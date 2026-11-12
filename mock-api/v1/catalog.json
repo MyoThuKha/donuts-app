@@ -1,0 +1,206 @@
+{
+  "data": {
+    "products": [
+      {
+        "id": "p_mistletoe_box",
+        "code": "JD011201",
+        "name": "Mistletoe Romance box",
+        "priceMmk": 24000,
+        "isNew": false,
+        "discountPercent": 50,
+        "description": "Six festive donuts in red, green and white, boxed for sharing.",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/box_mistletoe_romance.webp",
+        "imageAsset": "assets/images/box_mistletoe_romance.webp",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_christmas_family_box",
+        "code": "JD011202",
+        "name": "Christmas Mix Family box",
+        "priceMmk": 42000,
+        "isNew": true,
+        "discountPercent": null,
+        "description": "Twelve holiday donuts in two rows, enough for the whole family.",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/box_christmas_family.webp",
+        "imageAsset": "assets/images/box_christmas_family.webp",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_strawberry_chocolate",
+        "code": "JD022110",
+        "name": "Strawberry Chocolate Donuts",
+        "priceMmk": 2800,
+        "isNew": false,
+        "discountPercent": null,
+        "description": "Strawberry glaze topped with dark chocolate sprinkles.",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/donut_pink_chocolate_sprinkles.webp",
+        "imageAsset": "assets/images/donut_pink_chocolate_sprinkles.webp",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_dalgona",
+        "code": "JD031005",
+        "name": "Dalgona Creamy Coffee",
+        "priceMmk": 4500,
+        "isNew": false,
+        "discountPercent": null,
+        "description": "Iced milk under a thick layer of whipped coffee foam.",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/coffee_dalgona.webp",
+        "imageAsset": "assets/images/coffee_dalgona.webp",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_coconut",
+        "code": "JD022123",
+        "name": "Coconut Donut",
+        "priceMmk": 3200,
+        "isNew": true,
+        "discountPercent": null,
+        "description": "Enjoy our scrumptious donuts – soft, sweet, and satisfying in every bite. Choose from classic glazed, rich chocolate, or fun sprinkles. Dive into deliciousness now!",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/donut_choco_pink_drizzle.webp",
+        "imageAsset": "assets/images/donut_choco_pink_drizzle.webp",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_blueberry",
+        "code": "JD022115",
+        "name": "Blueberry Glazed Donut",
+        "priceMmk": 2800,
+        "isNew": false,
+        "discountPercent": null,
+        "description": "A glossy blueberry glaze with a few lilac sprinkles.",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/donut_purple_glaze.webp",
+        "imageAsset": "assets/images/donut_purple_glaze.webp",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_santa_cookies",
+        "code": "JD041210",
+        "name": "Santa's favorite cookies set",
+        "priceMmk": 6500,
+        "isNew": false,
+        "discountPercent": 20,
+        "description": "Iced sugar cookies in star, tree and snowflake shapes.",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/cookies_santa.webp",
+        "imageAsset": "assets/images/cookies_santa.webp",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_caramel_crunch",
+        "code": "JD022118",
+        "name": "Caramel Crunch Donut",
+        "priceMmk": 3000,
+        "isNew": false,
+        "discountPercent": 20,
+        "description": "Amber caramel glaze with crushed toffee on top.",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/donut_caramel_glaze.webp",
+        "imageAsset": "assets/images/donut_caramel_glaze.webp",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_toasted_coconut",
+        "code": "JD022130",
+        "name": "Toasted Coconut Donut",
+        "priceMmk": 3400,
+        "isNew": true,
+        "discountPercent": null,
+        "description": "Vanilla glaze under a thick layer of toasted coconut flakes.",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/donut_coconut.webp",
+        "imageAsset": null,
+        "updatedAt": "2026-11-12T00:00:00Z"
+      }
+    ],
+    "sections": [
+      {
+        "id": "seasonal",
+        "titleKey": "seasonal",
+        "sortOrder": 0,
+        "productIds": [
+          "p_mistletoe_box",
+          "p_christmas_family_box"
+        ]
+      },
+      {
+        "id": "popular",
+        "titleKey": "popular",
+        "sortOrder": 1,
+        "productIds": [
+          "p_toasted_coconut",
+          "p_strawberry_chocolate",
+          "p_dalgona",
+          "p_coconut",
+          "p_blueberry"
+        ]
+      },
+      {
+        "id": "order_again",
+        "titleKey": "order_again",
+        "sortOrder": 2,
+        "productIds": [
+          "p_santa_cookies",
+          "p_caramel_crunch",
+          "p_dalgona"
+        ]
+      }
+    ],
+    "banners": [
+      {
+        "id": "b_central_boulevard",
+        "tag": "New shop",
+        "title": "We are now at Central Boulevard",
+        "style": "indigo",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/banner_central_boulevard.webp",
+        "imageAsset": "assets/images/banner_central_boulevard.webp",
+        "sortOrder": 0
+      },
+      {
+        "id": "b_hot_drinks",
+        "tag": "50% off",
+        "title": "Hot drinks are here",
+        "style": "sky",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/banner_hot_drinks.webp",
+        "imageAsset": "assets/images/banner_hot_drinks.webp",
+        "sortOrder": 1
+      }
+    ],
+    "shops": [
+      {
+        "id": "s_myaynigone",
+        "name": "J'Donuts Myaynigone",
+        "address": "Bayint Naung Road, Hlaing Township, Yangon",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/shop_myaynigone.webp",
+        "imageAsset": "assets/images/shop_myaynigone.webp",
+        "sortOrder": 0
+      },
+      {
+        "id": "s_sanchaung",
+        "name": "J'Donuts Sanchaung",
+        "address": "Sanchaung Street, Sanchaung Township, Yangon",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/shop_sanchaung.webp",
+        "imageAsset": "assets/images/shop_sanchaung.webp",
+        "sortOrder": 1
+      },
+      {
+        "id": "s_downtown",
+        "name": "J'Donuts Downtown",
+        "address": "Bogyoke Aung San Road, Pabedan Township, Yangon",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/shop_downtown.webp",
+        "imageAsset": "assets/images/shop_downtown.webp",
+        "sortOrder": 2
+      },
+      {
+        "id": "s_central_boulevard",
+        "name": "J'Donuts Central Boulevard",
+        "address": "Kabar Aye Pagoda Road, Yankin Township, Yangon",
+        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/shop_downtown.webp",
+        "imageAsset": "assets/images/shop_downtown.webp",
+        "sortOrder": 3
+      }
+    ]
+  },
+  "error": null,
+  "meta": {
+    "version": 2,
+    "generatedAt": "2026-11-12T00:00:00Z"
+  }
+}

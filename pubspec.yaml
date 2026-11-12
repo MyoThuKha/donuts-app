@@ -47,6 +47,7 @@ flutter:
   assets:
     - assets/fonts/OFL.txt
     - assets/logos/
+    - assets/seed/
 
   fonts:
     - family: PlusJakartaSans
