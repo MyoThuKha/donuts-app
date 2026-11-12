@@ -243,6 +243,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The {document} will be available here soon.'**
   String documentUnavailable(String document);
+
+  /// Screen-reader label for the registration progress ring.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {step} of {total}'**
+  String stepOf(int step, int total);
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
 }
 
 class _AppLocalizationsDelegate

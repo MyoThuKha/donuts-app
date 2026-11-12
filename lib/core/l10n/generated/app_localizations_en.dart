@@ -92,4 +92,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String documentUnavailable(String document) {
     return 'The $document will be available here soon.';
   }
+
+  @override
+  String stepOf(int step, int total) {
+    return 'Step $step of $total';
+  }
+
+  @override
+  String get back => 'Back';
 }
