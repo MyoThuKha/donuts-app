@@ -1,0 +1,91 @@
+{
+  "data": {
+    "profile": {
+      "totalPoints": 680000,
+      "avatarUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/avatar_member.webp",
+      "avatarAsset": "assets/images/avatar_member.webp",
+      "notificationCount": 2,
+      "rewardsCount": 3
+    },
+    "tiers": [
+      {
+        "id": "silver",
+        "name": "Silver",
+        "minPoints": 678500,
+        "sortOrder": 0
+      },
+      {
+        "id": "gold",
+        "name": "Gold",
+        "minPoints": 680500,
+        "sortOrder": 1
+      },
+      {
+        "id": "platinum",
+        "name": "Platinum",
+        "minPoints": 1000000,
+        "sortOrder": 2
+      }
+    ],
+    "challenges": [
+      {
+        "id": "c_coco_donuts",
+        "title": "Eat 4 Coco donuts",
+        "kind": "donutQuarters",
+        "progress": 4,
+        "target": 4,
+        "rewardPoints": 100,
+        "imageAsset": "assets/images/donut_pink_sprinkles.webp",
+        "sortOrder": 0
+      },
+      {
+        "id": "c_americano",
+        "title": "Drink 12 cups americano",
+        "kind": "coffeeArc",
+        "progress": 9,
+        "target": 12,
+        "rewardPoints": 200,
+        "imageAsset": "assets/images/coffee_iced_latte.webp",
+        "sortOrder": 1
+      },
+      {
+        "id": "c_strawberry_donuts",
+        "title": "Eat 4 Strawberry donuts",
+        "kind": "donutQuarters",
+        "progress": 1,
+        "target": 4,
+        "rewardPoints": 100,
+        "imageAsset": "assets/images/donut_pink_chocolate_sprinkles.webp",
+        "sortOrder": 2
+      }
+    ],
+    "gifts": [
+      {
+        "id": "g_classic_donut",
+        "title": "Free classic donut",
+        "costPoints": 20000,
+        "imageAsset": "assets/images/donut_caramel_glaze.webp",
+        "sortOrder": 0
+      },
+      {
+        "id": "g_iced_latte",
+        "title": "Free iced latte",
+        "costPoints": 35000,
+        "imageAsset": "assets/images/coffee_iced_latte.webp",
+        "sortOrder": 1
+      },
+      {
+        "id": "g_box_of_six",
+        "title": "Box of 6 donuts",
+        "costPoints": 90000,
+        "imageAsset": "assets/images/box_mistletoe_romance.webp",
+        "sortOrder": 2
+      }
+    ]
+  },
+  "error": null,
+  "meta": {
+    "version": 1,
+    "generatedAt": "2026-11-12T00:00:00Z"
+  }
+}

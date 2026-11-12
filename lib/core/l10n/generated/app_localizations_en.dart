@@ -196,4 +196,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get letsExplore => 'Let\'s explore';
+
+  @override
+  String get imageUnavailable => 'Image unavailable';
 }

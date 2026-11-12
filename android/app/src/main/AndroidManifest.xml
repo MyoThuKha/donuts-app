@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Release builds refresh the catalog from the mock API. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="J'Donuts"
         android:name="${applicationName}"

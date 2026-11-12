@@ -150,5 +150,9 @@
   "monthHint": "Month",
   "dayHint": "Day",
   "yearHint": "Year",
-  "letsExplore": "Let's explore"
+  "letsExplore": "Let's explore",
+  "imageUnavailable": "Image unavailable",
+  "@imageUnavailable": {
+    "description": "Screen reader label for an image that failed to load"
+  }
 }

@@ -429,6 +429,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Let\'s explore'**
   String get letsExplore;
+
+  /// Screen reader label for an image that failed to load
+  ///
+  /// In en, this message translates to:
+  /// **'Image unavailable'**
+  String get imageUnavailable;
 }
 
 class _AppLocalizationsDelegate
