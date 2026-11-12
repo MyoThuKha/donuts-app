@@ -3,6 +3,7 @@ import 'package:donuts/core/result/guard.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 void main() {
   group('guard', () {
@@ -32,7 +33,7 @@ void main() {
 
     test('turns any other exception into an UnknownFailure', () async {
       final result = await guard<int>(
-        () async => throw const FormatException('bad'),
+        () async => throw const _OtherException(),
       );
 
       expect(
@@ -45,8 +46,34 @@ void main() {
       );
     });
 
+    test('guard turns CheckedFromJsonException into ParsingFailure', () async {
+      final result = await guard<int>(
+        () async =>
+            throw CheckedFromJsonException({}, 'priceMmk', 'ProductDto', 'bad'),
+      );
+
+      expect(_failureOf(result), isA<ParsingFailure>());
+    });
+
+    test('guard turns FormatException into ParsingFailure', () async {
+      final result = await guard<int>(
+        () async => throw const FormatException('bad'),
+      );
+
+      expect(_failureOf(result), isA<ParsingFailure>());
+    });
+
     test('lets programming errors through instead of hiding them', () {
       expect(guard<int>(() async => throw StateError('bug')), throwsStateError);
     });
   });
+}
+
+AppFailure? _failureOf<T>(Result<T> result) => switch (result) {
+  Failure(:final failure) => failure,
+  Success() => null,
+};
+
+class _OtherException implements Exception {
+  const new();
 }
