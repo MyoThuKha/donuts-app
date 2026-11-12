@@ -47,6 +47,7 @@ flutter:
 
   assets:
     - assets/fonts/OFL.txt
+    - assets/icons/
     - assets/logos/
     - assets/seed/
 

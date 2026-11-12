@@ -1,16 +1,16 @@
 import 'dart:ui';
 
+import 'package:donuts/app/shell/widgets/nav_icons.dart';
 import 'package:donuts/app/shell/widgets/nav_pill_widget.dart';
 import 'package:donuts/features/home/presentation/home_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../helpers/fakes.dart';
 import '../../helpers/pump_app.dart';
 
-final Finder _rewardIcon = find.byIcon(LucideIcons.crown);
-final Finder _homeIcon = find.byIcon(LucideIcons.house);
+final Finder _rewardIcon = find.byKey(const ValueKey(NavIcons.reward));
+final Finder _homeIcon = find.byKey(const ValueKey(NavIcons.home));
 
 Future<void> _pumpApp(WidgetTester tester) =>
     pumpRouterApp(tester, session: testSessionCubit()..signedIn(testUser));
@@ -109,13 +109,13 @@ void main() {
     await _pumpApp(tester);
 
     for (final icon in [
-      LucideIcons.crown,
-      LucideIcons.target,
-      LucideIcons.wallet,
-      LucideIcons.settings,
-      LucideIcons.house,
+      NavIcons.reward,
+      NavIcons.explore,
+      NavIcons.wallet,
+      NavIcons.settings,
+      NavIcons.home,
     ]) {
-      await tester.tap(find.byIcon(icon));
+      await tester.tap(find.byKey(ValueKey(icon)));
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     }

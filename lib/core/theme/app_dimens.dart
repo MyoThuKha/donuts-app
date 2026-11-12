@@ -31,6 +31,8 @@ abstract final class AppSizes {
   static const double button = 48;
   static const double field = 56;
   static const Size otpBox = Size(48, 52);
-  static const double navBar = 72;
+
+  /// The bottom nav panel's height above the home indicator.
+  static const double navBar = 80;
   static const double imageErrorIcon = 24;
 }

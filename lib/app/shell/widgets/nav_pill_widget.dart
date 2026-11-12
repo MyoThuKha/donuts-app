@@ -1,3 +1,4 @@
+import 'package:donuts/app/shell/widgets/app_bottom_nav.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -11,7 +12,10 @@ class NavPillWidget extends StatelessWidget {
       decoration: ShapeDecoration(
         color: context.colors.accent,
         shape: StadiumBorder(
-          side: BorderSide(color: context.colors.onPrimary, width: 1.5),
+          side: BorderSide(
+            color: context.colors.onPrimary,
+            width: AppBottomNav.rim,
+          ),
         ),
       ),
     );

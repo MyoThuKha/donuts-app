@@ -1,9 +1,9 @@
+import 'package:donuts/app/shell/widgets/nav_icons.dart';
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
 import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:donuts/features/rewards/presentation/widgets/earn_button_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../helpers/fakes.dart';
@@ -37,13 +37,13 @@ void main() {
       tester,
       session: testSessionCubit()..signedIn(testUser),
     );
-    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.reward)));
     await tester.pumpAndSettle();
     expect(_ringProgress(tester), closeTo(0.75, 0.001));
 
-    await tester.tap(find.byIcon(LucideIcons.house));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.home)));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.reward)));
     await tester.pump();
 
     expect(_ringProgress(tester), closeTo(0, 0.01));
@@ -58,7 +58,7 @@ void main() {
       tester,
       session: testSessionCubit()..signedIn(testUser),
     );
-    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.reward)));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Gift'));
@@ -74,13 +74,13 @@ void main() {
       tester,
       session: testSessionCubit()..signedIn(testUser),
     );
-    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.reward)));
     await tester.pumpAndSettle();
     expect(_earnPulse(tester), 1);
 
-    await tester.tap(find.byIcon(LucideIcons.house));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.home)));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.reward)));
     await tester.pump();
     await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
 
@@ -100,13 +100,13 @@ void main() {
         tester,
         session: testSessionCubit()..signedIn(testUser),
       );
-      await tester.tap(find.byIcon(LucideIcons.crown));
+      await tester.tap(find.byKey(const ValueKey(NavIcons.reward)));
       await tester.pumpAndSettle();
       expect(cocoDonut(), 1);
 
-      await tester.tap(find.byIcon(LucideIcons.house));
+      await tester.tap(find.byKey(const ValueKey(NavIcons.home)));
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(LucideIcons.crown));
+      await tester.tap(find.byKey(const ValueKey(NavIcons.reward)));
       await tester.pump();
 
       expect(cocoDonut(), closeTo(0, 0.01));
@@ -122,16 +122,18 @@ void main() {
       tester,
       session: testSessionCubit()..signedIn(testUser),
     );
-    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.reward)));
     await tester.pumpAndSettle();
     final earn = find.byWidgetPredicate((w) => w is EarnButton && w.active);
-    await tester.ensureVisible(earn);
+    // Centred, not at the bottom edge, where the bottom nav covers it.
+    await Scrollable.ensureVisible(tester.element(earn), alignment: 0.5);
+    await tester.pumpAndSettle();
     await tester.tap(earn);
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(LucideIcons.house));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.home)));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.tap(find.byKey(const ValueKey(NavIcons.reward)));
     await tester.pump();
     await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
 

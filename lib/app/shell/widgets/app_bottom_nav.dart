@@ -3,12 +3,16 @@ import 'package:donuts/app/shell/widgets/stretchy_position_widget.dart';
 import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_ui/material_ui.dart';
 
-typedef AppNavItem = ({IconData icon, String label});
+/// A tab: its SVG icon (see `NavIcons`) and label.
+typedef AppNavItem = ({String icon, String label});
 
-/// Bottom bar whose accent pill slides to the active tab and widens to show
-/// its label.
+/// The bottom bar as the design draws it: a blue panel with rounded top
+/// corners and a white rim, inset from the screen sides, over a pink band
+/// that runs edge to edge behind its lower half. The accent pill slides to
+/// the active tab and widens to show its label.
 class AppBottomNav extends StatelessWidget {
   const new({
     required this.currentIndex,
@@ -17,13 +21,19 @@ class AppBottomNav extends StatelessWidget {
     super.key,
   });
 
-  /// Share of the bar's inner width the active pill takes.
-  static const double pillShare = 0.36;
+  /// Share of the panel's inner width the active pill takes.
+  static const double pillShare = 0.28;
 
-  /// Gap between the pill and the bar's top and bottom edges.
-  static const double pillInset = 12;
+  /// Height of the active pill.
+  static const double pillHeight = 50;
 
-  static const double iconSize = 24;
+  static const double iconSize = 22;
+
+  /// Corner radius of the panel's top corners.
+  static const double panelRadius = 28;
+
+  /// The white outline around the panel and the pill.
+  static const double rim = 1.5;
 
   final int currentIndex;
   final ValueChanged<int> onSelected;
@@ -32,22 +42,49 @@ class AppBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.primary,
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(AppRadii.nav),
-        ),
-      ),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: AppSizes.navBar,
-          child: LayoutBuilder(
-            builder: (context, constraints) =>
-                _buildSlots(context, constraints.maxWidth),
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    return SizedBox(
+      height: AppSizes.navBar + bottomInset,
+      child: Stack(
+        children: [
+          // The pink band behind the panel's lower half, edge to edge.
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: AppSizes.navBar / 2 + bottomInset,
+            child: ColoredBox(color: colors.accent),
           ),
-        ),
+          // The panel runs a rim's width past the bottom, so its outline
+          // shows only on the top and sides.
+          Positioned(
+            left: AppSpacing.pageGutter,
+            right: AppSpacing.pageGutter,
+            top: 0,
+            bottom: -rim,
+            child: DecoratedBox(
+              decoration: ShapeDecoration(
+                color: colors.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(panelRadius),
+                  ),
+                  side: BorderSide(color: colors.onPrimary, width: rim),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: AppSpacing.pageGutter,
+            right: AppSpacing.pageGutter,
+            top: 0,
+            height: AppSizes.navBar,
+            child: LayoutBuilder(
+              builder: (context, constraints) =>
+                  _buildSlots(context, constraints.maxWidth),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -66,8 +103,8 @@ class AppBottomNav extends StatelessWidget {
           curve: AppMotion.emphasized,
           left: AppSpacing.l + layout.leftOf(currentIndex),
           width: layout.pillWidth,
-          top: pillInset,
-          bottom: pillInset,
+          top: (AppSizes.navBar - pillHeight) / 2,
+          bottom: (AppSizes.navBar - pillHeight) / 2,
           child: const NavPillWidget(),
         ),
         for (var i = 0; i < items.length; i++)
@@ -133,7 +170,13 @@ class _NavItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(item.icon, color: color, size: AppBottomNav.iconSize),
+              SvgPicture.asset(
+                item.icon,
+                key: ValueKey(item.icon),
+                width: AppBottomNav.iconSize,
+                height: AppBottomNav.iconSize,
+                colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+              ),
               if (selected) _label(context, color),
             ],
           ),
@@ -145,7 +188,7 @@ class _NavItem extends StatelessWidget {
   Widget _label(BuildContext context, Color color) {
     return Flexible(
       child: Padding(
-        padding: const EdgeInsets.only(left: AppSpacing.xs),
+        padding: const EdgeInsets.only(left: AppSpacing.s),
         child: TweenAnimationBuilder<double>(
           tween: Tween(begin: 0, end: 1),
           duration: context.motion.of(AppMotion.fast),
@@ -157,7 +200,10 @@ class _NavItem extends StatelessWidget {
             child: Text(
               item.label,
               maxLines: 1,
-              style: context.text.label.copyWith(color: color),
+              style: context.text.label.copyWith(
+                color: color,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),
