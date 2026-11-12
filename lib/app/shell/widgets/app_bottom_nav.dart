@@ -1,4 +1,5 @@
 import 'package:donuts/app/shell/widgets/nav_pill_widget.dart';
+import 'package:donuts/app/shell/widgets/stretchy_position_widget.dart';
 import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
@@ -60,7 +61,7 @@ class AppBottomNav extends StatelessWidget {
     final duration = context.motion.of(AppMotion.medium);
     return Stack(
       children: [
-        AnimatedPositioned(
+        StretchyPositionWidget(
           duration: duration,
           curve: AppMotion.emphasized,
           left: AppSpacing.l + layout.leftOf(currentIndex),
@@ -119,6 +120,7 @@ class _NavItem extends StatelessWidget {
       button: true,
       selected: selected,
       label: item.label,
+      onTap: onTap,
       excludeSemantics: true,
       child: InkResponse(
         onTap: onTap,
@@ -144,12 +146,19 @@ class _NavItem extends StatelessWidget {
     return Flexible(
       child: Padding(
         padding: const EdgeInsets.only(left: AppSpacing.xs),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            item.label,
-            maxLines: 1,
-            style: context.text.label.copyWith(color: color),
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: 1),
+          duration: context.motion.of(AppMotion.fast),
+          curve: AppMotion.standard,
+          builder: (context, opacity, child) =>
+              Opacity(opacity: opacity, child: child),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              item.label,
+              maxLines: 1,
+              style: context.text.label.copyWith(color: color),
+            ),
           ),
         ),
       ),

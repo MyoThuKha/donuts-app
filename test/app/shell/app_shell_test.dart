@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:donuts/app/app.dart';
 import 'package:donuts/app/shell/widgets/nav_pill_widget.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -117,5 +118,50 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     }
+  });
+
+  testWidgets('nav buttons expose a tap action to screen readers', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await _pumpApp(tester);
+
+    final reward = tester.getSemantics(find.bySemanticsLabel('Reward'));
+
+    expect(reward.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
+    semantics.dispose();
+  });
+
+  testWidgets('the new tab label fades in instead of appearing at once', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+
+    await tester.tap(_rewardIcon);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 30));
+    final fade = tester.widget<Opacity>(
+      find.ancestor(of: find.text('Reward'), matching: find.byType(Opacity)),
+    );
+
+    expect(fade.opacity, inExclusiveRange(0, 1));
+  });
+
+  testWidgets('the pill stretches while it travels, then lands on the tab', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+    final restingWidth = tester.getSize(find.byType(NavPillWidget)).width;
+
+    await tester.tap(_rewardIcon);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 120));
+    final travellingWidth = tester.getSize(find.byType(NavPillWidget)).width;
+    await tester.pumpAndSettle();
+    final landed = tester.getRect(find.byType(NavPillWidget));
+
+    expect(travellingWidth, greaterThan(restingWidth));
+    expect(landed.width, moreOrLessEquals(restingWidth));
+    expect(landed.contains(tester.getCenter(_rewardIcon)), isTrue);
   });
 }
