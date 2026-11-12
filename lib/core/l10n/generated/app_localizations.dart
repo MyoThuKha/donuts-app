@@ -135,6 +135,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{tab} is coming soon'**
   String placeholderComingSoon(String tab);
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to the world of J\'donuts'**
+  String get welcomeTitle;
+
+  /// No description provided for @onboardingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Round food for every mood'**
+  String get onboardingTitle;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s get started'**
+  String get getStarted;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @logIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get logIn;
+
+  /// No description provided for @termsPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing, you acknowledge that you have read and agree to our'**
+  String get termsPrefix;
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get termsOfUse;
+
+  /// No description provided for @and.
+  ///
+  /// In en, this message translates to:
+  /// **'and'**
+  String get and;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @comingSoonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoonTitle;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @logOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logOut;
+
+  /// No description provided for @logOutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out of J\'Donuts?'**
+  String get logOutConfirm;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Accessibility label for a social sign-in button.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with {provider}'**
+  String continueWith(String provider);
+
+  /// Placeholder sheet body for social sign-in.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} sign-in isn\'t available in this demo'**
+  String socialSignInUnavailable(String provider);
+
+  /// Placeholder sheet body for legal documents.
+  ///
+  /// In en, this message translates to:
+  /// **'The {document} will be available here soon.'**
+  String documentUnavailable(String document);
+
+  /// Screen-reader label for the registration progress ring.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {step} of {total}'**
+  String stepOf(int step, int total);
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @phoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get phoneTitle;
+
+  /// No description provided for @phoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'09xxxxxxxxx'**
+  String get phoneHint;
+
+  /// No description provided for @phoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a Myanmar mobile number, like 09 254 135 592'**
+  String get phoneInvalid;
+
+  /// No description provided for @notRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This number isn\'t registered yet.'**
+  String get notRegistered;
+
+  /// No description provided for @registerInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Register instead'**
+  String get registerInstead;
+
+  /// No description provided for @alreadyRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This number is already registered.'**
+  String get alreadyRegistered;
+
+  /// No description provided for @logInInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in instead'**
+  String get logInInstead;
+
+  /// No description provided for @genericError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get genericError;
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueLabel;
+
+  /// No description provided for @otpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your number'**
+  String get otpTitle;
+
+  /// No description provided for @otpWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That code isn\'t right. Try again.'**
+  String get otpWrong;
+
+  /// No description provided for @otpLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many wrong codes. Tap Resend to get a new one.'**
+  String get otpLocked;
+
+  /// No description provided for @didntReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t receive the code?'**
+  String get didntReceive;
+
+  /// No description provided for @resend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend'**
+  String get resend;
+
+  /// No description provided for @firstNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your first name'**
+  String get firstNameRequired;
+
+  /// No description provided for @nameInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Use letters and spaces only'**
+  String get nameInvalid;
+
+  /// No description provided for @dobInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That date doesn\'t exist'**
+  String get dobInvalid;
+
+  /// No description provided for @dobFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth can\'t be in the future'**
+  String get dobFuture;
+
+  /// No description provided for @otpSent.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve sent a 6 digit OTP to {phone}'**
+  String otpSent(String phone);
+
+  /// No description provided for @resendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'resend in {time} min'**
+  String resendIn(String time);
+
+  /// No description provided for @nameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Use {max} characters or fewer'**
+  String nameTooLong(int max);
+
+  /// No description provided for @dobTooYoung.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to be at least {age} to join'**
+  String dobTooYoung(int age);
+
+  /// No description provided for @nameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s your name?'**
+  String get nameTitle;
+
+  /// No description provided for @firstNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get firstNameHint;
+
+  /// No description provided for @lastNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get lastNameHint;
+
+  /// No description provided for @dobTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s your date of birth?'**
+  String get dobTitle;
+
+  /// No description provided for @monthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get monthHint;
+
+  /// No description provided for @dayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get dayHint;
+
+  /// No description provided for @yearHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get yearHint;
+
+  /// No description provided for @letsExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s explore'**
+  String get letsExplore;
 }
 
 class _AppLocalizationsDelegate

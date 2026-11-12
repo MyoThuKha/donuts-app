@@ -66,4 +66,8 @@ void main() {
       expect(weights, unorderedEquals([400, 500, 600, 700, 800]));
     },
   );
+
+  test('error colour is the danger token, not the link pink', () {
+    expect(AppTheme.light().colorScheme.error, DonutsColors.light.danger);
+  });
 }

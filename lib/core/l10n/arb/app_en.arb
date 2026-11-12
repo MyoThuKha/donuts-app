@@ -1,20 +1,154 @@
 {
   "@@locale": "en",
   "appTitle": "J'Donuts",
-  "@appTitle": {"description": "App name shown by the OS task switcher."},
+  "@appTitle": {
+    "description": "App name shown by the OS task switcher."
+  },
   "tabHome": "Home",
-  "@tabHome": {"description": "Bottom navigation label for the Home tab."},
+  "@tabHome": {
+    "description": "Bottom navigation label for the Home tab."
+  },
   "tabReward": "Reward",
-  "@tabReward": {"description": "Bottom navigation label for the Rewards tab."},
+  "@tabReward": {
+    "description": "Bottom navigation label for the Rewards tab."
+  },
   "tabExplore": "Explore",
-  "@tabExplore": {"description": "Bottom navigation label for the Explore tab."},
+  "@tabExplore": {
+    "description": "Bottom navigation label for the Explore tab."
+  },
   "tabWallet": "Wallet",
-  "@tabWallet": {"description": "Bottom navigation label for the Wallet tab."},
+  "@tabWallet": {
+    "description": "Bottom navigation label for the Wallet tab."
+  },
   "tabSettings": "Settings",
-  "@tabSettings": {"description": "Bottom navigation label for the Settings tab."},
+  "@tabSettings": {
+    "description": "Bottom navigation label for the Settings tab."
+  },
   "placeholderComingSoon": "{tab} is coming soon",
   "@placeholderComingSoon": {
     "description": "Body of a tab that is not built yet.",
-    "placeholders": {"tab": {"type": "String", "example": "Wallet"}}
-  }
+    "placeholders": {
+      "tab": {
+        "type": "String",
+        "example": "Wallet"
+      }
+    }
+  },
+  "welcomeTitle": "Welcome to the world of J'donuts",
+  "onboardingTitle": "Round food for every mood",
+  "getStarted": "Let's get started",
+  "alreadyHaveAccount": "Already have an account?",
+  "logIn": "Log In",
+  "termsPrefix": "By continuing, you acknowledge that you have read and agree to our",
+  "termsOfUse": "Terms of Use",
+  "and": "and",
+  "privacyPolicy": "Privacy Policy",
+  "comingSoonTitle": "Coming soon",
+  "close": "Close",
+  "logOut": "Log out",
+  "logOutConfirm": "Log out of J'Donuts?",
+  "cancel": "Cancel",
+  "continueWith": "Continue with {provider}",
+  "@continueWith": {
+    "description": "Accessibility label for a social sign-in button.",
+    "placeholders": {
+      "provider": {
+        "type": "String",
+        "example": "Google"
+      }
+    }
+  },
+  "socialSignInUnavailable": "{provider} sign-in isn't available in this demo",
+  "@socialSignInUnavailable": {
+    "description": "Placeholder sheet body for social sign-in.",
+    "placeholders": {
+      "provider": {
+        "type": "String",
+        "example": "Google"
+      }
+    }
+  },
+  "documentUnavailable": "The {document} will be available here soon.",
+  "@documentUnavailable": {
+    "description": "Placeholder sheet body for legal documents.",
+    "placeholders": {
+      "document": {
+        "type": "String",
+        "example": "Terms of Use"
+      }
+    }
+  },
+  "stepOf": "Step {step} of {total}",
+  "@stepOf": {
+    "description": "Screen-reader label for the registration progress ring.",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "back": "Back",
+  "phoneTitle": "Enter your phone number",
+  "phoneHint": "09xxxxxxxxx",
+  "phoneInvalid": "Enter a Myanmar mobile number, like 09 254 135 592",
+  "notRegistered": "This number isn't registered yet.",
+  "registerInstead": "Register instead",
+  "alreadyRegistered": "This number is already registered.",
+  "logInInstead": "Log in instead",
+  "genericError": "Something went wrong. Try again.",
+  "continueLabel": "Continue",
+  "otpTitle": "Verify your number",
+  "otpWrong": "That code isn't right. Try again.",
+  "otpLocked": "Too many wrong codes. Tap Resend to get a new one.",
+  "didntReceive": "Didn't receive the code?",
+  "resend": "Resend",
+  "firstNameRequired": "Enter your first name",
+  "nameInvalid": "Use letters and spaces only",
+  "dobInvalid": "That date doesn't exist",
+  "dobFuture": "Date of birth can't be in the future",
+  "otpSent": "We've sent a 6 digit OTP to {phone}",
+  "@otpSent": {
+    "placeholders": {
+      "phone": {
+        "type": "String",
+        "example": "+959254135592"
+      }
+    }
+  },
+  "resendIn": "resend in {time} min",
+  "@resendIn": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "4:58"
+      }
+    }
+  },
+  "nameTooLong": "Use {max} characters or fewer",
+  "@nameTooLong": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "dobTooYoung": "You need to be at least {age} to join",
+  "@dobTooYoung": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "nameTitle": "What's your name?",
+  "firstNameHint": "First Name",
+  "lastNameHint": "Last Name",
+  "dobTitle": "What's your date of birth?",
+  "monthHint": "Month",
+  "dayHint": "Day",
+  "yearHint": "Year",
+  "letsExplore": "Let's explore"
 }
