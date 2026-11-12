@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/motion/app_motion.dart';
@@ -100,7 +101,6 @@ class _PagerState extends State<_Pager> {
   Timer? _timer;
   bool _held = false;
   bool _reduced = false;
-  int _page = 0;
 
   @override
   void didChangeDependencies() {
@@ -121,10 +121,20 @@ class _PagerState extends State<_Pager> {
     _timer = Timer(HomeDimens.carouselInterval, _advance);
   }
 
+  /// Moves to the banner after the one showing, or back to the first.
+  /// Reads the page from the controller, which stays right when the list
+  /// shrinks, and stops at the last banner's resting offset: with
+  /// `padEnds: false` it rests short of a full page, and animating to the
+  /// full page would overshoot and bounce on iOS.
   void _advance() {
     if (!mounted || !_controller.hasClients) return;
-    _controller.animateToPage(
-      (_page + 1) % widget.banners.length,
+    final position = _controller.position;
+    final current = (_controller.page ?? 0).round();
+    final next = current + 1 < widget.banners.length ? current + 1 : 0;
+    final pageExtent =
+        position.viewportDimension * HomeDimens.bannerViewportFraction;
+    _controller.animateTo(
+      math.min(next * pageExtent, position.maxScrollExtent),
       duration: AppMotion.slow,
       curve: AppMotion.emphasized,
     );
@@ -153,7 +163,6 @@ class _PagerState extends State<_Pager> {
         controller: _controller,
         padEnds: false,
         itemCount: widget.banners.length,
-        onPageChanged: (page) => _page = page,
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.only(left: AppSpacing.pageGutter),
           child: BannerItem(banner: widget.banners[index]),

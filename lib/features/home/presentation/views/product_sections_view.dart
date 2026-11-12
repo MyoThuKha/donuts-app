@@ -28,11 +28,17 @@ class ProductSectionsView extends StatelessWidget {
         );
     final l10n = context.l10n;
     return switch (sections) {
-      SectionReady(:final data) => SliverList.builder(
-        itemCount: data.length,
-        itemBuilder: (context, i) => StaggeredEntrance(
-          index: firstIndex + i,
-          child: ProductSectionView(section: data[i]),
+      // One box, not a lazy list: a lazy list disposes a row that scrolls
+      // away and replays its entrance when it comes back.
+      SectionReady(:final data) => SliverToBoxAdapter(
+        child: Column(
+          children: [
+            for (final (i, section) in data.indexed)
+              StaggeredEntrance(
+                index: firstIndex + i,
+                child: ProductSectionView(section: section),
+              ),
+          ],
         ),
       ),
       SectionLoading() => _box(firstIndex, const _SectionsSkeleton()),

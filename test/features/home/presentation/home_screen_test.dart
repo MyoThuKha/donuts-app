@@ -4,6 +4,8 @@ import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
+import 'package:donuts/core/widgets/images/network_image.dart';
+import 'package:donuts/features/home/presentation/items/banner_item.dart';
 import 'package:donuts/features/home/presentation/items/product_tile_item.dart';
 import 'package:donuts/features/home/presentation/views/banner_carousel_view.dart';
 import 'package:donuts/features/home/presentation/views/home_header_view.dart';
@@ -182,5 +184,83 @@ void main() {
     };
     expect(find.byType(SeeAllButtonWidget), findsNWidgets(3));
     expect(rightEdges, hasLength(1));
+  });
+
+  testWidgets('the offline banner pushes the header down instead of '
+      'covering it', (tester) async {
+    final connectivity = ConnectivityCubit(
+      FakeConnectivitySource(),
+      FakeReachabilityProbe(),
+    );
+    await pumpHomeScreen(tester, streams, connectivity: connectivity);
+    streams.emitAll();
+    await connectivity.start();
+    await tester.pumpAndSettle();
+
+    final banner = tester.getRect(find.byType(OfflineBanner));
+    final name = tester.getRect(find.text('Ye Min'));
+
+    expect(name.top, greaterThanOrEqualTo(banner.bottom));
+  });
+
+  testWidgets('product rows keep their place after scrolling away and back '
+      'on a small phone', (tester) async {
+    await pumpHomeScreen(tester, streams, surface: smallPhoneSurface);
+    streams.emitAll();
+    await tester.pumpAndSettle();
+    final position = tester
+        .state<ScrollableState>(
+          find
+              .descendant(
+                of: find.byType(CustomScrollView),
+                matching: find.byType(Scrollable),
+              )
+              .first,
+        )
+        .position;
+
+    position.jumpTo(position.maxScrollExtent);
+    await tester.pump();
+    position.jumpTo(0);
+    await tester.pump();
+
+    final fade = tester.widget<FadeTransition>(
+      find
+          .ancestor(
+            of: find.text('Seasonal specials'),
+            matching: find.byType(FadeTransition),
+          )
+          .first,
+    );
+    expect(fade.opacity.value, 1);
+  });
+
+  testWidgets('long shop and member names end in an ellipsis', (tester) async {
+    await pumpHomeScreen(tester, streams);
+    streams.emitAll();
+    await tester.pump(_entrance);
+
+    for (final name in ['Ye Min', "J'Donuts Central Boulevard"]) {
+      expect(
+        tester.widget<Text>(find.text(name)).overflow,
+        TextOverflow.ellipsis,
+        reason: name,
+      );
+    }
+  });
+
+  testWidgets('banner photos decode at the card width', (tester) async {
+    await pumpHomeScreen(tester, streams);
+    streams.emitAll();
+    await tester.pump(_entrance);
+
+    final photos = tester.widgetList<AppNetworkImage>(
+      find.descendant(
+        of: find.byType(BannerItem),
+        matching: find.byType(AppNetworkImage),
+      ),
+    );
+    expect(photos, isNotEmpty);
+    expect(photos.map((p) => p.cacheWidth), everyElement(isNotNull));
   });
 }

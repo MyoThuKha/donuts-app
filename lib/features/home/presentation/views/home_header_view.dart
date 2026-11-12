@@ -138,7 +138,12 @@ class _NameAndTier extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: AppSpacing.xs,
       children: [
-        Text(firstName, maxLines: 1, style: context.text.headline),
+        Text(
+          firstName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: context.text.headline,
+        ),
         if (member is SectionLoading)
           const SkeletonGroup(
             child: Skeleton(

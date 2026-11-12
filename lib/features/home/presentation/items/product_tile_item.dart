@@ -1,3 +1,4 @@
+import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
@@ -25,15 +26,22 @@ class ProductTileItem extends StatelessWidget {
 
   Object get _heroTag => productHeroTag(product.id, scope: sectionId);
 
+  void _open(BuildContext context) =>
+      context.push(AppRoutes.productDetail(product.id), extra: _heroTag);
+
+  /// The tap is on the semantics node too, so screen readers and switch
+  /// access can open the product, and the discount is read as its value.
   @override
   Widget build(BuildContext context) {
+    final discount = product.discountPercent;
     return Semantics(
       button: true,
       label: product.name,
+      value: discount == null ? null : context.l10n.discountOff(discount),
+      onTap: () => _open(context),
       excludeSemantics: true,
       child: PressScaleWidget(
-        onTap: () =>
-            context.push(AppRoutes.productDetail(product.id), extra: _heroTag),
+        onTap: () => _open(context),
         child: SizedBox(
           width: imageSize.width,
           child: Column(

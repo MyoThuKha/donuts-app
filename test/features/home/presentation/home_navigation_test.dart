@@ -59,4 +59,34 @@ void main() {
     expect(detail.productId, 'p_dalgona');
     expect(detail.heroTag, productHeroTag('p_dalgona', scope: 'order_again'));
   });
+
+  testWidgets('a screen reader can open a tile', (tester) async {
+    useTallPhoneSurface(tester);
+    await pumpRouterApp(
+      tester,
+      session: testSessionCubit()..signedIn(testUser),
+    );
+
+    tester.semantics.tap(find.semantics.byLabel('Coconut Donut'));
+    await tester.pumpAndSettle();
+
+    final detail = tester.widget<ProductDetailScreen>(
+      find.byType(ProductDetailScreen),
+    );
+    expect(detail.productId, 'p_coconut');
+  });
+
+  testWidgets('a discounted tile tells screen readers its discount', (
+    tester,
+  ) async {
+    useTallPhoneSurface(tester);
+    await pumpRouterApp(
+      tester,
+      session: testSessionCubit()..signedIn(testUser),
+    );
+
+    final node = find.semantics.byLabel('Mistletoe Romance box').evaluate();
+
+    expect(node.single.value, '50% off');
+  });
 }

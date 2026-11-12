@@ -42,7 +42,15 @@ class BannerItem extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(AppRadii.tile),
         ),
-        child: AppNetworkImage(url: banner.imageUrl, asset: banner.imageAsset),
+        child: LayoutBuilder(
+          builder: (context, constraints) => AppNetworkImage(
+            url: banner.imageUrl,
+            asset: banner.imageAsset,
+            cacheWidth:
+                (constraints.maxWidth * MediaQuery.devicePixelRatioOf(context))
+                    .round(),
+          ),
+        ),
       ),
     ),
   );

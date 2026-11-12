@@ -74,10 +74,20 @@ class HomeStreams {
   }
 }
 
-/// A phone-sized, tall test surface, so every Home section is built.
-void useTallPhoneSurface(WidgetTester tester) {
+/// A phone-wide but very tall surface, in logical pixels, so every Home
+/// section is built at once.
+const Size tallPhoneSurface = Size(430, 3000);
+
+/// A 4.7" phone, in logical pixels.
+const Size smallPhoneSurface = Size(375, 667);
+
+/// Sizes the test view to [logicalSize] at a device pixel ratio of 3.
+void useTallPhoneSurface(
+  WidgetTester tester, {
+  Size logicalSize = tallPhoneSurface,
+}) {
   tester.view
-    ..physicalSize = const Size(1290, 9000)
+    ..physicalSize = logicalSize * 3
     ..devicePixelRatio = 3;
   addTearDown(tester.view.reset);
 }
@@ -90,8 +100,9 @@ Future<void> pumpHomeScreen(
   ConnectivityCubit? connectivity,
   CatalogSyncCubit? sync,
   bool reduceMotion = false,
+  Size surface = tallPhoneSurface,
 }) async {
-  useTallPhoneSurface(tester);
+  useTallPhoneSurface(tester, logicalSize: surface);
   getIt.registerFactory(streams.cubit);
   addTearDown(getIt.reset);
   final connectivityCubit =

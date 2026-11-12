@@ -1,5 +1,6 @@
 import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
@@ -36,20 +37,33 @@ class _HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return ColoredBox(
-      color: context.colors.canvas,
-      child: Stack(
+      color: colors.canvas,
+      child: Column(
         children: [
-          RefreshIndicator(
-            edgeOffset: MediaQuery.paddingOf(context).top,
-            color: context.colors.accent,
-            onRefresh: () => _refresh(context),
-            child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: _slivers(context),
+          ColoredBox(
+            color: colors.memberHeader,
+            child: SizedBox(
+              width: double.infinity,
+              height: MediaQuery.paddingOf(context).top,
             ),
           ),
-          const Positioned(top: 0, left: 0, right: 0, child: _Offline()),
+          const _Offline(),
+          Expanded(
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: RefreshIndicator(
+                color: colors.accent,
+                onRefresh: () => _refresh(context),
+                child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: _slivers(context),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -102,15 +116,24 @@ class _HomePage extends StatelessWidget {
   }
 }
 
+/// The offline banner, between the status bar and the page. It opens a
+/// strip of its own height, so it pushes Home down instead of covering the
+/// header, and folds away when the app is back online.
 class _Offline extends StatelessWidget {
   const new();
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-    bottom: false,
-    child: BlocSelector<ConnectivityCubit, ConnectivityStatus, bool>(
-      selector: (status) => status == ConnectivityStatus.offline,
-      builder: (context, offline) => OfflineBanner(visible: offline),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      BlocSelector<ConnectivityCubit, ConnectivityStatus, bool>(
+        selector: (status) => status == ConnectivityStatus.offline,
+        builder: (context, offline) => ClipRect(
+          child: AnimatedAlign(
+            alignment: Alignment.topCenter,
+            heightFactor: offline ? 1 : 0,
+            duration: context.motion.of(AppMotion.medium),
+            curve: AppMotion.standard,
+            child: OfflineBanner(visible: offline),
+          ),
+        ),
+      );
 }

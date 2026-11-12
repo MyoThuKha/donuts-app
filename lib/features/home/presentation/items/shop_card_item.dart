@@ -32,8 +32,18 @@ class ShopCardItem extends StatelessWidget {
             spacing: AppSpacing.xs,
             children: [
               _photo(context),
-              Text(shop.name, maxLines: 1, style: text.label),
-              Text(shop.address, maxLines: 2, style: text.caption),
+              Text(
+                shop.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: text.label,
+              ),
+              Text(
+                shop.address,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: text.caption,
+              ),
               _orderOnline(context),
             ],
           ),
