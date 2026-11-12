@@ -1,9 +1,11 @@
 import 'package:donuts/core/database/app_database.steps.dart';
+import 'package:donuts/core/database/daos/cart_dao.dart';
 import 'package:donuts/core/database/daos/catalog_dao.dart';
 import 'package:donuts/core/database/daos/member_dao.dart';
 import 'package:donuts/core/database/daos/sync_state_dao.dart';
 import 'package:donuts/core/database/daos/users_dao.dart';
 import 'package:donuts/core/database/tables/banners_table.dart';
+import 'package:donuts/core/database/tables/cart_items_table.dart';
 import 'package:donuts/core/database/tables/challenges_table.dart';
 import 'package:donuts/core/database/tables/gifts_table.dart';
 import 'package:donuts/core/database/tables/home_sections_table.dart';
@@ -32,8 +34,9 @@ part 'app_database.g.dart';
     ChallengesTable,
     GiftsTable,
     SyncStateTable,
+    CartItemsTable,
   ],
-  daos: [UsersDao, CatalogDao, MemberDao, SyncStateDao],
+  daos: [UsersDao, CatalogDao, MemberDao, SyncStateDao, CartDao],
 )
 class AppDatabase extends _$AppDatabase {
   new() : super(driftDatabase(name: 'donuts'));
@@ -41,11 +44,15 @@ class AppDatabase extends _$AppDatabase {
   new forTesting(super.e);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    onUpgrade: stepByStep(from1To2: _addCatalogTables),
+    onUpgrade: stepByStep(
+      from1To2: _addCatalogTables,
+      // v3 adds `cart_items`, the persistent cart.
+      from2To3: (m, schema) => m.createTable(schema.cartItems),
+    ),
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
   );
 }
