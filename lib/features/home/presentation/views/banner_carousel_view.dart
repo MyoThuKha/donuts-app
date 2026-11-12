@@ -102,10 +102,16 @@ class _PagerState extends State<_Pager> {
   bool _held = false;
   bool _reduced = false;
 
+  /// False while Home sits on a hidden tab. The shell mutes its tickers
+  /// with `TickerMode`, which would freeze a queued page move and let it
+  /// jump on return, so the timer stops instead.
+  bool _visible = true;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _reduced = context.motion.reduced;
+    _visible = TickerMode.valuesOf(context).enabled;
     _schedule();
   }
 
@@ -117,7 +123,7 @@ class _PagerState extends State<_Pager> {
 
   void _schedule() {
     _timer?.cancel();
-    if (_reduced || _held || widget.banners.length < 2) return;
+    if (_reduced || _held || !_visible || widget.banners.length < 2) return;
     _timer = Timer(HomeDimens.carouselInterval, _advance);
   }
 

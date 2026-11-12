@@ -77,6 +77,7 @@ class _StepperButton extends StatelessWidget {
       enabled: onPressed != null,
       label: label,
       excludeSemantics: true,
+      onTap: onPressed,
       child: InkResponse(
         onTap: onPressed,
         radius: ProductDimens.stepperTapTarget / 2,

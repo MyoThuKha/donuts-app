@@ -72,8 +72,11 @@ class _EarnButtonState extends State<EarnButton>
     if (pressed != _pressed) setState(() => _pressed = pressed);
   }
 
-  /// A completed press, not a scroll that started on the button.
+  /// A completed press on an active button, not a scroll that started on
+  /// it. A grey button still shrinks under the finger but counts for
+  /// nothing, so its pulse can still run once the challenge completes.
   void _onTap() {
+    if (!widget.active) return;
     _pressedOnce = true;
     _stopPulse();
     widget.onPressed?.call();
@@ -92,7 +95,7 @@ class _EarnButtonState extends State<EarnButton>
       enabled: widget.active,
       label: widget.label,
       excludeSemantics: true,
-      onTap: _onTap,
+      onTap: widget.active ? _onTap : null,
       child: GestureDetector(
         onTapDown: (_) => _setPressed(true),
         onTapUp: (_) => _setPressed(false),
