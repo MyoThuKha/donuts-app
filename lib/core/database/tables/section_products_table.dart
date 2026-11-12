@@ -4,11 +4,8 @@ import 'package:drift/drift.dart';
 
 /// Which products a Home section shows, in order.
 class SectionProductsTable extends Table {
-  TextColumn get sectionId => text().references(
-    HomeSectionsTable,
-    #id,
-    onDelete: KeyAction.cascade,
-  )();
+  TextColumn get sectionId =>
+      text().references(HomeSectionsTable, #id, onDelete: KeyAction.cascade)();
   TextColumn get productId =>
       text().references(ProductsTable, #id, onDelete: KeyAction.cascade)();
   IntColumn get sortOrder => integer()();

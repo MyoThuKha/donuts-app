@@ -46,8 +46,7 @@ abstract class HomeSectionDto with _$HomeSectionDto {
     required List<String> productIds,
   }) = _HomeSectionDto;
 
-  factory fromJson(Map<String, dynamic> json) =>
-      _$HomeSectionDtoFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$HomeSectionDtoFromJson(json);
 }
 
 /// Banner colours are theme tokens, never hex values from the server.
