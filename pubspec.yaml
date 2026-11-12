@@ -12,9 +12,10 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  go_router: ^18.1.4
   intl: ^0.20.3
+  lucide_icons_flutter: ^4.0.3
   material_ui: ^1.1.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
