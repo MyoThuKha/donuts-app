@@ -4325,6 +4325,279 @@ class SyncStateTableCompanion extends UpdateCompanion<SyncStateTableData> {
   }
 }
 
+class $CartItemsTableTable extends CartItemsTable
+    with TableInfo<$CartItemsTableTable, CartItemsTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CartItemsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _productIdMeta = const VerificationMeta(
+    'productId',
+  );
+  @override
+  late final GeneratedColumn<String> productId = GeneratedColumn<String>(
+    'product_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES products (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _quantityMeta = const VerificationMeta(
+    'quantity',
+  );
+  @override
+  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
+    'quantity',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [productId, quantity, updatedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cart_items';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CartItemsTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('product_id')) {
+      context.handle(
+        _productIdMeta,
+        productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_productIdMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(
+        _quantityMeta,
+        quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {productId};
+  @override
+  CartItemsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CartItemsTableData(
+      productId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}product_id'],
+      )!,
+      quantity: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}quantity'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CartItemsTableTable createAlias(String alias) {
+    return $CartItemsTableTable(attachedDatabase, alias);
+  }
+}
+
+class CartItemsTableData extends DataClass
+    implements Insertable<CartItemsTableData> {
+  final String productId;
+  final int quantity;
+  final DateTime updatedAt;
+  const CartItemsTableData({
+    required this.productId,
+    required this.quantity,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['product_id'] = Variable<String>(productId);
+    map['quantity'] = Variable<int>(quantity);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  CartItemsTableCompanion toCompanion(bool nullToAbsent) {
+    return CartItemsTableCompanion(
+      productId: Value(productId),
+      quantity: Value(quantity),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory CartItemsTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CartItemsTableData(
+      productId: serializer.fromJson<String>(json['productId']),
+      quantity: serializer.fromJson<int>(json['quantity']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'productId': serializer.toJson<String>(productId),
+      'quantity': serializer.toJson<int>(quantity),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  CartItemsTableData copyWith({
+    String? productId,
+    int? quantity,
+    DateTime? updatedAt,
+  }) => CartItemsTableData(
+    productId: productId ?? this.productId,
+    quantity: quantity ?? this.quantity,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  CartItemsTableData copyWithCompanion(CartItemsTableCompanion data) {
+    return CartItemsTableData(
+      productId: data.productId.present ? data.productId.value : this.productId,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CartItemsTableData(')
+          ..write('productId: $productId, ')
+          ..write('quantity: $quantity, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(productId, quantity, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CartItemsTableData &&
+          other.productId == this.productId &&
+          other.quantity == this.quantity &&
+          other.updatedAt == this.updatedAt);
+}
+
+class CartItemsTableCompanion extends UpdateCompanion<CartItemsTableData> {
+  final Value<String> productId;
+  final Value<int> quantity;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const CartItemsTableCompanion({
+    this.productId = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CartItemsTableCompanion.insert({
+    required String productId,
+    required int quantity,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : productId = Value(productId),
+       quantity = Value(quantity),
+       updatedAt = Value(updatedAt);
+  static Insertable<CartItemsTableData> custom({
+    Expression<String>? productId,
+    Expression<int>? quantity,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (productId != null) 'product_id': productId,
+      if (quantity != null) 'quantity': quantity,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CartItemsTableCompanion copyWith({
+    Value<String>? productId,
+    Value<int>? quantity,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return CartItemsTableCompanion(
+      productId: productId ?? this.productId,
+      quantity: quantity ?? this.quantity,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (productId.present) {
+      map['product_id'] = Variable<String>(productId.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CartItemsTableCompanion(')
+          ..write('productId: $productId, ')
+          ..write('quantity: $quantity, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4344,10 +4617,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $GiftsTableTable giftsTable = $GiftsTableTable(this);
   late final $SyncStateTableTable syncStateTable = $SyncStateTableTable(this);
+  late final $CartItemsTableTable cartItemsTable = $CartItemsTableTable(this);
   late final UsersDao usersDao = UsersDao(this as AppDatabase);
   late final CatalogDao catalogDao = CatalogDao(this as AppDatabase);
   late final MemberDao memberDao = MemberDao(this as AppDatabase);
   late final SyncStateDao syncStateDao = SyncStateDao(this as AppDatabase);
+  late final CartDao cartDao = CartDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4364,6 +4639,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     challengesTable,
     giftsTable,
     syncStateTable,
+    cartItemsTable,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -4380,6 +4656,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('section_products', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'products',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('cart_items', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -5101,6 +5384,24 @@ final class $$ProductsTableTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$CartItemsTableTable, List<CartItemsTableData>>
+  _cartItemsTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.cartItemsTable,
+    aliasName: 'products__id__cart_items__product_id',
+  );
+
+  $$CartItemsTableTableProcessedTableManager get cartItemsTableRefs {
+    final manager = $$CartItemsTableTableTableManager(
+      $_db,
+      $_db.cartItemsTable,
+    ).filter((f) => f.productId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_cartItemsTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$ProductsTableTableFilterComposer
@@ -5178,6 +5479,31 @@ class $$ProductsTableTableFilterComposer
           }) => $$SectionProductsTableTableFilterComposer(
             $db: $db,
             $table: $db.sectionProductsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> cartItemsTableRefs(
+    Expression<bool> Function($$CartItemsTableTableFilterComposer f) f,
+  ) {
+    final $$CartItemsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.cartItemsTable,
+      getReferencedColumn: (t) => t.productId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CartItemsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.cartItemsTable,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5318,6 +5644,31 @@ class $$ProductsTableTableAnnotationComposer
         );
     return f(composer);
   }
+
+  Expression<T> cartItemsTableRefs<T extends Object>(
+    Expression<T> Function($$CartItemsTableTableAnnotationComposer a) f,
+  ) {
+    final $$CartItemsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.cartItemsTable,
+      getReferencedColumn: (t) => t.productId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CartItemsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.cartItemsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$ProductsTableTableTableManager
@@ -5333,7 +5684,10 @@ class $$ProductsTableTableTableManager
           $$ProductsTableTableUpdateCompanionBuilder,
           (ProductsTableData, $$ProductsTableTableReferences),
           ProductsTableData,
-          PrefetchHooks Function({bool sectionProductsTableRefs})
+          PrefetchHooks Function({
+            bool sectionProductsTableRefs,
+            bool cartItemsTableRefs,
+          })
         > {
   $$ProductsTableTableTableManager(_$AppDatabase db, $ProductsTableTable table)
     : super(
@@ -5406,39 +5760,61 @@ class $$ProductsTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({sectionProductsTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (sectionProductsTableRefs) db.sectionProductsTable,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (sectionProductsTableRefs)
-                    await $_getPrefetchedDataByColumns<
-                      ProductsTableData,
-                      $ProductsTableTable,
-                      SectionProductsTableData,
-                      $SectionProductsTableTable
-                    >(
-                      currentTable: table,
-                      referencedTable: $$ProductsTableTableReferences
-                          ._sectionProductsTableRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$ProductsTableTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).sectionProductsTableRefs,
-                      currentColumn: 'id',
-                      referencedColumn: 'product_id',
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({sectionProductsTableRefs = false, cartItemsTableRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (sectionProductsTableRefs) db.sectionProductsTable,
+                    if (cartItemsTableRefs) db.cartItemsTable,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (sectionProductsTableRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ProductsTableData,
+                          $ProductsTableTable,
+                          SectionProductsTableData,
+                          $SectionProductsTableTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ProductsTableTableReferences
+                              ._sectionProductsTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ProductsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).sectionProductsTableRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'product_id',
+                          typedResults: items,
+                        ),
+                      if (cartItemsTableRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ProductsTableData,
+                          $ProductsTableTable,
+                          CartItemsTableData,
+                          $CartItemsTableTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ProductsTableTableReferences
+                              ._cartItemsTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ProductsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).cartItemsTableRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'product_id',
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -5455,7 +5831,10 @@ typedef $$ProductsTableTableProcessedTableManager =
       $$ProductsTableTableUpdateCompanionBuilder,
       (ProductsTableData, $$ProductsTableTableReferences),
       ProductsTableData,
-      PrefetchHooks Function({bool sectionProductsTableRefs})
+      PrefetchHooks Function({
+        bool sectionProductsTableRefs,
+        bool cartItemsTableRefs,
+      })
     >;
 typedef $$HomeSectionsTableTableCreateCompanionBuilder =
     HomeSectionsTableCompanion Function({
@@ -7278,6 +7657,294 @@ typedef $$SyncStateTableTableProcessedTableManager =
       SyncStateTableData,
       PrefetchHooks Function()
     >;
+typedef $$CartItemsTableTableCreateCompanionBuilder =
+    CartItemsTableCompanion Function({
+      required String productId,
+      required int quantity,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$CartItemsTableTableUpdateCompanionBuilder =
+    CartItemsTableCompanion Function({
+      Value<String> productId,
+      Value<int> quantity,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$CartItemsTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $CartItemsTableTable,
+          CartItemsTableData
+        > {
+  $$CartItemsTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ProductsTableTable _productIdTable(_$AppDatabase db) =>
+      db.productsTable.createAlias('cart_items__product_id__products__id');
+
+  $$ProductsTableTableProcessedTableManager get productId {
+    final $_column = $_itemColumn<String>('product_id')!;
+
+    final manager = $$ProductsTableTableTableManager(
+      $_db,
+      $_db.productsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_productIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$CartItemsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CartItemsTableTable> {
+  $$CartItemsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get quantity => $composableBuilder(
+    column: $table.quantity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ProductsTableTableFilterComposer get productId {
+    final $$ProductsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.productId,
+      referencedTable: $db.productsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ProductsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.productsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CartItemsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CartItemsTableTable> {
+  $$CartItemsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get quantity => $composableBuilder(
+    column: $table.quantity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ProductsTableTableOrderingComposer get productId {
+    final $$ProductsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.productId,
+      referencedTable: $db.productsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ProductsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.productsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CartItemsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CartItemsTableTable> {
+  $$CartItemsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ProductsTableTableAnnotationComposer get productId {
+    final $$ProductsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.productId,
+      referencedTable: $db.productsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ProductsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.productsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CartItemsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CartItemsTableTable,
+          CartItemsTableData,
+          $$CartItemsTableTableFilterComposer,
+          $$CartItemsTableTableOrderingComposer,
+          $$CartItemsTableTableAnnotationComposer,
+          $$CartItemsTableTableCreateCompanionBuilder,
+          $$CartItemsTableTableUpdateCompanionBuilder,
+          (CartItemsTableData, $$CartItemsTableTableReferences),
+          CartItemsTableData,
+          PrefetchHooks Function({bool productId})
+        > {
+  $$CartItemsTableTableTableManager(
+    _$AppDatabase db,
+    $CartItemsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CartItemsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CartItemsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CartItemsTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> productId = const Value.absent(),
+                Value<int> quantity = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CartItemsTableCompanion(
+                productId: productId,
+                quantity: quantity,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String productId,
+                required int quantity,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => CartItemsTableCompanion.insert(
+                productId: productId,
+                quantity: quantity,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$CartItemsTableTable, CartItemsTableData>(table),
+                  $$CartItemsTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({productId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (productId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.productId,
+                        referencedTable: $$CartItemsTableTableReferences
+                            ._productIdTable(db),
+                        referencedColumn: $$CartItemsTableTableReferences
+                            ._productIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$CartItemsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CartItemsTableTable,
+      CartItemsTableData,
+      $$CartItemsTableTableFilterComposer,
+      $$CartItemsTableTableOrderingComposer,
+      $$CartItemsTableTableAnnotationComposer,
+      $$CartItemsTableTableCreateCompanionBuilder,
+      $$CartItemsTableTableUpdateCompanionBuilder,
+      (CartItemsTableData, $$CartItemsTableTableReferences),
+      CartItemsTableData,
+      PrefetchHooks Function({bool productId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7304,4 +7971,6 @@ class $AppDatabaseManager {
       $$GiftsTableTableTableManager(_db, _db.giftsTable);
   $$SyncStateTableTableTableManager get syncStateTable =>
       $$SyncStateTableTableTableManager(_db, _db.syncStateTable);
+  $$CartItemsTableTableTableManager get cartItemsTable =>
+      $$CartItemsTableTableTableManager(_db, _db.cartItemsTable);
 }
