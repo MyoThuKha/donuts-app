@@ -1,18 +1,14 @@
+import 'package:donuts/app/app.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
 void main() {
+  LicenseRegistry.addLicense(_fontLicense);
   runApp(const DonutsApp());
 }
 
-/// Placeholder root widget until the router and theme land.
-class DonutsApp extends StatelessWidget {
-  const new({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: "J'Donuts",
-      home: Scaffold(body: Center(child: Text("J'Donuts"))),
-    );
-  }
+Stream<LicenseEntry> _fontLicense() async* {
+  final licence = await rootBundle.loadString('assets/fonts/OFL.txt');
+  yield LicenseEntryWithLineBreaks(['PlusJakartaSans'], licence);
 }
