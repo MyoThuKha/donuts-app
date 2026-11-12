@@ -22,3 +22,12 @@ Dio buildApiDio(ApiConfig config, {bool logRequests = kDebugMode}) {
   }
   return dio;
 }
+
+/// The Dio the reachability probe uses: short timeouts and no retry, so an
+/// unreachable host is reported within [ApiConfig.probeTimeout].
+Dio buildProbeDio() => Dio(
+  BaseOptions(
+    connectTimeout: ApiConfig.probeTimeout,
+    receiveTimeout: ApiConfig.probeTimeout,
+  ),
+);
