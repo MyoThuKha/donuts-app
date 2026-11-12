@@ -4,7 +4,8 @@ import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
 import 'package:donuts/features/rewards/domain/vo/tier_vo.dart';
 
 extension TiersTableDataMapper on TiersTableData {
-  TierVO toVO() => TierVO(id: id, name: name, minPoints: minPoints);
+  TierVO toVO() =>
+      TierVO(id: id, name: name, minPoints: minPoints, sortOrder: sortOrder);
 }
 
 extension MemberProfileTableDataMapper on MemberProfileTableData {

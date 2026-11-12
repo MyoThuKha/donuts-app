@@ -11,5 +11,8 @@ abstract class TierVO with _$TierVO {
     required String id,
     required String name,
     required int minPoints,
+
+    /// Position on the ladder, 0 for the lowest tier.
+    required int sortOrder,
   }) = _TierVO;
 }

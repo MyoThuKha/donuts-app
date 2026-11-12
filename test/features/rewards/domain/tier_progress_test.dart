@@ -2,9 +2,19 @@ import 'package:donuts/features/rewards/domain/tier_progress.dart';
 import 'package:donuts/features/rewards/domain/vo/tier_vo.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-const _silver = TierVO(id: 'silver', name: 'Silver', minPoints: 678500);
-const _gold = TierVO(id: 'gold', name: 'Gold', minPoints: 680500);
-const _platinum = TierVO(id: 'platinum', name: 'Platinum', minPoints: 1000000);
+const _silver = TierVO(
+  id: 'silver',
+  name: 'Silver',
+  minPoints: 678500,
+  sortOrder: 0,
+);
+const _gold = TierVO(id: 'gold', name: 'Gold', minPoints: 680500, sortOrder: 1);
+const _platinum = TierVO(
+  id: 'platinum',
+  name: 'Platinum',
+  minPoints: 1000000,
+  sortOrder: 2,
+);
 const List<TierVO> _tiers = [_silver, _gold, _platinum];
 
 void main() {

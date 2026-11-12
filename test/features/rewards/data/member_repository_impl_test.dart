@@ -34,6 +34,7 @@ void main() {
     expect(summary?.totalPoints, 680000);
     expect(summary?.rewardsCount, 3);
     expect(summary?.tiers.map((t) => t.id), ['silver', 'gold', 'platinum']);
+    expect(summary?.tiers.map((t) => t.sortOrder), [0, 1, 2]);
     expect(summary?.tierProgress.current?.name, 'Silver');
     expect(summary?.tierProgress.pointsToNext, 500);
   });
