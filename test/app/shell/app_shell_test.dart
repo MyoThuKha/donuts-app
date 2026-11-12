@@ -33,7 +33,7 @@ void main() {
     await tester.tap(_rewardIcon);
     await tester.pumpAndSettle();
 
-    expect(find.text('Reward is coming soon'), findsOneWidget);
+    expect(find.text("J' Donuts Rewards"), findsOneWidget);
     expect(find.text('Reward'), findsOneWidget);
     expect(find.text('Home'), findsNothing);
   });
@@ -48,7 +48,7 @@ void main() {
     await tester.tap(_rewardIcon);
     await tester.pumpAndSettle();
 
-    expect(find.text('Reward is coming soon'), findsOneWidget);
+    expect(find.text("J' Donuts Rewards"), findsOneWidget);
   });
 
   testWidgets('re-tapping the active tab keeps the same tab without errors', (
@@ -79,7 +79,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(tester.getRect(find.byType(NavPillWidget)), pillAfterOneFrame);
-    expect(find.text('Reward is coming soon'), findsOneWidget);
+    expect(find.text("J' Donuts Rewards"), findsOneWidget);
   });
 
   testWidgets('pill animates over several frames when Reduce Motion is off', (
