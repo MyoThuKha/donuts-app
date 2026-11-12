@@ -1,8 +1,10 @@
+import 'package:donuts/features/rewards/domain/repositories/rewards_repository.dart';
 import 'package:donuts/features/rewards/domain/types/challenge_kind.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_gifts_use_case.dart';
 import 'package:donuts/features/rewards/domain/vo/challenge_vo.dart';
 import 'package:donuts/features/rewards/domain/vo/gift_vo.dart';
+import 'package:donuts/features/rewards/presentation/blocs/rewards_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -45,8 +47,38 @@ const List<GiftVO> testGifts = [
   GiftVO(id: 'g_box_of_six', title: 'Box of 6 donuts', costPoints: 90000),
 ];
 
+/// A rewards repository that emits [challenges] and [gifts] once.
+class FakeRewardsRepository implements RewardsRepository {
+  new({this.challenges = testChallenges, this.gifts = testGifts});
+
+  final List<ChallengeVO> challenges;
+  final List<GiftVO> gifts;
+
+  @override
+  Stream<List<ChallengeVO>> watchChallenges() => Stream.value(challenges);
+
+  @override
+  Stream<List<GiftVO>> watchGifts() => Stream.value(gifts);
+}
+
 /// Fakes for the rewards screen's get_it dependencies, used by
 /// `pumpRouterApp`. Register each one only if
 /// `getIt.isRegistered<T>()` is false, so a test's own fakes win.
-/// The member summary comes from `registerMemberFakes`.
-void registerRewardsFakes(GetIt getIt) {}
+/// The member summary comes from `registerMemberFakes`, which must run
+/// first.
+void registerRewardsFakes(GetIt getIt) {
+  if (!getIt.isRegistered<RewardsRepository>()) {
+    getIt.registerSingleton<RewardsRepository>(FakeRewardsRepository());
+  }
+  if (!getIt.isRegistered<WatchChallengesUseCase>()) {
+    getIt.registerSingleton(WatchChallengesUseCase(getIt()));
+  }
+  if (!getIt.isRegistered<WatchGiftsUseCase>()) {
+    getIt.registerSingleton(WatchGiftsUseCase(getIt()));
+  }
+  if (!getIt.isRegistered<RewardsCubit>()) {
+    getIt.registerFactory(
+      () => RewardsCubit(member: getIt(), challenges: getIt(), gifts: getIt()),
+    );
+  }
+}
