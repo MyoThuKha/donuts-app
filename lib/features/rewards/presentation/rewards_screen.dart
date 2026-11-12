@@ -51,6 +51,10 @@ class _RewardsPageState extends State<_RewardsPage>
   );
   bool _entered = false;
 
+  /// Bumped on each replay. The card lists are keyed by it, so they mount
+  /// again and their stagger, art fill and Earn pulse play once more.
+  int _run = 0;
+
   /// Whether the Rewards tab is the one showing. The shell keeps this page
   /// alive in an indexed stack and wraps each tab in a [TickerMode], so the
   /// value flips to true each time the user comes back.
@@ -62,7 +66,10 @@ class _RewardsPageState extends State<_RewardsPage>
     final onScreen = TickerMode.valuesOf(context).enabled;
     final cameBack = onScreen && !_onScreen;
     _onScreen = onScreen;
-    if (cameBack && _entered) _playEntrance();
+    if (cameBack && _entered) {
+      _run++;
+      _playEntrance();
+    }
   }
 
   void _onStatus(BuildContext context, RewardsState state) {
@@ -195,7 +202,12 @@ class _RewardsPageState extends State<_RewardsPage>
             AppSpacing.pageGutter,
             0,
           ),
-          sliver: SliverToBoxAdapter(child: _CardLists(state: state)),
+          sliver: SliverToBoxAdapter(
+            child: KeyedSubtree(
+              key: ValueKey(_run),
+              child: _CardLists(state: state),
+            ),
+          ),
         ),
       ],
     };
@@ -256,12 +268,16 @@ class _CardLists extends StatelessWidget {
           ),
         );
       },
-      child: KeyedSubtree(key: current, child: _list()),
+      child: KeyedSubtree(key: current, child: _list(context)),
     );
   }
 
-  Widget _list() => switch (state.tab) {
-    RewardsTab.challenges => ChallengeListView(challenges: state.challenges),
+  Widget _list(BuildContext context) => switch (state.tab) {
+    RewardsTab.challenges => ChallengeListView(
+      challenges: state.challenges,
+      acknowledged: state.acknowledgedEarns,
+      onEarnPressed: context.read<RewardsCubit>().acknowledgeEarn,
+    ),
     RewardsTab.gifts => GiftListView(
       gifts: state.gifts,
       totalPoints: state.member?.totalPoints ?? 0,

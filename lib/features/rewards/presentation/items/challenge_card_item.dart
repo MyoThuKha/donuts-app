@@ -16,10 +16,21 @@ import 'package:material_ui/material_ui.dart';
 /// A challenge card. Its art fills to the challenge's progress once the
 /// card at [index] has entered.
 class ChallengeCardItem extends StatefulWidget {
-  const new({required this.challenge, required this.index, super.key});
+  const new({
+    required this.challenge,
+    required this.index,
+    this.acknowledged = false,
+    this.onEarnPressed,
+    super.key,
+  });
 
   final ChallengeVO challenge;
   final int index;
+
+  /// True once the user has pressed this challenge's Earn, which stops
+  /// its pulse.
+  final bool acknowledged;
+  final VoidCallback? onEarnPressed;
 
   @override
   State<ChallengeCardItem> createState() => _ChallengeCardItemState();
@@ -86,8 +97,9 @@ class _ChallengeCardItemState extends State<ChallengeCardItem>
         RewardCardAction(
           button: EarnButton(
             active: challenge.isComplete,
-            pulse: challenge.isComplete,
+            pulse: challenge.isComplete && !widget.acknowledged,
             label: l10n.rewardsEarn,
+            onPressed: widget.onEarnPressed,
           ),
           points: l10n.rewardsPoints(formatGrouped(challenge.rewardPoints)),
         ),

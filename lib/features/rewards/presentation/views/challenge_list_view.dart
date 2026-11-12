@@ -8,9 +8,18 @@ import 'package:material_ui/material_ui.dart';
 
 /// The "Eat more earn more" cards, entering one after another.
 class ChallengeListView extends StatelessWidget {
-  const new({required this.challenges, super.key});
+  const new({
+    required this.challenges,
+    this.acknowledged = const {},
+    this.onEarnPressed,
+    super.key,
+  });
 
   final List<ChallengeVO> challenges;
+
+  /// Ids of challenges whose Earn was already pressed.
+  final Set<String> acknowledged;
+  final ValueChanged<String>? onEarnPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,14 @@ class ChallengeListView extends StatelessWidget {
           StaggeredEntrance(
             key: ValueKey(challenge.id),
             index: i,
-            child: ChallengeCardItem(challenge: challenge, index: i),
+            child: ChallengeCardItem(
+              challenge: challenge,
+              index: i,
+              acknowledged: acknowledged.contains(challenge.id),
+              onEarnPressed: onEarnPressed == null
+                  ? null
+                  : () => onEarnPressed!(challenge.id),
+            ),
           ),
       ],
     );

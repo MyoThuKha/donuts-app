@@ -1,4 +1,5 @@
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
+import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
 import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:donuts/features/rewards/presentation/widgets/earn_button_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -84,5 +85,56 @@ void main() {
     await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
 
     expect(_earnPulse(tester), greaterThan(1));
+  });
+
+  testWidgets(
+    'coming back to the Rewards tab replays the cards and their art',
+    (tester) async {
+      double cocoDonut() => tester
+          .widgetList<ClipPath>(find.byType(ClipPath))
+          .map((c) => c.clipper)
+          .whereType<QuarterClipper>()
+          .first
+          .fraction;
+      await pumpRouterApp(
+        tester,
+        session: testSessionCubit()..signedIn(testUser),
+      );
+      await tester.tap(find.byIcon(LucideIcons.crown));
+      await tester.pumpAndSettle();
+      expect(cocoDonut(), 1);
+
+      await tester.tap(find.byIcon(LucideIcons.house));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(LucideIcons.crown));
+      await tester.pump();
+
+      expect(cocoDonut(), closeTo(0, 0.01));
+      await tester.pumpAndSettle();
+      expect(cocoDonut(), 1);
+    },
+  );
+
+  testWidgets('a pressed Earn stays still when the user comes back', (
+    tester,
+  ) async {
+    await pumpRouterApp(
+      tester,
+      session: testSessionCubit()..signedIn(testUser),
+    );
+    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.pumpAndSettle();
+    final earn = find.byWidgetPredicate((w) => w is EarnButton && w.active);
+    await tester.ensureVisible(earn);
+    await tester.tap(earn);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(LucideIcons.house));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.pump();
+    await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
+
+    expect(_earnPulse(tester), 1);
   });
 }

@@ -77,6 +77,13 @@ void main() {
   );
 
   blocTest<RewardsCubit, RewardsState>(
+    'acknowledgeEarn remembers the challenge whose Earn was pressed',
+    build: build,
+    act: (cubit) => cubit.acknowledgeEarn('c_coco_donuts'),
+    verify: (cubit) => expect(cubit.state.acknowledgedEarns, {'c_coco_donuts'}),
+  );
+
+  blocTest<RewardsCubit, RewardsState>(
     'retry after a failure resubscribes and recovers',
     setUp: () {
       var calls = 0;

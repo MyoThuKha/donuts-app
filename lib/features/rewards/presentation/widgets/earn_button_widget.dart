@@ -16,12 +16,17 @@ class EarnButton extends StatefulWidget {
     required this.active,
     required this.label,
     this.pulse = false,
+    this.onPressed,
     super.key,
   });
 
   final bool active;
   final String label;
   final bool pulse;
+
+  /// Called after a completed press. It never triggers a reward; callers
+  /// use it to remember that the pulse has done its job.
+  final VoidCallback? onPressed;
 
   @override
   State<EarnButton> createState() => _EarnButtonState();
@@ -64,11 +69,14 @@ class _EarnButtonState extends State<EarnButton>
     ..value = 0;
 
   void _setPressed(bool pressed) {
-    if (pressed) {
-      _pressedOnce = true;
-      _stopPulse();
-    }
     if (pressed != _pressed) setState(() => _pressed = pressed);
+  }
+
+  /// A completed press, not a scroll that started on the button.
+  void _onTap() {
+    _pressedOnce = true;
+    _stopPulse();
+    widget.onPressed?.call();
   }
 
   @override
@@ -84,12 +92,12 @@ class _EarnButtonState extends State<EarnButton>
       enabled: widget.active,
       label: widget.label,
       excludeSemantics: true,
-      onTap: _noAction,
+      onTap: _onTap,
       child: GestureDetector(
         onTapDown: (_) => _setPressed(true),
         onTapUp: (_) => _setPressed(false),
         onTapCancel: () => _setPressed(false),
-        onTap: _noAction,
+        onTap: _onTap,
         child: ScaleTransition(
           scale: _scale,
           child: AnimatedScale(
@@ -102,9 +110,6 @@ class _EarnButtonState extends State<EarnButton>
       ),
     );
   }
-
-  /// Rewards have no backend; pressing gives feedback only.
-  static void _noAction() {}
 
   Widget _body(BuildContext context) {
     final colors = context.colors;

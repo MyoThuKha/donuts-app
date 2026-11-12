@@ -35,11 +35,20 @@ class RewardsCubit extends Cubit<RewardsState> {
 
   void selectTab(RewardsTab tab) => emit(state.copyWith(tab: tab));
 
+  /// Earn has no backend action; pressing it only stops its pulse.
+  void acknowledgeEarn(String challengeId) => emit(
+    state.copyWith(
+      acknowledgedEarns: {...state.acknowledgedEarns, challengeId},
+    ),
+  );
+
   /// Drops the current streams and subscribes again from loading, keeping
   /// the selected tab.
   void retry() {
     unawaited(_cancel());
-    emit(RewardsState(tab: state.tab));
+    emit(
+      RewardsState(tab: state.tab, acknowledgedEarns: state.acknowledgedEarns),
+    );
     start();
   }
 
