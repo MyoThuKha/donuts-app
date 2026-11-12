@@ -97,6 +97,48 @@ void main() {
     expect(await productCount(), 0);
   });
 
+  Future<void> expectRejected(CatalogDto broken) async {
+    await expectLater(
+      importer.importCatalog(broken, version: 1),
+      throwsA(isA<CatalogIntegrityException>()),
+    );
+    expect(await productCount(), 0);
+    expect(await importer.hasData(SyncKeys.catalog), isFalse);
+  }
+
+  test('a repeated section id writes nothing', () async {
+    await expectRejected(
+      seed.copyWith(sections: [...seed.sections, seed.sections.first]),
+    );
+  });
+
+  test('a repeated banner id writes nothing', () async {
+    await expectRejected(
+      seed.copyWith(banners: [...seed.banners, seed.banners.first]),
+    );
+  });
+
+  test('a repeated shop id writes nothing', () async {
+    await expectRejected(
+      seed.copyWith(shops: [...seed.shops, seed.shops.first]),
+    );
+  });
+
+  test('a product listed twice in one section writes nothing', () async {
+    final popular = seed.sections.firstWhere((s) => s.id == 'popular');
+    final doubled = popular.copyWith(
+      productIds: [...popular.productIds, popular.productIds.first],
+    );
+    await expectRejected(
+      seed.copyWith(
+        sections: [
+          for (final s in seed.sections)
+            if (s.id == 'popular') doubled else s,
+        ],
+      ),
+    );
+  });
+
   test(
     'importMember stores one profile with 680,000 points and three tiers',
     () async {

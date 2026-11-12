@@ -64,22 +64,33 @@ class CatalogImporter {
     return isNewer ? ImportOutcome.imported : ImportOutcome.skipped;
   });
 
+  /// Rejects a catalog whose ids repeat within a list, or whose sections
+  /// name a product it doesn't have or name one product twice.
   void _checkIntegrity(CatalogDto catalog) {
-    final productIds = <String>{};
-    for (final product in catalog.products) {
-      if (!productIds.add(product.id)) {
-        throw CatalogIntegrityException('Repeated product id ${product.id}');
-      }
-    }
+    final productIds = _uniqueIds('product', [
+      for (final p in catalog.products) p.id,
+    ]);
+    _uniqueIds('section', [for (final s in catalog.sections) s.id]);
+    _uniqueIds('banner', [for (final b in catalog.banners) b.id]);
+    _uniqueIds('shop', [for (final s in catalog.shops) s.id]);
     for (final section in catalog.sections) {
-      final missing = section.productIds.where(
-        (id) => !productIds.contains(id),
-      );
+      final listed = _uniqueIds('${section.id} product', section.productIds);
+      final missing = listed.difference(productIds);
       if (missing.isNotEmpty) {
         throw CatalogIntegrityException(
           'Section ${section.id} names unknown products $missing',
         );
       }
     }
+  }
+
+  Set<String> _uniqueIds(String kind, List<String> ids) {
+    final unique = <String>{};
+    for (final id in ids) {
+      if (!unique.add(id)) {
+        throw CatalogIntegrityException('Repeated $kind id $id');
+      }
+    }
+    return unique;
   }
 }
