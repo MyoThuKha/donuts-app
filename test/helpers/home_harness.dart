@@ -16,6 +16,7 @@ import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:donuts/features/home/presentation/home_screen.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -101,6 +102,10 @@ Future<void> pumpHomeScreen(
   CatalogSyncCubit? sync,
   bool reduceMotion = false,
   Size surface = tallPhoneSurface,
+
+  /// Drives a `TickerMode` around Home, the way the shell hides an
+  /// inactive tab. Visible when omitted.
+  ValueListenable<bool>? visible,
 }) async {
   useTallPhoneSurface(tester, logicalSize: surface);
   getIt.registerFactory(streams.cubit);
@@ -127,7 +132,12 @@ Future<void> pumpHomeScreen(
         builder: (context) => MediaQuery(
           data: MediaQuery.of(context)
               .copyWith(disableAnimations: reduceMotion),
-          child: const HomeScreen(),
+          child: ValueListenableBuilder<bool>(
+            valueListenable: visible ?? const _AlwaysVisible(),
+            builder: (context, isVisible, child) =>
+                TickerMode(enabled: isVisible, child: child!),
+            child: const HomeScreen(),
+          ),
         ),
       ),
     ),
@@ -143,4 +153,17 @@ CatalogSyncCubit _idleSync(ConnectivityCubit connectivity) {
     connectivity: connectivity,
     now: DateTime.now,
   );
+}
+
+class _AlwaysVisible implements ValueListenable<bool> {
+  const new();
+
+  @override
+  bool get value => true;
+
+  @override
+  void addListener(VoidCallback listener) {}
+
+  @override
+  void removeListener(VoidCallback listener) {}
 }

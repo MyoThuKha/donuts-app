@@ -30,6 +30,31 @@ void main() {
     expect(_page(tester), 1);
   });
 
+  testWidgets('the carousel waits while Home is on a hidden tab', (
+    tester,
+  ) async {
+    final visible = ValueNotifier(true);
+    addTearDown(visible.dispose);
+    await pumpHomeScreen(tester, streams, visible: visible);
+    streams.emitAll();
+    await tester.pumpAndSettle();
+
+    visible.value = false;
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 9));
+    await tester.pumpAndSettle();
+    expect(_page(tester), 0);
+
+    // Back on Home: no queued jump, then a full interval before it moves.
+    visible.value = true;
+    await tester.pumpAndSettle();
+    expect(_page(tester), 0);
+
+    await tester.pump(const Duration(seconds: 4));
+    await tester.pumpAndSettle();
+    expect(_page(tester), 1);
+  });
+
   testWidgets('the carousel pauses while a finger is down', (tester) async {
     await pumpHomeScreen(tester, streams);
     streams.emitAll();
