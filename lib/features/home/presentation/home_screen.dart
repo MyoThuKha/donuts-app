@@ -1,6 +1,9 @@
 import 'package:donuts/core/di/locator.dart';
+import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
+import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
+import 'package:donuts/core/sync/presentation/catalog_sync_state.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner.dart';
@@ -37,11 +40,39 @@ class _HomePage extends StatelessWidget {
       color: context.colors.canvas,
       child: Stack(
         children: [
-          CustomScrollView(slivers: _slivers(context)),
+          RefreshIndicator(
+            edgeOffset: MediaQuery.paddingOf(context).top,
+            color: context.colors.accent,
+            onRefresh: () => _refresh(context),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: _slivers(context),
+            ),
+          ),
           const Positioned(top: 0, left: 0, right: 0, child: _Offline()),
         ],
       ),
     );
+  }
+
+  /// Refreshes the catalog, or waits for the refresh already running, and
+  /// reports a failure in a snackbar. The rows keep showing the saved data.
+  /// Only this pull reports failures: background refreshes stay silent.
+  Future<void> _refresh(BuildContext context) async {
+    final sync = context.read<CatalogSyncCubit>();
+    final messenger = ScaffoldMessenger.of(context);
+    final failedMessage = context.l10n.homeRefreshFailed;
+    if (sync.state.status == CatalogSyncStatus.syncing) {
+      await sync.stream.firstWhere(
+        (state) => state.status != CatalogSyncStatus.syncing,
+      );
+    } else {
+      await sync.refresh();
+    }
+    if (sync.state.status != CatalogSyncStatus.failed) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(failedMessage)));
   }
 
   List<Widget> _slivers(BuildContext context) {
