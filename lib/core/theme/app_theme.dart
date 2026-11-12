@@ -15,7 +15,7 @@ abstract final class AppTheme {
         onSecondary: colors.onPrimary,
         tertiary: colors.highlight,
         onTertiary: colors.onPrimary,
-        error: colors.accent,
+        error: colors.danger,
         onError: colors.onPrimary,
         surface: colors.surface,
         onSurface: colors.ink,
