@@ -26,13 +26,17 @@ class AppBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final onTap = enabled ? onPressed ?? () => _back(context) : null;
+    // excludeSemantics drops the InkResponse's own tap action, so the
+    // Semantics node carries it for screen readers.
     return Semantics(
       button: true,
       label: context.l10n.back,
       enabled: enabled,
       excludeSemantics: true,
+      onTap: onTap,
       child: InkResponse(
-        onTap: enabled ? onPressed ?? () => _back(context) : null,
+        onTap: onTap,
         radius: AppSizes.button / 2,
         child: SizedBox.square(
           dimension: AppSizes.button,
