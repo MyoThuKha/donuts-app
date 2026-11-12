@@ -21,4 +21,22 @@ void main() {
     expect(l10n.tabReward, 'Reward');
     expect(l10n.placeholderComingSoon('Wallet'), 'Wallet is coming soon');
   });
+
+  test('screen 8 to 10 strings read as designed', () async {
+    final l10n = await AppLocalizations.delegate.load(const Locale('en'));
+
+    expect(l10n.homeShopsTitle(4), "There are 4 J'Donut shops near you");
+    expect(l10n.homeShopsTitle(1), "There is 1 J'Donut shop near you");
+    expect(l10n.productPrice('3,200'), '3,200 MMK');
+    expect(
+      l10n.rewardsTierRemaining('500', 'Gold'),
+      '500 pts Remaining to become Gold',
+    );
+    expect(
+      l10n.productAddedToCart(2, 'Coconut Donut'),
+      'Added 2 Coconut Donut to your cart',
+    );
+    expect(l10n.discountOff(50), '50% off');
+    expect(l10n.rewardsProgress(9, 12), '9/12');
+  });
 }

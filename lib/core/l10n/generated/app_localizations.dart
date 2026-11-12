@@ -435,6 +435,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Image unavailable'**
   String get imageUnavailable;
+
+  /// Member tier under the name on Home
+  ///
+  /// In en, this message translates to:
+  /// **'{tier} member'**
+  String homeMemberTier(String tier);
+
+  /// Chip under the Home header; points is pre-formatted
+  ///
+  /// In en, this message translates to:
+  /// **'{points} points left to become {tier} Member'**
+  String homePointsToNextTier(String points, String tier);
+
+  /// Home header chip when there is no next tier
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re at our top tier'**
+  String get homeTopTier;
+
+  /// Screen reader label for the notification bell
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No notifications} =1{1 notification} other{{count} notifications}}'**
+  String homeNotifications(int count);
+
+  /// Home section title
+  ///
+  /// In en, this message translates to:
+  /// **'Seasonal specials'**
+  String get homeSectionSeasonal;
+
+  /// Home section title
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get homeSectionPopular;
+
+  /// Home section title
+  ///
+  /// In en, this message translates to:
+  /// **'Order again'**
+  String get homeSectionOrderAgain;
+
+  /// Chevron button next to a Home section title
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get homeSeeAll;
+
+  /// Discount badge on product tiles and Product detail
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% off'**
+  String discountOff(int percent);
+
+  /// Title of the nearby shops band
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{There is 1 J\'Donut shop near you} other{There are {count} J\'Donut shops near you}}'**
+  String homeShopsTitle(int count);
+
+  /// Button in the nearby shops band
+  ///
+  /// In en, this message translates to:
+  /// **'Explore now'**
+  String get homeExploreNow;
+
+  /// Link on a shop card
+  ///
+  /// In en, this message translates to:
+  /// **'Order online'**
+  String get homeOrderOnline;
+
+  /// Banner at the top of Home while offline
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline. Showing saved data.'**
+  String get homeOffline;
+
+  /// Snackbar after a failed pull-to-refresh
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t refresh. Showing saved data.'**
+  String get homeRefreshFailed;
+
+  /// Shown in a Home section with no items
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet.'**
+  String get homeSectionEmpty;
+
+  /// Shown in a Home section that failed to load
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load this section.'**
+  String get homeSectionError;
+
+  /// Retry button in a failed Home section
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get homeRetry;
+
+  /// Badge on a new product
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get productNew;
+
+  /// Label next to the product description
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s this?'**
+  String get productWhatsThis;
+
+  /// Add to cart button
+  ///
+  /// In en, this message translates to:
+  /// **'Add to cart'**
+  String get productAddToCart;
+
+  /// A price in Myanmar kyat; amount is pre-formatted
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} MMK'**
+  String productPrice(String amount);
+
+  /// Snackbar after adding to the cart
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Added 1 {name} to your cart} other{Added {count} {name} to your cart}}'**
+  String productAddedToCart(int count, String name);
+
+  /// Screen reader label for the minus button
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease quantity'**
+  String get productDecrease;
+
+  /// Screen reader label for the plus button
+  ///
+  /// In en, this message translates to:
+  /// **'Increase quantity'**
+  String get productIncrease;
+
+  /// Product detail for a product the catalog no longer has
+  ///
+  /// In en, this message translates to:
+  /// **'This product isn\'t available any more.'**
+  String get productNotFound;
+
+  /// Snackbar when adding to the cart fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t add to your cart. Try again.'**
+  String get productAddFailed;
+
+  /// Rewards screen title
+  ///
+  /// In en, this message translates to:
+  /// **'J\' Donuts Rewards'**
+  String get rewardsTitle;
+
+  /// Pill next to the Rewards title
+  ///
+  /// In en, this message translates to:
+  /// **'Rewards'**
+  String get rewardsPill;
+
+  /// Screen reader label for the Rewards pill badge
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 reward available} other{{count} rewards available}}'**
+  String rewardsAvailable(int count);
+
+  /// Caption under the current tier
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re here now'**
+  String get rewardsTierCurrent;
+
+  /// Caption under the next tier; points is pre-formatted
+  ///
+  /// In en, this message translates to:
+  /// **'{points} pts Remaining to become {tier}'**
+  String rewardsTierRemaining(String points, String tier);
+
+  /// Caption under tiers beyond the next one
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll be here soon'**
+  String get rewardsTierUpcoming;
+
+  /// Caption under tiers below the current one
+  ///
+  /// In en, this message translates to:
+  /// **'Reached'**
+  String get rewardsTierReached;
+
+  /// Label inside the points ring
+  ///
+  /// In en, this message translates to:
+  /// **'Total points'**
+  String get rewardsTotalPoints;
+
+  /// Rewards tab
+  ///
+  /// In en, this message translates to:
+  /// **'Eat more earn more'**
+  String get rewardsTabChallenges;
+
+  /// Rewards tab
+  ///
+  /// In en, this message translates to:
+  /// **'Gift'**
+  String get rewardsTabGifts;
+
+  /// Button on a challenge card
+  ///
+  /// In en, this message translates to:
+  /// **'Earn'**
+  String get rewardsEarn;
+
+  /// Button on a gift card
+  ///
+  /// In en, this message translates to:
+  /// **'Redeem'**
+  String get rewardsRedeem;
+
+  /// Points value; points is pre-formatted
+  ///
+  /// In en, this message translates to:
+  /// **'{points} pts'**
+  String rewardsPoints(String points);
+
+  /// Challenge progress
+  ///
+  /// In en, this message translates to:
+  /// **'{progress}/{target}'**
+  String rewardsProgress(int progress, int target);
+
+  /// Rewards with no member data
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to show yet.'**
+  String get rewardsEmpty;
+
+  /// Rewards when its data fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load your rewards.'**
+  String get rewardsError;
+
+  /// Retry button on the Rewards error state
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get rewardsRetry;
 }
 
 class _AppLocalizationsDelegate

@@ -154,5 +154,244 @@
   "imageUnavailable": "Image unavailable",
   "@imageUnavailable": {
     "description": "Screen reader label for an image that failed to load"
+  },
+  "homeMemberTier": "{tier} member",
+  "@homeMemberTier": {
+    "description": "Member tier under the name on Home",
+    "placeholders": {
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "homePointsToNextTier": "{points} points left to become {tier} Member",
+  "@homePointsToNextTier": {
+    "description": "Chip under the Home header; points is pre-formatted",
+    "placeholders": {
+      "points": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTopTier": "You're at our top tier",
+  "@homeTopTier": {
+    "description": "Home header chip when there is no next tier"
+  },
+  "homeNotifications": "{count, plural, =0{No notifications} =1{1 notification} other{{count} notifications}}",
+  "@homeNotifications": {
+    "description": "Screen reader label for the notification bell",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeSectionSeasonal": "Seasonal specials",
+  "@homeSectionSeasonal": {
+    "description": "Home section title"
+  },
+  "homeSectionPopular": "Popular",
+  "@homeSectionPopular": {
+    "description": "Home section title"
+  },
+  "homeSectionOrderAgain": "Order again",
+  "@homeSectionOrderAgain": {
+    "description": "Home section title"
+  },
+  "homeSeeAll": "See all",
+  "@homeSeeAll": {
+    "description": "Chevron button next to a Home section title"
+  },
+  "discountOff": "{percent}% off",
+  "@discountOff": {
+    "description": "Discount badge on product tiles and Product detail",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "homeShopsTitle": "{count, plural, =1{There is 1 J'Donut shop near you} other{There are {count} J'Donut shops near you}}",
+  "@homeShopsTitle": {
+    "description": "Title of the nearby shops band",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeExploreNow": "Explore now",
+  "@homeExploreNow": {
+    "description": "Button in the nearby shops band"
+  },
+  "homeOrderOnline": "Order online",
+  "@homeOrderOnline": {
+    "description": "Link on a shop card"
+  },
+  "homeOffline": "You're offline. Showing saved data.",
+  "@homeOffline": {
+    "description": "Banner at the top of Home while offline"
+  },
+  "homeRefreshFailed": "Couldn't refresh. Showing saved data.",
+  "@homeRefreshFailed": {
+    "description": "Snackbar after a failed pull-to-refresh"
+  },
+  "homeSectionEmpty": "Nothing here yet.",
+  "@homeSectionEmpty": {
+    "description": "Shown in a Home section with no items"
+  },
+  "homeSectionError": "We couldn't load this section.",
+  "@homeSectionError": {
+    "description": "Shown in a Home section that failed to load"
+  },
+  "homeRetry": "Try again",
+  "@homeRetry": {
+    "description": "Retry button in a failed Home section"
+  },
+  "productNew": "New",
+  "@productNew": {
+    "description": "Badge on a new product"
+  },
+  "productWhatsThis": "What's this?",
+  "@productWhatsThis": {
+    "description": "Label next to the product description"
+  },
+  "productAddToCart": "Add to cart",
+  "@productAddToCart": {
+    "description": "Add to cart button"
+  },
+  "productPrice": "{amount} MMK",
+  "@productPrice": {
+    "description": "A price in Myanmar kyat; amount is pre-formatted",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "productAddedToCart": "{count, plural, =1{Added 1 {name} to your cart} other{Added {count} {name} to your cart}}",
+  "@productAddedToCart": {
+    "description": "Snackbar after adding to the cart",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "productDecrease": "Decrease quantity",
+  "@productDecrease": {
+    "description": "Screen reader label for the minus button"
+  },
+  "productIncrease": "Increase quantity",
+  "@productIncrease": {
+    "description": "Screen reader label for the plus button"
+  },
+  "productNotFound": "This product isn't available any more.",
+  "@productNotFound": {
+    "description": "Product detail for a product the catalog no longer has"
+  },
+  "productAddFailed": "Couldn't add to your cart. Try again.",
+  "@productAddFailed": {
+    "description": "Snackbar when adding to the cart fails"
+  },
+  "rewardsTitle": "J' Donuts Rewards",
+  "@rewardsTitle": {
+    "description": "Rewards screen title"
+  },
+  "rewardsPill": "Rewards",
+  "@rewardsPill": {
+    "description": "Pill next to the Rewards title"
+  },
+  "rewardsAvailable": "{count, plural, =1{1 reward available} other{{count} rewards available}}",
+  "@rewardsAvailable": {
+    "description": "Screen reader label for the Rewards pill badge",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardsTierCurrent": "You're here now",
+  "@rewardsTierCurrent": {
+    "description": "Caption under the current tier"
+  },
+  "rewardsTierRemaining": "{points} pts Remaining to become {tier}",
+  "@rewardsTierRemaining": {
+    "description": "Caption under the next tier; points is pre-formatted",
+    "placeholders": {
+      "points": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsTierUpcoming": "You'll be here soon",
+  "@rewardsTierUpcoming": {
+    "description": "Caption under tiers beyond the next one"
+  },
+  "rewardsTierReached": "Reached",
+  "@rewardsTierReached": {
+    "description": "Caption under tiers below the current one"
+  },
+  "rewardsTotalPoints": "Total points",
+  "@rewardsTotalPoints": {
+    "description": "Label inside the points ring"
+  },
+  "rewardsTabChallenges": "Eat more earn more",
+  "@rewardsTabChallenges": {
+    "description": "Rewards tab"
+  },
+  "rewardsTabGifts": "Gift",
+  "@rewardsTabGifts": {
+    "description": "Rewards tab"
+  },
+  "rewardsEarn": "Earn",
+  "@rewardsEarn": {
+    "description": "Button on a challenge card"
+  },
+  "rewardsRedeem": "Redeem",
+  "@rewardsRedeem": {
+    "description": "Button on a gift card"
+  },
+  "rewardsPoints": "{points} pts",
+  "@rewardsPoints": {
+    "description": "Points value; points is pre-formatted",
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsProgress": "{progress}/{target}",
+  "@rewardsProgress": {
+    "description": "Challenge progress",
+    "placeholders": {
+      "progress": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardsEmpty": "Nothing to show yet.",
+  "@rewardsEmpty": {
+    "description": "Rewards with no member data"
+  },
+  "rewardsError": "We couldn't load your rewards.",
+  "@rewardsError": {
+    "description": "Rewards when its data fails to load"
+  },
+  "rewardsRetry": "Try again",
+  "@rewardsRetry": {
+    "description": "Retry button on the Rewards error state"
   }
 }
