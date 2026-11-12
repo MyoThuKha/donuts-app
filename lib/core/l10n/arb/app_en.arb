@@ -1,0 +1,20 @@
+{
+  "@@locale": "en",
+  "appTitle": "J'Donuts",
+  "@appTitle": {"description": "App name shown by the OS task switcher."},
+  "tabHome": "Home",
+  "@tabHome": {"description": "Bottom navigation label for the Home tab."},
+  "tabReward": "Reward",
+  "@tabReward": {"description": "Bottom navigation label for the Rewards tab."},
+  "tabExplore": "Explore",
+  "@tabExplore": {"description": "Bottom navigation label for the Explore tab."},
+  "tabWallet": "Wallet",
+  "@tabWallet": {"description": "Bottom navigation label for the Wallet tab."},
+  "tabSettings": "Settings",
+  "@tabSettings": {"description": "Bottom navigation label for the Settings tab."},
+  "placeholderComingSoon": "{tab} is coming soon",
+  "@placeholderComingSoon": {
+    "description": "Body of a tab that is not built yet.",
+    "placeholders": {"tab": {"type": "String", "example": "Wallet"}}
+  }
+}

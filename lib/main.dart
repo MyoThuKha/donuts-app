@@ -1,3 +1,4 @@
+import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/theme/app_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,9 @@ class DonutsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "J'Donuts",
+      onGenerateTitle: (context) => context.l10n.appTitle,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: AppTheme.light(),
       home: const Scaffold(body: Center(child: Text("J'Donuts"))),
     );
