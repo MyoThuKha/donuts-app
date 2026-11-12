@@ -135,6 +135,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{tab} is coming soon'**
   String placeholderComingSoon(String tab);
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to the world of J\'donuts'**
+  String get welcomeTitle;
+
+  /// No description provided for @onboardingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Round food for every mood'**
+  String get onboardingTitle;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s get started'**
+  String get getStarted;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @logIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get logIn;
+
+  /// No description provided for @termsPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing, you acknowledge that you have read and agree to our'**
+  String get termsPrefix;
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get termsOfUse;
+
+  /// No description provided for @and.
+  ///
+  /// In en, this message translates to:
+  /// **'and'**
+  String get and;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @comingSoonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoonTitle;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @logOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logOut;
+
+  /// No description provided for @logOutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out of J\'Donuts?'**
+  String get logOutConfirm;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @registrationComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration is on its way.'**
+  String get registrationComingSoon;
+
+  /// Accessibility label for a social sign-in button.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with {provider}'**
+  String continueWith(String provider);
+
+  /// Placeholder sheet body for social sign-in.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} sign-in isn\'t available in this demo'**
+  String socialSignInUnavailable(String provider);
+
+  /// Placeholder sheet body for legal documents.
+  ///
+  /// In en, this message translates to:
+  /// **'The {document} will be available here soon.'**
+  String documentUnavailable(String document);
 }
 
 class _AppLocalizationsDelegate

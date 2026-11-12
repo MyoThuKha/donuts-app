@@ -1,18 +1,18 @@
 import 'dart:ui';
 
-import 'package:donuts/app/app.dart';
 import 'package:donuts/app/shell/widgets/nav_pill_widget.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../helpers/fakes.dart';
+import '../../helpers/pump_app.dart';
+
 final Finder _rewardIcon = find.byIcon(LucideIcons.crown);
 final Finder _homeIcon = find.byIcon(LucideIcons.house);
 
-Future<void> _pumpApp(WidgetTester tester) async {
-  await tester.pumpWidget(const DonutsApp());
-  await tester.pumpAndSettle();
-}
+Future<void> _pumpApp(WidgetTester tester) =>
+    pumpRouterApp(tester, session: testSessionCubit()..signedIn(testUser));
 
 void main() {
   testWidgets('app opens on the Home tab with the pill on Home', (

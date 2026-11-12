@@ -17,6 +17,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^11.2.0
+  flutter_svg: ^2.3.4
   get_it: ^9.3.0
   go_router: ^18.1.4
   intl: ^0.20.3
@@ -38,6 +39,7 @@ flutter:
 
   assets:
     - assets/fonts/OFL.txt
+    - assets/logos/
 
   fonts:
     - family: PlusJakartaSans

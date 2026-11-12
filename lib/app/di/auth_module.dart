@@ -7,6 +7,7 @@ import 'package:donuts/features/auth/domain/usecases/register_use_case.dart';
 import 'package:donuts/features/auth/domain/usecases/request_otp_use_case.dart';
 import 'package:donuts/features/auth/domain/usecases/restore_session_use_case.dart';
 import 'package:donuts/features/auth/domain/usecases/verify_otp_use_case.dart';
+import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 void registerAuthModule(GetIt getIt, {required Duration latency}) {
@@ -23,5 +24,9 @@ void registerAuthModule(GetIt getIt, {required Duration latency}) {
     ..registerLazySingleton(() => VerifyOtpUseCase(getIt()))
     ..registerLazySingleton(() => RegisterUseCase(getIt()))
     ..registerLazySingleton(() => RestoreSessionUseCase(getIt()))
-    ..registerLazySingleton(() => LogOutUseCase(getIt()));
+    ..registerLazySingleton(() => LogOutUseCase(getIt()))
+    ..registerLazySingleton(
+      () => SessionCubit(restoreSession: getIt(), logOut: getIt()),
+      dispose: (cubit) => cubit.close(),
+    );
 }
