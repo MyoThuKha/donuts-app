@@ -60,4 +60,17 @@ void main() {
     expect(midway, isNot(DonutsColors.light.primary));
     expect(_borderColour(tester), DonutsColors.light.primary);
   });
+
+  testWidgets('the prefix shows while the field is empty and unfocused', (
+    tester,
+  ) async {
+    final controller = TextEditingController();
+    addTearDown(controller.dispose);
+    await pumpThemed(
+      tester,
+      AppTextField(controller: controller, hint: '09', prefixText: '+95'),
+    );
+
+    expect(find.text('+95'), findsOneWidget);
+  });
 }

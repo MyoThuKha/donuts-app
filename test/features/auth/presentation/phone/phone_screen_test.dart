@@ -100,4 +100,20 @@ void main() {
     await tester.pumpAndSettle();
     await unmountApp(tester);
   });
+
+  testWidgets('registering a known number offers to log in instead', (
+    tester,
+  ) async {
+    when(() => mocks.requestOtp(any()))
+        .thenAnswer((_) async => const Failure(AlreadyRegisteredFailure()));
+    await pumpPhone(tester, AppRoutes.registerPhone);
+
+    await tester.enterText(_field, '09254135592');
+    await tester.pump();
+    await tester.tap(_continue);
+    await tester.pumpAndSettle();
+
+    expect(find.text('This number is already registered.'), findsOneWidget);
+    expect(find.text('Log in instead'), findsOneWidget);
+  });
 }

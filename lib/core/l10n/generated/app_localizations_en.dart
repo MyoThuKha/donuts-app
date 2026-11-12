@@ -76,9 +76,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
-  String get registrationComingSoon => 'Registration is on its way.';
-
-  @override
   String continueWith(String provider) {
     return 'Continue with $provider';
   }
@@ -175,4 +172,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String dobTooYoung(int age) {
     return 'You need to be at least $age to join';
   }
+
+  @override
+  String get nameTitle => 'What\'s your name?';
+
+  @override
+  String get firstNameHint => 'First Name';
+
+  @override
+  String get lastNameHint => 'Last Name';
+
+  @override
+  String get dobTitle => 'What\'s your date of birth?';
+
+  @override
+  String get monthHint => 'Month';
+
+  @override
+  String get dayHint => 'Day';
+
+  @override
+  String get yearHint => 'Year';
+
+  @override
+  String get letsExplore => 'Let\'s explore';
 }

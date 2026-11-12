@@ -42,5 +42,5 @@ final class PhoneState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [input, phone, showError, status];
+  List<Object?> get props => [input, validation, showError, status];
 }

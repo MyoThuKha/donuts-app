@@ -48,7 +48,6 @@
   "logOut": "Log out",
   "logOutConfirm": "Log out of J'Donuts?",
   "cancel": "Cancel",
-  "registrationComingSoon": "Registration is on its way.",
   "continueWith": "Continue with {provider}",
   "@continueWith": {
     "description": "Accessibility label for a social sign-in button.",
@@ -143,5 +142,13 @@
         "type": "int"
       }
     }
-  }
+  },
+  "nameTitle": "What's your name?",
+  "firstNameHint": "First Name",
+  "lastNameHint": "Last Name",
+  "dobTitle": "What's your date of birth?",
+  "monthHint": "Month",
+  "dayHint": "Day",
+  "yearHint": "Year",
+  "letsExplore": "Let's explore"
 }

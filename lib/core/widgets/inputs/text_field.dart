@@ -20,6 +20,7 @@ class AppTextField extends StatefulWidget {
     this.autofillHints,
     this.onChanged,
     this.onSubmitted,
+    this.autofocus = false,
     super.key,
   });
 
@@ -34,6 +35,7 @@ class AppTextField extends StatefulWidget {
   final Iterable<String>? autofillHints;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
+  final bool autofocus;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -104,10 +106,32 @@ class _AppTextFieldState extends State<AppTextField> {
     );
   }
 
+  /// The prefix sits outside the text field so it shows even while the
+  /// field is empty and unfocused, as the designs draw `+95`.
   Widget _field(BuildContext context) {
+    final prefix = widget.prefixText;
+    return Row(
+      children: [
+        if (prefix != null)
+          Padding(
+            padding: const EdgeInsets.only(left: AppSpacing.l),
+            child: Text(
+              prefix,
+              style: context.text.body.copyWith(
+                color: context.colors.inkSubtle,
+              ),
+            ),
+          ),
+        Expanded(child: _input(context)),
+      ],
+    );
+  }
+
+  Widget _input(BuildContext context) {
     final text = context.text;
     return Center(
       child: TextField(
+        autofocus: widget.autofocus,
         controller: widget.controller,
         focusNode: _focusNode,
         keyboardType: widget.keyboardType,
@@ -120,8 +144,6 @@ class _AppTextFieldState extends State<AppTextField> {
         decoration: InputDecoration(
           hintText: widget.hint,
           hintStyle: text.body.copyWith(color: context.colors.inkSubtle),
-          prefixText: widget.prefixText,
-          prefixStyle: text.body.copyWith(color: context.colors.inkSubtle),
           border: InputBorder.none,
           isCollapsed: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.l),

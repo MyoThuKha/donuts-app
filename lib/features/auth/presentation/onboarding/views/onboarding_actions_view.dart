@@ -3,7 +3,6 @@ import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
-import 'package:donuts/core/widgets/sheets/placeholder_sheet.dart';
 import 'package:donuts/features/auth/presentation/widgets/social_sign_in_row_widget.dart';
 import 'package:donuts/features/auth/presentation/widgets/terms_notice_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -27,10 +26,7 @@ class OnboardingActionsView extends StatelessWidget {
         const SizedBox(height: AppSpacing.xxl),
         AppPrimaryButton(
           label: l10n.getStarted,
-          onPressed: () => showPlaceholderSheet(
-            context,
-            message: l10n.registrationComingSoon,
-          ),
+          onPressed: () => context.push(AppRoutes.registerPhone),
         ),
         const SizedBox(height: AppSpacing.l),
         const _LogInRow(),

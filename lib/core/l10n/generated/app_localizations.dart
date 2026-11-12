@@ -220,12 +220,6 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
-  /// No description provided for @registrationComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Registration is on its way.'**
-  String get registrationComingSoon;
-
   /// Accessibility label for a social sign-in button.
   ///
   /// In en, this message translates to:
@@ -387,6 +381,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You need to be at least {age} to join'**
   String dobTooYoung(int age);
+
+  /// No description provided for @nameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s your name?'**
+  String get nameTitle;
+
+  /// No description provided for @firstNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get firstNameHint;
+
+  /// No description provided for @lastNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get lastNameHint;
+
+  /// No description provided for @dobTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s your date of birth?'**
+  String get dobTitle;
+
+  /// No description provided for @monthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get monthHint;
+
+  /// No description provided for @dayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get dayHint;
+
+  /// No description provided for @yearHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get yearHint;
+
+  /// No description provided for @letsExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s explore'**
+  String get letsExplore;
 }
 
 class _AppLocalizationsDelegate

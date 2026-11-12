@@ -83,7 +83,8 @@ class _PhonePageState extends State<_PhonePage> {
               controller: _controller,
               focusNode: _focus,
               hint: l10n.phoneHint,
-              prefixText: '${AuthRules.countryCode}   ',
+              prefixText: AuthRules.countryCode,
+              autofocus: true,
               keyboardType: TextInputType.phone,
               autofillHints: const [AutofillHints.telephoneNumberNational],
               inputFormatters: [

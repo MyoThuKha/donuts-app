@@ -5,12 +5,15 @@ import 'package:donuts/app/shell/placeholder_tab_screen.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/features/auth/domain/types/auth_mode.dart';
+import 'package:donuts/features/auth/presentation/dob/dob_screen.dart';
 import 'package:donuts/features/auth/presentation/flow/blocs/registration_draft_cubit.dart';
+import 'package:donuts/features/auth/presentation/name/name_screen.dart';
 import 'package:donuts/features/auth/presentation/onboarding/onboarding_screen.dart';
 import 'package:donuts/features/auth/presentation/otp/otp_screen.dart';
 import 'package:donuts/features/auth/presentation/phone/phone_screen.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
+import 'package:donuts/features/auth/presentation/welcome/welcome_screen.dart';
 import 'package:donuts/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -33,10 +36,8 @@ GoRouter buildAppRouter({
       ),
       GoRoute(
         path: AppRoutes.welcome,
-        builder: (context, state) => PlaceholderTabScreen(
-          key: const ValueKey(AppRoutes.welcome),
-          title: context.l10n.welcomeTitle,
-        ),
+        builder: (context, state) =>
+            const WelcomeScreen(key: ValueKey(AppRoutes.welcome)),
       ),
       _authFlow(AuthMode.logIn, [
         _step(AppRoutes.logInPhone, const PhoneScreen()),
@@ -45,11 +46,8 @@ GoRouter buildAppRouter({
       _authFlow(AuthMode.register, [
         _step(AppRoutes.registerPhone, const PhoneScreen()),
         _step(AppRoutes.registerOtp, const OtpScreen()),
-        GoRoute(
-          path: AppRoutes.registerName,
-          builder: (context, state) =>
-              PlaceholderTabScreen(title: context.l10n.getStarted),
-        ),
+        _step(AppRoutes.registerName, const NameScreen()),
+        _step(AppRoutes.registerDob, const DobScreen()),
       ]),
       _shell(),
     ],
