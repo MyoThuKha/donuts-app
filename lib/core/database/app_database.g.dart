@@ -4345,6 +4345,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $GiftsTableTable giftsTable = $GiftsTableTable(this);
   late final $SyncStateTableTable syncStateTable = $SyncStateTableTable(this);
   late final UsersDao usersDao = UsersDao(this as AppDatabase);
+  late final CatalogDao catalogDao = CatalogDao(this as AppDatabase);
+  late final MemberDao memberDao = MemberDao(this as AppDatabase);
+  late final SyncStateDao syncStateDao = SyncStateDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();

@@ -1,4 +1,7 @@
 import 'package:donuts/core/database/app_database.steps.dart';
+import 'package:donuts/core/database/daos/catalog_dao.dart';
+import 'package:donuts/core/database/daos/member_dao.dart';
+import 'package:donuts/core/database/daos/sync_state_dao.dart';
 import 'package:donuts/core/database/daos/users_dao.dart';
 import 'package:donuts/core/database/tables/banners_table.dart';
 import 'package:donuts/core/database/tables/challenges_table.dart';
@@ -30,7 +33,7 @@ part 'app_database.g.dart';
     GiftsTable,
     SyncStateTable,
   ],
-  daos: [UsersDao],
+  daos: [UsersDao, CatalogDao, MemberDao, SyncStateDao],
 )
 class AppDatabase extends _$AppDatabase {
   new() : super(driftDatabase(name: 'donuts'));
