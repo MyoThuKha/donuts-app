@@ -199,4 +199,180 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get imageUnavailable => 'Image unavailable';
+
+  @override
+  String homeMemberTier(String tier) {
+    return '$tier member';
+  }
+
+  @override
+  String homePointsToNextTier(String points, String tier) {
+    return '$points points left to become $tier Member';
+  }
+
+  @override
+  String get homeTopTier => 'You\'re at our top tier';
+
+  @override
+  String homeNotifications(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count notifications',
+      one: '1 notification',
+      zero: 'No notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeSectionSeasonal => 'Seasonal specials';
+
+  @override
+  String get homeSectionPopular => 'Popular';
+
+  @override
+  String get homeSectionOrderAgain => 'Order again';
+
+  @override
+  String get homeSeeAll => 'See all';
+
+  @override
+  String discountOff(int percent) {
+    return '$percent% off';
+  }
+
+  @override
+  String homeShopsTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'There are $count J\'Donut shops near you',
+      one: 'There is 1 J\'Donut shop near you',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeExploreNow => 'Explore now';
+
+  @override
+  String get homeOrderOnline => 'Order online';
+
+  @override
+  String get homeOffline => 'You\'re offline. Showing saved data.';
+
+  @override
+  String get homeRefreshFailed => 'Couldn\'t refresh. Showing saved data.';
+
+  @override
+  String get homeSectionEmpty => 'Nothing here yet.';
+
+  @override
+  String get homeSectionError => 'We couldn\'t load this section.';
+
+  @override
+  String get homeRetry => 'Try again';
+
+  @override
+  String get productNew => 'New';
+
+  @override
+  String get productWhatsThis => 'What\'s this?';
+
+  @override
+  String get productAddToCart => 'Add to cart';
+
+  @override
+  String productPrice(String amount) {
+    return '$amount MMK';
+  }
+
+  @override
+  String productAddedToCart(int count, String name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Added $count $name to your cart',
+      one: 'Added 1 $name to your cart',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get productDecrease => 'Decrease quantity';
+
+  @override
+  String get productIncrease => 'Increase quantity';
+
+  @override
+  String get productNotFound => 'This product isn\'t available any more.';
+
+  @override
+  String get productAddFailed => 'Couldn\'t add to your cart. Try again.';
+
+  @override
+  String get rewardsTitle => 'J\' Donuts Rewards';
+
+  @override
+  String get rewardsPill => 'Rewards';
+
+  @override
+  String rewardsAvailable(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rewards available',
+      one: '1 reward available',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get rewardsTierCurrent => 'You\'re here now';
+
+  @override
+  String rewardsTierRemaining(String points, String tier) {
+    return '$points pts Remaining to become $tier';
+  }
+
+  @override
+  String get rewardsTierUpcoming => 'You\'ll be here soon';
+
+  @override
+  String get rewardsTierReached => 'Reached';
+
+  @override
+  String get rewardsTotalPoints => 'Total points';
+
+  @override
+  String get rewardsTabChallenges => 'Eat more earn more';
+
+  @override
+  String get rewardsTabGifts => 'Gift';
+
+  @override
+  String get rewardsEarn => 'Earn';
+
+  @override
+  String get rewardsRedeem => 'Redeem';
+
+  @override
+  String rewardsPoints(String points) {
+    return '$points pts';
+  }
+
+  @override
+  String rewardsProgress(int progress, int target) {
+    return '$progress/$target';
+  }
+
+  @override
+  String get rewardsEmpty => 'Nothing to show yet.';
+
+  @override
+  String get rewardsError => 'We couldn\'t load your rewards.';
+
+  @override
+  String get rewardsRetry => 'Try again';
 }
