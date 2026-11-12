@@ -6,6 +6,9 @@ import 'dart:io';
 /// Serves `mock-api/` over HTTP, so a phone or simulator can run the app
 /// against a local copy of the mock API.
 ///
+/// It listens on loopback only. The iOS Simulator shares the Mac's loopback,
+/// and a USB Android phone reaches it through `adb reverse`.
+///
 /// ```sh
 /// dart run tool/mock_server.dart [--port 8080] [--delay-ms 0]
 /// ```
@@ -15,7 +18,7 @@ Future<void> main(List<String> args) async {
     milliseconds: int.parse(_option(args, '--delay-ms') ?? '0'),
   );
   final root = Directory('mock-api').absolute;
-  final server = await HttpServer.bind(InternetAddress.anyIPv4, port);
+  final server = await HttpServer.bind(InternetAddress.loopbackIPv4, port);
 
   print('Serving ${root.path} on http://localhost:$port/');
   print('Run the app with --dart-define=API_BASE_URL=http://localhost:$port/');
@@ -30,7 +33,7 @@ Future<void> main(List<String> args) async {
 Future<void> _serve(HttpRequest request, Directory root) async {
   final response = request.response;
   final method = request.method;
-  final file = _resolve(root, request.uri);
+  final file = resolveMockFile(root, request.uri);
   print('$method ${request.uri.path}');
   if ((method != 'GET' && method != 'HEAD') || file == null) {
     response.statusCode = HttpStatus.notFound;
@@ -43,9 +46,13 @@ Future<void> _serve(HttpRequest request, Directory root) async {
 
 /// The file under [root] for [uri], or null when it doesn't exist or the
 /// path escapes [root].
-File? _resolve(Directory root, Uri uri) {
+File? resolveMockFile(Directory root, Uri uri) {
   final segments = uri.pathSegments.where((s) => s.isNotEmpty).toList();
-  if (segments.any((s) => s == '..' || s.contains(r'\'))) return null;
+  // pathSegments are decoded, so `%2F` arrives as a `/` inside a segment.
+  final escapes = segments.any(
+    (s) => s == '..' || s == '.' || s.contains('/') || s.contains(r'\'),
+  );
+  if (escapes) return null;
   final file = File([root.path, ...segments].join(Platform.pathSeparator));
   final insideRoot = file.absolute.path.startsWith(root.path);
   return insideRoot && file.existsSync() ? file : null;
