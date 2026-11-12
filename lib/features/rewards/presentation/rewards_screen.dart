@@ -47,6 +47,20 @@ class _RewardsPageState extends State<_RewardsPage>
   );
   bool _entered = false;
 
+  /// Whether the Rewards tab is the one showing. The shell keeps this page
+  /// alive in an indexed stack and wraps each tab in a [TickerMode], so the
+  /// value flips to true each time the user comes back.
+  bool _onScreen = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final onScreen = TickerMode.valuesOf(context).enabled;
+    final cameBack = onScreen && !_onScreen;
+    _onScreen = onScreen;
+    if (cameBack && _entered) _playEntrance();
+  }
+
   void _onStatus(BuildContext context, RewardsState state) {
     if (state.status != RewardsStatus.ready || _entered) return;
     _entered = true;

@@ -1,0 +1,88 @@
+import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
+import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
+import 'package:donuts/features/rewards/presentation/widgets/earn_button_widget.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:material_ui/material_ui.dart';
+
+import '../../../helpers/fakes.dart';
+import '../../../helpers/pump_app.dart';
+
+double _ringProgress(WidgetTester tester) => tester
+    .widgetList<CustomPaint>(find.byType(CustomPaint))
+    .map((p) => p.painter)
+    .whereType<PointsRingPainter>()
+    .single
+    .progress
+    .value;
+
+/// The pulse scale of the one active Earn button: its outer ScaleTransition
+/// (the press scale sits inside it).
+double _earnPulse(WidgetTester tester) {
+  final earn = find.byWidgetPredicate((w) => w is EarnButton && w.active);
+  return tester
+      .widget<ScaleTransition>(
+        find.descendant(of: earn, matching: find.byType(ScaleTransition)).first,
+      )
+      .scale
+      .value;
+}
+
+void main() {
+  testWidgets('coming back to the Rewards tab replays the ring sweep', (
+    tester,
+  ) async {
+    await pumpRouterApp(
+      tester,
+      session: testSessionCubit()..signedIn(testUser),
+    );
+    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.pumpAndSettle();
+    expect(_ringProgress(tester), closeTo(0.75, 0.001));
+
+    await tester.tap(find.byIcon(LucideIcons.house));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.pump();
+
+    expect(_ringProgress(tester), closeTo(0, 0.01));
+    await tester.pumpAndSettle();
+    expect(_ringProgress(tester), closeTo(0.75, 0.001));
+  });
+
+  testWidgets('switching tabs inside Rewards does not replay the entrance', (
+    tester,
+  ) async {
+    await pumpRouterApp(
+      tester,
+      session: testSessionCubit()..signedIn(testUser),
+    );
+    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Gift'));
+    await tester.pump();
+
+    expect(_ringProgress(tester), closeTo(0.75, 0.001));
+  });
+
+  testWidgets('coming back to the Rewards tab pulses the complete Earn again', (
+    tester,
+  ) async {
+    await pumpRouterApp(
+      tester,
+      session: testSessionCubit()..signedIn(testUser),
+    );
+    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.pumpAndSettle();
+    expect(_earnPulse(tester), 1);
+
+    await tester.tap(find.byIcon(LucideIcons.house));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(LucideIcons.crown));
+    await tester.pump();
+    await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
+
+    expect(_earnPulse(tester), greaterThan(1));
+  });
+}

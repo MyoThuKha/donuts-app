@@ -4,6 +4,7 @@ import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_cas
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
+import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:donuts/features/rewards/presentation/rewards_screen.dart';
 import 'package:donuts/features/rewards/presentation/widgets/count_up_text_widget.dart';
 import 'package:donuts/features/rewards/presentation/widgets/earn_button_widget.dart';
@@ -96,6 +97,25 @@ void main() {
     final buttons = tester.widgetList<EarnButton>(find.byType(EarnButton));
     expect(buttons, hasLength(3));
     expect(buttons.where((b) => b.active), hasLength(1));
+  });
+
+  testWidgets('pressing the pulsing Earn stops its pulse for good', (
+    tester,
+  ) async {
+    await _pumpRewards(tester);
+    final earn = find.byWidgetPredicate((w) => w is EarnButton && w.active);
+    final pulse = find
+        .descendant(of: earn, matching: find.byType(ScaleTransition))
+        .first;
+    double scale() => tester.widget<ScaleTransition>(pulse).scale.value;
+    await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
+    expect(scale(), greaterThan(1));
+
+    await tester.ensureVisible(earn);
+    await tester.tap(earn);
+    await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
+
+    expect(scale(), 1);
   });
 
   testWidgets('the donuts colour in to 4/4 and 1/4 after their cards enter', (
