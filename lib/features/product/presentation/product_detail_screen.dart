@@ -68,9 +68,11 @@ class _ProductDetailPage extends StatelessWidget {
                 child: BlocBuilder<ProductDetailCubit, ProductDetailState>(
                   buildWhen: (previous, current) =>
                       previous.status != current.status,
+                  // Loading and ready share one body, so the Hero built while
+                  // loading is the one the product fills in.
                   builder: (context, state) => switch (state.status) {
-                    ProductLoadStatus.loading => const SizedBox.shrink(),
                     ProductLoadStatus.notFound => const _NotFound(),
+                    ProductLoadStatus.loading ||
                     ProductLoadStatus.ready => _ProductBody(heroTag: heroTag),
                   },
                 ),
@@ -109,7 +111,7 @@ class _ProductBody extends StatelessWidget {
     final cubit = context.read<ProductDetailCubit>();
     final state = context.watch<ProductDetailCubit>().state;
     final product = state.product;
-    if (product == null) return const SizedBox.shrink();
+    final ready = product != null;
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -127,19 +129,24 @@ class _ProductBody extends StatelessWidget {
                   ),
                   QuantityStepperWidget(
                     quantity: state.quantity,
-                    onDecrement: state.quantity > ProductRules.minQuantity
+                    onDecrement:
+                        ready && state.quantity > ProductRules.minQuantity
                         ? cubit.decrement
                         : null,
-                    onIncrement: state.quantity < ProductRules.maxQuantity
+                    onIncrement:
+                        ready && state.quantity < ProductRules.maxQuantity
                         ? cubit.increment
                         : null,
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.xxxl),
-                child: ProductDescriptionView(description: product.description),
-              ),
+              if (product != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.xxxl),
+                  child: ProductDescriptionView(
+                    description: product.description,
+                  ),
+                ),
             ],
           ),
         ),

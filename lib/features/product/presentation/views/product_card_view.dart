@@ -11,17 +11,22 @@ import 'package:material_ui/material_ui.dart';
 
 /// The white card with the code, badges, name, unit price and the Hero
 /// image. Its bottom padding leaves room for the stepper that overlaps it.
+///
+/// While the product loads it is an empty shell with the Hero already in
+/// place, so the tile's image has somewhere to fly to on the first frame.
 class ProductCardView extends StatelessWidget {
   const new({required this.product, required this.heroTag, super.key});
 
-  final ProductDetailVO product;
+  /// Null while loading.
+  final ProductDetailVO? product;
   final Object heroTag;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final text = context.text;
-    final discount = product.discountPercent;
+    final product = this.product;
+    final discount = product?.discountPercent;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.surface,
@@ -42,20 +47,24 @@ class ProductCardView extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    product.code,
+                    product?.code ?? '',
                     style: text.caption.copyWith(color: colors.inkSubtle),
                   ),
                 ),
                 if (discount != null) DiscountBadge(percent: discount),
-                if (product.isNew) const NewBadgeWidget(),
+                if (product?.isNew ?? false) const NewBadgeWidget(),
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: AppSpacing.xs),
-              child: Text(product.name, style: text.title),
+              child: Text(product?.name ?? '', style: text.title),
             ),
             Text(
-              context.l10n.productPrice(formatGrouped(product.unitPriceMmk)),
+              product == null
+                  ? ''
+                  : context.l10n.productPrice(
+                      formatGrouped(product.unitPriceMmk),
+                    ),
               style: text.body.copyWith(
                 color: colors.ink,
                 fontWeight: FontWeight.w700,
@@ -69,9 +78,10 @@ class ProductCardView extends StatelessWidget {
                   aspectRatio: 1,
                   child: Hero(
                     tag: heroTag,
+                    flightShuttleBuilder: _flyTheSourceImage,
                     child: AppNetworkImage(
-                      url: product.imageUrl,
-                      asset: product.imageAsset,
+                      url: product?.imageUrl,
+                      asset: product?.imageAsset,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -84,3 +94,13 @@ class ProductCardView extends StatelessWidget {
     );
   }
 }
+
+/// Flies the image the flight started from. On a push that is the tile's
+/// image, which shows even if the product hasn't loaded yet.
+Widget _flyTheSourceImage(
+  BuildContext flightContext,
+  Animation<double> animation,
+  HeroFlightDirection direction,
+  BuildContext fromHeroContext,
+  BuildContext toHeroContext,
+) => (fromHeroContext.widget as Hero).child;

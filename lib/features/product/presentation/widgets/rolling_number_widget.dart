@@ -40,7 +40,11 @@ class _RollingNumberWidgetState extends State<RollingNumberWidget> {
         duration: AppMotion.fast,
         switchInCurve: AppMotion.standard,
         switchOutCurve: AppMotion.standard,
-        transitionBuilder: _slide,
+        // A new closure each build: AnimatedSwitcher only re-applies the
+        // builder to the outgoing number when the builder changes, and the
+        // outgoing number must leave in the current direction.
+        transitionBuilder: (child, animation) =>
+            _slide(child, animation, direction: _direction),
         child: number,
       ),
     );
@@ -48,9 +52,13 @@ class _RollingNumberWidgetState extends State<RollingNumberWidget> {
 
   /// The incoming number starts one line below (or above) and the outgoing
   /// one, whose animation runs in reverse, leaves the other way.
-  Widget _slide(Widget child, Animation<double> animation) {
+  Widget _slide(
+    Widget child,
+    Animation<double> animation, {
+    required double direction,
+  }) {
     final incoming = child.key == ValueKey(widget.value);
-    final from = Offset(0, incoming ? _direction : -_direction);
+    final from = Offset(0, incoming ? direction : -direction);
     return SlideTransition(
       position: Tween(begin: from, end: Offset.zero).animate(animation),
       child: child,

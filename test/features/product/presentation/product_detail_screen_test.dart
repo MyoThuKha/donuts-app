@@ -121,6 +121,38 @@ void main() {
     expect(inStepper('1'), findsOneWidget);
   });
 
+  testWidgets('the quantity rolls up on increment and down on decrement', (
+    tester,
+  ) async {
+    await pumpDetail(tester);
+    const halfway = Duration(milliseconds: 75);
+
+    Future<(double, double)> rollTo(
+      String semantics,
+      String from,
+      String to,
+    ) async {
+      await tester.tap(find.bySemanticsLabel(semantics));
+      await tester.pump();
+      await tester.pump(halfway);
+      final positions = (
+        tester.getCenter(inStepper(from)).dy,
+        tester.getCenter(inStepper(to)).dy,
+      );
+      await tester.pumpAndSettle();
+      return positions;
+    }
+
+    final (oneUp, twoIn) = await rollTo('Increase quantity', '1', '2');
+    expect(oneUp, lessThan(twoIn));
+    final (twoUp, threeIn) = await rollTo('Increase quantity', '2', '3');
+    expect(twoUp, lessThan(threeIn));
+    final (threeDown, twoBack) = await rollTo('Decrease quantity', '3', '2');
+    expect(threeDown, greaterThan(twoBack));
+    final (twoDown, oneBack) = await rollTo('Decrease quantity', '2', '1');
+    expect(twoDown, greaterThan(oneBack));
+  });
+
   testWidgets('with reduce motion the quantity changes without animation', (
     tester,
   ) async {
@@ -167,6 +199,53 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text("Couldn't add to your cart. Try again."), findsOneWidget);
+  });
+
+  testWidgets('the image flies from the tile that opened the screen', (
+    tester,
+  ) async {
+    const tileImage = Key('tile-image');
+    final router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (_, _) => const Align(
+            alignment: Alignment.topLeft,
+            child: Hero(
+              tag: _heroTag,
+              child: SizedBox.square(key: tileImage, dimension: 50),
+            ),
+          ),
+          routes: [
+            GoRoute(
+              path: 'product/:id',
+              builder: (_, state) => ProductDetailScreen(
+                productId: state.pathParameters['id']!,
+                heroTag: _heroTag,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+    addTearDown(router.dispose);
+    await tester.pumpWidget(
+      MaterialApp.router(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: AppTheme.light(),
+        routerConfig: router,
+      ),
+    );
+
+    unawaited(router.push('/product/p_coconut'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    // In flight, the tile keeps an offstage copy of its image as a
+    // placeholder while the shuttle carries the visible one.
+    expect(find.byKey(tileImage, skipOffstage: false), findsNWidgets(2));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('an unknown product shows the not-found message and back pops', (
