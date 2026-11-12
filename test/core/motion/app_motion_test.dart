@@ -4,12 +4,16 @@ import 'package:material_ui/material_ui.dart';
 
 Future<MotionScale> _motionWith(
   WidgetTester tester, {
-  required bool disableAnimations,
+  bool disableAnimations = false,
+  bool reduceMotion = false,
 }) async {
   late MotionScale motion;
   await tester.pumpWidget(
     MediaQuery(
-      data: MediaQueryData(disableAnimations: disableAnimations),
+      data: MediaQueryData(
+        disableAnimations: disableAnimations,
+        reduceMotion: reduceMotion,
+      ),
       child: Builder(
         builder: (context) {
           motion = context.motion;
@@ -34,9 +38,19 @@ void main() {
   testWidgets('motion durations stay unchanged when Reduce Motion is off', (
     tester,
   ) async {
-    final motion = await _motionWith(tester, disableAnimations: false);
+    final motion = await _motionWith(tester);
 
     expect(motion.of(AppMotion.medium), AppMotion.medium);
     expect(motion.cue(AppMotion.medium), AppMotion.medium);
   });
+
+  testWidgets(
+    "motion durations collapse to zero under iOS's Reduce Motion setting",
+    (tester) async {
+      final motion = await _motionWith(tester, reduceMotion: true);
+
+      expect(motion.reduced, isTrue);
+      expect(motion.of(AppMotion.medium), Duration.zero);
+    },
+  );
 }

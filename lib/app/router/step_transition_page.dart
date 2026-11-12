@@ -14,7 +14,7 @@ Page<void> stepTransitionPage({required LocalKey key, required Widget child}) {
     key: key,
     child: child,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      if (MediaQuery.disableAnimationsOf(context)) return child;
+      if (context.motion.reduced) return child;
       return _SharedAxis(
         animation: animation,
         secondaryAnimation: secondaryAnimation,

@@ -38,6 +38,12 @@ class MotionScale {
 }
 
 extension MotionContext on BuildContext {
-  MotionScale get motion =>
-      MotionScale(reduced: MediaQuery.maybeDisableAnimationsOf(this) ?? false);
+  /// Reduced when either platform asks: Android's "Remove animations"
+  /// (`disableAnimations`) or iOS's "Reduce Motion" (`reduceMotion`), which
+  /// Flutter reports separately.
+  MotionScale get motion => MotionScale(
+    reduced:
+        (MediaQuery.maybeDisableAnimationsOf(this) ?? false) ||
+        (MediaQuery.maybeReduceMotionOf(this) ?? false),
+  );
 }
