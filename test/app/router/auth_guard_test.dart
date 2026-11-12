@@ -1,4 +1,5 @@
 import 'package:donuts/core/router/app_routes.dart';
+import 'package:donuts/features/home/presentation/home_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -23,7 +24,7 @@ void main() {
       initialLocation: AppRoutes.onboarding,
     );
 
-    expect(find.text('Home is coming soon'), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
   });
 
   testWidgets('just registered, any route opens Welcome first', (tester) async {
