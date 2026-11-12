@@ -2,13 +2,16 @@ import 'package:donuts/app/router/app_router.dart';
 import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
+import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/router/app_routes.dart';
+import 'package:donuts/core/sync/domain/sync_outcome.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
 import 'package:donuts/core/theme/app_theme.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'fake_connectivity.dart';
 import 'fakes.dart';
@@ -35,8 +38,11 @@ Future<void> pumpRouterApp(
     FakeConnectivitySource(),
     FakeReachabilityProbe(),
   );
+  final refresh = MockRefreshCatalogUseCase();
+  when(refresh.call)
+      .thenAnswer((_) async => const Success(SyncOutcome.upToDate));
   final sync = CatalogSyncCubit(
-    refresh: MockRefreshCatalogUseCase(),
+    refresh: refresh,
     connectivity: connectivity,
     now: DateTime.now,
   );
