@@ -17,6 +17,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
+  flutter_cache_manager: ^3.5.0
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^11.2.0

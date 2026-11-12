@@ -32,4 +32,5 @@ abstract final class AppSizes {
   static const double field = 56;
   static const Size otpBox = Size(48, 52);
   static const double navBar = 72;
+  static const double imageErrorIcon = 24;
 }
