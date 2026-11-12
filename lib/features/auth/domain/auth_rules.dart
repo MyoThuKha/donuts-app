@@ -6,4 +6,7 @@ abstract final class AuthRules {
   static const Duration resendCountdown = Duration(minutes: 5);
   static const int nameMaxLength = 50;
   static const int minimumAge = 13;
+
+  /// Older than anyone alive; an older date of birth is a typo.
+  static const int maximumAge = 120;
 }

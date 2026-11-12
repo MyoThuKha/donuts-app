@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
 import 'package:donuts/features/auth/domain/params/otp_params.dart';
+import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -91,6 +94,23 @@ void main() {
 
     final sent = verify(() => mocks.verifyOtp(captureAny())).captured.single;
     expect((sent as OtpVerificationParams).code, '123456');
+    await unmountApp(tester);
+  });
+
+  testWidgets('while the code is checked, a spinner shows and entry pauses', (
+    tester,
+  ) async {
+    final pending = Completer<Result<UserVO?>>();
+    when(() => mocks.verifyOtp(any())).thenAnswer((_) => pending.future);
+    await _openOtp(tester);
+
+    await tester.enterText(_field, '123456');
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(tester.widget<TextField>(_field).enabled, isFalse);
+    pending.complete(const Failure(WrongOtpFailure()));
+    await tester.pumpAndSettle();
     await unmountApp(tester);
   });
 

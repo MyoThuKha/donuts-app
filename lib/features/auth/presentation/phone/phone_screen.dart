@@ -76,6 +76,7 @@ class _PhonePageState extends State<_PhonePage> {
         title: l10n.phoneTitle,
         step: 1,
         of: steps,
+        busy: state.status == PhoneStatus.submitting,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

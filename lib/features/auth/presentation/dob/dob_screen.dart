@@ -60,7 +60,7 @@ class _DobPageState extends State<_DobPage> {
     cubit.changed(
       day: int.tryParse(_day.text),
       month: month ?? cubit.state.month,
-      year: int.tryParse(_year.text),
+      year: _year.text.length < _yearDigits ? null : int.tryParse(_year.text),
     );
   }
 
@@ -79,6 +79,7 @@ class _DobPageState extends State<_DobPage> {
         title: l10n.dobTitle,
         step: steps,
         of: steps,
+        busy: state.status == DobStatus.submitting,
         body: Column(
           children: [
             MonthFieldWidget(

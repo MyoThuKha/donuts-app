@@ -17,7 +17,11 @@ ValidationResult<DateTime> validateDateOfBirth({
 
   final todayDate = DateTime(today.year, today.month, today.day);
   if (date.isAfter(todayDate)) return const Invalid(ValidationError.inFuture);
-  if (_ageOn(todayDate, date) < AuthRules.minimumAge) {
+  final age = _ageOn(todayDate, date);
+  if (age > AuthRules.maximumAge) {
+    return const Invalid(ValidationError.notARealDate);
+  }
+  if (age < AuthRules.minimumAge) {
     return const Invalid(ValidationError.tooYoung);
   }
   return Valid(date);

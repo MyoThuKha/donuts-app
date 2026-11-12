@@ -37,6 +37,13 @@ void main() {
       expectNormalised('959254135592');
     });
 
+    test('keeps a local number that starts with 95 as typed', () {
+      expect(
+        validatePhone('9591234567'),
+        isA<Valid<String>>().having((v) => v.value, 'value', '+959591234567'),
+      );
+    });
+
     test('accepts 9 followed by 7 or 9 digits', () {
       expect(validatePhone('0912345678'), isA<Valid<String>>());
       expect(validatePhone('09123456789'), isA<Valid<String>>());

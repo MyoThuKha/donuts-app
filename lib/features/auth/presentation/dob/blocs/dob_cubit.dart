@@ -42,6 +42,9 @@ class DobCubit extends Cubit<DobState> {
           day: day,
           today: _now(),
         ),
+        status: state.status == DobStatus.submitting
+            ? DobStatus.submitting
+            : DobStatus.editing,
       ),
     );
   }

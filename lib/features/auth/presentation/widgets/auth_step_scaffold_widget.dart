@@ -1,4 +1,5 @@
 import 'package:donuts/core/theme/app_dimens.dart';
+import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/back_button.dart';
 import 'package:donuts/features/auth/presentation/widgets/step_progress_ring_widget.dart';
@@ -15,6 +16,7 @@ class AuthStepScaffold extends StatelessWidget {
     required this.step,
     required this.of,
     this.subtitle,
+    this.busy = false,
     super.key,
   });
 
@@ -25,9 +27,17 @@ class AuthStepScaffold extends StatelessWidget {
   final int step;
   final int of;
 
+  /// True while the step's request runs. Back is blocked so a request
+  /// can't finish behind a screen the user already left.
+  final bool busy;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    return PopScope(canPop: !busy, child: _scaffold(colors));
+  }
+
+  Widget _scaffold(DonutsColors colors) {
     return Scaffold(
       body: DecoratedBox(
         decoration: BoxDecoration(
@@ -45,7 +55,7 @@ class AuthStepScaffold extends StatelessWidget {
             child: Column(
               children: [
                 _header(),
-                Expanded(child: _content(context)),
+                Expanded(child: Builder(builder: _content)),
                 _footer(),
               ],
             ),
@@ -57,7 +67,7 @@ class AuthStepScaffold extends StatelessWidget {
 
   Widget _header() => Row(
     children: [
-      const AppBackButton(),
+      AppBackButton(enabled: !busy),
       const Spacer(),
       Padding(
         padding: const EdgeInsets.all(AppSpacing.s),

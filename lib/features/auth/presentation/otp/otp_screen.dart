@@ -62,6 +62,7 @@ class _OtpPage extends StatelessWidget {
         subtitle: l10n.otpSent(cubit.phone),
         step: 2,
         of: steps,
+        busy: state.status == OtpStatus.verifying,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -69,7 +70,7 @@ class _OtpPage extends StatelessWidget {
               trigger: state.shakeCount,
               child: OtpInputWidget(
                 code: state.code,
-                enabled: !state.locked,
+                enabled: !state.locked && state.status != OtpStatus.verifying,
                 onChanged: cubit.changed,
               ),
             ),
@@ -91,6 +92,9 @@ class _OtpPage extends StatelessWidget {
 class _OtpMessage extends StatelessWidget {
   const new({required this.state});
 
+  static const double _spinnerSize = 20;
+  static const double _spinnerStroke = 2.5;
+
   final OtpState state;
 
   @override
@@ -103,6 +107,15 @@ class _OtpMessage extends StatelessWidget {
             OtpStatus.failed => l10n.genericError,
             _ => null,
           };
+    if (state.status == OtpStatus.verifying) {
+      return const Padding(
+        padding: EdgeInsets.only(top: AppSpacing.m),
+        child: SizedBox.square(
+          dimension: _spinnerSize,
+          child: CircularProgressIndicator(strokeWidth: _spinnerStroke),
+        ),
+      );
+    }
     if (message == null) return const SizedBox(height: AppSpacing.l);
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.s),

@@ -8,7 +8,7 @@ import 'package:material_ui/material_ui.dart';
 
 /// The white rounded square with an arrow from the registration designs.
 class AppBackButton extends StatelessWidget {
-  const new({this.onPressed, super.key});
+  const new({this.onPressed, this.enabled = true, super.key});
 
   static const double boxSize = 40;
   static const double iconSize = 20;
@@ -16,6 +16,9 @@ class AppBackButton extends StatelessWidget {
   /// Defaults to popping the current route, or going to Onboarding when
   /// there is nothing to pop (a flow entered with `go`).
   final VoidCallback? onPressed;
+
+  /// False while a step's request runs, so leaving can't strand it.
+  final bool enabled;
 
   void _back(BuildContext context) =>
       context.canPop() ? context.pop() : context.go(AppRoutes.onboarding);
@@ -26,9 +29,10 @@ class AppBackButton extends StatelessWidget {
     return Semantics(
       button: true,
       label: context.l10n.back,
+      enabled: enabled,
       excludeSemantics: true,
       child: InkResponse(
-        onTap: onPressed ?? () => _back(context),
+        onTap: enabled ? onPressed ?? () => _back(context) : null,
         radius: AppSizes.button / 2,
         child: SizedBox.square(
           dimension: AppSizes.button,

@@ -45,6 +45,11 @@ void main() {
       expect(_check(2000, 1, 0), _invalid(ValidationError.notARealDate));
     });
 
+    test('rejects a year that would make someone older than any person', () {
+      expect(_check(198, 5, 1), _invalid(ValidationError.notARealDate));
+      expect(_check(1800, 5, 1), _invalid(ValidationError.notARealDate));
+    });
+
     test('rejects a date after today', () {
       expect(_check(2026, 11, 13), _invalid(ValidationError.inFuture));
     });

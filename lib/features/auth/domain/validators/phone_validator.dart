@@ -20,12 +20,13 @@ ValidationResult<String> validatePhone(String input) {
       : const Invalid(ValidationError.invalidPhone);
 }
 
-/// Removes a pasted `+95` or `95`, but only when what follows is still a
-/// full local number, so a local `95…` number keeps its digits.
+/// Removes a pasted `+95`, or a bare `95` when the input isn't already a
+/// local number on its own, so a local `95…` number keeps its digits.
 String _stripCountryCode(String digits) {
   if (digits.startsWith(AuthRules.countryCode)) {
     return digits.substring(AuthRules.countryCode.length);
   }
+  if (_localWithOptionalZero.hasMatch(digits)) return digits;
   final rest = digits.startsWith(_countryDigits)
       ? digits.substring(_countryDigits.length)
       : null;

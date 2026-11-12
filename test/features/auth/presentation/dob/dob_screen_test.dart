@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
@@ -77,6 +79,58 @@ void main() {
 
     expect(find.text('You need to be at least 13 to join'), findsOneWidget);
     expect(_enabled(tester), isFalse);
+  });
+
+  testWidgets('a year still being typed keeps Continue disabled', (
+    tester,
+  ) async {
+    await pumpDob(tester);
+
+    await _enterDate(tester, month: 'May', day: '1', year: '198');
+
+    expect(_enabled(tester), isFalse);
+  });
+
+  testWidgets('Back does nothing while the account is being created', (
+    tester,
+  ) async {
+    final pending = Completer<Result<UserVO>>();
+    when(() => mocks.register(any())).thenAnswer((_) => pending.future);
+    await pumpRouterApp(
+      tester,
+      session: testSessionCubit(),
+      initialLocation: AppRoutes.registerPhone,
+    );
+    await tester.enterText(find.byType(TextField), '09254135592');
+    await tester.pump();
+    await _tapContinue(tester);
+    when(() => mocks.verifyOtp(any()))
+        .thenAnswer((_) async => const Success<UserVO?>(null));
+    await tester.enterText(find.byType(TextField), '123456');
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, 'Ye Min');
+    await tester.pump();
+    await _tapContinue(tester);
+    await _enterDate(tester, month: 'May', day: '1', year: '1980');
+
+    await tester.tap(_continue);
+    await tester.pump();
+    await tester.tap(find.bySemanticsLabel('Back'), warnIfMissed: false);
+    // The spinner keeps animating while the request is pending.
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(find.text("What's your date of birth?"), findsOneWidget);
+    pending.complete(
+      Success(
+        UserVO(
+          id: 1,
+          phone: '+959254135592',
+          firstName: 'Ye Min',
+          dateOfBirth: DateTime(1980, 5),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
   });
 
   testWidgets('the date step is the last of four', (tester) async {
