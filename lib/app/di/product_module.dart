@@ -5,6 +5,7 @@ import 'package:donuts/features/product/domain/repositories/cart_repository.dart
 import 'package:donuts/features/product/domain/repositories/product_repository.dart';
 import 'package:donuts/features/product/domain/usecases/add_to_cart_use_case.dart';
 import 'package:donuts/features/product/domain/usecases/watch_product_use_case.dart';
+import 'package:donuts/features/product/presentation/blocs/product_detail_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 /// Product detail and the persistent cart.
@@ -20,5 +21,13 @@ void registerProductModule(GetIt getIt) {
       ),
     )
     ..registerLazySingleton(() => WatchProductUseCase(getIt()))
-    ..registerLazySingleton(() => AddToCartUseCase(getIt()));
+    ..registerLazySingleton(() => AddToCartUseCase(getIt()))
+    // A factory: each Product detail screen gets its own cubit for its id.
+    ..registerFactoryParam<ProductDetailCubit, String, void>(
+      (productId, _) => ProductDetailCubit(
+        productId: productId,
+        watchProduct: getIt(),
+        addToCart: getIt(),
+      ),
+    );
 }
