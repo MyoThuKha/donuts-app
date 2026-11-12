@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:donuts/core/network/api_exception.dart';
 import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/guard.dart';
 import 'package:donuts/core/result/result.dart';
@@ -61,6 +65,53 @@ void main() {
       );
 
       expect(_failureOf(result), isA<ParsingFailure>());
+    });
+
+    test('a receive timeout becomes TimeoutFailure', () async {
+      final result = await guard<int>(
+        () async => throw DioException.receiveTimeout(
+          timeout: const Duration(seconds: 8),
+          requestOptions: RequestOptions(),
+        ),
+      );
+
+      expect(_failureOf(result), isA<TimeoutFailure>());
+    });
+
+    test('a 500 becomes ServerFailure with status 500', () async {
+      final options = RequestOptions();
+      final result = await guard<int>(
+        () async => throw DioException.badResponse(
+          statusCode: 500,
+          requestOptions: options,
+          response: Response<void>(requestOptions: options, statusCode: 500),
+        ),
+      );
+
+      expect(
+        _failureOf(result),
+        isA<ServerFailure>().having((f) => f.statusCode, 'statusCode', 500),
+      );
+    });
+
+    test('a SocketException becomes NetworkFailure', () async {
+      final result = await guard<int>(
+        () async => throw DioException.connectionError(
+          requestOptions: RequestOptions(),
+          reason: 'offline',
+          error: const SocketException('offline'),
+        ),
+      );
+
+      expect(_failureOf(result), isA<NetworkFailure>());
+    });
+
+    test('ApiException becomes ServerFailure', () async {
+      final result = await guard<int>(
+        () async => throw const ApiException('not_found', 'No catalog'),
+      );
+
+      expect(_failureOf(result), isA<ServerFailure>());
     });
 
     test('lets programming errors through instead of hiding them', () {

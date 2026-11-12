@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:donuts/core/network/api_exception.dart';
 import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:drift/drift.dart';
@@ -15,6 +19,10 @@ Future<Result<T>> guard<T>(Future<T> Function() run) async {
     return Failure(DatabaseFailure(error: e, stackTrace: s));
   } on DriftWrappedException catch (e, s) {
     return Failure(DatabaseFailure(error: e, stackTrace: s));
+  } on DioException catch (e, s) {
+    return Failure(_fromDio(e, s));
+  } on ApiException catch (e, s) {
+    return Failure(ServerFailure(error: e, stackTrace: s));
   } on CheckedFromJsonException catch (e, s) {
     return Failure(ParsingFailure(error: e, stackTrace: s));
   } on FormatException catch (e, s) {
@@ -23,3 +31,20 @@ Future<Result<T>> guard<T>(Future<T> Function() run) async {
     return Failure(UnknownFailure(error: e, stackTrace: s));
   }
 }
+
+AppFailure _fromDio(DioException e, StackTrace s) => switch (e.type) {
+  DioExceptionType.connectionTimeout ||
+  DioExceptionType.sendTimeout ||
+  DioExceptionType.receiveTimeout => TimeoutFailure(error: e, stackTrace: s),
+  DioExceptionType.badResponse => ServerFailure(
+    statusCode: e.response?.statusCode,
+    error: e,
+    stackTrace: s,
+  ),
+  DioExceptionType.connectionError => NetworkFailure(error: e, stackTrace: s),
+  DioExceptionType.unknown when e.error is SocketException => NetworkFailure(
+    error: e,
+    stackTrace: s,
+  ),
+  _ => UnknownFailure(error: e, stackTrace: s),
+};
