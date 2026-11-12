@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:donuts/core/theme/app_theme.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/donuts_text.dart';
@@ -46,4 +48,22 @@ void main() {
       expect(data.lengthInBytes, greaterThan(0));
     }
   });
+
+  testWidgets(
+    'font manifest registers the theme family at weights 400 to 800',
+    (tester) async {
+      final manifest = jsonDecode(
+        await rootBundle.loadString('FontManifest.json'),
+      ) as List<dynamic>;
+      final family = manifest.cast<Map<String, dynamic>>().singleWhere(
+        (entry) => entry['family'] == DonutsText.fontFamily,
+      );
+      final weights = [
+        for (final font in family['fonts'] as List<dynamic>)
+          (font as Map<String, dynamic>)['weight'],
+      ];
+
+      expect(weights, unorderedEquals([400, 500, 600, 700, 800]));
+    },
+  );
 }
