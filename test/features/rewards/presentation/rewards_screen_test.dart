@@ -182,6 +182,31 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('scrolled content stays out from under the status bar', (
+    tester,
+  ) async {
+    tester.view.padding = const FakeViewPadding(top: 120);
+    addTearDown(tester.view.reset);
+    await _pumpRewards(tester);
+    await tester.pumpAndSettle();
+
+    await tester.drag(find.byType(CustomScrollView), const Offset(0, -400));
+    await tester.pumpAndSettle();
+
+    final strip = tester.getRect(find.byKey(RewardsScreen.statusBarKey));
+    expect(strip.top, 0);
+    expect(strip.height, closeTo(120 / tester.view.devicePixelRatio, 0.01));
+    final hit = tester.hitTestOnBinding(Offset(strip.center.dx, 10));
+    expect(
+      hit.path.any(
+        (e) =>
+            e.target ==
+            tester.renderObject(find.byKey(RewardsScreen.statusBarKey)),
+      ),
+      isTrue,
+    );
+  });
+
   testWidgets('a null member shows the empty message', (tester) async {
     final member = _MockWatchMember();
     when(member.call).thenAnswer((_) => Stream.value(null));

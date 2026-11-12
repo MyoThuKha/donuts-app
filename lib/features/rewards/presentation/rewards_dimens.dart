@@ -18,8 +18,8 @@ abstract final class RewardsDimens {
   static const double glowSpread = 2;
   static const double glowAlpha = 0.45;
 
-  static const double pillHeight = 40;
-  static const double badgeSize = 24;
+  static const double pillHeight = 36;
+  static const double badgeSize = 22;
 
   static const double tabHeight = 44;
   static const double tabBarInset = 4;

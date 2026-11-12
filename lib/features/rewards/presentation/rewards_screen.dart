@@ -22,6 +22,10 @@ import 'package:material_ui/material_ui.dart';
 class RewardsScreen extends StatelessWidget {
   const new({super.key});
 
+  /// The white strip behind the status bar that scrolled content passes
+  /// under.
+  static const Key statusBarKey = ValueKey('rewards-status-bar');
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -86,22 +90,40 @@ class _RewardsPageState extends State<_RewardsPage>
     return BlocConsumer<RewardsCubit, RewardsState>(
       listenWhen: (a, b) => a.status != b.status,
       listener: _onStatus,
-      builder: (context, state) => ColoredBox(
-        color: context.colors.canvas,
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(child: _top(context, state)),
-            ..._body(context, state),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MediaQuery.paddingOf(context).bottom + AppSpacing.xl,
-              ),
+      builder: (context, state) => Stack(
+        children: [
+          ColoredBox(
+            color: context.colors.canvas,
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(child: _top(context, state)),
+                ..._body(context, state),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height:
+                        MediaQuery.paddingOf(context).bottom + AppSpacing.xl,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          _statusBarStrip(context),
+        ],
       ),
     );
   }
+
+  Widget _statusBarStrip(BuildContext context) => Positioned(
+    top: 0,
+    left: 0,
+    right: 0,
+    height: MediaQuery.paddingOf(context).top,
+    child: ColoredBox(
+      key: RewardsScreen.statusBarKey,
+      color: context.colors.surface,
+      child: const SizedBox.expand(),
+    ),
+  );
 
   /// The white upper half: the header, then the ladder and ring.
   Widget _top(BuildContext context, RewardsState state) {
