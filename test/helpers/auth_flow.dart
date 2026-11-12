@@ -1,3 +1,4 @@
+import 'package:donuts/app/di/auth_module.dart';
 import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/features/auth/domain/usecases/register_use_case.dart';
@@ -24,6 +25,7 @@ class AuthFlowMocks {
       ..registerSingleton<VerifyOtpUseCase>(verifyOtp)
       ..registerSingleton<RegisterUseCase>(register)
       ..registerSingleton<DateTime Function()>(() => DateTime(2026, 11, 12));
+    registerAuthStepCubits(getIt);
   }
 }
 

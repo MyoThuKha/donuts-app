@@ -25,12 +25,7 @@ class OtpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final draft = context.read<RegistrationDraftCubit>().state;
     return BlocProvider(
-      create: (_) => OtpCubit(
-        verifyOtp: getIt(),
-        requestOtp: getIt(),
-        phone: draft.phone ?? '',
-        mode: draft.mode,
-      )..startCountdown(),
+      create: (_) => getIt<OtpCubit>(param1: draft)..startCountdown(),
       child: const _OtpPage(),
     );
   }
@@ -63,28 +58,41 @@ class _OtpPage extends StatelessWidget {
         step: 2,
         of: steps,
         busy: state.status == OtpStatus.verifying,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ShakeWidget(
-              trigger: state.shakeCount,
-              child: OtpInputWidget(
-                code: state.code,
-                enabled: !state.locked && state.status != OtpStatus.verifying,
-                onChanged: cubit.changed,
-              ),
-            ),
-            _OtpMessage(state: state),
-            const SizedBox(height: AppSpacing.xxl),
-            ResendCountdownWidget(
-              remaining: state.remaining,
-              canResend: state.canResend,
-              onResend: cubit.resend,
-            ),
-          ],
-        ),
+        body: _OtpBody(state: state),
         bottom: const SizedBox.shrink(),
       ),
+    );
+  }
+}
+
+/// The boxes, the message under them and the resend countdown.
+class _OtpBody extends StatelessWidget {
+  const new({required this.state});
+
+  final OtpState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<OtpCubit>();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ShakeWidget(
+          trigger: state.shakeCount,
+          child: OtpInputWidget(
+            code: state.code,
+            enabled: !state.locked && state.status != OtpStatus.verifying,
+            onChanged: cubit.changed,
+          ),
+        ),
+        _OtpMessage(state: state),
+        const SizedBox(height: AppSpacing.xxl),
+        ResendCountdownWidget(
+          remaining: state.remaining,
+          canResend: state.canResend,
+          onResend: cubit.resend,
+        ),
+      ],
     );
   }
 }

@@ -39,6 +39,10 @@ class _DonutPainter extends CustomPainter {
   static const int _sprinkleCount = 14;
   static const double _sprinkleRadius = 0.035;
 
+  /// Alternate sprinkles sit a little outside or inside the glaze's middle.
+  static const double _outerSprinkle = 1.08;
+  static const double _innerSprinkle = 0.9;
+
   final Color dough;
   final Color glaze;
   final Color sprinkles;
@@ -53,7 +57,7 @@ class _DonutPainter extends CustomPainter {
     final orbit = unit * (_glazeOuter + _glazeInner) / 2;
     for (var i = 0; i < _sprinkleCount; i++) {
       final angle = 2 * math.pi * i / _sprinkleCount;
-      final wobble = i.isEven ? 1.08 : 0.9;
+      final wobble = i.isEven ? _outerSprinkle : _innerSprinkle;
       canvas.drawCircle(
         center + Offset.fromDirection(angle, orbit * wobble),
         unit * _sprinkleRadius,

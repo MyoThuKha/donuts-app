@@ -1,7 +1,7 @@
 import 'package:donuts/core/theme/app_dimens.dart';
-import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/features/auth/presentation/onboarding/views/onboarding_actions_view.dart';
 import 'package:donuts/features/auth/presentation/onboarding/views/onboarding_hero_view.dart';
+import 'package:donuts/features/auth/presentation/widgets/auth_background_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -16,17 +16,9 @@ class _OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    return Scaffold(
-      body: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [colors.authTop, colors.authBottom],
-          ),
-        ),
-        child: const SafeArea(
+    return const Scaffold(
+      body: AuthBackgroundWidget(
+        child: SafeArea(
           top: false,
           child: Column(
             children: [

@@ -20,11 +20,8 @@ class DobScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-    create: (context) => DobCubit(
-      register: getIt(),
-      draft: context.read<RegistrationDraftCubit>(),
-      now: getIt(),
-    ),
+    create: (context) =>
+        getIt<DobCubit>(param1: context.read<RegistrationDraftCubit>()),
     child: const _DobPage(),
   );
 }
@@ -80,40 +77,39 @@ class _DobPageState extends State<_DobPage> {
         step: steps,
         of: steps,
         busy: state.status == DobStatus.submitting,
-        body: Column(
-          children: [
-            MonthFieldWidget(
-              month: state.month,
-              hint: l10n.monthHint,
-              onChanged: (month) => _changed(month: month),
-            ),
-            const SizedBox(height: AppSpacing.m),
-            _numberField(_day, l10n.dayHint, _dayDigits),
-            const SizedBox(height: AppSpacing.m),
-            _numberField(
-              _year,
-              l10n.yearHint,
-              _yearDigits,
-              error: l10n.dateOfBirthError(state.validation),
-            ),
-            if (state.status == DobStatus.failed)
-              Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.s),
-                child: Text(
-                  l10n.genericError,
-                  style: context.text.caption.copyWith(
-                    color: context.colors.danger,
-                  ),
-                ),
-              ),
-          ],
-        ),
+        body: _fields(state),
         bottom: AppPrimaryButton(
           label: l10n.continueLabel,
           loading: state.status == DobStatus.submitting,
           onPressed: state.validation.isValid ? _submit : null,
         ),
       ),
+    );
+  }
+
+  Widget _fields(DobState state) {
+    final l10n = context.l10n;
+    return Column(
+      spacing: AppSpacing.m,
+      children: [
+        MonthFieldWidget(
+          month: state.month,
+          hint: l10n.monthHint,
+          onChanged: (month) => _changed(month: month),
+        ),
+        _numberField(_day, l10n.dayHint, _dayDigits),
+        _numberField(
+          _year,
+          l10n.yearHint,
+          _yearDigits,
+          error: l10n.dateOfBirthError(state.validation),
+        ),
+        if (state.status == DobStatus.failed)
+          Text(
+            l10n.genericError,
+            style: context.text.caption.copyWith(color: context.colors.danger),
+          ),
+      ],
     );
   }
 

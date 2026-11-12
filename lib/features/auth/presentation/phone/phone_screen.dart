@@ -22,10 +22,8 @@ class PhoneScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-    create: (context) => PhoneCubit(
-      requestOtp: getIt(),
-      draft: context.read<RegistrationDraftCubit>(),
-    ),
+    create: (context) =>
+        getIt<PhoneCubit>(param1: context.read<RegistrationDraftCubit>()),
     child: const _PhonePage(),
   );
 }
@@ -80,23 +78,7 @@ class _PhonePageState extends State<_PhonePage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppTextField(
-              controller: _controller,
-              focusNode: _focus,
-              hint: l10n.phoneHint,
-              prefixText: AuthRules.countryCode,
-              autofocus: true,
-              keyboardType: TextInputType.phone,
-              autofillHints: const [AutofillHints.telephoneNumberNational],
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[\d +-]')),
-              ],
-              errorText: state.showError
-                  ? l10n.phoneError(state.validation)
-                  : null,
-              onChanged: context.read<PhoneCubit>().changed,
-              onSubmitted: (_) => _submit(),
-            ),
+            _field(state),
             _AccountNotice(status: state.status),
           ],
         ),
@@ -108,7 +90,26 @@ class _PhonePageState extends State<_PhonePage> {
       ),
     );
   }
+
+  Widget _field(PhoneState state) => AppTextField(
+    controller: _controller,
+    focusNode: _focus,
+    hint: context.l10n.phoneHint,
+    prefixText: AuthRules.countryCode,
+    autofocus: true,
+    keyboardType: TextInputType.phone,
+    autofillHints: const [AutofillHints.telephoneNumberNational],
+    inputFormatters: [FilteringTextInputFormatter.allow(_phoneCharacters)],
+    errorText: state.showError
+        ? context.l10n.phoneError(state.validation)
+        : null,
+    onChanged: context.read<PhoneCubit>().changed,
+    onSubmitted: (_) => _submit(),
+  );
 }
+
+/// Digits plus the separators people type or paste with a number.
+final RegExp _phoneCharacters = RegExp(r'[\d +-]');
 
 /// The inline message when the number doesn't match the chosen path, with a
 /// link to the other path.
@@ -117,45 +118,48 @@ class _AccountNotice extends StatelessWidget {
 
   final PhoneStatus status;
 
+  /// The message, and the link to the other path when there is one.
+  (String, String?, String?)? _notice(AppLocalizations l10n) =>
+      switch (status) {
+        PhoneStatus.notRegistered => (
+          l10n.notRegistered,
+          l10n.registerInstead,
+          AppRoutes.registerPhone,
+        ),
+        PhoneStatus.alreadyRegistered => (
+          l10n.alreadyRegistered,
+          l10n.logInInstead,
+          AppRoutes.logInPhone,
+        ),
+        PhoneStatus.failed => (l10n.genericError, null, null),
+        _ => null,
+      };
+
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final (message, action, route) = switch (status) {
-      PhoneStatus.notRegistered => (
-        l10n.notRegistered,
-        l10n.registerInstead,
-        AppRoutes.registerPhone,
-      ),
-      PhoneStatus.alreadyRegistered => (
-        l10n.alreadyRegistered,
-        l10n.logInInstead,
-        AppRoutes.logInPhone,
-      ),
-      PhoneStatus.failed => (l10n.genericError, null, null),
-      _ => (null, null, null),
-    };
-    if (message == null) return const SizedBox.shrink();
+    final notice = _notice(context.l10n);
+    if (notice == null) return const SizedBox.shrink();
+    final (message, action, route) = notice;
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.m),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Text(message, style: context.text.bodySmall),
-          if (action != null && route != null)
-            TextButton(
-              onPressed: () => context.go(route),
-              style: TextButton.styleFrom(
-                minimumSize: const Size(AppSizes.button, AppSizes.button),
-              ),
-              child: Text(
-                action,
-                style: context.text.label.copyWith(
-                  color: context.colors.accent,
-                ),
-              ),
-            ),
+          if (action != null && route != null) _link(context, action, route),
         ],
       ),
     );
   }
+
+  Widget _link(BuildContext context, String action, String route) => TextButton(
+    onPressed: () => context.go(route),
+    style: TextButton.styleFrom(
+      minimumSize: const Size(AppSizes.button, AppSizes.button),
+    ),
+    child: Text(
+      action,
+      style: context.text.label.copyWith(color: context.colors.accent),
+    ),
+  );
 }

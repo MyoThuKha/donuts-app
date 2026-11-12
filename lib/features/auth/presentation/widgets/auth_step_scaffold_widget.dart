@@ -2,6 +2,7 @@ import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/back_button.dart';
+import 'package:donuts/features/auth/presentation/widgets/auth_background_widget.dart';
 import 'package:donuts/features/auth/presentation/widgets/step_progress_ring_widget.dart';
 import 'package:donuts/features/auth/presentation/widgets/terms_notice_widget.dart';
 import 'package:material_ui/material_ui.dart';
@@ -39,14 +40,7 @@ class AuthStepScaffold extends StatelessWidget {
 
   Widget _scaffold(DonutsColors colors) {
     return Scaffold(
-      body: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [colors.authTop, colors.authBottom],
-          ),
-        ),
+      body: AuthBackgroundWidget(
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(
