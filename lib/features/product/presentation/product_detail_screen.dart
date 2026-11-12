@@ -53,7 +53,10 @@ class _ProductDetailPage extends StatelessWidget {
       listener: _showAddResult,
       child: Scaffold(
         backgroundColor: context.colors.canvas,
+        // In the bottom bar slot, so the add snackbar shows above it.
+        bottomNavigationBar: const _AddToCartBar(),
         body: SafeArea(
+          bottom: false,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -107,64 +110,70 @@ class _ProductBody extends StatelessWidget {
     final state = context.watch<ProductDetailCubit>().state;
     final product = state.product;
     if (product == null) return const SizedBox.shrink();
-    return Column(
-      children: [
-        Expanded(
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.all(AppSpacing.pageGutter),
-                sliver: SliverList.list(
-                  children: [
-                    Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: ProductDimens.stepperHeight / 2,
-                          ),
-                          child: ProductCardView(
-                            product: product,
-                            heroTag: heroTag,
-                          ),
-                        ),
-                        QuantityStepperWidget(
-                          quantity: state.quantity,
-                          onDecrement: state.quantity > ProductRules.minQuantity
-                              ? cubit.decrement
-                              : null,
-                          onIncrement: state.quantity < ProductRules.maxQuantity
-                              ? cubit.increment
-                              : null,
-                        ),
-                      ],
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.all(AppSpacing.pageGutter),
+          sliver: SliverList.list(
+            children: [
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: ProductDimens.stepperHeight / 2,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: AppSpacing.xxxl),
-                      child: ProductDescriptionView(
-                        description: product.description,
-                      ),
-                    ),
-                  ],
-                ),
+                    child: ProductCardView(product: product, heroTag: heroTag),
+                  ),
+                  QuantityStepperWidget(
+                    quantity: state.quantity,
+                    onDecrement: state.quantity > ProductRules.minQuantity
+                        ? cubit.decrement
+                        : null,
+                    onIncrement: state.quantity < ProductRules.maxQuantity
+                        ? cubit.increment
+                        : null,
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.xxxl),
+                child: ProductDescriptionView(description: product.description),
               ),
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.pageGutter,
-            0,
-            AppSpacing.pageGutter,
-            AppSpacing.l,
-          ),
-          child: AddToCartBarView(
-            total: state.total ?? 0,
-            adding: state.addStatus == CartAddStatus.adding,
-            onPressed: cubit.addToCart,
-          ),
-        ),
       ],
+    );
+  }
+}
+
+/// Shown only once the product has loaded.
+class _AddToCartBar extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<ProductDetailCubit>().state;
+    final total = state.total;
+    if (state.status != ProductLoadStatus.ready || total == null) {
+      return const SizedBox.shrink();
+    }
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.pageGutter,
+          AppSpacing.s,
+          AppSpacing.pageGutter,
+          AppSpacing.l,
+        ),
+        child: AddToCartBarView(
+          total: total,
+          adding: state.addStatus == CartAddStatus.adding,
+          onPressed: context.read<ProductDetailCubit>().addToCart,
+        ),
+      ),
     );
   }
 }

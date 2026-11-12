@@ -8,6 +8,7 @@ import 'package:donuts/core/theme/app_theme.dart';
 import 'package:donuts/features/product/domain/usecases/add_to_cart_use_case.dart';
 import 'package:donuts/features/product/domain/usecases/watch_product_use_case.dart';
 import 'package:donuts/features/product/presentation/product_detail_screen.dart';
+import 'package:donuts/features/product/presentation/views/add_to_cart_bar_view.dart';
 import 'package:donuts/features/product/presentation/views/product_card_view.dart';
 import 'package:donuts/features/product/presentation/widgets/quantity_stepper_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,7 +17,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/product_fakes.dart';
-import '../../../helpers/pump_app.dart';
 
 const _heroTag = 'product-image-seasonal-p_coconut';
 
@@ -46,13 +46,19 @@ void main() {
       ..physicalSize = const Size(1206, 2622)
       ..devicePixelRatio = 3;
     addTearDown(tester.view.reset);
-    await pumpThemed(
-      tester,
-      Builder(
-        builder: (context) => MediaQuery(
-          data: MediaQuery.of(context)
-              .copyWith(disableAnimations: reduceMotion),
-          child: ProductDetailScreen(productId: productId, heroTag: _heroTag),
+    // No outer Scaffold: on the device the product route is the root one,
+    // and snackbars show on the root Scaffold.
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: AppTheme.light(),
+        home: Builder(
+          builder: (context) => MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(disableAnimations: reduceMotion),
+            child: ProductDetailScreen(productId: productId, heroTag: _heroTag),
+          ),
         ),
       ),
     );
@@ -137,6 +143,19 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Added 2 Coconut Donut to your cart'), findsOneWidget);
+  });
+
+  testWidgets('the added snackbar leaves the Add to cart bar uncovered', (
+    tester,
+  ) async {
+    await pumpDetail(tester);
+
+    await tester.tap(find.text('ADD TO CART'));
+    await tester.pumpAndSettle();
+
+    final bar = tester.getRect(find.byType(AddToCartBarView));
+    final snackBar = tester.getRect(find.byType(SnackBar));
+    expect(bar.overlaps(snackBar), isFalse);
   });
 
   testWidgets('a failed add shows the failure snackbar', (tester) async {

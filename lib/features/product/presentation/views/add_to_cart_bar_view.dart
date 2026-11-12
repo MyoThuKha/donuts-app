@@ -69,7 +69,10 @@ class _AddToCartBarViewState extends State<AddToCartBarView> {
 
   Widget _body(BuildContext context, double fullWidth) {
     final motion = context.motion;
+    // heightFactor 1: in the Scaffold's bottom slot, a plain Center would
+    // take the whole screen height.
     return Center(
+      heightFactor: 1,
       child: AnimatedContainer(
         duration: motion.of(AppMotion.medium),
         curve: AppMotion.emphasized,
