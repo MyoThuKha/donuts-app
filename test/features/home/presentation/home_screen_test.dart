@@ -8,6 +8,7 @@ import 'package:donuts/features/home/presentation/items/product_tile_item.dart';
 import 'package:donuts/features/home/presentation/views/banner_carousel_view.dart';
 import 'package:donuts/features/home/presentation/views/home_header_view.dart';
 import 'package:donuts/features/home/presentation/views/shops_band_view.dart';
+import 'package:donuts/features/home/presentation/widgets/see_all_button_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -166,5 +167,20 @@ void main() {
       isTrue,
     );
     expect(find.text("You're offline. Showing saved data."), findsOneWidget);
+  });
+
+  testWidgets('every row lines its See all button up on the right edge', (
+    tester,
+  ) async {
+    await pumpHomeScreen(tester, streams);
+    streams.emitAll();
+    await tester.pump(_entrance);
+
+    final buttons = find.byType(SeeAllButtonWidget);
+    final rightEdges = {
+      for (var i = 0; i < 3; i++) tester.getTopRight(buttons.at(i)).dx,
+    };
+    expect(find.byType(SeeAllButtonWidget), findsNWidgets(3));
+    expect(rightEdges, hasLength(1));
   });
 }

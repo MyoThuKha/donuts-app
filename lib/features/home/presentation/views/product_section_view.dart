@@ -54,23 +54,28 @@ class _SectionTitle extends StatelessWidget {
         right: AppSpacing.l,
       ),
       child: Row(
-        spacing: AppSpacing.xs,
         children: [
-          Flexible(
-            child: Semantics(
-              header: true,
-              child: Text(title, style: context.text.sectionTitle),
+          Expanded(
+            child: Row(
+              spacing: AppSpacing.xs,
+              children: [
+                Flexible(
+                  child: Semantics(
+                    header: true,
+                    child: Text(title, style: context.text.sectionTitle),
+                  ),
+                ),
+                if (section.kind == HomeSectionKind.popular)
+                  ExcludeSemantics(
+                    child: Icon(
+                      LucideIcons.flame,
+                      size: HomeDimens.flameIcon,
+                      color: context.colors.highlight,
+                    ),
+                  ),
+              ],
             ),
           ),
-          if (section.kind == HomeSectionKind.popular)
-            ExcludeSemantics(
-              child: Icon(
-                LucideIcons.flame,
-                size: HomeDimens.flameIcon,
-                color: context.colors.highlight,
-              ),
-            ),
-          const Spacer(),
           const SeeAllButtonWidget(),
         ],
       ),
