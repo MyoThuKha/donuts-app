@@ -6,6 +6,7 @@ import 'package:donuts/core/widgets/buttons/primary_button.dart';
 import 'package:donuts/features/auth/domain/params/registration_params.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
+import 'package:donuts/features/home/presentation/home_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -185,7 +186,7 @@ void main() {
 
       await tester.tap(find.byType(AppPrimaryButton));
       await tester.pumpAndSettle();
-      expect(find.text('Home is coming soon'), findsOneWidget);
+      expect(find.byType(HomeScreen), findsOneWidget);
     },
   );
 }

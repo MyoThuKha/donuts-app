@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:donuts/app/shell/widgets/nav_pill_widget.dart';
+import 'package:donuts/features/home/presentation/home_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -20,7 +21,7 @@ void main() {
   ) async {
     await _pumpApp(tester);
 
-    expect(find.text('Home is coming soon'), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Reward'), findsNothing);
   });
@@ -61,7 +62,7 @@ void main() {
     await tester.tap(_homeIcon);
     await tester.pumpAndSettle();
 
-    expect(find.text('Home is coming soon'), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

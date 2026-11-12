@@ -1,26 +1,139 @@
+import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/motion/stagger.dart';
+import 'package:donuts/core/network/connectivity_cubit.dart';
+import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
+import 'package:donuts/core/sync/presentation/catalog_sync_state.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/feedback/offline_banner.dart';
+import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
+import 'package:donuts/features/home/presentation/views/banner_carousel_view.dart';
+import 'package:donuts/features/home/presentation/views/home_header_view.dart';
+import 'package:donuts/features/home/presentation/views/product_sections_view.dart';
+import 'package:donuts/features/home/presentation/views/shops_band_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Home (screen 8). A stub until branch 4 builds it.
+/// Home (screen 8). Every section reads the local database through
+/// [HomeCubit], so it renders offline.
 class HomeScreen extends StatelessWidget {
   const new({super.key});
 
   @override
+  Widget build(BuildContext context) => BlocProvider(
+    create: (_) => getIt<HomeCubit>()..start(),
+    child: const _HomePage(),
+  );
+}
+
+class _HomePage extends StatelessWidget {
+  const new();
+
+  /// Stagger order: header, banners, then the product rows, then shops.
+  static const int _firstSectionIndex = 2;
+  static const int _shopsIndex = 5;
+
+  @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return ColoredBox(
-      color: context.colors.canvas,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.pageGutter),
-          child: Text(
-            context.l10n.placeholderComingSoon(context.l10n.tabHome),
-            style: context.text.sectionTitle,
-            textAlign: TextAlign.center,
+      color: colors.canvas,
+      child: Column(
+        children: [
+          ColoredBox(
+            color: colors.memberHeader,
+            child: SizedBox(
+              width: double.infinity,
+              height: MediaQuery.paddingOf(context).top,
+            ),
           ),
-        ),
+          const _Offline(),
+          Expanded(
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: RefreshIndicator(
+                color: colors.accent,
+                onRefresh: () => _refresh(context),
+                child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: _slivers(context),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
+
+  /// Refreshes the catalog, or waits for the refresh already running, and
+  /// reports a failure in a snackbar. The rows keep showing the saved data.
+  /// Only this pull reports failures: background refreshes stay silent.
+  Future<void> _refresh(BuildContext context) async {
+    final sync = context.read<CatalogSyncCubit>();
+    final messenger = ScaffoldMessenger.of(context);
+    final failedMessage = context.l10n.homeRefreshFailed;
+    if (sync.state.status == CatalogSyncStatus.syncing) {
+      await sync.stream.firstWhere(
+        (state) => state.status != CatalogSyncStatus.syncing,
+      );
+    } else {
+      await sync.refresh();
+    }
+    if (sync.state.status != CatalogSyncStatus.failed) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(failedMessage)));
+  }
+
+  List<Widget> _slivers(BuildContext context) {
+    final navClearance =
+        AppSizes.navBar + MediaQuery.paddingOf(context).bottom + AppSpacing.xxl;
+    return [
+      SliverToBoxAdapter(
+        child: ColoredBox(
+          color: context.colors.memberHeader,
+          child: const StaggeredEntrance(index: 0, child: HomeHeaderView()),
+        ),
+      ),
+      const SliverToBoxAdapter(
+        child: StaggeredEntrance(index: 1, child: BannerCarouselView()),
+      ),
+      const ProductSectionsView(firstIndex: _firstSectionIndex),
+      SliverPadding(
+        padding: const EdgeInsets.only(top: AppSpacing.xxxl),
+        sliver: SliverToBoxAdapter(
+          child: StaggeredEntrance(
+            index: _shopsIndex,
+            child: ShopsBandView(bottomInset: navClearance),
+          ),
+        ),
+      ),
+    ];
+  }
+}
+
+/// The offline banner, between the status bar and the page. It opens a
+/// strip of its own height, so it pushes Home down instead of covering the
+/// header, and folds away when the app is back online.
+class _Offline extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) =>
+      BlocSelector<ConnectivityCubit, ConnectivityStatus, bool>(
+        selector: (status) => status == ConnectivityStatus.offline,
+        builder: (context, offline) => ClipRect(
+          child: AnimatedAlign(
+            alignment: Alignment.topCenter,
+            heightFactor: offline ? 1 : 0,
+            duration: context.motion.of(AppMotion.medium),
+            curve: AppMotion.standard,
+            child: OfflineBanner(visible: offline),
+          ),
+        ),
+      );
 }
