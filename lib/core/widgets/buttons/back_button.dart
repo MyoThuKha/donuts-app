@@ -1,4 +1,5 @@
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:go_router/go_router.dart';
@@ -12,8 +13,12 @@ class AppBackButton extends StatelessWidget {
   static const double boxSize = 40;
   static const double iconSize = 20;
 
-  /// Defaults to popping the current route.
+  /// Defaults to popping the current route, or going to Onboarding when
+  /// there is nothing to pop (a flow entered with `go`).
   final VoidCallback? onPressed;
+
+  void _back(BuildContext context) =>
+      context.canPop() ? context.pop() : context.go(AppRoutes.onboarding);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +28,7 @@ class AppBackButton extends StatelessWidget {
       label: context.l10n.back,
       excludeSemantics: true,
       child: InkResponse(
-        onTap: onPressed ?? () => context.pop(),
+        onTap: onPressed ?? () => _back(context),
         radius: AppSizes.button / 2,
         child: SizedBox.square(
           dimension: AppSizes.button,

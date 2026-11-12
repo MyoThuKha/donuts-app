@@ -1,12 +1,18 @@
 import 'package:donuts/app/router/session_listenable.dart';
+import 'package:donuts/app/router/step_transition_page.dart';
 import 'package:donuts/app/shell/app_shell.dart';
 import 'package:donuts/app/shell/placeholder_tab_screen.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/router/app_routes.dart';
+import 'package:donuts/features/auth/domain/types/auth_mode.dart';
+import 'package:donuts/features/auth/presentation/flow/blocs/registration_draft_cubit.dart';
 import 'package:donuts/features/auth/presentation/onboarding/onboarding_screen.dart';
+import 'package:donuts/features/auth/presentation/otp/otp_screen.dart';
+import 'package:donuts/features/auth/presentation/phone/phone_screen.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
 import 'package:donuts/features/settings/presentation/settings_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -32,11 +38,19 @@ GoRouter buildAppRouter({
           title: context.l10n.welcomeTitle,
         ),
       ),
-      GoRoute(
-        path: AppRoutes.logInPhone,
-        builder: (context, state) =>
-            PlaceholderTabScreen(title: context.l10n.logIn),
-      ),
+      _authFlow(AuthMode.logIn, [
+        _step(AppRoutes.logInPhone, const PhoneScreen()),
+        _step(AppRoutes.logInOtp, const OtpScreen()),
+      ]),
+      _authFlow(AuthMode.register, [
+        _step(AppRoutes.registerPhone, const PhoneScreen()),
+        _step(AppRoutes.registerOtp, const OtpScreen()),
+        GoRoute(
+          path: AppRoutes.registerName,
+          builder: (context, state) =>
+              PlaceholderTabScreen(title: context.l10n.getStarted),
+        ),
+      ]),
       _shell(),
     ],
   );
@@ -53,6 +67,20 @@ String? authRedirect(SessionState session, String location) {
       public || location == AppRoutes.welcome ? AppRoutes.home : null,
   };
 }
+
+/// One sign-up or log-in attempt. Its steps share a draft, so going back
+/// keeps what was typed.
+ShellRoute _authFlow(AuthMode mode, List<RouteBase> steps) => ShellRoute(
+  builder: (context, state, child) =>
+      BlocProvider(create: (_) => RegistrationDraftCubit(mode), child: child),
+  routes: steps,
+);
+
+GoRoute _step(String path, Widget screen) => GoRoute(
+  path: path,
+  pageBuilder: (context, state) =>
+      stepTransitionPage(key: state.pageKey, child: screen),
+);
 
 StatefulShellRoute _shell() => StatefulShellRoute.indexedStack(
   builder: (context, state, navigationShell) =>

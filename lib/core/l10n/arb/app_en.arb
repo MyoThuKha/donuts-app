@@ -91,5 +91,57 @@
       }
     }
   },
-  "back": "Back"
+  "back": "Back",
+  "phoneTitle": "Enter your phone number",
+  "phoneHint": "09xxxxxxxxx",
+  "phoneInvalid": "Enter a Myanmar mobile number, like 09 254 135 592",
+  "notRegistered": "This number isn't registered yet.",
+  "registerInstead": "Register instead",
+  "alreadyRegistered": "This number is already registered.",
+  "logInInstead": "Log in instead",
+  "genericError": "Something went wrong. Try again.",
+  "continueLabel": "Continue",
+  "otpTitle": "Verify your number",
+  "otpWrong": "That code isn't right. Try again.",
+  "otpLocked": "Too many wrong codes. Tap Resend to get a new one.",
+  "didntReceive": "Didn't receive the code?",
+  "resend": "Resend",
+  "firstNameRequired": "Enter your first name",
+  "nameInvalid": "Use letters and spaces only",
+  "dobInvalid": "That date doesn't exist",
+  "dobFuture": "Date of birth can't be in the future",
+  "otpSent": "We've sent a 6 digit OTP to {phone}",
+  "@otpSent": {
+    "placeholders": {
+      "phone": {
+        "type": "String",
+        "example": "+959254135592"
+      }
+    }
+  },
+  "resendIn": "resend in {time} min",
+  "@resendIn": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "4:58"
+      }
+    }
+  },
+  "nameTooLong": "Use {max} characters or fewer",
+  "@nameTooLong": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "dobTooYoung": "You need to be at least {age} to join",
+  "@dobTooYoung": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -100,4 +100,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get back => 'Back';
+
+  @override
+  String get phoneTitle => 'Enter your phone number';
+
+  @override
+  String get phoneHint => '09xxxxxxxxx';
+
+  @override
+  String get phoneInvalid =>
+      'Enter a Myanmar mobile number, like 09 254 135 592';
+
+  @override
+  String get notRegistered => 'This number isn\'t registered yet.';
+
+  @override
+  String get registerInstead => 'Register instead';
+
+  @override
+  String get alreadyRegistered => 'This number is already registered.';
+
+  @override
+  String get logInInstead => 'Log in instead';
+
+  @override
+  String get genericError => 'Something went wrong. Try again.';
+
+  @override
+  String get continueLabel => 'Continue';
+
+  @override
+  String get otpTitle => 'Verify your number';
+
+  @override
+  String get otpWrong => 'That code isn\'t right. Try again.';
+
+  @override
+  String get otpLocked => 'Too many wrong codes. Tap Resend to get a new one.';
+
+  @override
+  String get didntReceive => 'Didn\'t receive the code?';
+
+  @override
+  String get resend => 'Resend';
+
+  @override
+  String get firstNameRequired => 'Enter your first name';
+
+  @override
+  String get nameInvalid => 'Use letters and spaces only';
+
+  @override
+  String get dobInvalid => 'That date doesn\'t exist';
+
+  @override
+  String get dobFuture => 'Date of birth can\'t be in the future';
+
+  @override
+  String otpSent(String phone) {
+    return 'We\'ve sent a 6 digit OTP to $phone';
+  }
+
+  @override
+  String resendIn(String time) {
+    return 'resend in $time min';
+  }
+
+  @override
+  String nameTooLong(int max) {
+    return 'Use $max characters or fewer';
+  }
+
+  @override
+  String dobTooYoung(int age) {
+    return 'You need to be at least $age to join';
+  }
 }

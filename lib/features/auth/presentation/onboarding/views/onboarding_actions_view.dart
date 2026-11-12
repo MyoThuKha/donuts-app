@@ -54,7 +54,7 @@ class _LogInRow extends StatelessWidget {
       children: [
         Text(l10n.alreadyHaveAccount, style: context.text.bodySmall),
         TextButton(
-          onPressed: () => context.go(AppRoutes.logInPhone),
+          onPressed: () => context.push(AppRoutes.logInPhone),
           style: TextButton.styleFrom(
             minimumSize: const Size(AppSizes.button, AppSizes.button),
           ),

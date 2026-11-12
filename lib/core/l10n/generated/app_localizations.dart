@@ -255,6 +255,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back'**
   String get back;
+
+  /// No description provided for @phoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get phoneTitle;
+
+  /// No description provided for @phoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'09xxxxxxxxx'**
+  String get phoneHint;
+
+  /// No description provided for @phoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a Myanmar mobile number, like 09 254 135 592'**
+  String get phoneInvalid;
+
+  /// No description provided for @notRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This number isn\'t registered yet.'**
+  String get notRegistered;
+
+  /// No description provided for @registerInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Register instead'**
+  String get registerInstead;
+
+  /// No description provided for @alreadyRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This number is already registered.'**
+  String get alreadyRegistered;
+
+  /// No description provided for @logInInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in instead'**
+  String get logInInstead;
+
+  /// No description provided for @genericError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get genericError;
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueLabel;
+
+  /// No description provided for @otpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your number'**
+  String get otpTitle;
+
+  /// No description provided for @otpWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That code isn\'t right. Try again.'**
+  String get otpWrong;
+
+  /// No description provided for @otpLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many wrong codes. Tap Resend to get a new one.'**
+  String get otpLocked;
+
+  /// No description provided for @didntReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t receive the code?'**
+  String get didntReceive;
+
+  /// No description provided for @resend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend'**
+  String get resend;
+
+  /// No description provided for @firstNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your first name'**
+  String get firstNameRequired;
+
+  /// No description provided for @nameInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Use letters and spaces only'**
+  String get nameInvalid;
+
+  /// No description provided for @dobInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That date doesn\'t exist'**
+  String get dobInvalid;
+
+  /// No description provided for @dobFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth can\'t be in the future'**
+  String get dobFuture;
+
+  /// No description provided for @otpSent.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve sent a 6 digit OTP to {phone}'**
+  String otpSent(String phone);
+
+  /// No description provided for @resendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'resend in {time} min'**
+  String resendIn(String time);
+
+  /// No description provided for @nameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Use {max} characters or fewer'**
+  String nameTooLong(int max);
+
+  /// No description provided for @dobTooYoung.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to be at least {age} to join'**
+  String dobTooYoung(int age);
 }
 
 class _AppLocalizationsDelegate
