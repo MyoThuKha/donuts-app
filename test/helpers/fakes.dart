@@ -1,4 +1,5 @@
 import 'package:donuts/core/result/result.dart';
+import 'package:donuts/core/sync/domain/usecases/refresh_catalog_use_case.dart';
 import 'package:donuts/features/auth/domain/params/otp_params.dart';
 import 'package:donuts/features/auth/domain/params/registration_params.dart';
 import 'package:donuts/features/auth/domain/types/auth_mode.dart';
@@ -20,6 +21,8 @@ class MockRequestOtpUseCase extends Mock implements RequestOtpUseCase;
 class MockVerifyOtpUseCase extends Mock implements VerifyOtpUseCase;
 
 class MockRegisterUseCase extends Mock implements RegisterUseCase;
+
+class MockRefreshCatalogUseCase extends Mock implements RefreshCatalogUseCase;
 
 /// Call once in `setUpAll` before stubbing use cases with `any()`.
 void registerAuthFallbacks() {

@@ -1,5 +1,7 @@
 import 'package:donuts/app/di/auth_module.dart';
 import 'package:donuts/app/di/core_module.dart';
+import 'package:donuts/app/di/home_module.dart';
+import 'package:donuts/app/di/product_module.dart';
 import 'package:donuts/app/di/rewards_module.dart';
 import 'package:donuts/app/di/sync_module.dart';
 import 'package:donuts/core/database/app_database.dart';
@@ -31,5 +33,7 @@ Future<void> configureDependencies({
     connectivitySource: connectivitySource,
     probe: probe,
   );
+  registerHomeModule(getIt);
+  registerProductModule(getIt);
   registerRewardsModule(getIt);
 }

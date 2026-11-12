@@ -4,6 +4,7 @@ import 'package:donuts/app/shell/app_shell.dart';
 import 'package:donuts/app/shell/placeholder_tab_screen.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/router/app_routes.dart';
+import 'package:donuts/core/widgets/images/product_hero_tag.dart';
 import 'package:donuts/features/auth/domain/types/auth_mode.dart';
 import 'package:donuts/features/auth/presentation/dob/dob_screen.dart';
 import 'package:donuts/features/auth/presentation/flow/blocs/registration_draft_cubit.dart';
@@ -14,6 +15,9 @@ import 'package:donuts/features/auth/presentation/phone/phone_screen.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
 import 'package:donuts/features/auth/presentation/welcome/welcome_screen.dart';
+import 'package:donuts/features/home/presentation/home_screen.dart';
+import 'package:donuts/features/product/presentation/product_detail_screen.dart';
+import 'package:donuts/features/rewards/presentation/rewards_screen.dart';
 import 'package:donuts/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -50,6 +54,7 @@ GoRouter buildAppRouter({
         _step(AppRoutes.registerDob, const DobScreen()),
       ]),
       _shell(),
+      GoRoute(path: AppRoutes.product, builder: _productDetail),
     ],
   );
 }
@@ -84,8 +89,8 @@ StatefulShellRoute _shell() => StatefulShellRoute.indexedStack(
   builder: (context, state, navigationShell) =>
       AppShell(navigationShell: navigationShell),
   branches: [
-    _placeholderBranch(AppRoutes.home, (l10n) => l10n.tabHome),
-    _placeholderBranch(AppRoutes.rewards, (l10n) => l10n.tabReward),
+    _branch(AppRoutes.home, const HomeScreen()),
+    _branch(AppRoutes.rewards, const RewardsScreen()),
     _placeholderBranch(AppRoutes.explore, (l10n) => l10n.tabExplore),
     _placeholderBranch(AppRoutes.wallet, (l10n) => l10n.tabWallet),
     StatefulShellBranch(
@@ -98,6 +103,19 @@ StatefulShellRoute _shell() => StatefulShellRoute.indexedStack(
     ),
   ],
 );
+
+StatefulShellBranch _branch(String path, Widget screen) => StatefulShellBranch(
+  routes: [GoRoute(path: path, builder: (context, state) => screen)],
+);
+
+/// Home passes its tile's Hero tag as `extra`. A deep link has none.
+Widget _productDetail(BuildContext context, GoRouterState state) {
+  final id = state.pathParameters['id']!;
+  return ProductDetailScreen(
+    productId: id,
+    heroTag: state.extra ?? productHeroTag(id),
+  );
+}
 
 StatefulShellBranch _placeholderBranch(
   String path,

@@ -6,6 +6,10 @@ abstract final class AppRoutes {
   static const String wallet = '/wallet';
   static const String settings = '/settings';
 
+  /// Product detail, above the shell. Build links with [productDetail].
+  static const String product = '/product/:id';
+  static String productDetail(String id) => '/product/$id';
+
   static const String onboarding = '/onboarding';
   static const String welcome = '/welcome';
 
