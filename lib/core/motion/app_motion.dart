@@ -39,5 +39,5 @@ class MotionScale {
 
 extension MotionContext on BuildContext {
   MotionScale get motion =>
-      MotionScale(reduced: MediaQuery.disableAnimationsOf(this));
+      MotionScale(reduced: MediaQuery.maybeDisableAnimationsOf(this) ?? false);
 }

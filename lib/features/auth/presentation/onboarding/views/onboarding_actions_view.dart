@@ -1,4 +1,5 @@
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
@@ -12,28 +13,32 @@ import 'package:material_ui/material_ui.dart';
 class OnboardingActionsView extends StatelessWidget {
   const new({super.key});
 
+  /// The text starts entering once the first circles are on their way.
+  static const int _afterCircles = 3;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final items = [
+      Text(
+        l10n.onboardingTitle,
+        style: context.text.display,
+        textAlign: TextAlign.center,
+      ),
+      AppPrimaryButton(
+        label: l10n.getStarted,
+        onPressed: () => context.push(AppRoutes.registerPhone),
+      ),
+      const _LogInRow(),
+      const SocialSignInRowWidget(),
+      const TermsNoticeWidget(),
+    ];
     return Column(
       mainAxisSize: MainAxisSize.min,
+      spacing: AppSpacing.m,
       children: [
-        Text(
-          l10n.onboardingTitle,
-          style: context.text.display,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: AppSpacing.xxl),
-        AppPrimaryButton(
-          label: l10n.getStarted,
-          onPressed: () => context.push(AppRoutes.registerPhone),
-        ),
-        const SizedBox(height: AppSpacing.l),
-        const _LogInRow(),
-        const SizedBox(height: AppSpacing.m),
-        const SocialSignInRowWidget(),
-        const SizedBox(height: AppSpacing.l),
-        const TermsNoticeWidget(),
+        for (final (i, item) in items.indexed)
+          StaggeredEntrance(index: i + _afterCircles, child: item),
       ],
     );
   }

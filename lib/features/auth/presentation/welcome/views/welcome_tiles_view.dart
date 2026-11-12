@@ -1,3 +1,4 @@
+import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/theme_context.dart';
@@ -42,6 +43,9 @@ final List<WelcomeTile> welcomeTiles = [
 class WelcomeTilesView extends StatelessWidget {
   const new({super.key});
 
+  /// How far, in tile widths, each tile slides in from its side.
+  static const double _slide = 0.4;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -50,7 +54,7 @@ class WelcomeTilesView extends StatelessWidget {
         return Stack(
           clipBehavior: Clip.none,
           children: [
-            for (final tile in welcomeTiles)
+            for (final (i, tile) in welcomeTiles.indexed)
               Positioned.fromRect(
                 rect: Rect.fromLTRB(
                   tile.rect.left * size.width,
@@ -58,7 +62,11 @@ class WelcomeTilesView extends StatelessWidget {
                   tile.rect.right * size.width,
                   tile.rect.bottom * size.height,
                 ),
-                child: WelcomeTileItem(tile: tile),
+                child: StaggeredEntrance(
+                  index: i,
+                  from: Offset(i.isEven ? -_slide : _slide, 0),
+                  child: WelcomeTileItem(tile: tile),
+                ),
               ),
           ],
         );

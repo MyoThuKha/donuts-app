@@ -1,4 +1,5 @@
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
@@ -17,6 +18,9 @@ class WelcomeScreen extends StatelessWidget {
 
 class _WelcomePage extends StatelessWidget {
   const new();
+
+  /// The title fades up once all four tiles have started sliding in.
+  static const int _afterTiles = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +51,21 @@ class _WelcomePage extends StatelessWidget {
                   padding: const EdgeInsets.only(right: AppSpacing.l),
                   child: Column(
                     children: [
-                      Text(
-                        l10n.welcomeTitle,
-                        style: context.text.display,
-                        textAlign: TextAlign.center,
+                      StaggeredEntrance(
+                        index: _afterTiles,
+                        child: Text(
+                          l10n.welcomeTitle,
+                          style: context.text.display,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       const SizedBox(height: AppSpacing.xxl),
-                      AppPrimaryButton(
-                        label: l10n.letsExplore,
-                        onPressed: context.read<SessionCubit>().welcomeSeen,
+                      StaggeredEntrance(
+                        index: _afterTiles + 1,
+                        child: AppPrimaryButton(
+                          label: l10n.letsExplore,
+                          onPressed: context.read<SessionCubit>().welcomeSeen,
+                        ),
                       ),
                     ],
                   ),

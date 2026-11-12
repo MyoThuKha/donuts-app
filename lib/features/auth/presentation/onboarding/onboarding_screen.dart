@@ -27,6 +27,7 @@ class _OnboardingPage extends StatelessWidget {
           ),
         ),
         child: const SafeArea(
+          top: false,
           child: Column(
             children: [
               Expanded(child: OnboardingHeroView()),

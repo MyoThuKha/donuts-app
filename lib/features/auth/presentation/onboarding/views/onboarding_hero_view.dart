@@ -1,3 +1,5 @@
+import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/images/donut_placeholder.dart';
@@ -65,10 +67,9 @@ class OnboardingHeroView extends StatelessWidget {
       builder: (context, constraints) {
         final size = constraints.biggest;
         return Stack(
-          clipBehavior: Clip.none,
           children: [
-            for (final circle in onboardingCircles)
-              _positioned(context, circle, size),
+            for (final (i, circle) in onboardingCircles.indexed)
+              _positioned(context, i, circle, size),
             const Positioned.fill(child: _BottomFade()),
           ],
         );
@@ -76,16 +77,39 @@ class OnboardingHeroView extends StatelessWidget {
     );
   }
 
-  Widget _positioned(BuildContext context, HeroCircle circle, Size size) {
+  Widget _positioned(
+    BuildContext context,
+    int index,
+    HeroCircle circle,
+    Size size,
+  ) {
     final diameter = circle.diameter * size.width;
     return Positioned(
       left: circle.center.dx * size.width - diameter / 2,
       top: circle.center.dy * size.height - diameter / 2,
       width: diameter,
       height: diameter,
-      child: HeroCircleItem(circle: circle),
+      child: StaggeredEntrance(
+        index: index,
+        from: _driftFrom(circle.center),
+        duration: AppMotion.showcase,
+        curve: AppMotion.emphasized,
+        child: HeroCircleItem(circle: circle),
+      ),
     );
   }
+
+  /// Circles near an edge drift in from that edge; the middle ones rise
+  /// from below. Offsets are in circle diameters.
+  static Offset _driftFrom(Offset center) {
+    if (center.dx < _edgeZone) return const Offset(-_drift, _rise);
+    if (center.dx > 1 - _edgeZone) return const Offset(_drift, _rise);
+    return const Offset(0, _drift);
+  }
+
+  static const double _edgeZone = 0.3;
+  static const double _drift = 0.7;
+  static const double _rise = 0.15;
 }
 
 class HeroCircleItem extends StatelessWidget {
