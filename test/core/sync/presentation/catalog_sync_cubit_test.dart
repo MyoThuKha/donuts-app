@@ -19,6 +19,7 @@ final _syncedAt = DateTime.utc(2026, 11, 12, 9);
 void main() {
   late _MockRefresh refresh;
   late FakeConnectivitySource source;
+  late FakeReachabilityProbe probe;
   late ConnectivityCubit connectivity;
 
   CatalogSyncCubit build() => CatalogSyncCubit(
@@ -30,7 +31,8 @@ void main() {
   setUp(() {
     refresh = _MockRefresh();
     source = FakeConnectivitySource();
-    connectivity = ConnectivityCubit(source, FakeReachabilityProbe());
+    probe = FakeReachabilityProbe();
+    connectivity = ConnectivityCubit(source, probe);
   });
   tearDown(() => connectivity.close());
 
@@ -92,6 +94,19 @@ void main() {
       await cubit.close();
     },
   );
+
+  test('a refresh that fails on the network rechecks connectivity', () async {
+    when(refresh.call).thenAnswer((_) async => const Failure(NetworkFailure()));
+    source.interfaceUp = true;
+    final cubit = build();
+    await connectivity.start();
+    probe.reachable = false;
+    await pumpEventQueue();
+
+    expect(connectivity.state, ConnectivityStatus.offline);
+    expect(cubit.state.failure, isA<NetworkFailure>());
+    await cubit.close();
+  });
 
   test('a failed refresh keeps lastSyncedAt', () async {
     final answers = <Result<SyncOutcome>>[

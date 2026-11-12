@@ -80,6 +80,27 @@ void main() {
     });
   });
 
+  test('recheck while online goes offline when the host stops answering, '
+      'then re-probes', () {
+    fakeAsync((async) {
+      source.interfaceUp = true;
+      final cubit = build();
+      unawaited(cubit.start());
+      async.flushMicrotasks();
+      expect(cubit.state, ConnectivityStatus.online);
+
+      probe.reachable = false;
+      unawaited(cubit.recheck());
+      async.flushMicrotasks();
+      expect(cubit.state, ConnectivityStatus.offline);
+
+      probe.reachable = true;
+      async.elapse(ConnectivityCubit.defaultReprobeInterval);
+      expect(cubit.state, ConnectivityStatus.online);
+      unawaited(cubit.close());
+    });
+  });
+
   test('close cancels the re-probe timer', () {
     fakeAsync((async) {
       source.interfaceUp = true;

@@ -35,6 +35,12 @@ class ConnectivityCubit extends Cubit<ConnectivityStatus> {
     await _onInterface(await _source.hasInterface());
   }
 
+  /// Probes again now. Call it when a request fails on the network while
+  /// the status still says online, for example after the router loses its
+  /// uplink.
+  Future<void> recheck() async =>
+      await _onInterface(await _source.hasInterface());
+
   Future<void> _onInterface(bool interfaceUp) async {
     _stopReprobing();
     final generation = ++_generation;

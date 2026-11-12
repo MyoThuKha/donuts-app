@@ -41,6 +41,9 @@ class CatalogSyncCubit extends Cubit<CatalogSyncState> {
         );
       case Failure(:final failure):
         _fail(failure);
+        if (failure is NetworkFailure || failure is TimeoutFailure) {
+          unawaited(_connectivity.recheck());
+        }
     }
   }
 

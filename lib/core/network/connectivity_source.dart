@@ -13,9 +13,11 @@ class PlusConnectivitySource implements ConnectivitySource {
 
   final Connectivity _connectivity;
 
+  /// Not de-duplicated: moving from cellular to Wi-Fi reports `true` twice,
+  /// and the second event is what makes the cubit probe the new network.
   @override
   Stream<bool> get interfaceChanges =>
-      _connectivity.onConnectivityChanged.map(_anyUp).distinct();
+      _connectivity.onConnectivityChanged.map(_anyUp);
 
   @override
   Future<bool> hasInterface() async =>
