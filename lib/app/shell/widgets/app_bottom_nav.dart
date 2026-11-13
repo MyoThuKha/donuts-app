@@ -35,14 +35,30 @@ class AppBottomNav extends StatelessWidget {
   /// The white outline around the panel and the pill.
   static const double rim = 1.5;
 
+  /// Android's 3-button bar is taller than this (48dp). Its gesture handle
+  /// is shorter (24dp on the test phone), so a 20dp cut-off would mistake
+  /// it for buttons.
+  static const double buttonNavMinInset = 32;
+
   final int currentIndex;
   final ValueChanged<int> onSelected;
   final List<AppNavItem> items;
 
+  /// The space the bar leaves below its panel. Only Android's 3-button bar
+  /// gets it, so the buttons don't cover the tabs. The iPhone home
+  /// indicator and Android's gesture handle draw over the panel.
+  static double bottomInsetOf(BuildContext context) {
+    final inset = MediaQuery.paddingOf(context).bottom;
+    final hasButtonNav =
+        Theme.of(context).platform == TargetPlatform.android &&
+        inset > buttonNavMinInset;
+    return hasButtonNav ? inset : 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final bottomInset = bottomInsetOf(context);
     return SizedBox(
       height: AppSizes.navBar + bottomInset,
       child: Stack(
@@ -179,7 +195,7 @@ class _NavItem extends StatelessWidget {
                 height: AppBottomNav.iconSize,
                 colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
               ),
-              if (selected) _label(context, color),
+              if (selected) _label(context),
             ],
           ),
         ),
@@ -187,7 +203,7 @@ class _NavItem extends StatelessWidget {
     );
   }
 
-  Widget _label(BuildContext context, Color color) {
+  Widget _label(BuildContext context) {
     return Flexible(
       child: Padding(
         padding: const EdgeInsets.only(left: AppSpacing.s),
@@ -202,7 +218,9 @@ class _NavItem extends StatelessWidget {
             child: Text(
               item.label,
               maxLines: 1,
-              style: context.text.label.copyWith(color: color),
+              // The design's label is about 12pt bold white. Badge is the
+              // nearest role.
+              style: context.text.badge,
             ),
           ),
         ),
