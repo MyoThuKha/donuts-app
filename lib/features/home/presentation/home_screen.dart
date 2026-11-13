@@ -7,6 +7,7 @@ import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_state.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:donuts/features/home/presentation/views/member_panel_view.dart';
@@ -86,9 +87,7 @@ class _HomePage extends StatelessWidget {
       await sync.refresh();
     }
     if (sync.state.status != CatalogSyncStatus.failed) return;
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(failedMessage)));
+    messenger.showMessage(failedMessage);
   }
 
   List<Widget> _slivers(BuildContext context) {

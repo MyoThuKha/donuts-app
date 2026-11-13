@@ -4,6 +4,7 @@ import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/back_button.dart';
+import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/images/product_hero_tag.dart';
 import 'package:donuts/features/product/domain/product_rules.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_cubit.dart';
@@ -102,9 +103,7 @@ class _ProductDetailPage extends StatelessWidget {
       CartAddStatus.idle || CartAddStatus.adding => null,
     };
     if (message == null) return;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+    context.showMessage(message);
   }
 }
 
