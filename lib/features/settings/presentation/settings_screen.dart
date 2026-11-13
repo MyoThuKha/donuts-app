@@ -1,4 +1,5 @@
 import 'package:donuts/core/di/locator.dart';
+import 'package:donuts/core/format/date_format.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
@@ -10,7 +11,6 @@ import 'package:donuts/features/settings/presentation/blocs/settings_member_cubi
 import 'package:donuts/features/settings/presentation/items/settings_row_item.dart';
 import 'package:donuts/features/settings/presentation/views/settings_header_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -103,9 +103,10 @@ class _SettingsPage extends StatelessWidget {
       SettingsRowItem(
         icon: LucideIcons.cake,
         label: l10n.accountDateOfBirth,
-        value: DateFormat.yMMMMd(
+        value: formatLongDate(
+          user.dateOfBirth,
           Localizations.localeOf(context).toLanguageTag(),
-        ).format(user.dateOfBirth),
+        ),
       ),
       SettingsRowItem(
         icon: LucideIcons.calendarDays,

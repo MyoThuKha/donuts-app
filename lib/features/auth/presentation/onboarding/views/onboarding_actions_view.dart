@@ -50,8 +50,11 @@ class _LogInRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    // Wraps, so Log In moves under the question when the line runs out of
+    // room, as Burmese does at large text on a 4.7-inch phone.
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text(l10n.alreadyHaveAccount, style: context.text.bodySmall),
         TextButton(

@@ -44,5 +44,52 @@ void main() {
     );
     expect(l10n.discountOff(50), '50% off');
     expect(l10n.rewardsProgress(9, 12), '9/12');
+    expect(l10n.termsSuffix, '.');
+  });
+
+  test('Burmese is a supported locale', () {
+    expect(AppLocalizations.supportedLocales, contains(const Locale('my')));
+  });
+
+  test('Burmese strings fill placeholders in Burmese word order', () async {
+    final l10n = await AppLocalizations.delegate.load(const Locale('my'));
+
+    expect(l10n.tabReward, 'ဆုလာဘ်');
+    expect(l10n.productPrice('3,200'), '3,200 ကျပ်');
+    expect(
+      l10n.rewardsTierRemaining('500', 'Gold'),
+      'Gold ဖြစ်ရန် 500 မှတ် လိုသည်',
+    );
+    expect(
+      l10n.productAddedToCart(2, 'Coconut Donut'),
+      'Coconut Donut 2 ခုကို ခြင်းထဲ ထည့်လိုက်ပါပြီ',
+    );
+    expect(l10n.homeNotifications(0), 'အသိပေးချက် မရှိပါ');
+    expect(l10n.homeNotifications(3), 'အသိပေးချက် 3 ခု');
+    expect(l10n.termsSuffix, startsWith(' '));
+  });
+
+  testWidgets('Material widgets resolve under the Burmese locale', (
+    tester,
+  ) async {
+    late AppLocalizations l10n;
+    late MaterialLocalizations material;
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('my'),
+        localizationsDelegates: appLocalizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) {
+            l10n = context.l10n;
+            material = MaterialLocalizations.of(context);
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+
+    expect(l10n.localeName, 'my');
+    expect(material.okButtonLabel, isNotEmpty);
   });
 }

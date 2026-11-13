@@ -61,6 +61,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyPolicy => 'Privacy Policy';
 
   @override
+  String get termsSuffix => '.';
+
+  @override
   String get comingSoonTitle => 'Coming soon';
 
   @override

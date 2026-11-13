@@ -43,6 +43,10 @@
   "termsOfUse": "Terms of Use",
   "and": "and",
   "privacyPolicy": "Privacy Policy",
+  "termsSuffix": ".",
+  "@termsSuffix": {
+    "description": "Text after the Privacy Policy link in the terms notice. Holds its own leading space, so languages that put the verb after the links can finish the sentence here."
+  },
   "comingSoonTitle": "Coming soon",
   "featureComingSoon": "This feature is coming soon.",
   "@featureComingSoon": {
