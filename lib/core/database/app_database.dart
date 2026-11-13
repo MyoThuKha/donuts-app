@@ -43,6 +43,15 @@ class AppDatabase extends _$AppDatabase {
 
   new forTesting(super.e);
 
+  bool _createdOnOpen = false;
+
+  /// Whether opening the database on this launch created its file. The file
+  /// is deleted with the app, so true means a new install.
+  Future<bool> createdOnThisLaunch() async {
+    await doWhenOpened((_) {});
+    return _createdOnOpen;
+  }
+
   @override
   int get schemaVersion => 5;
 
@@ -57,7 +66,10 @@ class AppDatabase extends _$AppDatabase {
       from4To5: (m, schema) =>
           m.addColumn(schema.challenges, schema.challenges.claimed),
     ),
-    beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
+    beforeOpen: (details) {
+      _createdOnOpen = details.wasCreated;
+      return customStatement('PRAGMA foreign_keys = ON');
+    },
   );
 }
 

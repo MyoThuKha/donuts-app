@@ -83,7 +83,7 @@ lib/
 │   ├── sync/            # seeding from bundled JSON and refreshing from the mock API
 │   ├── result/          # Result<T> and the typed AppFailure classes
 │   ├── state/           # SectionState and the stream watcher shared by screens
-│   ├── storage/         # session in flutter_secure_storage
+│   ├── storage/         # session and language in flutter_secure_storage, cleared on a new install
 │   ├── l10n/            # ARB files (English, Burmese), language picker
 │   ├── motion/          # every duration and curve, and Reduce Motion handling
 │   ├── theme/           # colour, type, spacing and radius tokens

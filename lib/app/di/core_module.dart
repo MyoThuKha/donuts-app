@@ -1,5 +1,6 @@
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/l10n/language_cubit.dart';
+import 'package:donuts/core/storage/fresh_install_cleanup.dart';
 import 'package:donuts/core/storage/language_store.dart';
 import 'package:donuts/core/storage/session_store.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -21,6 +22,13 @@ void registerCoreModule(
     )
     ..registerLazySingleton<LanguageStore>(
       () => languageStore ?? const SecureLanguageStore(FlutterSecureStorage()),
+    )
+    ..registerLazySingleton(
+      () => FreshInstallCleanup(
+        database: getIt(),
+        session: getIt(),
+        language: getIt(),
+      ),
     )
     ..registerLazySingleton(
       () => LanguageCubit(getIt()),

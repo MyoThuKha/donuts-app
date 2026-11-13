@@ -2,6 +2,8 @@ import 'package:donuts/app/bootstrap.dart';
 import 'package:donuts/app/di/di.dart';
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/di/locator.dart';
+import 'package:donuts/core/l10n/app_language.dart';
+import 'package:donuts/core/l10n/language_cubit.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_state.dart';
@@ -43,5 +45,27 @@ void main() {
     expect(getIt<SeedCubit>().state, SeedStatus.done);
     expect(getIt<CatalogSyncCubit>().state.status, CatalogSyncStatus.idle);
     expect(probe.calls, 0);
+  });
+
+  test('bootstrap on a new install ignores the session and language an '
+      'earlier install left in secure storage', () async {
+    final session = MemorySessionStore()..userId = 1;
+    final language = FakeLanguageStore('my');
+    await configureDependencies(
+      database: AppDatabase.forTesting(NativeDatabase.memory()),
+      sessionStore: session,
+      languageStore: language,
+      authLatency: Duration.zero,
+      seedSource: FileSeedSource(),
+      connectivitySource: FakeConnectivitySource(),
+      probe: FakeReachabilityProbe(),
+    );
+
+    await bootstrap();
+
+    expect(session.userId, isNull);
+    expect(language.code, isNull);
+    expect(getIt<SessionCubit>().state, isA<SessionSignedOut>());
+    expect(getIt<LanguageCubit>().state, AppLanguage.system);
   });
 }
