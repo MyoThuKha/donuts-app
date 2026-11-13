@@ -3,6 +3,7 @@ import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/app_language.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/l10n/language_cubit.dart';
+import 'package:donuts/core/l10n/language_semantics.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/router/app_routes.dart';
@@ -72,6 +73,8 @@ Future<void> pumpRouterApp(
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.light(),
           routerConfig: router,
+          builder: (context, child) =>
+              LanguageSemantics(locale: state.locale, child: child!),
         ),
       ),
     ),
@@ -98,6 +101,8 @@ Future<void> pumpThemed(
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.light(),
           home: Scaffold(body: child),
+          builder: (context, child) =>
+              LanguageSemantics(locale: state.locale, child: child!),
         ),
       ),
     ),

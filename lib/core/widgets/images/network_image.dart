@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -84,13 +85,15 @@ class AppNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = this.url;
     if (url == null) return _assetOr(_loading);
+    // The fade is decoration, so Reduce Motion skips it.
+    final fades = fade && !context.motion.reduced;
     return CachedNetworkImage(
       imageUrl: url,
       cacheManager: cacheManager,
       memCacheWidth: cacheWidth,
       fit: fit,
-      fadeInDuration: fade ? _fadeIn : Duration.zero,
-      fadeOutDuration: fade ? _fadeOut : Duration.zero,
+      fadeInDuration: fades ? _fadeIn : Duration.zero,
+      fadeOutDuration: fades ? _fadeOut : Duration.zero,
       placeholder: (_, _) => _assetOr(_loading),
       errorWidget: (_, _, _) =>
           _assetOr(fallback ?? _ErrorTile(placeholderColor, placeholderShape)),

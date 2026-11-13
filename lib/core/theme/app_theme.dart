@@ -1,3 +1,4 @@
+import 'package:donuts/core/motion/motion_page_transitions.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/donuts_text.dart';
 import 'package:material_ui/material_ui.dart';
@@ -23,6 +24,7 @@ abstract final class AppTheme {
       fontFamily: DonutsText.fontFamily,
       fontFamilyFallback: DonutsText.fallback,
       scaffoldBackgroundColor: colors.canvas,
+      pageTransitionsTheme: motionAwarePageTransitions,
       extensions: [colors, text],
     );
   }

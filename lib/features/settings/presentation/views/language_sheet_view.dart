@@ -21,6 +21,7 @@ class LanguageSheetView extends StatelessWidget {
         for (final language in AppLanguage.values)
           LanguageOptionItem(
             label: language.label(context.l10n),
+            locale: language.locale ?? Localizations.localeOf(context),
             selected: language == current,
             onTap: () => _select(context, language),
           ),

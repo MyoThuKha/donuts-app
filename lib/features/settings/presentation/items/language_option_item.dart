@@ -8,6 +8,7 @@ import 'package:material_ui/material_ui.dart';
 class LanguageOptionItem extends StatelessWidget {
   const new({
     required this.label,
+    required this.locale,
     required this.selected,
     required this.onTap,
     super.key,
@@ -15,12 +16,17 @@ class LanguageOptionItem extends StatelessWidget {
 
   final String label;
 
+  /// The language [label] is written in, so a screen reader says "English"
+  /// in English and "မြန်မာ" in Burmese whatever the app's language.
+  final Locale locale;
   final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      container: true,
+      localeForSubtree: locale,
       selected: selected,
       inMutuallyExclusiveGroup: true,
       child: InkWell(

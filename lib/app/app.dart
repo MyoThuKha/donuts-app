@@ -3,6 +3,7 @@ import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/app_language.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/l10n/language_cubit.dart';
+import 'package:donuts/core/l10n/language_semantics.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
 import 'package:donuts/core/theme/app_theme.dart';
@@ -46,6 +47,8 @@ class _DonutsAppState extends State<DonutsApp> {
           theme: AppTheme.light(),
           debugShowCheckedModeBanner: false,
           routerConfig: _router,
+          builder: (context, child) =>
+              LanguageSemantics(locale: language.locale, child: child!),
         ),
       ),
     );

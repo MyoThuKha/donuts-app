@@ -1,4 +1,5 @@
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
@@ -82,15 +83,19 @@ class ProductTileItem extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Hero(
-            tag: _heroTag,
-            flightShuttleBuilder: productHeroShuttle,
-            child: ProductHeroImage(
-              url: product.imageUrl,
-              asset: product.imageAsset,
-              radius: radius,
-              fit: fillsTile ? BoxFit.cover : BoxFit.contain,
-              inset: fillsTile ? 0 : HomeDimens.productInset,
+          HeroMode(
+            // Reduce Motion skips the flight; the page fades in instead.
+            enabled: !context.motion.reduced,
+            child: Hero(
+              tag: _heroTag,
+              flightShuttleBuilder: productHeroShuttle,
+              child: ProductHeroImage(
+                url: product.imageUrl,
+                asset: product.imageAsset,
+                radius: radius,
+                fit: fillsTile ? BoxFit.cover : BoxFit.contain,
+                inset: fillsTile ? 0 : HomeDimens.productInset,
+              ),
             ),
           ),
           if (discount != null)
