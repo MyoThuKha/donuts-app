@@ -22,6 +22,7 @@ extension CatalogDtoDbMapper on CatalogDto {
     ],
     banners: [for (final b in banners) b.toCompanion(imageBase)],
     shops: [for (final s in shops) s.toCompanion(imageBase)],
+    gifts: [for (final g in gifts) g.toCompanion(imageBase)],
   );
 }
 
@@ -74,7 +75,9 @@ extension ShopDtoDbMapper on ShopDto {
 }
 
 extension MemberSeedDtoDbMapper on MemberSeedDto {
-  MemberRows toRows() => (
+  /// Relative tier and challenge image URLs resolve against [imageBase],
+  /// like the catalog's.
+  MemberRows toRows({required Uri imageBase}) => (
     profile: MemberProfileTableCompanion.insert(
       id: const Value(MemberDao.profileId),
       totalPoints: profile.totalPoints,
@@ -90,35 +93,40 @@ extension MemberSeedDtoDbMapper on MemberSeedDto {
           name: t.name,
           minPoints: t.minPoints,
           sortOrder: t.sortOrder,
-          imageUrl: Value(t.imageUrl),
+          imageUrl: Value(_resolve(imageBase, t.imageUrl)),
           imageAsset: Value(t.imageAsset),
         ),
     ],
-    challenges: [for (final c in challenges) c.toCompanion()],
-    gifts: [
-      for (final g in gifts)
-        GiftsTableCompanion.insert(
-          id: g.id,
-          title: g.title,
-          costPoints: g.costPoints,
-          imageUrl: Value(g.imageUrl),
-          imageAsset: Value(g.imageAsset),
-          sortOrder: g.sortOrder,
-        ),
-    ],
+    challenges: [for (final c in challenges) c.toCompanion(imageBase)],
   );
 }
 
-extension ChallengeDtoDbMapper on ChallengeDto {
-  ChallengesTableCompanion toCompanion() => ChallengesTableCompanion.insert(
+extension GiftDtoDbMapper on GiftDto {
+  GiftsTableCompanion toCompanion(Uri imageBase) => GiftsTableCompanion.insert(
     id: id,
     title: title,
-    kind: kind.name,
-    progress: progress,
-    target: target,
-    rewardPoints: rewardPoints,
-    imageUrl: Value(imageUrl),
+    costPoints: costPoints,
+    imageUrl: Value(_resolve(imageBase, imageUrl)),
     imageAsset: Value(imageAsset),
     sortOrder: sortOrder,
   );
+}
+
+/// [url] against [imageBase] when it is relative; null stays null.
+String? _resolve(Uri imageBase, String? url) =>
+    url == null ? null : imageBase.resolve(url).toString();
+
+extension ChallengeDtoDbMapper on ChallengeDto {
+  ChallengesTableCompanion toCompanion(Uri imageBase) =>
+      ChallengesTableCompanion.insert(
+        id: id,
+        title: title,
+        kind: kind.name,
+        progress: progress,
+        target: target,
+        rewardPoints: rewardPoints,
+        imageUrl: Value(_resolve(imageBase, imageUrl)),
+        imageAsset: Value(imageAsset),
+        sortOrder: sortOrder,
+      );
 }

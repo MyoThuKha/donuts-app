@@ -57,8 +57,7 @@
         "isNew": true,
         "discountPercent": null,
         "description": "A double shot of espresso, poured long over ice and cold water.",
-        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/drink_americano.webp",
-        "imageAsset": "assets/images/drink_americano.webp",
+        "imageUrl": "assets/home/americano.webp",
         "updatedAt": "2026-11-13T00:00:00Z"
       },
       {
@@ -222,11 +221,34 @@
         "imageAsset": null,
         "sortOrder": 3
       }
+    ],
+    "gifts": [
+      {
+        "id": "g_classic_donut",
+        "title": "Free classic donut",
+        "costPoints": 20000,
+        "imageUrl": "assets/home/donuts/blueberry-sprinkle.png",
+        "sortOrder": 0
+      },
+      {
+        "id": "g_iced_latte",
+        "title": "Free iced latte",
+        "costPoints": 35000,
+        "imageUrl": "assets/home/daigona-coffee.png",
+        "sortOrder": 1
+      },
+      {
+        "id": "g_box_of_six",
+        "title": "Box of 6 donuts",
+        "costPoints": 90000,
+        "imageUrl": "assets/home/box.jpg",
+        "sortOrder": 2
+      }
     ]
   },
   "error": null,
   "meta": {
-    "version": 3,
+    "version": 4,
     "generatedAt": "2026-11-13T00:00:00Z"
   }
 }

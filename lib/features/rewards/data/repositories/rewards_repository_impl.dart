@@ -1,3 +1,4 @@
+import 'package:donuts/core/database/daos/catalog_dao.dart';
 import 'package:donuts/core/database/daos/member_dao.dart';
 import 'package:donuts/core/result/guard.dart';
 import 'package:donuts/core/result/result.dart';
@@ -9,9 +10,12 @@ import 'package:donuts/features/rewards/domain/vo/challenge_vo.dart';
 import 'package:donuts/features/rewards/domain/vo/gift_vo.dart';
 
 class RewardsRepositoryImpl implements RewardsRepository {
-  const new(this._dao, this._claims);
+  const new(this._dao, this._catalog, this._claims);
 
   final MemberDao _dao;
+
+  /// Gifts come with the public catalog.
+  final CatalogDao _catalog;
   final RewardClaimsMemorySource _claims;
 
   @override
@@ -27,7 +31,7 @@ class RewardsRepositoryImpl implements RewardsRepository {
 
   @override
   Stream<List<GiftVO>> watchGifts() =>
-      _dao.watchGifts().map((rows) => [for (final row in rows) row.toVO()]);
+      _catalog.watchGifts().map((rows) => [for (final row in rows) row.toVO()]);
 
   @override
   Future<Result<void>> claimChallenge(String challengeId) => guard(() async {

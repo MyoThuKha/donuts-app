@@ -5,15 +5,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'member_dto.freezed.dart';
 part 'member_dto.g.dart';
 
-/// The member's private data. It is seeded once and never refreshed from
-/// the public catalog.
+/// The member's private data: profile, tiers and challenges. It is seeded
+/// once and never refreshed from the public catalog.
 @freezed
 abstract class MemberSeedDto with _$MemberSeedDto {
   const factory MemberSeedDto({
     required MemberProfileDto profile,
     required List<TierDto> tiers,
     required List<ChallengeDto> challenges,
-    required List<GiftDto> gifts,
   }) = _MemberSeedDto;
 
   factory fromJson(Map<String, dynamic> json) => _$MemberSeedDtoFromJson(json);
@@ -65,18 +64,4 @@ abstract class ChallengeDto with _$ChallengeDto {
   }) = _ChallengeDto;
 
   factory fromJson(Map<String, dynamic> json) => _$ChallengeDtoFromJson(json);
-}
-
-@freezed
-abstract class GiftDto with _$GiftDto {
-  const factory GiftDto({
-    required String id,
-    required String title,
-    required int costPoints,
-    required int sortOrder,
-    String? imageUrl,
-    String? imageAsset,
-  }) = _GiftDto;
-
-  factory fromJson(Map<String, dynamic> json) => _$GiftDtoFromJson(json);
 }

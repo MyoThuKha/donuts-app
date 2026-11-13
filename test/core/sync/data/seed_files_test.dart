@@ -20,7 +20,7 @@ void main() {
   });
 
   test(
-    'the remote catalog has version 3 and exactly one product the seed lacks',
+    'the remote catalog has version 4 and exactly one product the seed lacks',
     () {
       final seedIds = {
         for (final p in readCatalogFile(seedCatalogPath).data!.products) p.id,
@@ -28,7 +28,7 @@ void main() {
       final remote = readCatalogFile(remoteCatalogPath);
       final added = remote.data!.products.where((p) => !seedIds.contains(p.id));
 
-      expect(remote.meta.version, 3);
+      expect(remote.meta.version, 4);
       expect(added.map((p) => p.id), ['p_toasted_coconut']);
       expect(added.single.imageAsset, isNull);
     },

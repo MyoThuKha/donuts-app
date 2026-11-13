@@ -22,7 +22,11 @@ void registerRewardsModule(GetIt getIt) {
     )
     ..registerLazySingleton(() => WatchMemberSummaryUseCase(getIt()))
     ..registerLazySingleton<RewardsRepository>(
-      () => RewardsRepositoryImpl(getIt<AppDatabase>().memberDao, getIt()),
+      () => RewardsRepositoryImpl(
+        getIt<AppDatabase>().memberDao,
+        getIt<AppDatabase>().catalogDao,
+        getIt(),
+      ),
     )
     ..registerLazySingleton(() => WatchChallengesUseCase(getIt()))
     ..registerLazySingleton(() => WatchGiftsUseCase(getIt()))

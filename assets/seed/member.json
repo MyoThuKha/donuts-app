@@ -13,24 +13,21 @@
         "name": "Silver",
         "minPoints": 678500,
         "sortOrder": 0,
-        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/tier_silver.webp",
-        "imageAsset": "assets/images/tier_silver.webp"
+        "imageUrl": "assets/rewards/silver-badge.webp"
       },
       {
         "id": "gold",
         "name": "Gold",
         "minPoints": 680500,
         "sortOrder": 1,
-        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/tier_gold.webp",
-        "imageAsset": "assets/images/tier_gold.webp"
+        "imageUrl": "assets/rewards/gold-badge.webp"
       },
       {
         "id": "platinum",
         "name": "Platinum",
         "minPoints": 1000000,
         "sortOrder": 2,
-        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/tier_platinum.webp",
-        "imageAsset": "assets/images/tier_platinum.webp"
+        "imageUrl": "assets/rewards/platinum-badge.webp"
       }
     ],
     "challenges": [
@@ -41,9 +38,8 @@
         "progress": 4,
         "target": 4,
         "rewardPoints": 200,
-        "imageAsset": "assets/images/reward_donut.png",
         "sortOrder": 0,
-        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/reward_donut.png"
+        "imageUrl": "assets/rewards/reward-donut.webp"
       },
       {
         "id": "c_americano",
@@ -52,9 +48,8 @@
         "progress": 9,
         "target": 12,
         "rewardPoints": 100,
-        "imageAsset": "assets/images/drink_americano.webp",
         "sortOrder": 1,
-        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/drink_americano.webp"
+        "imageUrl": "assets/home/americano.webp"
       },
       {
         "id": "c_strawberry_donuts",
@@ -63,32 +58,8 @@
         "progress": 1,
         "target": 4,
         "rewardPoints": 100,
-        "imageAsset": "assets/images/reward_donut.png",
         "sortOrder": 2,
-        "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/reward_donut.png"
-      }
-    ],
-    "gifts": [
-      {
-        "id": "g_classic_donut",
-        "title": "Free classic donut",
-        "costPoints": 20000,
-        "imageAsset": "assets/images/donut_caramel_glaze.webp",
-        "sortOrder": 0
-      },
-      {
-        "id": "g_iced_latte",
-        "title": "Free iced latte",
-        "costPoints": 35000,
-        "imageAsset": "assets/images/coffee_iced_latte.webp",
-        "sortOrder": 1
-      },
-      {
-        "id": "g_box_of_six",
-        "title": "Box of 6 donuts",
-        "costPoints": 90000,
-        "imageAsset": "assets/images/box_mistletoe_romance.webp",
-        "sortOrder": 2
+        "imageUrl": "assets/rewards/reward-donut.webp"
       }
     ]
   },

@@ -14,6 +14,9 @@ abstract class CatalogDto with _$CatalogDto {
     required List<HomeSectionDto> sections,
     required List<BannerDto> banners,
     required List<ShopDto> shops,
+
+    /// The Rewards gifts. An older catalog without them reads as none.
+    @Default(<GiftDto>[]) List<GiftDto> gifts,
   }) = _CatalogDto;
 
   factory fromJson(Map<String, dynamic> json) => _$CatalogDtoFromJson(json);
@@ -79,4 +82,18 @@ abstract class ShopDto with _$ShopDto {
   }) = _ShopDto;
 
   factory fromJson(Map<String, dynamic> json) => _$ShopDtoFromJson(json);
+}
+
+@freezed
+abstract class GiftDto with _$GiftDto {
+  const factory GiftDto({
+    required String id,
+    required String title,
+    required int costPoints,
+    required int sortOrder,
+    String? imageUrl,
+    String? imageAsset,
+  }) = _GiftDto;
+
+  factory fromJson(Map<String, dynamic> json) => _$GiftDtoFromJson(json);
 }

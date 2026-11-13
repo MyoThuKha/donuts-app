@@ -51,7 +51,7 @@ class CatalogImporter {
   }) => _importVersioned(
     SyncKeys.member,
     version,
-    () => _db.memberDao.replaceMember(member.toRows()),
+    () => _db.memberDao.replaceMember(member.toRows(imageBase: _imageBase)),
   );
 
   Future<ImportOutcome> _importVersioned(
@@ -79,6 +79,7 @@ class CatalogImporter {
     _uniqueIds('section', [for (final s in catalog.sections) s.id]);
     _uniqueIds('banner', [for (final b in catalog.banners) b.id]);
     _uniqueIds('shop', [for (final s in catalog.shops) s.id]);
+    _uniqueIds('gift', [for (final g in catalog.gifts) g.id]);
     for (final section in catalog.sections) {
       final listed = _uniqueIds('${section.id} product', section.productIds);
       final missing = listed.difference(productIds);

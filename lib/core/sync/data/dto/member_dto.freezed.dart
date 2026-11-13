@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MemberSeedDto {
 
- MemberProfileDto get profile; List<TierDto> get tiers; List<ChallengeDto> get challenges; List<GiftDto> get gifts;
+ MemberProfileDto get profile; List<TierDto> get tiers; List<ChallengeDto> get challenges;
 /// Create a copy of MemberSeedDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,20 +30,20 @@ $MemberSeedDtoCopyWith<MemberSeedDto> get copyWith => _$MemberSeedDtoCopyWithImp
 @override
 bool operator ==(Object other) {
   final _this = this as MemberSeedDto;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemberSeedDto&&(identical(other.profile, _this.profile) || other.profile == _this.profile)&&const DeepCollectionEquality().equals(other.tiers, _this.tiers)&&const DeepCollectionEquality().equals(other.challenges, _this.challenges)&&const DeepCollectionEquality().equals(other.gifts, _this.gifts));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemberSeedDto&&(identical(other.profile, _this.profile) || other.profile == _this.profile)&&const DeepCollectionEquality().equals(other.tiers, _this.tiers)&&const DeepCollectionEquality().equals(other.challenges, _this.challenges));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as MemberSeedDto;
-  return Object.hash(runtimeType,_this.profile,const DeepCollectionEquality().hash(_this.tiers),const DeepCollectionEquality().hash(_this.challenges),const DeepCollectionEquality().hash(_this.gifts));
+  return Object.hash(runtimeType,_this.profile,const DeepCollectionEquality().hash(_this.tiers),const DeepCollectionEquality().hash(_this.challenges));
 }
 
 @override
 String toString() {
   final _this = this as MemberSeedDto;
-  return 'MemberSeedDto(profile: ${_this.profile}, tiers: ${_this.tiers}, challenges: ${_this.challenges}, gifts: ${_this.gifts})';
+  return 'MemberSeedDto(profile: ${_this.profile}, tiers: ${_this.tiers}, challenges: ${_this.challenges})';
 }
 
 
@@ -54,7 +54,7 @@ abstract mixin class $MemberSeedDtoCopyWith<$Res>  {
   factory $MemberSeedDtoCopyWith(MemberSeedDto value, $Res Function(MemberSeedDto) _then) = _$MemberSeedDtoCopyWithImpl;
 @useResult
 $Res call({
- MemberProfileDto profile, List<TierDto> tiers, List<ChallengeDto> challenges, List<GiftDto> gifts
+ MemberProfileDto profile, List<TierDto> tiers, List<ChallengeDto> challenges
 });
 
 
@@ -71,13 +71,12 @@ class _$MemberSeedDtoCopyWithImpl<$Res>
 
 /// Create a copy of MemberSeedDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? profile = null,Object? tiers = null,Object? challenges = null,Object? gifts = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? profile = null,Object? tiers = null,Object? challenges = null,}) {
   return _then(MemberSeedDto(
 profile: null == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as MemberProfileDto,tiers: null == tiers ? _self.tiers : tiers // ignore: cast_nullable_to_non_nullable
 as List<TierDto>,challenges: null == challenges ? _self.challenges : challenges // ignore: cast_nullable_to_non_nullable
-as List<ChallengeDto>,gifts: null == gifts ? _self.gifts : gifts // ignore: cast_nullable_to_non_nullable
-as List<GiftDto>,
+as List<ChallengeDto>,
   ));
 }
 /// Create a copy of MemberSeedDto
@@ -171,10 +170,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MemberProfileDto profile,  List<TierDto> tiers,  List<ChallengeDto> challenges,  List<GiftDto> gifts)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MemberProfileDto profile,  List<TierDto> tiers,  List<ChallengeDto> challenges)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MemberSeedDto() when $default != null:
-return $default(_that.profile,_that.tiers,_that.challenges,_that.gifts);case _:
+return $default(_that.profile,_that.tiers,_that.challenges);case _:
   return orElse();
 
 }
@@ -192,10 +191,10 @@ return $default(_that.profile,_that.tiers,_that.challenges,_that.gifts);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MemberProfileDto profile,  List<TierDto> tiers,  List<ChallengeDto> challenges,  List<GiftDto> gifts)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MemberProfileDto profile,  List<TierDto> tiers,  List<ChallengeDto> challenges)  $default,) {final _that = this;
 switch (_that) {
 case _MemberSeedDto():
-return $default(_that.profile,_that.tiers,_that.challenges,_that.gifts);case _:
+return $default(_that.profile,_that.tiers,_that.challenges);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -212,10 +211,10 @@ return $default(_that.profile,_that.tiers,_that.challenges,_that.gifts);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MemberProfileDto profile,  List<TierDto> tiers,  List<ChallengeDto> challenges,  List<GiftDto> gifts)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MemberProfileDto profile,  List<TierDto> tiers,  List<ChallengeDto> challenges)?  $default,) {final _that = this;
 switch (_that) {
 case _MemberSeedDto() when $default != null:
-return $default(_that.profile,_that.tiers,_that.challenges,_that.gifts);case _:
+return $default(_that.profile,_that.tiers,_that.challenges);case _:
   return null;
 
 }
@@ -227,7 +226,7 @@ return $default(_that.profile,_that.tiers,_that.challenges,_that.gifts);case _:
 @JsonSerializable()
 
 class _MemberSeedDto implements MemberSeedDto {
-  const _MemberSeedDto({required this.profile, required  List<TierDto> tiers, required  List<ChallengeDto> challenges, required  List<GiftDto> gifts}): _tiers = tiers,_challenges = challenges,_gifts = gifts;
+  const _MemberSeedDto({required this.profile, required  List<TierDto> tiers, required  List<ChallengeDto> challenges}): _tiers = tiers,_challenges = challenges;
   factory _MemberSeedDto.fromJson(Map<String, dynamic> json) => _$MemberSeedDtoFromJson(json);
 
 @override final  MemberProfileDto profile;
@@ -245,13 +244,6 @@ class _MemberSeedDto implements MemberSeedDto {
   return EqualUnmodifiableListView(_challenges);
 }
 
- final  List<GiftDto> _gifts;
-@override List<GiftDto> get gifts {
-  if (_gifts is EqualUnmodifiableListView) return _gifts;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_gifts);
-}
-
 
 /// Create a copy of MemberSeedDto
 /// with the given fields replaced by the non-null parameter values.
@@ -266,18 +258,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MemberSeedDto&&(identical(other.profile, profile) || other.profile == profile)&&const DeepCollectionEquality().equals(other.tiers, _tiers)&&const DeepCollectionEquality().equals(other.challenges, _challenges)&&const DeepCollectionEquality().equals(other.gifts, _gifts));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MemberSeedDto&&(identical(other.profile, profile) || other.profile == profile)&&const DeepCollectionEquality().equals(other.tiers, _tiers)&&const DeepCollectionEquality().equals(other.challenges, _challenges));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,profile,const DeepCollectionEquality().hash(_tiers),const DeepCollectionEquality().hash(_challenges),const DeepCollectionEquality().hash(_gifts));
+    return Object.hash(runtimeType,profile,const DeepCollectionEquality().hash(_tiers),const DeepCollectionEquality().hash(_challenges));
 }
 
 @override
 String toString() {
-    return 'MemberSeedDto(profile: $profile, tiers: $tiers, challenges: $challenges, gifts: $gifts)';
+    return 'MemberSeedDto(profile: $profile, tiers: $tiers, challenges: $challenges)';
 }
 
 
@@ -288,7 +280,7 @@ abstract mixin class _$MemberSeedDtoCopyWith<$Res> implements $MemberSeedDtoCopy
   factory _$MemberSeedDtoCopyWith(_MemberSeedDto value, $Res Function(_MemberSeedDto) _then) = __$MemberSeedDtoCopyWithImpl;
 @override @useResult
 $Res call({
- MemberProfileDto profile, List<TierDto> tiers, List<ChallengeDto> challenges, List<GiftDto> gifts
+ MemberProfileDto profile, List<TierDto> tiers, List<ChallengeDto> challenges
 });
 
 
@@ -305,13 +297,12 @@ class __$MemberSeedDtoCopyWithImpl<$Res>
 
 /// Create a copy of MemberSeedDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? profile = null,Object? tiers = null,Object? challenges = null,Object? gifts = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? profile = null,Object? tiers = null,Object? challenges = null,}) {
   return _then(_MemberSeedDto(
 profile: null == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as MemberProfileDto,tiers: null == tiers ? _self._tiers : tiers // ignore: cast_nullable_to_non_nullable
 as List<TierDto>,challenges: null == challenges ? _self._challenges : challenges // ignore: cast_nullable_to_non_nullable
-as List<ChallengeDto>,gifts: null == gifts ? _self._gifts : gifts // ignore: cast_nullable_to_non_nullable
-as List<GiftDto>,
+as List<ChallengeDto>,
   ));
 }
 
@@ -1178,291 +1169,6 @@ as String,kind: null == kind ? _self.kind : kind // ignore: cast_nullable_to_non
 as ChallengeKindDto,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as int,target: null == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
 as int,rewardPoints: null == rewardPoints ? _self.rewardPoints : rewardPoints // ignore: cast_nullable_to_non_nullable
-as int,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as int,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
-as String?,imageAsset: freezed == imageAsset ? _self.imageAsset : imageAsset // ignore: cast_nullable_to_non_nullable
-as String?,
-  ));
-}
-
-
-}
-
-
-/// @nodoc
-mixin _$GiftDto {
-
- String get id; String get title; int get costPoints; int get sortOrder; String? get imageUrl; String? get imageAsset;
-/// Create a copy of GiftDto
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$GiftDtoCopyWith<GiftDto> get copyWith => _$GiftDtoCopyWithImpl<GiftDto>(this as GiftDto, _$identity);
-
-  /// Serializes this GiftDto to a JSON map.
-  Map<String, dynamic> toJson();
-
-
-@override
-bool operator ==(Object other) {
-  final _this = this as GiftDto;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GiftDto&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.costPoints, _this.costPoints) || other.costPoints == _this.costPoints)&&(identical(other.sortOrder, _this.sortOrder) || other.sortOrder == _this.sortOrder)&&(identical(other.imageUrl, _this.imageUrl) || other.imageUrl == _this.imageUrl)&&(identical(other.imageAsset, _this.imageAsset) || other.imageAsset == _this.imageAsset));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode {
-  final _this = this as GiftDto;
-  return Object.hash(runtimeType,_this.id,_this.title,_this.costPoints,_this.sortOrder,_this.imageUrl,_this.imageAsset);
-}
-
-@override
-String toString() {
-  final _this = this as GiftDto;
-  return 'GiftDto(id: ${_this.id}, title: ${_this.title}, costPoints: ${_this.costPoints}, sortOrder: ${_this.sortOrder}, imageUrl: ${_this.imageUrl}, imageAsset: ${_this.imageAsset})';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $GiftDtoCopyWith<$Res>  {
-  factory $GiftDtoCopyWith(GiftDto value, $Res Function(GiftDto) _then) = _$GiftDtoCopyWithImpl;
-@useResult
-$Res call({
- String id, String title, int costPoints, int sortOrder, String? imageUrl, String? imageAsset
-});
-
-
-
-
-}
-/// @nodoc
-class _$GiftDtoCopyWithImpl<$Res>
-    implements $GiftDtoCopyWith<$Res> {
-  _$GiftDtoCopyWithImpl(this._self, this._then);
-
-  final GiftDto _self;
-  final $Res Function(GiftDto) _then;
-
-/// Create a copy of GiftDto
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? costPoints = null,Object? sortOrder = null,Object? imageUrl = freezed,Object? imageAsset = freezed,}) {
-  return _then(GiftDto(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,costPoints: null == costPoints ? _self.costPoints : costPoints // ignore: cast_nullable_to_non_nullable
-as int,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as int,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
-as String?,imageAsset: freezed == imageAsset ? _self.imageAsset : imageAsset // ignore: cast_nullable_to_non_nullable
-as String?,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [GiftDto].
-extension GiftDtoPatterns on GiftDto {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GiftDto value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _GiftDto() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GiftDto value)  $default,){
-final _that = this;
-switch (_that) {
-case _GiftDto():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GiftDto value)?  $default,){
-final _that = this;
-switch (_that) {
-case _GiftDto() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  int costPoints,  int sortOrder,  String? imageUrl,  String? imageAsset)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _GiftDto() when $default != null:
-return $default(_that.id,_that.title,_that.costPoints,_that.sortOrder,_that.imageUrl,_that.imageAsset);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  int costPoints,  int sortOrder,  String? imageUrl,  String? imageAsset)  $default,) {final _that = this;
-switch (_that) {
-case _GiftDto():
-return $default(_that.id,_that.title,_that.costPoints,_that.sortOrder,_that.imageUrl,_that.imageAsset);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  int costPoints,  int sortOrder,  String? imageUrl,  String? imageAsset)?  $default,) {final _that = this;
-switch (_that) {
-case _GiftDto() when $default != null:
-return $default(_that.id,_that.title,_that.costPoints,_that.sortOrder,_that.imageUrl,_that.imageAsset);case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _GiftDto implements GiftDto {
-  const _GiftDto({required this.id, required this.title, required this.costPoints, required this.sortOrder, this.imageUrl, this.imageAsset});
-  factory _GiftDto.fromJson(Map<String, dynamic> json) => _$GiftDtoFromJson(json);
-
-@override final  String id;
-@override final  String title;
-@override final  int costPoints;
-@override final  int sortOrder;
-@override final  String? imageUrl;
-@override final  String? imageAsset;
-
-/// Create a copy of GiftDto
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$GiftDtoCopyWith<_GiftDto> get copyWith => __$GiftDtoCopyWithImpl<_GiftDto>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$GiftDtoToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GiftDto&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.costPoints, costPoints) || other.costPoints == costPoints)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.imageAsset, imageAsset) || other.imageAsset == imageAsset));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode {
-    return Object.hash(runtimeType,id,title,costPoints,sortOrder,imageUrl,imageAsset);
-}
-
-@override
-String toString() {
-    return 'GiftDto(id: $id, title: $title, costPoints: $costPoints, sortOrder: $sortOrder, imageUrl: $imageUrl, imageAsset: $imageAsset)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$GiftDtoCopyWith<$Res> implements $GiftDtoCopyWith<$Res> {
-  factory _$GiftDtoCopyWith(_GiftDto value, $Res Function(_GiftDto) _then) = __$GiftDtoCopyWithImpl;
-@override @useResult
-$Res call({
- String id, String title, int costPoints, int sortOrder, String? imageUrl, String? imageAsset
-});
-
-
-
-
-}
-/// @nodoc
-class __$GiftDtoCopyWithImpl<$Res>
-    implements _$GiftDtoCopyWith<$Res> {
-  __$GiftDtoCopyWithImpl(this._self, this._then);
-
-  final _GiftDto _self;
-  final $Res Function(_GiftDto) _then;
-
-/// Create a copy of GiftDto
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? costPoints = null,Object? sortOrder = null,Object? imageUrl = freezed,Object? imageAsset = freezed,}) {
-  return _then(_GiftDto(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,costPoints: null == costPoints ? _self.costPoints : costPoints // ignore: cast_nullable_to_non_nullable
 as int,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
 as int,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
 as String?,imageAsset: freezed == imageAsset ? _self.imageAsset : imageAsset // ignore: cast_nullable_to_non_nullable

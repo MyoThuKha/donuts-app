@@ -62,4 +62,13 @@ CatalogRows catalogRows(List<String> productIds) => (
   ],
   banners: [bannerRow('b1')],
   shops: [shopRow('s1')],
+  gifts: [giftRow('g1')],
 );
+
+GiftsTableCompanion giftRow(String id, {int sortOrder = 0}) =>
+    GiftsTableCompanion.insert(
+      id: id,
+      title: 'Gift $id',
+      costPoints: 20000,
+      sortOrder: sortOrder,
+    );
