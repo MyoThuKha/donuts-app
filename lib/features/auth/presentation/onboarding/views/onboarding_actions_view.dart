@@ -50,8 +50,10 @@ class _LogInRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    // Wraps Log In under the question when large text leaves no room.
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text(l10n.alreadyHaveAccount, style: context.text.bodySmall),
         TextButton(
@@ -59,7 +61,7 @@ class _LogInRow extends StatelessWidget {
           style: TextButton.styleFrom(
             minimumSize: const Size(AppSizes.button, AppSizes.button),
           ),
-          child: Text(l10n.logIn, style: context.text.pointsLabel),
+          child: Text(l10n.logIn, style: context.text.link),
         ),
       ],
     );

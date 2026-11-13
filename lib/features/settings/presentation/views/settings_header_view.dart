@@ -78,18 +78,19 @@ class SettingsHeaderView extends StatelessWidget {
               alignment: Alignment.bottomRight,
             ),
           ),
-          // Pinned to the bottom of the band, so a stretch grows the blue
-          // above the row instead of moving the row.
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              height: contentHeight,
-              child: _HeaderRow(
-                user: user,
-                avatarUrl: member?.avatarUrl,
-                avatarAsset: member?.avatarAsset,
-                tierName: tier?.name,
-              ),
+          // Pinned to the bottom of the band at its full height, so a
+          // stretch grows the blue above the row and a scroll slides the
+          // row up under the clip instead of squeezing it.
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: contentHeight,
+            child: _HeaderRow(
+              user: user,
+              avatarUrl: member?.avatarUrl,
+              avatarAsset: member?.avatarAsset,
+              tierName: tier?.name,
             ),
           ),
         ],
