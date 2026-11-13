@@ -15,6 +15,9 @@ class PointsRingView extends StatelessWidget {
   const new({required this.member, required this.entrance, super.key});
 
   final MemberSummary? member;
+
+  /// How far the ring's lit middle runs from the accent toward white.
+  static const double _highlightMix = 0.38;
   final Animation<double> entrance;
 
   @override
@@ -56,6 +59,7 @@ class PointsRingView extends StatelessWidget {
       progress: value,
       track: colors.canvas,
       fill: colors.accent,
+      highlight: Color.lerp(colors.accent, colors.surface, _highlightMix),
       stroke: RewardsDimens.ringStroke,
       sprinkle: colors.surface,
     );

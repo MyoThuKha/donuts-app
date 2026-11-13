@@ -6,7 +6,6 @@ import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_cubit.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_state.dart';
-import 'package:donuts/features/rewards/presentation/rewards_dimens.dart';
 import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:donuts/features/rewards/presentation/views/challenge_list_view.dart';
 import 'package:donuts/features/rewards/presentation/views/gift_list_view.dart';
@@ -21,10 +20,6 @@ import 'package:material_ui/material_ui.dart';
 /// challenge and gift cards, all read from the local database.
 class RewardsScreen extends StatelessWidget {
   const new({super.key});
-
-  /// The white strip behind the status bar that scrolled content passes
-  /// under.
-  static const Key statusBarKey = ValueKey('rewards-status-bar');
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +38,32 @@ class _RewardsPage extends StatefulWidget {
 }
 
 class _RewardsPageState extends State<_RewardsPage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   /// Drives the ring, count, shields, ladder line and badge together.
   late final AnimationController _entrance = AnimationController(
     vsync: this,
     duration: RewardsMotion.entrance,
   );
   bool _entered = false;
+
+  /// Drives the tab pills and the swipeable lists. The cubit's tab follows
+  /// it, so a tap and a swipe both end up in the same state.
+  late final TabController _tabs = TabController(
+    length: RewardsTab.values.length,
+    vsync: this,
+  )..addListener(_onTabChanged);
+
+  void _onTabChanged() {
+    final tab = RewardsTab.values[_tabs.index];
+    final cubit = context.read<RewardsCubit>();
+    if (cubit.state.tab != tab) cubit.selectTab(tab);
+  }
+
+  void _selectTab(RewardsTab tab) => _tabs.animateTo(
+    tab.index,
+    duration: context.motion.of(AppMotion.medium),
+    curve: AppMotion.standard,
+  );
 
   /// Bumped on each replay. The card lists are keyed by it, so they mount
   /// again and their stagger, art fill and Earn pulse play once more.
@@ -88,6 +102,7 @@ class _RewardsPageState extends State<_RewardsPage>
 
   @override
   void dispose() {
+    _tabs.dispose();
     _entrance.dispose();
     super.dispose();
   }
@@ -97,40 +112,26 @@ class _RewardsPageState extends State<_RewardsPage>
     return BlocConsumer<RewardsCubit, RewardsState>(
       listenWhen: (a, b) => a.status != b.status,
       listener: _onStatus,
-      builder: (context, state) => Stack(
-        children: [
-          ColoredBox(
-            color: context.colors.canvas,
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(child: _top(context, state)),
-                ..._body(context, state),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height:
-                        MediaQuery.paddingOf(context).bottom + AppSpacing.xl,
-                  ),
+      builder: (context, state) => ColoredBox(
+        color: context.colors.canvas,
+        // The header and tabs scroll away together, and the lists below
+        // them page sideways in a TabBarView.
+        child: NestedScrollView(
+          headerSliverBuilder: (context, _) => [
+            SliverToBoxAdapter(child: _top(context, state)),
+            if (state.status == RewardsStatus.ready)
+              SliverToBoxAdapter(
+                child: RewardsTabsView(
+                  controller: _tabs,
+                  onSelected: _selectTab,
                 ),
-              ],
-            ),
-          ),
-          _statusBarStrip(context),
-        ],
+              ),
+          ],
+          body: _body(context, state),
+        ),
       ),
     );
   }
-
-  Widget _statusBarStrip(BuildContext context) => Positioned(
-    top: 0,
-    left: 0,
-    right: 0,
-    height: MediaQuery.paddingOf(context).top,
-    child: ColoredBox(
-      key: RewardsScreen.statusBarKey,
-      color: context.colors.surface,
-      child: const SizedBox.expand(),
-    ),
-  );
 
   /// The white upper half: the header, then the ladder and ring.
   Widget _top(BuildContext context, RewardsState state) {
@@ -176,103 +177,76 @@ class _RewardsPageState extends State<_RewardsPage>
     );
   }
 
-  List<Widget> _body(BuildContext context, RewardsState state) {
+  Widget _body(BuildContext context, RewardsState state) {
     final l10n = context.l10n;
     return switch (state.status) {
-      RewardsStatus.loading => const [],
-      RewardsStatus.empty => [_message(context, l10n.rewardsEmpty)],
-      RewardsStatus.failed => [
-        _message(
-          context,
-          l10n.rewardsError,
-          retry: context.read<RewardsCubit>().retry,
-        ),
-      ],
-      RewardsStatus.ready => [
-        SliverToBoxAdapter(
-          child: RewardsTabsView(
-            tab: state.tab,
-            onSelected: context.read<RewardsCubit>().selectTab,
-          ),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.pageGutter,
-            AppSpacing.xl,
-            AppSpacing.pageGutter,
-            0,
-          ),
-          sliver: SliverToBoxAdapter(
-            child: KeyedSubtree(
-              key: ValueKey(_run),
-              child: _CardLists(state: state),
+      RewardsStatus.loading => const SizedBox.shrink(),
+      RewardsStatus.empty => _message(context, l10n.rewardsEmpty),
+      RewardsStatus.failed => _message(
+        context,
+        l10n.rewardsError,
+        retry: context.read<RewardsCubit>().retry,
+      ),
+      RewardsStatus.ready => TabBarView(
+        controller: _tabs,
+        children: [
+          for (final tab in RewardsTab.values)
+            _TabList(
+              // Keyed by the replay count, so coming back to the Rewards
+              // tab mounts the cards again and their entrance replays.
+              key: ValueKey((tab, _run)),
+              state: state,
+              tab: tab,
             ),
-          ),
-        ),
-      ],
+        ],
+      ),
     };
   }
 
   Widget _message(BuildContext context, String text, {VoidCallback? retry}) {
-    return SliverPadding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(AppSpacing.pageGutter),
-      sliver: SliverToBoxAdapter(
-        child: Column(
-          spacing: AppSpacing.l,
-          children: [
-            Text(text, style: context.text.body, textAlign: TextAlign.center),
-            if (retry != null)
-              AppPrimaryButton(
-                label: context.l10n.rewardsRetry,
-                onPressed: retry,
-              ),
-          ],
-        ),
+      child: Column(
+        spacing: AppSpacing.l,
+        children: [
+          Text(text, style: context.text.body, textAlign: TextAlign.center),
+          if (retry != null)
+            AppPrimaryButton(
+              label: context.l10n.rewardsRetry,
+              onPressed: retry,
+            ),
+        ],
       ),
     );
   }
 }
 
-/// Switches between the challenge and gift cards, sliding the new list in
-/// from the side of the tab that was picked.
-class _CardLists extends StatelessWidget {
-  const new({required this.state});
+/// One tab's cards in their own scroll view, so the TabBarView can page
+/// between them. They enter staggered each time the page mounts.
+class _TabList extends StatelessWidget {
+  const new({required this.state, required this.tab, super.key});
 
   final RewardsState state;
+  final RewardsTab tab;
 
   @override
   Widget build(BuildContext context) {
-    final current = ValueKey(state.tab);
-    final towardsGifts = state.tab == RewardsTab.gifts;
-    return AnimatedSwitcher(
-      duration: context.motion.of(RewardsMotion.tabSwitch),
-      switchInCurve: AppMotion.standard,
-      switchOutCurve: AppMotion.standard,
-      layoutBuilder: (child, previous) => Stack(
-        alignment: Alignment.topCenter,
-        children: [...previous, ?child],
-      ),
-      transitionBuilder: (child, animation) {
-        final incoming = child.key == current;
-        final side = incoming == towardsGifts ? 1.0 : -1.0;
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: animation.drive(
-              Tween(
-                begin: Offset(side * RewardsDimens.tabSlide, 0),
-                end: Offset.zero,
-              ),
-            ),
-            child: child,
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.pageGutter,
+            AppSpacing.xl,
+            AppSpacing.pageGutter,
+            MediaQuery.paddingOf(context).bottom + AppSpacing.xl,
           ),
-        );
-      },
-      child: KeyedSubtree(key: current, child: _list(context)),
+          sliver: SliverToBoxAdapter(child: _list(context)),
+        ),
+      ],
     );
   }
 
-  Widget _list(BuildContext context) => switch (state.tab) {
+  Widget _list(BuildContext context) => switch (tab) {
     RewardsTab.challenges => ChallengeListView(
       challenges: state.challenges,
       acknowledged: state.acknowledgedEarns,

@@ -21,11 +21,10 @@ abstract final class RewardsDimens {
   static const double pillHeight = 36;
   static const double badgeSize = 22;
 
-  static const double tabHeight = 44;
-  static const double tabBarInset = 4;
+  static const double tabHeight = 48;
 
-  /// Share of a card list's width it slides by when the tab changes.
-  static const double tabSlide = 0.08;
+  /// The white outline around each tab pill.
+  static const double tabRim = 3;
 
   static const double cardArt = 96;
   static const double coffeeStroke = 8;
