@@ -9,9 +9,24 @@ abstract final class AppMotion {
   static const Duration showcase = Duration(milliseconds: 1200);
   static const Duration stagger = Duration(milliseconds: 60);
 
+  /// How long a downloaded photo takes to fade in over its stand-in, and
+  /// the stand-in to fade out under it (cached_network_image's defaults).
+  static const Duration imageFadeIn = slow;
+  static const Duration imageFadeOut = Duration(milliseconds: 1000);
+
+  /// One attention pulse and the rest after it, such as on a complete
+  /// challenge's Earn button.
+  static const Duration attentionPulse = Duration(milliseconds: 1600);
+
+  /// How long an auto-playing carousel holds each page.
+  static const Duration carouselDwell = Duration(seconds: 4);
+
   static const Curve standard = Curves.easeOutCubic;
   static const Curve emphasized = Curves.easeInOutCubicEmphasized;
   static const Curve pop = Curves.easeOutBack;
+
+  /// Starts slow and speeds up, for something leaving the screen.
+  static const Curve exit = Curves.easeIn;
 
   /// The spring sheets slide on. Flutter's defaults (half a second, no
   /// bounce) match an iOS sheet's smooth spring.

@@ -45,7 +45,7 @@ abstract final class RewardsMotion {
 
   /// One attention pulse on a complete challenge's Earn button, then a
   /// rest. It runs [earnPulseCycles] times each time the tab opens.
-  static const Duration earnPulsePeriod = Duration(milliseconds: 1600);
+  static const Duration earnPulsePeriod = AppMotion.attentionPulse;
   static const int earnPulseCycles = 3;
   static final Animatable<double> earnPulse = TweenSequence<double>([
     TweenSequenceItem(tween: ConstantTween<double>(1), weight: 2),

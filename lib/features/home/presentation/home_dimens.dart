@@ -28,7 +28,6 @@ abstract final class HomeDimens {
 
   /// Share of the banner's width and height its photo takes.
   static const Size bannerImageFactor = Size(0.66, 0.42);
-  static const Duration carouselInterval = Duration(seconds: 4);
 
   static const double shopCardWidth = 236;
   static const double shopImageHeight = 120;

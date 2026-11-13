@@ -85,7 +85,7 @@ class _CardSlot extends StatelessWidget {
 }
 
 /// Pages through the banners, moving on every
-/// [HomeDimens.carouselInterval]. A finger on the carousel pauses it until
+/// [AppMotion.carouselDwell]. A finger on the carousel pauses it until
 /// one interval after release, and Reduce Motion turns it off.
 class _Pager extends StatefulWidget {
   const new({required this.banners});
@@ -126,7 +126,7 @@ class _PagerState extends State<_Pager> {
   void _schedule() {
     _timer?.cancel();
     if (_reduced || _held || !_visible || widget.banners.length < 2) return;
-    _timer = Timer(HomeDimens.carouselInterval, _advance);
+    _timer = Timer(AppMotion.carouselDwell, _advance);
   }
 
   /// Moves to the banner after the one showing, or back to the first.

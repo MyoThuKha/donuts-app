@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/widgets/images/network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -125,5 +127,37 @@ void main() {
     );
     expect(find.text('YP'), findsOneWidget);
     expect(find.byKey(AppNetworkImage.errorKey), findsNothing);
+  });
+
+  _fadeTests();
+}
+
+void _fadeTests() {
+  CachedNetworkImage pumped(WidgetTester tester) =>
+      tester.widget<CachedNetworkImage>(find.byType(CachedNetworkImage));
+
+  testWidgets('a downloaded photo fades in over the motion file durations', (
+    tester,
+  ) async {
+    await pumpThemed(
+      tester,
+      AppNetworkImage(url: _url, cacheManager: _FailingCacheManager()),
+    );
+
+    expect(pumped(tester).fadeInDuration, AppMotion.imageFadeIn);
+    expect(pumped(tester).fadeOutDuration, AppMotion.imageFadeOut);
+  });
+
+  testWidgets('Reduce Motion shows the photo without a fade', (tester) async {
+    await pumpThemed(
+      tester,
+      MediaQuery(
+        data: const MediaQueryData(disableAnimations: true),
+        child: AppNetworkImage(url: _url, cacheManager: _FailingCacheManager()),
+      ),
+    );
+
+    expect(pumped(tester).fadeInDuration, Duration.zero);
+    expect(pumped(tester).fadeOutDuration, Duration.zero);
   });
 }

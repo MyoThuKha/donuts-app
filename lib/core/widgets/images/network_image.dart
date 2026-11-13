@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -28,10 +29,6 @@ class AppNetworkImage extends StatelessWidget {
 
   static const Key placeholderKey = ValueKey('app-network-image-placeholder');
   static const Key errorKey = ValueKey('app-network-image-error');
-
-  // cached_network_image's own defaults.
-  static const Duration _fadeIn = Duration(milliseconds: 500);
-  static const Duration _fadeOut = Duration(milliseconds: 1000);
 
   final String? url;
   final String? asset;
@@ -63,13 +60,14 @@ class AppNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = this.url;
     if (url == null) return _assetOr(_loading);
+    final motion = context.motion;
     return CachedNetworkImage(
       imageUrl: url,
       cacheManager: cacheManager,
       memCacheWidth: cacheWidth,
       fit: fit,
-      fadeInDuration: fade ? _fadeIn : Duration.zero,
-      fadeOutDuration: fade ? _fadeOut : Duration.zero,
+      fadeInDuration: fade ? motion.of(AppMotion.imageFadeIn) : Duration.zero,
+      fadeOutDuration: fade ? motion.of(AppMotion.imageFadeOut) : Duration.zero,
       placeholder: (_, _) => _assetOr(_loading),
       errorWidget: (_, _, _) =>
           _assetOr(fallback ?? _ErrorTile(placeholderColor, placeholderShape)),

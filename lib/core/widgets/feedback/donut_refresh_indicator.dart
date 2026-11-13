@@ -210,7 +210,7 @@ class _DonutRefreshIndicatorState extends State<DonutRefreshIndicator>
     await _exit.animateTo(
       1,
       duration: motion.of(AppMotion.fast),
-      curve: Curves.easeIn,
+      curve: AppMotion.exit,
     );
     if (!mounted) return;
     _pull.value = 0;
