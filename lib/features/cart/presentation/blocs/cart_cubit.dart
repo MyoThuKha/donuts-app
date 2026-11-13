@@ -59,32 +59,16 @@ class CartCubit extends Cubit<CartState>
     return _set(productId, current + 1);
   }
 
-  /// Takes one away, or removes the item at the minimum and keeps it for
-  /// [undoRemove].
+  /// Takes one away, or removes the item when the tile shows it at the
+  /// minimum, with its trash button. A tap while an earlier step to the
+  /// minimum is still being written does nothing, so a quick double tap on
+  /// minus never removes an item the member didn't see a trash button for.
   Future<void> decrement(String productId) {
     final current = _quantityOf(productId);
     if (current == null) return Future.value();
     if (current > CartRules.minQuantity) return _set(productId, current - 1);
-    final item = _itemOf(productId);
-    if (item == null) return Future.value();
-    _pending.remove(productId);
-    emit(
-      state.copyWith(
-        lastRemoved: CartRemoval(
-          productId: productId,
-          name: item.name,
-          quantity: current,
-        ),
-      ),
-    );
+    if (_pending.containsKey(productId)) return Future.value();
     return _enqueue(productId, () => _remove(productId));
-  }
-
-  /// Puts the last removed item back. Does nothing once the screen is gone.
-  Future<void> undoRemove() {
-    final removed = state.lastRemoved;
-    if (removed == null || isClosed) return Future.value();
-    return _set(removed.productId, removed.quantity);
   }
 
   Future<void> _set(String productId, int quantity) {
@@ -112,15 +96,20 @@ class CartCubit extends Cubit<CartState>
     _queues.removeWhere(
       (id, queue) => id == productId && identical(queue, next),
     );
+    // The database may already show the written quantity.
+    _settlePending();
   }
 
   /// Forgets a pending quantity once the database shows it and no write for
   /// that product is queued. Until then a tap counts from the pending one.
-  void _settlePending() => _pending.removeWhere(
-    (productId, quantity) =>
-        !_queues.containsKey(productId) &&
-        _itemOf(productId)?.quantity == quantity,
-  );
+  void _settlePending() {
+    if (isClosed) return;
+    _pending.removeWhere(
+      (productId, quantity) =>
+          !_queues.containsKey(productId) &&
+          _itemOf(productId)?.quantity == quantity,
+    );
+  }
 
   void _reportFailure(String productId, Object failure) {
     _pending.remove(productId);

@@ -34,4 +34,20 @@ void main() {
 
     expect(find.byType(CartScreen), findsOneWidget);
   });
+
+  testWidgets('a double tap on the cart tag opens one cart', (tester) async {
+    await pumpRouterApp(
+      tester,
+      session: testSessionCubit()..signedIn(testUser),
+      initialLocation: AppRoutes.settings,
+    );
+    await tester.pumpAndSettle();
+
+    final tag = find.bySemanticsLabel(RegExp('^Cart'));
+    await tester.tap(tag);
+    await tester.tap(tag, warnIfMissed: false);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CartScreen, skipOffstage: false), findsOneWidget);
+  });
 }

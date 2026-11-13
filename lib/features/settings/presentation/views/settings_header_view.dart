@@ -4,6 +4,7 @@ import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/pending_tap_guard.dart';
 import 'package:donuts/core/widgets/images/profile_avatar.dart';
 import 'package:donuts/core/widgets/images/tier_backdrop.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
@@ -110,13 +111,20 @@ class SettingsHeaderView extends StatelessWidget {
   }
 }
 
-class _CartTag extends StatelessWidget {
+/// Ignores taps while the cart it opened is on top, so a double tap opens
+/// one cart.
+class _CartTag extends StatefulWidget {
   const new();
 
   @override
+  State<_CartTag> createState() => _CartTagState();
+}
+
+class _CartTagState extends State<_CartTag> with PendingTapGuard {
+  @override
   Widget build(BuildContext context) => CartTagWidget(
     count: context.watch<CartCountCubit>().state,
-    onTap: () => context.push(AppRoutes.cart),
+    onTap: () => runGuarded(() => context.push(AppRoutes.cart)),
   );
 }
 

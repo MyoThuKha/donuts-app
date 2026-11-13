@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/result.dart';
+import 'package:donuts/features/cart/domain/cart_rules.dart';
 import 'package:donuts/features/cart/domain/repositories/cart_repository.dart';
 import 'package:donuts/features/cart/domain/usecases/remove_from_cart_use_case.dart';
 import 'package:donuts/features/cart/domain/usecases/set_cart_quantity_use_case.dart';
@@ -77,6 +79,8 @@ class FakeCartRepository implements CartRepository {
     _changes.add(null);
   }
 
+  /// Like the Drift cart: the most recently added first, and a quantity
+  /// change keeps a line in place.
   CartVO get cart => CartVO(
     items: [
       for (final MapEntry(:key, :value)
@@ -103,7 +107,10 @@ class FakeCartRepository implements CartRepository {
 
   @override
   Future<Result<void>> add(String productId, int quantity) => _write(
-    () => _quantities[productId] = (_quantities[productId] ?? 0) + quantity,
+    () => _quantities[productId] = math.min(
+      (_quantities[productId] ?? 0) + quantity,
+      CartRules.maxQuantity,
+    ),
   );
 
   @override

@@ -506,10 +506,6 @@
   "@cartEmptyMessage": {
     "description": "Cart empty state message"
   },
-  "cartBrowse": "Browse donuts",
-  "@cartBrowse": {
-    "description": "Cart empty state button that goes Home"
-  },
   "cartErrorTitle": "Couldn't load your cart",
   "@cartErrorTitle": {
     "description": "Cart error state title"
@@ -522,30 +518,13 @@
   "@cartRetry": {
     "description": "Cart error state retry button"
   },
-  "cartCheckout": "Checkout",
-  "@cartCheckout": {
-    "description": "Checkout button label on the cart's total bar"
-  },
   "cartRemove": "Remove",
   "@cartRemove": {
     "description": "Screen reader label of the trash button that takes an item out of the cart"
   },
-  "cartUndo": "Undo",
-  "@cartUndo": {
-    "description": "Snackbar action that puts a removed item back"
-  },
   "cartChangeFailed": "Couldn't update your cart",
   "@cartChangeFailed": {
     "description": "Snackbar when a cart change fails"
-  },
-  "cartRemoved": "{name} removed",
-  "@cartRemoved": {
-    "description": "Snackbar after an item is taken out of the cart",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
   },
   "cartOpen": "{count, plural, =0{Cart, empty} =1{Cart, 1 item} other{Cart, {count} items}}",
   "@cartOpen": {
@@ -555,5 +534,9 @@
         "type": "int"
       }
     }
+  },
+  "cartTotal": "Total",
+  "@cartTotal": {
+    "description": "Label beside the cart's total at the bottom of the cart"
   }
 }

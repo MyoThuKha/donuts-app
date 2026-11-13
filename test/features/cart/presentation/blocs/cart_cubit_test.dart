@@ -108,42 +108,54 @@ void main() {
         const SetCartQuantityParams(productId: 'p_coconut', quantity: 1),
       ),
     ).called(1);
-    expect(cubit.state.lastRemoved, isNull);
   });
 
-  test('decrement at 1 removes the item and remembers it', () async {
+  test('decrement at 1 removes the item', () async {
     final cubit = await ready();
 
     await cubit.decrement('p_berry');
 
     verify(() => remove('p_berry')).called(1);
     verifyNever(() => setQuantity(any()));
-    expect(cubit.state.lastRemoved?.productId, 'p_berry');
-    expect(cubit.state.lastRemoved?.name, 'Strawberry Donut');
-    expect(cubit.state.lastRemoved?.quantity, 1);
   });
 
-  test('undoRemove writes the removed quantity back', () async {
-    final cubit = await ready();
-    await cubit.decrement('p_berry');
+  test(
+    'a quick second minus while stepping down to 1 removes nothing',
+    () async {
+      final cubit = await ready();
+      final first = Completer<Result<void>>();
+      when(() => setQuantity(any())).thenAnswer((_) => first.future);
 
-    await cubit.undoRemove();
+      final a = cubit.decrement('p_coconut');
+      final b = cubit.decrement('p_coconut');
+      first.complete(const Success(null));
+      await Future.wait([a, b]);
+
+      verify(
+        () => setQuantity(
+          const SetCartQuantityParams(productId: 'p_coconut', quantity: 1),
+        ),
+      ).called(1);
+      verifyNever(() => remove(any()));
+    },
+  );
+
+  test('a pending quantity settles once the database shows it', () async {
+    final cubit = await ready();
+    await cubit.increment('p_coconut');
+    carts.add(cartWith('p_coconut', 3));
+    await pumpEventQueue();
+
+    // Something else sets it to 5; the next tap counts from the database.
+    carts.add(cartWith('p_coconut', 5));
+    await pumpEventQueue();
+    await cubit.increment('p_coconut');
 
     verify(
       () => setQuantity(
-        const SetCartQuantityParams(productId: 'p_berry', quantity: 1),
+        const SetCartQuantityParams(productId: 'p_coconut', quantity: 6),
       ),
     ).called(1);
-  });
-
-  test('undo after close does nothing', () async {
-    final cubit = await ready();
-    await cubit.decrement('p_berry');
-    await cubit.close();
-
-    await cubit.undoRemove();
-
-    verifyNever(() => setQuantity(any()));
   });
 
   test('two quick increments end two above', () async {

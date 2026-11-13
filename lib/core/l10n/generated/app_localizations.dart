@@ -860,12 +860,6 @@ abstract class AppLocalizations {
   /// **'Add a donut from any product page.'**
   String get cartEmptyMessage;
 
-  /// Cart empty state button that goes Home
-  ///
-  /// In en, this message translates to:
-  /// **'Browse donuts'**
-  String get cartBrowse;
-
   /// Cart error state title
   ///
   /// In en, this message translates to:
@@ -884,23 +878,11 @@ abstract class AppLocalizations {
   /// **'Try again'**
   String get cartRetry;
 
-  /// Checkout button label on the cart's total bar
-  ///
-  /// In en, this message translates to:
-  /// **'Checkout'**
-  String get cartCheckout;
-
   /// Screen reader label of the trash button that takes an item out of the cart
   ///
   /// In en, this message translates to:
   /// **'Remove'**
   String get cartRemove;
-
-  /// Snackbar action that puts a removed item back
-  ///
-  /// In en, this message translates to:
-  /// **'Undo'**
-  String get cartUndo;
 
   /// Snackbar when a cart change fails
   ///
@@ -908,17 +890,17 @@ abstract class AppLocalizations {
   /// **'Couldn\'t update your cart'**
   String get cartChangeFailed;
 
-  /// Snackbar after an item is taken out of the cart
-  ///
-  /// In en, this message translates to:
-  /// **'{name} removed'**
-  String cartRemoved(String name);
-
   /// Screen reader label of the Settings cart tag
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =0{Cart, empty} =1{Cart, 1 item} other{Cart, {count} items}}'**
   String cartOpen(int count);
+
+  /// Label beside the cart's total at the bottom of the cart
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get cartTotal;
 }
 
 class _AppLocalizationsDelegate

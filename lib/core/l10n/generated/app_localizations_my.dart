@@ -469,9 +469,6 @@ class AppLocalizationsMy extends AppLocalizations {
       'ပစ္စည်းစာမျက်နှာ တစ်ခုခုမှ မုန့်ကို ထည့်နိုင်ပါသည်။';
 
   @override
-  String get cartBrowse => 'မုန့်များ ကြည့်ရန်';
-
-  @override
   String get cartErrorTitle => 'ခြင်းကို ဖွင့်မရပါ';
 
   @override
@@ -482,21 +479,10 @@ class AppLocalizationsMy extends AppLocalizations {
   String get cartRetry => 'ထပ်ကြိုးစားရန်';
 
   @override
-  String get cartCheckout => 'ငွေချေရန်';
-
-  @override
   String get cartRemove => 'ဖယ်ရှားရန်';
 
   @override
-  String get cartUndo => 'ပြန်ထည့်ရန်';
-
-  @override
   String get cartChangeFailed => 'ခြင်းကို ပြင်မရပါ';
-
-  @override
-  String cartRemoved(String name) {
-    return '$name ကို ဖယ်လိုက်ပါပြီ';
-  }
 
   @override
   String cartOpen(int count) {
@@ -507,4 +493,7 @@ class AppLocalizationsMy extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get cartTotal => 'စုစုပေါင်း';
 }

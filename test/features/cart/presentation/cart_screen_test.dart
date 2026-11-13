@@ -9,7 +9,6 @@ import 'package:donuts/features/cart/domain/usecases/set_cart_quantity_use_case.
 import 'package:donuts/features/cart/domain/vo/cart_vo.dart';
 import 'package:donuts/features/cart/presentation/blocs/cart_cubit.dart';
 import 'package:donuts/features/cart/presentation/cart_screen.dart';
-import 'package:donuts/features/home/presentation/home_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -55,21 +54,14 @@ void main() {
     await tester.pump();
 
     expect(find.byType(Skeleton), findsWidgets);
-    expect(find.text('CHECKOUT'), findsNothing);
+    expect(find.text('Total'), findsNothing);
   });
 
-  testWidgets('an empty cart says so, and Browse donuts goes Home', (
-    tester,
-  ) async {
+  testWidgets('an empty cart says so and shows no total', (tester) async {
     await pumpCart(tester);
 
     expect(find.text('Your cart is empty'), findsOneWidget);
-    expect(find.text('CHECKOUT'), findsNothing);
-
-    await tester.tap(find.text('BROWSE DONUTS'));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.text('Total'), findsNothing);
   });
 
   testWidgets('a failed read offers Try again, which loads the cart', (
@@ -97,7 +89,7 @@ void main() {
     final coconut = tester.getTopLeft(find.text('Coconut Donut')).dy;
     final berry = tester.getTopLeft(find.text('Strawberry Donut')).dy;
     expect(coconut, lessThan(berry));
-    expect(find.text('CHECKOUT'), findsOneWidget);
+    expect(find.text('Total'), findsOneWidget);
     expect(find.text('8,900 MMK'), findsOneWidget);
   });
 
@@ -119,32 +111,15 @@ void main() {
     expect(find.text('9,600 MMK'), findsNWidgets(2), reason: 'line and bar');
   });
 
-  testWidgets('Checkout says it is coming soon', (tester) async {
-    repository.seed({'p_coconut': 1});
-    await pumpCart(tester);
-
-    await tester.tap(find.text('CHECKOUT'));
-    await tester.pump();
-
-    expect(find.text('This feature is coming soon.'), findsOneWidget);
-  });
-
-  testWidgets('removing shows the snackbar, and Undo puts it back', (
-    tester,
-  ) async {
+  testWidgets('trash removes the item', (tester) async {
     repository.seed({'p_berry': 1, 'p_coconut': 2});
     await pumpCart(tester);
 
     await tester.tap(find.byIcon(LucideIcons.trash2));
     await tester.pumpAndSettle();
+
     expect(find.text('Strawberry Donut'), findsNothing);
-    expect(find.text('Strawberry Donut removed'), findsOneWidget);
-
-    await tester.tap(find.text('Undo'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Strawberry Donut'), findsOneWidget);
-    expect(repository.cart.totalQuantity, 3);
+    expect(repository.cart.totalQuantity, 2);
   });
 
   testWidgets('removing the last item shows the empty state', (tester) async {

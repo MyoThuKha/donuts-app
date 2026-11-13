@@ -470,9 +470,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartEmptyMessage => 'Add a donut from any product page.';
 
   @override
-  String get cartBrowse => 'Browse donuts';
-
-  @override
   String get cartErrorTitle => 'Couldn\'t load your cart';
 
   @override
@@ -483,21 +480,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartRetry => 'Try again';
 
   @override
-  String get cartCheckout => 'Checkout';
-
-  @override
   String get cartRemove => 'Remove';
 
   @override
-  String get cartUndo => 'Undo';
-
-  @override
   String get cartChangeFailed => 'Couldn\'t update your cart';
-
-  @override
-  String cartRemoved(String name) {
-    return '$name removed';
-  }
 
   @override
   String cartOpen(int count) {
@@ -510,4 +496,7 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get cartTotal => 'Total';
 }

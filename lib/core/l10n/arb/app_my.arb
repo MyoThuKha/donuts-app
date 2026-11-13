@@ -127,14 +127,11 @@
   "cartTitle": "ခြင်း",
   "cartEmptyTitle": "ခြင်းထဲ ဘာမှ မရှိသေးပါ",
   "cartEmptyMessage": "ပစ္စည်းစာမျက်နှာ တစ်ခုခုမှ မုန့်ကို ထည့်နိုင်ပါသည်။",
-  "cartBrowse": "မုန့်များ ကြည့်ရန်",
   "cartErrorTitle": "ခြင်းကို ဖွင့်မရပါ",
   "cartErrorMessage": "ဖတ်ရာတွင် အမှားဖြစ်သွားပါသည်။ ခဏနေ ထပ်ကြိုးစားပါ။",
   "cartRetry": "ထပ်ကြိုးစားရန်",
-  "cartCheckout": "ငွေချေရန်",
   "cartRemove": "ဖယ်ရှားရန်",
-  "cartUndo": "ပြန်ထည့်ရန်",
   "cartChangeFailed": "ခြင်းကို ပြင်မရပါ",
-  "cartRemoved": "{name} ကို ဖယ်လိုက်ပါပြီ",
-  "cartOpen": "{count, plural, other{ခြင်း၊ ပစ္စည်း {count} ခု}}"
+  "cartOpen": "{count, plural, other{ခြင်း၊ ပစ္စည်း {count} ခု}}",
+  "cartTotal": "စုစုပေါင်း"
 }
