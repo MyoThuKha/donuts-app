@@ -8,6 +8,7 @@ import 'package:donuts/core/sync/presentation/catalog_sync_state.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
+import 'package:donuts/core/widgets/feedback/donut_refresh_indicator.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:donuts/features/home/presentation/views/member_panel_view.dart';
@@ -51,12 +52,11 @@ class _HomePage extends StatelessWidget {
               child: MediaQuery.removePadding(
                 context: context,
                 removeTop: offline,
-                child: RefreshIndicator(
-                  color: colors.accent,
+                child: DonutRefreshIndicator(
                   edgeOffset: offline ? 0 : inset,
                   onRefresh: () => _refresh(context),
                   child: CustomScrollView(
-                    // Clamping: a pull shows the spinner over the header
+                    // Clamping: a pull shows the donut over the header
                     // without dragging the page down and opening a gap.
                     physics: const AlwaysScrollableScrollPhysics(
                       parent: ClampingScrollPhysics(),

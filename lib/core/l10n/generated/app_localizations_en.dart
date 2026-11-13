@@ -294,6 +294,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeOffline => 'You’re offline. Showing saved data.';
 
   @override
+  String get refreshLoading => 'Loading';
+
+  @override
   String get homeRefreshFailed => 'Couldn’t refresh. Showing saved data.';
 
   @override
