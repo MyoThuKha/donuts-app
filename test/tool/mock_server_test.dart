@@ -23,4 +23,17 @@ void main() {
       isNull,
     );
   });
+
+  test('resolves an image path inside mock-api', () {
+    final file = resolveMockFile(root, Uri.parse('/assets/home/shop.jpg'));
+
+    expect(file?.path, endsWith('shop.jpg'));
+  });
+
+  test('serves images with an image content type and the rest as JSON', () {
+    expect(mockContentType(File('shop.jpg')).mimeType, 'image/jpeg');
+    expect(mockContentType(File('donut.PNG')).mimeType, 'image/png');
+    expect(mockContentType(File('box.webp')).mimeType, 'image/webp');
+    expect(mockContentType(File('catalog.json')), ContentType.json);
+  });
 }

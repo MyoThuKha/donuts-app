@@ -6,8 +6,10 @@ import 'package:donuts/core/sync/data/dto/member_dto.dart';
 import 'package:drift/drift.dart';
 
 extension CatalogDtoDbMapper on CatalogDto {
-  CatalogRows toRows() => (
-    products: [for (final p in products) p.toCompanion()],
+  /// Image URLs that are relative resolve against [imageBase]. Absolute ones
+  /// stay as they are.
+  CatalogRows toRows({required Uri imageBase}) => (
+    products: [for (final p in products) p.toCompanion(imageBase)],
     sections: [for (final s in sections) s.toCompanion()],
     sectionProducts: [
       for (final s in sections)
@@ -18,24 +20,25 @@ extension CatalogDtoDbMapper on CatalogDto {
             sortOrder: i,
           ),
     ],
-    banners: [for (final b in banners) b.toCompanion()],
-    shops: [for (final s in shops) s.toCompanion()],
+    banners: [for (final b in banners) b.toCompanion(imageBase)],
+    shops: [for (final s in shops) s.toCompanion(imageBase)],
   );
 }
 
 extension ProductDtoDbMapper on ProductDto {
-  ProductsTableCompanion toCompanion() => ProductsTableCompanion.insert(
-    id: id,
-    code: code,
-    name: name,
-    priceMmk: priceMmk,
-    isNew: isNew,
-    discountPercent: Value(discountPercent),
-    description: description,
-    imageUrl: imageUrl,
-    imageAsset: Value(imageAsset),
-    updatedAt: updatedAt,
-  );
+  ProductsTableCompanion toCompanion(Uri imageBase) =>
+      ProductsTableCompanion.insert(
+        id: id,
+        code: code,
+        name: name,
+        priceMmk: priceMmk,
+        isNew: isNew,
+        discountPercent: Value(discountPercent),
+        description: description,
+        imageUrl: imageBase.resolve(imageUrl).toString(),
+        imageAsset: Value(imageAsset),
+        updatedAt: updatedAt,
+      );
 }
 
 extension HomeSectionDtoDbMapper on HomeSectionDto {
@@ -47,23 +50,24 @@ extension HomeSectionDtoDbMapper on HomeSectionDto {
 }
 
 extension BannerDtoDbMapper on BannerDto {
-  BannersTableCompanion toCompanion() => BannersTableCompanion.insert(
-    id: id,
-    tag: tag,
-    title: title,
-    style: style.name,
-    imageUrl: imageUrl,
-    imageAsset: Value(imageAsset),
-    sortOrder: sortOrder,
-  );
+  BannersTableCompanion toCompanion(Uri imageBase) =>
+      BannersTableCompanion.insert(
+        id: id,
+        tag: tag,
+        title: title,
+        style: style.name,
+        imageUrl: imageBase.resolve(imageUrl).toString(),
+        imageAsset: Value(imageAsset),
+        sortOrder: sortOrder,
+      );
 }
 
 extension ShopDtoDbMapper on ShopDto {
-  ShopsTableCompanion toCompanion() => ShopsTableCompanion.insert(
+  ShopsTableCompanion toCompanion(Uri imageBase) => ShopsTableCompanion.insert(
     id: id,
     name: name,
     address: address,
-    imageUrl: imageUrl,
+    imageUrl: imageBase.resolve(imageUrl).toString(),
     imageAsset: Value(imageAsset),
     sortOrder: sortOrder,
   );

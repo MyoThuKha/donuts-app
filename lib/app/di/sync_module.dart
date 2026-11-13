@@ -31,7 +31,9 @@ void registerSyncModule(
       dispose: (dio) => dio.close(),
     )
     ..registerLazySingleton(() => CatalogRemoteDataSource(getIt()))
-    ..registerLazySingleton(() => CatalogImporter(getIt(), now: getIt()))
+    ..registerLazySingleton(
+      () => CatalogImporter(getIt(), now: getIt(), imageBase: config.baseUri),
+    )
     ..registerLazySingleton<SeedSource>(
       () => seedSource ?? AssetSeedSource(rootBundle),
     )

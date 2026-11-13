@@ -18,7 +18,7 @@ void main() {
         .fetchCatalog();
 
     expect(envelope.meta.version, 3);
-    expect(envelope.data!.products, hasLength(10));
+    expect(envelope.data!.products, hasLength(11));
   });
 
   test('an envelope with an error throws ApiException', () async {

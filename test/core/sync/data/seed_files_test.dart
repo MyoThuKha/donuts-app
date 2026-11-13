@@ -11,11 +11,11 @@ void _expectSectionsReferenceKnownProducts(CatalogDto catalog) {
 }
 
 void main() {
-  test('the seed catalog parses with version 2 and 9 products', () {
+  test('the seed catalog parses with version 2 and 10 products', () {
     final seed = readCatalogFile(seedCatalogPath);
 
     expect(seed.meta.version, 2);
-    expect(seed.data!.products, hasLength(9));
+    expect(seed.data!.products, hasLength(10));
     expect(seed.data!.shops, hasLength(4));
   });
 

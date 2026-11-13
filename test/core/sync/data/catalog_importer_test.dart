@@ -17,7 +17,7 @@ void main() {
 
   setUp(() {
     db = AppDatabase.forTesting(NativeDatabase.memory());
-    importer = CatalogImporter(db, now: () => _now);
+    importer = CatalogImporter(db, now: () => _now, imageBase: testImageBase);
   });
   tearDown(() => db.close());
 
@@ -30,7 +30,7 @@ void main() {
       final outcome = await importer.importCatalog(seed, version: 1);
 
       expect(outcome, ImportOutcome.imported);
-      expect(await productCount(), 9);
+      expect(await productCount(), 10);
       expect(await db.catalogDao.watchSections().first, hasLength(3));
       expect(await db.catalogDao.watchBanners().first, hasLength(2));
       expect(await db.catalogDao.watchShops().first, hasLength(4));
@@ -50,9 +50,40 @@ void main() {
       expect(outcome, ImportOutcome.imported);
       expect(popular.first.id, 'p_toasted_coconut');
       expect(popular.first.imageAsset, isNull);
-      expect(await productCount(), 10);
+      expect(await productCount(), 11);
     },
   );
+
+  test('relative image paths resolve against the API base URL', () async {
+    await importer.importCatalog(remote, version: 2);
+
+    final product = await db.catalogDao.watchProduct('p_dalgona').first;
+    final shops = await db.catalogDao.watchShops().first;
+
+    expect(
+      product?.imageUrl,
+      'http://localhost:8080/assets/home/daigona-coffee.png',
+    );
+    expect(
+      shops.map((s) => s.imageUrl),
+      everyElement('http://localhost:8080/assets/home/shop.jpg'),
+    );
+  });
+
+  test('an absolute image URL is stored as it is', () async {
+    const url = 'https://cdn.example.com/box.jpg';
+    final catalog = remote.copyWith(
+      products: [
+        for (final p in remote.products)
+          if (p.id == 'p_mistletoe_box') p.copyWith(imageUrl: url) else p,
+      ],
+    );
+
+    await importer.importCatalog(catalog, version: 2);
+    final box = await db.catalogDao.watchProduct('p_mistletoe_box').first;
+
+    expect(box?.imageUrl, url);
+  });
 
   test('importing version 1 after version 2 changes nothing', () async {
     await importer.importCatalog(remote, version: 2);
@@ -60,7 +91,7 @@ void main() {
     final outcome = await importer.importCatalog(seed, version: 1);
 
     expect(outcome, ImportOutcome.skipped);
-    expect(await productCount(), 10);
+    expect(await productCount(), 11);
     expect((await db.syncStateDao.find(SyncKeys.catalog))?.version, 2);
   });
 

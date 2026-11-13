@@ -27,6 +27,7 @@ void main() {
     await CatalogImporter(
       db,
       now: () => DateTime.utc(2026, 11, 12),
+      imageBase: testImageBase,
     ).importMember(member, version: 1);
 
     final summary = await MemberRepositoryImpl(
@@ -49,6 +50,7 @@ void main() {
       await CatalogImporter(
         db,
         now: () => DateTime.utc(2026, 11, 12),
+        imageBase: testImageBase,
       ).importMember(member, version: 1);
       final claims = RewardClaimsMemorySource();
       final seen = <(int, String?)>[];

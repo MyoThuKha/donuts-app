@@ -23,7 +23,11 @@ void main() {
       CatalogSyncRepositoryImpl(
         seed: seed,
         remote: CatalogRemoteDataSource(scriptedDio(ScriptedAdapter(replies))),
-        importer: CatalogImporter(db, now: () => DateTime.utc(2026, 11, 12)),
+        importer: CatalogImporter(
+          db,
+          now: () => DateTime.utc(2026, 11, 12),
+          imageBase: testImageBase,
+        ),
       );
 
   Future<int> productCount() async =>
@@ -40,7 +44,7 @@ void main() {
     final result = await repositoryReplying(const []).seedIfNeeded();
 
     expect(result, isA<Success<void>>());
-    expect(await productCount(), 9);
+    expect(await productCount(), 10);
     expect((await db.memberDao.watchProfile().first)?.totalPoints, 680300);
   });
 
@@ -67,7 +71,7 @@ void main() {
         SyncOutcome.updated,
       ),
     );
-    expect(await productCount(), 10);
+    expect(await productCount(), 11);
   });
 
   test('refresh of the same version returns upToDate', () async {
@@ -101,7 +105,7 @@ void main() {
         isA<NetworkFailure>(),
       ),
     );
-    expect(await productCount(), 9);
+    expect(await productCount(), 10);
   });
 
   test('refresh that receives HTML keeps the cached catalog', () async {
@@ -120,6 +124,6 @@ void main() {
         isA<ParsingFailure>(),
       ),
     );
-    expect(await productCount(), 9);
+    expect(await productCount(), 10);
   });
 }
