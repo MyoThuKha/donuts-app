@@ -77,9 +77,9 @@ void main() {
     (tester) async {
       await _pumpRewards(tester);
 
-      expect(find.text("You're here now"), findsOneWidget);
+      expect(find.text('You’re here now'), findsOneWidget);
       expect(find.text('500 pts Remaining to become Gold'), findsOneWidget);
-      expect(find.text("You'll be here soon"), findsOneWidget);
+      expect(find.text('You’ll be here soon'), findsOneWidget);
     },
   );
 
@@ -226,7 +226,7 @@ void main() {
     getIt.registerSingleton<WatchChallengesUseCase>(challenges);
 
     await _pumpRewards(tester);
-    expect(find.text("We couldn't load your rewards."), findsOneWidget);
+    expect(find.text('We couldn’t load your rewards.'), findsOneWidget);
 
     await tester.tap(find.text('TRY AGAIN'));
     await tester.pump();

@@ -198,7 +198,7 @@ void main() {
     await tester.tap(find.text('ADD TO CART'));
     await tester.pumpAndSettle();
 
-    expect(find.text("Couldn't add to your cart. Try again."), findsOneWidget);
+    expect(find.text('Couldn’t add to your cart. Try again.'), findsOneWidget);
   });
 
   testWidgets('the image flies from the tile that opened the screen', (
@@ -278,7 +278,7 @@ void main() {
     unawaited(router.push('/product/p_missing'));
     await tester.pumpAndSettle();
 
-    expect(find.text("This product isn't available any more."), findsOneWidget);
+    expect(find.text('This product isn’t available any more.'), findsOneWidget);
 
     await tester.tap(find.bySemanticsLabel('Back'));
     await tester.pumpAndSettle();

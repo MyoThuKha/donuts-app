@@ -10,7 +10,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'J\'Donuts';
+  String get appTitle => 'J’Donuts';
 
   @override
   String get tabHome => 'Home';
@@ -33,13 +33,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get welcomeTitle => 'Welcome to the world of J\'donuts';
+  String get welcomeTitle => 'Welcome to the world of J’donuts';
 
   @override
   String get onboardingTitle => 'Round food for every mood';
 
   @override
-  String get getStarted => 'Let\'s get started';
+  String get getStarted => 'Let’s get started';
 
   @override
   String get alreadyHaveAccount => 'Already have an account?';
@@ -70,7 +70,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logOut => 'Log out';
 
   @override
-  String get logOutConfirm => 'Log out of J\'Donuts?';
+  String get logOutConfirm => 'Log out of J’Donuts?';
 
   @override
   String get cancel => 'Cancel';
@@ -82,7 +82,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String socialSignInUnavailable(String provider) {
-    return '$provider sign-in isn\'t available in this demo';
+    return '$provider sign-in isn’t available in this demo';
   }
 
   @override
@@ -109,7 +109,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter a Myanmar mobile number, like 09 254 135 592';
 
   @override
-  String get notRegistered => 'This number isn\'t registered yet.';
+  String get notRegistered => 'This number isn’t registered yet.';
 
   @override
   String get registerInstead => 'Register instead';
@@ -130,13 +130,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get otpTitle => 'Verify your number';
 
   @override
-  String get otpWrong => 'That code isn\'t right. Try again.';
+  String get otpWrong => 'That code isn’t right. Try again.';
 
   @override
   String get otpLocked => 'Too many wrong codes. Tap Resend to get a new one.';
 
   @override
-  String get didntReceive => 'Didn\'t receive the code?';
+  String get didntReceive => 'Didn’t receive the code?';
 
   @override
   String get resend => 'Resend';
@@ -148,14 +148,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nameInvalid => 'Use letters and spaces only';
 
   @override
-  String get dobInvalid => 'That date doesn\'t exist';
+  String get dobInvalid => 'That date doesn’t exist';
 
   @override
-  String get dobFuture => 'Date of birth can\'t be in the future';
+  String get dobFuture => 'Date of birth can’t be in the future';
 
   @override
   String otpSent(String phone) {
-    return 'We\'ve sent a 6 digit OTP to $phone';
+    return 'We’ve sent a 6 digit OTP to $phone';
   }
 
   @override
@@ -174,7 +174,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get nameTitle => 'What\'s your name?';
+  String get nameTitle => 'What’s your name?';
 
   @override
   String get firstNameHint => 'First Name';
@@ -183,7 +183,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lastNameHint => 'Last Name';
 
   @override
-  String get dobTitle => 'What\'s your date of birth?';
+  String get dobTitle => 'What’s your date of birth?';
 
   @override
   String get monthHint => 'Month';
@@ -195,7 +195,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yearHint => 'Year';
 
   @override
-  String get letsExplore => 'Let\'s explore';
+  String get letsExplore => 'Let’s explore';
 
   @override
   String get imageUnavailable => 'Image unavailable';
@@ -211,7 +211,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get homeTopTier => 'You\'re at our top tier';
+  String get homeTopTier => 'You’re at our top tier';
 
   @override
   String homeNotifications(int count) {
@@ -260,16 +260,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeOrderOnline => 'Order online';
 
   @override
-  String get homeOffline => 'You\'re offline. Showing saved data.';
+  String get homeOffline => 'You’re offline. Showing saved data.';
 
   @override
-  String get homeRefreshFailed => 'Couldn\'t refresh. Showing saved data.';
+  String get homeRefreshFailed => 'Couldn’t refresh. Showing saved data.';
 
   @override
   String get homeSectionEmpty => 'Nothing here yet.';
 
   @override
-  String get homeSectionError => 'We couldn\'t load this section.';
+  String get homeSectionError => 'We couldn’t load this section.';
 
   @override
   String get homeRetry => 'Try again';
@@ -278,7 +278,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productNew => 'New';
 
   @override
-  String get productWhatsThis => 'What\'s this?';
+  String get productWhatsThis => 'What’s this?';
 
   @override
   String get productAddToCart => 'Add to cart';
@@ -306,10 +306,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productIncrease => 'Increase quantity';
 
   @override
-  String get productNotFound => 'This product isn\'t available any more.';
+  String get productNotFound => 'This product isn’t available any more.';
 
   @override
-  String get productAddFailed => 'Couldn\'t add to your cart. Try again.';
+  String get productAddFailed => 'Couldn’t add to your cart. Try again.';
 
   @override
   String get rewardsTitle => 'J\' Donuts Rewards';
@@ -329,7 +329,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get rewardsTierCurrent => 'You\'re here now';
+  String get rewardsTierCurrent => 'You’re here now';
 
   @override
   String rewardsTierRemaining(String points, String tier) {
@@ -337,7 +337,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get rewardsTierUpcoming => 'You\'ll be here soon';
+  String get rewardsTierUpcoming => 'You’ll be here soon';
 
   @override
   String get rewardsTierReached => 'Reached';
@@ -371,7 +371,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rewardsEmpty => 'Nothing to show yet.';
 
   @override
-  String get rewardsError => 'We couldn\'t load your rewards.';
+  String get rewardsError => 'We couldn’t load your rewards.';
 
   @override
   String get rewardsRetry => 'Try again';

@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "J'Donuts",
+  "appTitle": "J’Donuts",
   "@appTitle": {
     "description": "App name shown by the OS task switcher."
   },
@@ -34,9 +34,9 @@
       }
     }
   },
-  "welcomeTitle": "Welcome to the world of J'donuts",
+  "welcomeTitle": "Welcome to the world of J’donuts",
   "onboardingTitle": "Round food for every mood",
-  "getStarted": "Let's get started",
+  "getStarted": "Let’s get started",
   "alreadyHaveAccount": "Already have an account?",
   "logIn": "Log In",
   "termsPrefix": "By continuing, you acknowledge that you have read and agree to our",
@@ -46,7 +46,7 @@
   "comingSoonTitle": "Coming soon",
   "close": "Close",
   "logOut": "Log out",
-  "logOutConfirm": "Log out of J'Donuts?",
+  "logOutConfirm": "Log out of J’Donuts?",
   "cancel": "Cancel",
   "continueWith": "Continue with {provider}",
   "@continueWith": {
@@ -58,7 +58,7 @@
       }
     }
   },
-  "socialSignInUnavailable": "{provider} sign-in isn't available in this demo",
+  "socialSignInUnavailable": "{provider} sign-in isn’t available in this demo",
   "@socialSignInUnavailable": {
     "description": "Placeholder sheet body for social sign-in.",
     "placeholders": {
@@ -94,22 +94,22 @@
   "phoneTitle": "Enter your phone number",
   "phoneHint": "09xxxxxxxxx",
   "phoneInvalid": "Enter a Myanmar mobile number, like 09 254 135 592",
-  "notRegistered": "This number isn't registered yet.",
+  "notRegistered": "This number isn’t registered yet.",
   "registerInstead": "Register instead",
   "alreadyRegistered": "This number is already registered.",
   "logInInstead": "Log in instead",
   "genericError": "Something went wrong. Try again.",
   "continueLabel": "Continue",
   "otpTitle": "Verify your number",
-  "otpWrong": "That code isn't right. Try again.",
+  "otpWrong": "That code isn’t right. Try again.",
   "otpLocked": "Too many wrong codes. Tap Resend to get a new one.",
-  "didntReceive": "Didn't receive the code?",
+  "didntReceive": "Didn’t receive the code?",
   "resend": "Resend",
   "firstNameRequired": "Enter your first name",
   "nameInvalid": "Use letters and spaces only",
-  "dobInvalid": "That date doesn't exist",
-  "dobFuture": "Date of birth can't be in the future",
-  "otpSent": "We've sent a 6 digit OTP to {phone}",
+  "dobInvalid": "That date doesn’t exist",
+  "dobFuture": "Date of birth can’t be in the future",
+  "otpSent": "We’ve sent a 6 digit OTP to {phone}",
   "@otpSent": {
     "placeholders": {
       "phone": {
@@ -143,14 +143,14 @@
       }
     }
   },
-  "nameTitle": "What's your name?",
+  "nameTitle": "What’s your name?",
   "firstNameHint": "First Name",
   "lastNameHint": "Last Name",
-  "dobTitle": "What's your date of birth?",
+  "dobTitle": "What’s your date of birth?",
   "monthHint": "Month",
   "dayHint": "Day",
   "yearHint": "Year",
-  "letsExplore": "Let's explore",
+  "letsExplore": "Let’s explore",
   "imageUnavailable": "Image unavailable",
   "@imageUnavailable": {
     "description": "Screen reader label for an image that failed to load"
@@ -176,7 +176,7 @@
       }
     }
   },
-  "homeTopTier": "You're at our top tier",
+  "homeTopTier": "You’re at our top tier",
   "@homeTopTier": {
     "description": "Home header chip when there is no next tier"
   },
@@ -231,11 +231,11 @@
   "@homeOrderOnline": {
     "description": "Link on a shop card"
   },
-  "homeOffline": "You're offline. Showing saved data.",
+  "homeOffline": "You’re offline. Showing saved data.",
   "@homeOffline": {
     "description": "Banner at the top of Home while offline"
   },
-  "homeRefreshFailed": "Couldn't refresh. Showing saved data.",
+  "homeRefreshFailed": "Couldn’t refresh. Showing saved data.",
   "@homeRefreshFailed": {
     "description": "Snackbar after a failed pull-to-refresh"
   },
@@ -243,7 +243,7 @@
   "@homeSectionEmpty": {
     "description": "Shown in a Home section with no items"
   },
-  "homeSectionError": "We couldn't load this section.",
+  "homeSectionError": "We couldn’t load this section.",
   "@homeSectionError": {
     "description": "Shown in a Home section that failed to load"
   },
@@ -255,7 +255,7 @@
   "@productNew": {
     "description": "Badge on a new product"
   },
-  "productWhatsThis": "What's this?",
+  "productWhatsThis": "What’s this?",
   "@productWhatsThis": {
     "description": "Label next to the product description"
   },
@@ -292,11 +292,11 @@
   "@productIncrease": {
     "description": "Screen reader label for the plus button"
   },
-  "productNotFound": "This product isn't available any more.",
+  "productNotFound": "This product isn’t available any more.",
   "@productNotFound": {
     "description": "Product detail for a product the catalog no longer has"
   },
-  "productAddFailed": "Couldn't add to your cart. Try again.",
+  "productAddFailed": "Couldn’t add to your cart. Try again.",
   "@productAddFailed": {
     "description": "Snackbar when adding to the cart fails"
   },
@@ -317,7 +317,7 @@
       }
     }
   },
-  "rewardsTierCurrent": "You're here now",
+  "rewardsTierCurrent": "You’re here now",
   "@rewardsTierCurrent": {
     "description": "Caption under the current tier"
   },
@@ -333,7 +333,7 @@
       }
     }
   },
-  "rewardsTierUpcoming": "You'll be here soon",
+  "rewardsTierUpcoming": "You’ll be here soon",
   "@rewardsTierUpcoming": {
     "description": "Caption under tiers beyond the next one"
   },
@@ -386,7 +386,7 @@
   "@rewardsEmpty": {
     "description": "Rewards with no member data"
   },
-  "rewardsError": "We couldn't load your rewards.",
+  "rewardsError": "We couldn’t load your rewards.",
   "@rewardsError": {
     "description": "Rewards when its data fails to load"
   },

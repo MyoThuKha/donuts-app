@@ -108,7 +108,7 @@ void main() {
     expect(find.text('Seasonal specials'), findsOneWidget);
     expect(find.text('Mistletoe Romance box'), findsNothing);
     expect(find.text('Coconut Donut'), findsOneWidget);
-    expect(find.text("J'Donuts Myaynigone"), findsOneWidget);
+    expect(find.text('J’Donuts Myaynigone'), findsOneWidget);
   });
 
   testWidgets('Retry on a failed section subscribes again', (tester) async {
@@ -121,7 +121,7 @@ void main() {
     await tester.pump(_entrance);
 
     expect(find.byType(SectionErrorState), findsOneWidget);
-    expect(find.text("We couldn't load this section."), findsOneWidget);
+    expect(find.text('We couldn’t load this section.'), findsOneWidget);
     expect(find.text('We are now at Central Boulevard'), findsOneWidget);
     expect(streams.sectionSubscriptions, 1);
 
@@ -168,7 +168,7 @@ void main() {
       tester.widget<OfflineBanner>(find.byType(OfflineBanner)).visible,
       isTrue,
     );
-    expect(find.text("You're offline. Showing saved data."), findsOneWidget);
+    expect(find.text('You’re offline. Showing saved data.'), findsOneWidget);
   });
 
   testWidgets('every row lines its See all button up on the right edge', (
@@ -240,7 +240,7 @@ void main() {
     streams.emitAll();
     await tester.pump(_entrance);
 
-    for (final name in ['Ye Min', "J'Donuts Central Boulevard"]) {
+    for (final name in ['Ye Min', 'J’Donuts Central Boulevard']) {
       expect(
         tester.widget<Text>(find.text(name)).overflow,
         TextOverflow.ellipsis,

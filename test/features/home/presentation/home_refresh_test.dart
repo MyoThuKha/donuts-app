@@ -17,7 +17,7 @@ import '../../../helpers/home_harness.dart';
 /// the tall test surface is 3000 pt, so the pull is long.
 const Offset _pull = Offset(0, 1200);
 
-const String _refreshFailed = "Couldn't refresh. Showing saved data.";
+const String _refreshFailed = 'Couldn’t refresh. Showing saved data.';
 
 void main() {
   late HomeStreams streams;

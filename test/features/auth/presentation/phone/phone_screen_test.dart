@@ -75,7 +75,7 @@ void main() {
     await tester.tap(_continue);
     await tester.pumpAndSettle();
 
-    expect(find.text("This number isn't registered yet."), findsOneWidget);
+    expect(find.text('This number isn’t registered yet.'), findsOneWidget);
     await tester.tap(find.text('Register instead'));
     await tester.pumpAndSettle();
     expect(find.text('Enter your phone number'), findsOneWidget);

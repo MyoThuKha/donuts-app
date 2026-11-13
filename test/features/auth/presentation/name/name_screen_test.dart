@@ -65,7 +65,7 @@ void main() {
 
     await tester.tap(find.byType(AppPrimaryButton));
     await tester.pumpAndSettle();
-    expect(find.text("What's your date of birth?"), findsOneWidget);
+    expect(find.text('What’s your date of birth?'), findsOneWidget);
     await tester.tap(find.bySemanticsLabel('Back'));
     await tester.pumpAndSettle();
 

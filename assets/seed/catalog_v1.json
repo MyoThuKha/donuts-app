@@ -76,7 +76,7 @@
       {
         "id": "p_santa_cookies",
         "code": "JD041210",
-        "name": "Santa's favorite cookies set",
+        "name": "Santa’s favorite cookies set",
         "priceMmk": 6500,
         "isNew": false,
         "discountPercent": 20,
@@ -153,7 +153,7 @@
     "shops": [
       {
         "id": "s_myaynigone",
-        "name": "J'Donuts Myaynigone",
+        "name": "J’Donuts Myaynigone",
         "address": "Bayint Naung Road, Hlaing Township, Yangon",
         "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/shop_myaynigone.webp",
         "imageAsset": "assets/images/shop_myaynigone.webp",
@@ -161,7 +161,7 @@
       },
       {
         "id": "s_sanchaung",
-        "name": "J'Donuts Sanchaung",
+        "name": "J’Donuts Sanchaung",
         "address": "Sanchaung Street, Sanchaung Township, Yangon",
         "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/shop_sanchaung.webp",
         "imageAsset": "assets/images/shop_sanchaung.webp",
@@ -169,7 +169,7 @@
       },
       {
         "id": "s_downtown",
-        "name": "J'Donuts Downtown",
+        "name": "J’Donuts Downtown",
         "address": "Bogyoke Aung San Road, Pabedan Township, Yangon",
         "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/shop_downtown.webp",
         "imageAsset": "assets/images/shop_downtown.webp",
@@ -177,7 +177,7 @@
       },
       {
         "id": "s_central_boulevard",
-        "name": "J'Donuts Central Boulevard",
+        "name": "J’Donuts Central Boulevard",
         "address": "Kabar Aye Pagoda Road, Yankin Township, Yangon",
         "imageUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/shop_downtown.webp",
         "imageAsset": "assets/images/shop_downtown.webp",

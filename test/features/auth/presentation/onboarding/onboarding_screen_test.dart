@@ -9,7 +9,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Round food for every mood'), findsOneWidget);
-    expect(find.text("LET'S GET STARTED"), findsOneWidget);
+    expect(find.text('LET’S GET STARTED'), findsOneWidget);
     expect(find.text('Log In'), findsOneWidget);
   });
 
@@ -21,7 +21,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      find.text("Google sign-in isn't available in this demo"),
+      find.text('Google sign-in isn’t available in this demo'),
       findsOneWidget,
     );
   });

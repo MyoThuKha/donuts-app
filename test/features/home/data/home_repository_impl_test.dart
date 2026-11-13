@@ -82,7 +82,7 @@ void main() {
       's_downtown',
       's_central_boulevard',
     ]);
-    expect(shops.first.name, "J'Donuts Myaynigone");
+    expect(shops.first.name, 'J’Donuts Myaynigone');
     expect(shops.first.address, 'Bayint Naung Road, Hlaing Township, Yangon');
     expect(shops.first.imageAsset, 'assets/images/shop_myaynigone.webp');
   });

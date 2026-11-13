@@ -81,7 +81,7 @@ final List<ShopVO> testShops = [
   ].indexed)
     ShopVO(
       id: 's_$i',
-      name: "J'Donuts $name",
+      name: 'J’Donuts $name',
       address: 'Yangon',
       imageUrl: '$_imageBase/s_$i.webp',
     ),
