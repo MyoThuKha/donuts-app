@@ -1,13 +1,19 @@
+import 'dart:async';
+
 import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/app_language.dart';
 import 'package:donuts/core/l10n/language_cubit.dart';
+import 'package:donuts/core/result/app_failure.dart';
+import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/widgets/images/profile_avatar.dart';
 import 'package:donuts/core/widgets/images/tier_backdrop.dart';
+import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
 import 'package:donuts/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/fake_language_store.dart';
 import '../../helpers/fakes.dart';
@@ -146,6 +152,64 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(session.state, SessionSignedIn(testUser));
+  });
+
+  testWidgets("a log-out that can't clear the session keeps the user "
+      'signed in and says so', (tester) async {
+    final session = testSessionCubit(
+      logOutResult: const Failure(UnknownFailure()),
+    )..signedIn(testUser);
+    await pumpThemed(
+      tester,
+      BlocProvider.value(
+        value: session,
+        child: SettingsScreen(readVersion: () async => '1.0.0'),
+      ),
+    );
+
+    await tester.tap(find.text('Log out'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Log out').last);
+    await tester.pumpAndSettle();
+
+    expect(session.state, SessionSignedIn(testUser));
+    expect(find.text('Couldn’t log out. Try again.'), findsOneWidget);
+  });
+
+  testWidgets('while the log-out runs the row shows a spinner and a second '
+      'tap opens no second dialog', (tester) async {
+    final pending = Completer<Result<void>>();
+    final logOut = MockLogOutUseCase();
+    when(logOut.call).thenAnswer((_) => pending.future);
+    final session = SessionCubit(
+      restoreSession: MockRestoreSessionUseCase(),
+      logOut: logOut,
+    )..signedIn(testUser);
+    addTearDown(session.close);
+    await pumpThemed(
+      tester,
+      BlocProvider.value(
+        value: session,
+        child: SettingsScreen(readVersion: () async => '1.0.0'),
+      ),
+    );
+
+    await tester.tap(find.text('Log out'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Log out').last);
+    // The spinner never settles, so step past the dialog's exit by time.
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    await tester.tap(find.text('Log out'));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.byType(AlertDialog), findsNothing);
+    verify(logOut.call).called(1);
+
+    pending.complete(const Success(null));
+    await tester.pump();
+    expect(session.state, const SessionSignedOut());
   });
 
   testWidgets('picking မြန်မာ switches the app to Burmese and stores it', (

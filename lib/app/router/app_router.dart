@@ -72,10 +72,19 @@ String? authRedirect(SessionState session, String location) {
 }
 
 /// One sign-up or log-in attempt. Its steps share a draft, so going back
-/// keeps what was typed.
+/// keeps what was typed. A phone number passed as `extra` starts the draft,
+/// so switching between logging in and registering keeps the number.
 ShellRoute _authFlow(AuthMode mode, List<RouteBase> steps) => ShellRoute(
-  builder: (context, state, child) =>
-      BlocProvider(create: (_) => RegistrationDraftCubit(mode), child: child),
+  builder: (context, state, child) => BlocProvider(
+    create: (_) => RegistrationDraftCubit(
+      mode,
+      phoneInput: switch (state.extra) {
+        final String input => input,
+        _ => '',
+      },
+    ),
+    child: child,
+  ),
   routes: steps,
 );
 

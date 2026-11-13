@@ -64,9 +64,8 @@ void main() {
     expect(find.text(message), findsOneWidget);
   });
 
-  testWidgets('logging in with an unregistered number offers to register', (
-    tester,
-  ) async {
+  testWidgets('logging in with an unregistered number offers to register, '
+      'which keeps the typed number', (tester) async {
     when(() => mocks.requestOtp(any()))
         .thenAnswer((_) async => const Failure(NotRegisteredFailure()));
     await pumpPhone(tester, AppRoutes.logInPhone);
@@ -81,6 +80,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Enter your phone number'), findsOneWidget);
     expect(find.bySemanticsLabel('Step 1 of 4'), findsOneWidget);
+    expect(tester.widget<TextField>(_field).controller!.text, '09254135592');
+    expect(
+      tester.widget<AppPrimaryButton>(_continue).onPressed,
+      isNotNull,
+      reason: 'the carried number is valid, so Continue is on',
+    );
   });
 
   testWidgets('a double tap on Continue sends one OTP request', (tester) async {

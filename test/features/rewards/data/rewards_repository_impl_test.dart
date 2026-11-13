@@ -120,7 +120,7 @@ void main() {
 
       expect(result, isA<Success<void>>());
       expect(await claimed('c_coco_donuts'), isTrue);
-      expect(await totalPoints(), 680500);
+      expect(await totalPoints(), 680200);
     });
 
     test('keeps the claim for a new repository on the same database', () async {
@@ -136,7 +136,7 @@ void main() {
       await repository.claimChallenge('c_coco_donuts');
       await repository.claimChallenge('c_coco_donuts');
 
-      expect(await totalPoints(), 680500);
+      expect(await totalPoints(), 680200);
     });
 
     test('leaves an incomplete or unknown challenge alone', () async {
@@ -144,7 +144,7 @@ void main() {
       await repository.claimChallenge('c_missing');
 
       expect(await claimed('c_americano'), isFalse);
-      expect(await totalPoints(), 680300);
+      expect(await totalPoints(), 680000);
     });
 
     test(

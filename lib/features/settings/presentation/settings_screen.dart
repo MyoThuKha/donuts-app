@@ -4,6 +4,8 @@ import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/l10n/language_cubit.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/pending_tap_guard.dart';
+import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/sheets/sheet_extension.dart';
 import 'package:donuts/features/auth/domain/age.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
@@ -77,14 +79,7 @@ class _SettingsPage extends StatelessWidget {
           ] else
             SliverToBoxAdapter(child: SizedBox(height: insets.top)),
           const SliverToBoxAdapter(child: _LanguageRow()),
-          SliverToBoxAdapter(
-            child: SettingsRowItem(
-              icon: LucideIcons.logOut,
-              label: context.l10n.logOut,
-              filledIcon: true,
-              onTap: () => _confirmLogOut(context),
-            ),
-          ),
+          const SliverToBoxAdapter(child: _LogOutRow()),
           SliverPadding(
             padding: EdgeInsets.only(
               top: AppSpacing.xxl,
@@ -119,15 +114,46 @@ class _SettingsPage extends StatelessWidget {
       ),
     ];
   }
+}
 
-  Future<void> _confirmLogOut(BuildContext context) async {
+/// Confirms, then logs out. A second tap does nothing while the dialog is
+/// open or the log-out runs, and the row shows a spinner for the call. If
+/// the session can't be cleared, the user stays signed in and a snackbar
+/// says so.
+class _LogOutRow extends StatefulWidget {
+  const new();
+
+  @override
+  State<_LogOutRow> createState() => _LogOutRowState();
+}
+
+class _LogOutRowState extends State<_LogOutRow> with PendingTapGuard {
+  bool _loggingOut = false;
+
+  Future<void> _confirmAndLogOut() async {
     final session = context.read<SessionCubit>();
+    final messenger = ScaffoldMessenger.of(context);
+    final failed = context.l10n.logOutFailed;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => const _LogOutDialog(),
     );
-    if (confirmed ?? false) await session.logOut();
+    if (!(confirmed ?? false) || !mounted) return;
+    setState(() => _loggingOut = true);
+    final loggedOut = await session.logOut();
+    if (!mounted) return;
+    setState(() => _loggingOut = false);
+    if (!loggedOut) messenger.showMessage(failed, tone: AppSnackBarTone.error);
   }
+
+  @override
+  Widget build(BuildContext context) => SettingsRowItem(
+    icon: LucideIcons.logOut,
+    label: context.l10n.logOut,
+    filledIcon: true,
+    busy: _loggingOut,
+    onTap: () => runGuarded(_confirmAndLogOut),
+  );
 }
 
 /// Shows the current language and opens the language sheet.

@@ -54,7 +54,9 @@ flutter build apk --release
 flutter build ios --simulator
 ```
 
-The APK lands in `build/app/outputs/flutter-apk/app-release.apk`. Without `android/key.properties` it is signed with the debug key, so it installs on any device. Zip `build/ios/iphonesimulator/Runner.app` to hand over the iOS Simulator build.
+The APK lands in `build/app/outputs/flutter-apk/app-release.apk`. Without `android/key.properties` it is signed with the debug key, so it installs on any device. The iOS Simulator app lands in `build/ios/iphonesimulator/Runner.app`. Flutter builds simulator apps in debug mode only. Zip it with `ditto -c -k --keepParent build/ios/iphonesimulator/Runner.app Runner.zip`, and to install it, unzip it and drag `Runner.app` onto a booted simulator.
+
+Each GitHub release already has both files attached. The end of [Tests](#tests) explains the release workflow.
 
 ## Fake OTP code
 
@@ -110,7 +112,7 @@ features/home/
 
 The rules that hold everywhere:
 
-- Repositories catch exceptions and return `Result<T>` with a typed `AppFailure`. Nothing above a repository sees an exception, and no error is dropped silently.
+- Repositories catch exceptions and return `Result<T>` with a typed `AppFailure`. Their database streams go through `guarded()`, which turns an exception into the same `AppFailure` as an error event. Nothing above a repository sees an exception, and no error is dropped silently.
 - `AuthRepository` is an interface with `FakeAuthRepository` behind it. The fake waits about a second and keeps users in the local database, and a real API client can replace it in `lib/app/di/auth_module.dart` without touching any screen.
 - Validators are pure functions in `features/auth/domain/validators/`, each with unit tests.
 - Colours, type, spacing and motion come from tokens in `lib/core/theme/` and `lib/core/motion/`. Feature code holds no colour values or text-style overrides.
@@ -164,7 +166,7 @@ All motion uses Flutter's own APIs and `CustomPainter`, with no Lottie or Rive.
 - **Widget:** every screen's loading, empty, error and ready states; sign-up and log-in validation; double taps; Reduce Motion; and every screen at 1.3x text on a 4.7-inch phone.
 - **Integration:** `integration_test/register_to_product_detail_test.dart`, on a device.
 
-CI (`.github/workflows/ci.yml`) checks formatting, runs `flutter analyze` and runs `flutter test` on every push and pull request. A `v*` tag on `main` builds a signed release APK and publishes it on a GitHub release (`.github/workflows/release.yml`).
+CI (`.github/workflows/ci.yml`) checks formatting, runs `flutter analyze` and runs `flutter test` on every push and pull request. A `v*` tag on `main` runs `.github/workflows/release.yml`. It runs the analyzer and the tests once, builds a signed release APK on Linux and a zipped iOS Simulator app on macOS, then publishes both on one GitHub release. The tag sets the version, so `v1.0.0+1` builds version 1.0.0 with build number 1.
 
 ## Known gaps
 

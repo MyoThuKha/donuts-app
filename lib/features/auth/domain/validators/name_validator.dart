@@ -22,8 +22,16 @@ ValidationResult<String?> validateLastName(String input) {
   };
 }
 
+/// Combining marks: Myanmar vowel signs, medials, tone marks and asat.
+final RegExp _combiningMark = RegExp(r'\p{M}', unicode: true);
+
+/// The characters a reader counts. A Myanmar syllable is one consonant
+/// plus marks that draw on it, so the marks don't add to the length.
+int _visibleLength(String name) =>
+    name.replaceAll(_combiningMark, '').runes.length;
+
 ValidationResult<String> _checkCharacters(String name) {
-  if (name.runes.length > AuthRules.nameMaxLength) {
+  if (_visibleLength(name) > AuthRules.nameMaxLength) {
     return const Invalid(ValidationError.tooLong);
   }
   return _nameCharacters.hasMatch(name)

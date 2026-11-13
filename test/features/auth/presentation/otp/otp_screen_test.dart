@@ -67,6 +67,43 @@ void main() {
     await unmountApp(tester);
   });
 
+  testWidgets('after a wrong code the boxes keep focus, so the keyboard '
+      'stays up for the next try', (tester) async {
+    await _openOtp(tester);
+
+    await tester.enterText(_field, '000000');
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<TextField>(_field).focusNode!.hasFocus, isTrue);
+    await unmountApp(tester);
+  });
+
+  testWidgets('a check that fails for another reason offers Try again, '
+      'which checks the same code again', (tester) async {
+    var calls = 0;
+    when(() => mocks.verifyOtp(any())).thenAnswer((_) async {
+      calls++;
+      return calls == 1
+          ? const Failure(DatabaseFailure())
+          : const Failure(WrongOtpFailure());
+    });
+    await _openOtp(tester);
+
+    await tester.enterText(_field, '123456');
+    await tester.pumpAndSettle();
+    expect(find.text('Something went wrong. Try again.'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(TextButton, 'Try again'));
+    await tester.pumpAndSettle();
+
+    final codes = verify(() => mocks.verifyOtp(captureAny())).captured;
+    expect(
+      [for (final p in codes) (p as OtpVerificationParams).code],
+      ['123456', '123456'],
+    );
+    await unmountApp(tester);
+  });
+
   testWidgets('three wrong codes lock entry until Resend', (tester) async {
     await _openOtp(tester);
 
@@ -84,6 +121,24 @@ void main() {
     await unmountApp(tester);
   });
 
+  testWidgets('Resend after a lock opens entry and takes focus again', (
+    tester,
+  ) async {
+    await _openOtp(tester);
+    for (var i = 0; i < 3; i++) {
+      await tester.enterText(_field, '000000');
+      await tester.pumpAndSettle();
+    }
+
+    await tester.tap(find.text('Resend'));
+    await tester.pumpAndSettle();
+
+    final field = tester.widget<TextField>(_field);
+    expect(field.enabled, isTrue);
+    expect(field.focusNode!.hasFocus, isTrue);
+    await unmountApp(tester);
+  });
+
   testWidgets('pasting six digits fills every box and verifies', (
     tester,
   ) async {
@@ -97,18 +152,21 @@ void main() {
     await unmountApp(tester);
   });
 
-  testWidgets('while the code is checked, a spinner shows and entry pauses', (
-    tester,
-  ) async {
+  testWidgets('while the code is checked, a spinner shows and typing is '
+      'ignored, with the keyboard kept up', (tester) async {
     final pending = Completer<Result<UserVO?>>();
     when(() => mocks.verifyOtp(any())).thenAnswer((_) => pending.future);
     await _openOtp(tester);
 
     await tester.enterText(_field, '123456');
     await tester.pump();
+    await tester.enterText(_field, '1');
+    await tester.pump();
 
+    final field = tester.widget<TextField>(_field);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    expect(tester.widget<TextField>(_field).enabled, isFalse);
+    expect(field.controller!.text, '123456');
+    expect(field.focusNode!.hasFocus, isTrue);
     pending.complete(const Failure(WrongOtpFailure()));
     await tester.pumpAndSettle();
     await unmountApp(tester);

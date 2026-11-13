@@ -52,12 +52,17 @@ class FakeAuthRepository implements AuthRepository {
     await _wait();
     if (code != validOtp) return const Failure(WrongOtpFailure());
     if (mode == AuthMode.register) return const Success(null);
-    return await guard(() async {
-      final row = await _users.findByPhone(phone);
-      if (row == null) return null;
-      await _session.writeUserId(row.id);
-      return row.toVO();
-    });
+    final found = await guard(() => _users.findByPhone(phone));
+    return switch (found) {
+      Failure(:final failure) => Failure(failure),
+      // The number was registered when the code was sent, but its user is
+      // gone now. Logging in needs a user, so say it isn't registered.
+      Success(data: null) => const Failure(NotRegisteredFailure()),
+      Success(data: final row?) => await guard(() async {
+        await _session.writeUserId(row.id);
+        return row.toVO();
+      }),
+    };
   }
 
   @override

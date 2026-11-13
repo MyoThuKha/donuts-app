@@ -11,15 +11,23 @@ mixin SectionWatcher<K, S> on BlocBase<S> {
 
   /// Sets part [key] to loading, then follows [source] into it through
   /// [put]. Replaces any earlier subscription for [key].
+  ///
+  /// [put] only builds the next state. Work that follows from a new
+  /// section, such as subscribing to more parts, goes in [then], which
+  /// runs after that state is emitted.
   void watchSection<T>(
     K key,
     Stream<SectionState<T>> source,
-    S Function(SectionState<T> section) put,
-  ) {
+    S Function(SectionState<T> section) put, {
+    void Function(SectionState<T> section)? then,
+  }) {
     unawaited(_sections.remove(key)?.cancel());
     _emitIfOpen(put(SectionLoading<T>()));
     _sections[key] = source.listen(
-      (section) => _emitIfOpen(put(section)),
+      (section) {
+        _emitIfOpen(put(section));
+        if (!isClosed) then?.call(section);
+      },
       onError: (Object error, StackTrace stackTrace) {
         addError(error, stackTrace);
         _emitIfOpen(put(SectionFailed<T>()));

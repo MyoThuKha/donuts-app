@@ -8,17 +8,25 @@ import 'package:material_ui/material_ui.dart';
 /// Six OTP boxes backed by one hidden text field, so typing advances,
 /// backspace goes back, a paste fills every box and the platform can
 /// autofill the code from SMS.
+///
+/// While [busy] the field keeps its focus, so the keyboard stays up for the
+/// next try, but ignores edits. When [enabled] turns back on after a lock,
+/// the field takes focus again.
 class OtpInputWidget extends StatefulWidget {
   const new({
     required this.code,
     required this.onChanged,
     this.enabled = true,
+    this.busy = false,
     super.key,
   });
 
   final String code;
   final ValueChanged<String> onChanged;
   final bool enabled;
+
+  /// A check of the code is running.
+  final bool busy;
 
   @override
   State<OtpInputWidget> createState() => _OtpInputWidgetState();
@@ -42,6 +50,12 @@ class _OtpInputWidgetState extends State<OtpInputWidget> {
   void didUpdateWidget(OtpInputWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.code != _controller.text) _controller.text = widget.code;
+    // The field can take focus only once it has rebuilt as enabled.
+    if (widget.enabled && !oldWidget.enabled) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _focus.requestFocus();
+      });
+    }
   }
 
   @override
@@ -75,6 +89,9 @@ class _OtpInputWidgetState extends State<OtpInputWidget> {
     keyboardType: TextInputType.number,
     autofillHints: const [AutofillHints.oneTimeCode],
     inputFormatters: [
+      TextInputFormatter.withFunction(
+        (previous, next) => widget.busy ? previous : next,
+      ),
       FilteringTextInputFormatter.digitsOnly,
       LengthLimitingTextInputFormatter(AuthRules.otpLength),
     ],

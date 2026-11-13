@@ -128,8 +128,8 @@ void main() {
     expect(coconut.discountPercent, isNull);
   });
 
-  test('the member seed puts 680,300 points 200 short of Gold, which the '
-      'complete Coco challenge pays', () {
+  test('the member seed has the 680,000 points the brief names, 500 short '
+      'of Gold', () {
     final member = readMemberFile(seedMemberPath).data!;
     final silver = member.tiers.singleWhere((t) => t.id == 'silver');
     final gold = member.tiers.singleWhere((t) => t.id == 'gold');
@@ -137,12 +137,8 @@ void main() {
         (member.profile.totalPoints - silver.minPoints) /
         (gold.minPoints - silver.minPoints);
 
-    final coco = member.challenges.singleWhere((c) => c.id == 'c_coco_donuts');
-
-    expect(member.profile.totalPoints, 680300);
-    expect(progress, closeTo(0.9, 1e-9));
-    expect(gold.minPoints - member.profile.totalPoints, 200);
-    expect(coco.progress, coco.target);
-    expect(coco.rewardPoints, 200);
+    expect(member.profile.totalPoints, 680000);
+    expect(progress, closeTo(0.75, 1e-9));
+    expect(gold.minPoints - member.profile.totalPoints, 500);
   });
 }

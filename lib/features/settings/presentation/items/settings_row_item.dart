@@ -4,7 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// One Settings row: an icon, a bold label, and on the right a value, a
-/// chevron when the row opens something, or both.
+/// chevron when the row opens something, or both. While [busy] a small
+/// spinner takes the chevron's place and taps are ignored.
 class SettingsRowItem extends StatelessWidget {
   const new({
     required this.icon,
@@ -12,6 +13,7 @@ class SettingsRowItem extends StatelessWidget {
     this.value,
     this.onTap,
     this.filledIcon = false,
+    this.busy = false,
     super.key,
   });
 
@@ -27,7 +29,12 @@ class SettingsRowItem extends StatelessWidget {
   /// Puts the icon in a blue circle, as the design draws Logout.
   final bool filledIcon;
 
+  /// Whatever the row started is still running.
+  final bool busy;
+
   static const double iconSize = 24;
+  static const double _spinnerSize = 20;
+  static const double _spinnerStroke = 2.5;
   static const double filledIconCircle = 40;
   static const double minHeight = 60;
 
@@ -37,7 +44,7 @@ class SettingsRowItem extends StatelessWidget {
     final value = this.value;
     return MergeSemantics(
       child: InkWell(
-        onTap: onTap,
+        onTap: busy ? null : onTap,
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: minHeight),
           child: Padding(
@@ -61,7 +68,14 @@ class SettingsRowItem extends StatelessWidget {
                       style: context.text.body,
                     ),
                   ),
-                if (onTap != null)
+                if (busy)
+                  const SizedBox.square(
+                    dimension: _spinnerSize,
+                    child: CircularProgressIndicator(
+                      strokeWidth: _spinnerStroke,
+                    ),
+                  )
+                else if (onTap != null)
                   Icon(
                     LucideIcons.chevronRight,
                     size: iconSize,

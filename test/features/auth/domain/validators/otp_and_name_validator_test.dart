@@ -39,6 +39,12 @@ void main() {
       expect(validateFirstName('a' * 51), _invalid(ValidationError.tooLong));
     });
 
+    test('counts a Myanmar letter and its vowel sign as one character', () {
+      // ကာ is two code points: the consonant and a combining vowel sign.
+      expect(validateFirstName('ကာ' * 50), isA<Valid<String>>());
+      expect(validateFirstName('ကာ' * 51), _invalid(ValidationError.tooLong));
+    });
+
     test('requires a first name', () {
       expect(validateFirstName(''), _invalid(ValidationError.empty));
       expect(validateFirstName('   '), _invalid(ValidationError.empty));

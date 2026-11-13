@@ -83,6 +83,19 @@ void main() {
     expect(session.userId, isNull);
   });
 
+  test('the right OTP in log-in mode for a number with no user fails as '
+      'not registered and signs nobody in', () async {
+    expect(
+      await repository.verifyOtp(
+        _phone,
+        FakeAuthRepository.validOtp,
+        AuthMode.logIn,
+      ),
+      _failsWith<NotRegisteredFailure>(),
+    );
+    expect(session.userId, isNull);
+  });
+
   test('register stores the user and restores them as the session', () async {
     final user = await registered();
 

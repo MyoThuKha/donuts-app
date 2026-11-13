@@ -230,6 +230,12 @@ abstract class AppLocalizations {
   /// **'Log out of J’Donuts?'**
   String get logOutConfirm;
 
+  /// Snackbar when the saved session couldn't be cleared
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t log out. Try again.'**
+  String get logOutFailed;
+
   /// No description provided for @cancel.
   ///
   /// In en, this message translates to:
@@ -379,6 +385,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'That code isn’t right. Try again.'**
   String get otpWrong;
+
+  /// Link under the OTP boxes that checks the same code again after a failed check
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get otpRetry;
 
   /// No description provided for @otpLocked.
   ///

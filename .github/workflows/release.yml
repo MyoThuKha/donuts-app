@@ -1,30 +1,37 @@
 name: release
 
-# Pushing a tag like v1.0.0+1 that points at a commit on main builds a release
-# APK and publishes it on a GitHub release page. The tag sets the version:
-# v1.0.0+1 builds versionName 1.0.0 with versionCode 1. A tag with a
-# pre-release part, like v1.1.0-beta.1+5, makes a pre-release.
+# Pushing a tag like v1.0.0+1 that points at a commit on main builds a signed
+# release APK and a zipped iOS Simulator app, then publishes both on one GitHub
+# release page. The tag sets the version: v1.0.0+1 builds version 1.0.0 with
+# build number 1. A tag with a pre-release part, like v1.1.0-beta.1+5, makes a
+# pre-release.
 on:
   push:
     tags:
       - 'v*'
 
+# Only the publish job writes. The build jobs read the code and nothing else.
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: release-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
-  android-apk:
+  verify:
     runs-on: ubuntu-latest
+    outputs:
+      name: ${{ steps.version.outputs.name }}
+      number: ${{ steps.version.outputs.number }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      apk: ${{ steps.version.outputs.apk }}
+      ios_zip: ${{ steps.version.outputs.ios_zip }}
     steps:
       - uses: actions/checkout@v4
         with:
-          # The main-branch check and the release notes need every commit and tag.
+          # The main-branch check needs the history of main.
           fetch-depth: 0
-          # Only `gh release create` needs the token, and it gets it from GH_TOKEN.
           persist-credentials: false
 
       - name: Check the tag is on main
@@ -51,7 +58,7 @@ jobs:
 
           pubspec_version="$(grep -E '^version:' pubspec.yaml | awk '{print $2}')"
           if [[ "$pubspec_version" != "$name+$number" ]]; then
-            echo "::warning::pubspec.yaml says $pubspec_version but the tag says $name+$number. The APK uses the tag's version."
+            echo "::warning::pubspec.yaml says $pubspec_version but the tag says $name+$number. The builds use the tag's version."
           fi
 
           {
@@ -59,15 +66,10 @@ jobs:
             echo "number=$number"
             echo "prerelease=$prerelease"
             echo "apk=jdonuts-$name-build$number.apk"
+            echo "ios_zip=jdonuts-$name-build$number-ios-simulator.zip"
           } >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: gradle
-
-      # Pinned to a commit because this job can write releases.
+      # Pinned to a commit because the same action runs in every release job.
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: 3.50.0
@@ -82,6 +84,29 @@ jobs:
 
       - name: Test
         run: flutter test
+
+  android-apk:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: 3.50.0
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
 
       - name: Write the release keystore
         env:
@@ -107,8 +132,8 @@ jobs:
       - name: Build the release APK
         run: |
           flutter build apk --release \
-            --build-name="${{ steps.version.outputs.name }}" \
-            --build-number="${{ steps.version.outputs.number }}"
+            --build-name="${{ needs.verify.outputs.name }}" \
+            --build-number="${{ needs.verify.outputs.number }}"
           apk=build/app/outputs/flutter-apk/app-release.apk
           # Fail if the APK carries the debug certificate instead of the release key.
           apksigner="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)"
@@ -116,7 +141,77 @@ jobs:
             echo "::error::The APK is signed with the debug key. Check android/key.properties."
             exit 1
           fi
-          cp "$apk" "${{ steps.version.outputs.apk }}"
+          cp "$apk" "${{ needs.verify.outputs.apk }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: ${{ needs.verify.outputs.apk }}
+          if-no-files-found: error
+          retention-days: 7
+
+  ios-simulator:
+    needs: verify
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: 3.50.0
+          channel: stable
+          cache: true
+
+      - name: Show the Xcode version
+        run: xcodebuild -version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Flutter builds simulator apps in debug mode only, and they need no
+      # signing. The app runs on its own once dragged onto a booted simulator.
+      - name: Build the iOS Simulator app
+        run: |
+          flutter build ios --simulator \
+            --build-name="${{ needs.verify.outputs.name }}" \
+            --build-number="${{ needs.verify.outputs.number }}"
+
+      - name: Zip the app
+        run: |
+          app=build/ios/iphonesimulator/Runner.app
+          if [[ ! -d "$app" ]]; then
+            echo "::error::$app is missing after the build."
+            exit 1
+          fi
+          # ditto keeps the bundle's symlinks and permissions, which zip -r can break.
+          ditto -c -k --sequesterRsrc --keepParent "$app" "${{ needs.verify.outputs.ios_zip }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator
+          path: ${{ needs.verify.outputs.ios_zip }}
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: [verify, android-apk, ios-simulator]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The release notes need every commit and tag.
+          fetch-depth: 0
+          # Only `gh release create` needs the token, and it gets it from GH_TOKEN.
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
 
       - name: Write the release notes
         run: |
@@ -129,8 +224,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           args=()
-          [[ "${{ steps.version.outputs.prerelease }}" == true ]] && args+=(--prerelease)
-          gh release create "$GITHUB_REF_NAME" "${{ steps.version.outputs.apk }}" \
+          [[ "${{ needs.verify.outputs.prerelease }}" == true ]] && args+=(--prerelease)
+          gh release create "$GITHUB_REF_NAME" \
+            "dist/${{ needs.verify.outputs.apk }}" \
+            "dist/${{ needs.verify.outputs.ios_zip }}" \
             --verify-tag \
             --title "J'Donuts $GITHUB_REF_NAME" \
             --notes-file release-notes.md \
