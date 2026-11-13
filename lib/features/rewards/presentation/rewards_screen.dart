@@ -6,6 +6,7 @@ import 'package:donuts/core/sync/presentation/pull_to_refresh.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/feedback/donut_refresh_indicator.dart';
+import 'package:donuts/core/widgets/feedback/offline_banner_frame.dart';
 import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_cubit.dart';
@@ -27,7 +28,7 @@ class RewardsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<RewardsCubit>()..start(),
-      child: const _RewardsPage(),
+      child: const OfflineBannerFrame(child: _RewardsPage()),
     );
   }
 }

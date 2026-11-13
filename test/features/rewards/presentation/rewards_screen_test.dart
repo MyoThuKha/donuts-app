@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/network/connectivity_cubit.dart';
+import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_case.dart';
@@ -11,12 +13,15 @@ import 'package:donuts/features/rewards/presentation/items/challenge_card_item.d
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
 import 'package:donuts/features/rewards/presentation/rewards_screen.dart';
+import 'package:donuts/features/rewards/presentation/views/rewards_header_view.dart';
 import 'package:donuts/features/rewards/presentation/widgets/count_up_text_widget.dart';
 import 'package:donuts/features/rewards/presentation/widgets/earn_button_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../helpers/fake_connectivity.dart';
 import '../../../helpers/member_fakes.dart';
 import '../../../helpers/pump_app.dart';
 import '../../../helpers/rewards_fakes.dart';
@@ -27,11 +32,20 @@ const Duration _margin = Duration(milliseconds: 100);
 
 /// Pumps the screen over the seeded fakes, then one more frame so the
 /// cubit's first emissions are on screen.
-Future<void> _pumpRewards(WidgetTester tester) async {
+Future<void> _pumpRewards(
+  WidgetTester tester, {
+  ConnectivityCubit? connectivity,
+}) async {
   registerMemberFakes(getIt);
   registerRewardsFakes(getIt);
   addTearDown(getIt.reset);
-  await pumpThemed(tester, const RewardsScreen());
+  await pumpThemed(
+    tester,
+    BlocProvider.value(
+      value: connectivity ?? testConnectivity(),
+      child: const RewardsScreen(),
+    ),
+  );
   await tester.pump();
 }
 
@@ -294,5 +308,22 @@ void main() {
 
     expect(find.byType(SectionErrorState), findsOneWidget);
     expect(find.byType(ChallengeCardItem), findsWidgets);
+  });
+
+  testWidgets('the offline banner opens above the header while offline', (
+    tester,
+  ) async {
+    final connectivity = testConnectivity();
+    await _pumpRewards(tester, connectivity: connectivity);
+
+    await connectivity.start();
+    await tester.pumpAndSettle();
+
+    final banner = tester.widget<OfflineBanner>(find.byType(OfflineBanner));
+    expect(banner.visible, isTrue);
+    expect(
+      tester.getRect(find.byType(OfflineBanner)).bottom,
+      lessThanOrEqualTo(tester.getRect(find.byType(RewardsHeaderView)).top),
+    );
   });
 }
