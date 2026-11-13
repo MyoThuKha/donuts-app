@@ -5,6 +5,7 @@ import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/sync/domain/sync_outcome.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
+import 'package:donuts/core/sync/presentation/seed_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/home/domain/usecases/watch_banners_use_case.dart';
 import 'package:donuts/features/home/domain/usecases/watch_home_sections_use_case.dart';
@@ -130,6 +131,7 @@ Future<void> pumpHomeScreen(
   HomeStreams streams, {
   ConnectivityCubit? connectivity,
   CatalogSyncCubit? sync,
+  SeedCubit? seed,
   bool reduceMotion = false,
   Size surface = tallPhoneSurface,
 
@@ -157,6 +159,7 @@ Future<void> pumpHomeScreen(
         BlocProvider<SessionCubit>.value(value: session),
         BlocProvider.value(value: connectivityCubit),
         BlocProvider.value(value: syncCubit),
+        BlocProvider.value(value: seed ?? seededCubit()),
       ],
       child: Builder(
         builder: (context) => MediaQuery(

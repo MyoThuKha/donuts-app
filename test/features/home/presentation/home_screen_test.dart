@@ -1,4 +1,7 @@
 import 'package:donuts/core/network/connectivity_cubit.dart';
+import 'package:donuts/core/result/app_failure.dart';
+import 'package:donuts/core/result/result.dart';
+import 'package:donuts/core/sync/presentation/seed_cubit.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/widgets/badges/discount_badge.dart';
@@ -25,8 +28,10 @@ import 'package:donuts/features/home/presentation/views/shops_band_view.dart';
 import 'package:donuts/features/home/presentation/widgets/tier_ring_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/fake_connectivity.dart';
+import '../../../helpers/fakes.dart';
 import '../../../helpers/home_fixtures.dart';
 import '../../../helpers/home_harness.dart';
 import '../../../helpers/member_fakes.dart';
@@ -196,6 +201,31 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Dalgona Creamy Coffee'), findsNWidgets(2));
+  });
+
+  testWidgets('a failed first-launch seed shows an error page, and Try again '
+      'seeds once more and opens Home', (tester) async {
+    final useCase = MockSeedLocalDataUseCase();
+    var calls = 0;
+    when(useCase.call).thenAnswer(
+      (_) async =>
+          calls++ == 0 ? const Failure(DatabaseFailure()) : const Success(null),
+    );
+    final seed = SeedCubit(useCase);
+    addTearDown(seed.close);
+    await seed.seed();
+
+    await pumpHomeScreen(tester, streams, seed: seed);
+    expect(find.text('We couldn’t set up your app'), findsOneWidget);
+    expect(find.byType(HomeHeaderView), findsNothing);
+
+    await tester.tap(find.text('TRY AGAIN'));
+    await tester.pump();
+    await tester.pump();
+
+    verify(useCase.call).called(2);
+    expect(find.text('We couldn’t set up your app'), findsNothing);
+    expect(find.byType(MemberPanelView), findsOneWidget);
   });
 
   testWidgets('a section the app has no name for shows a generic title, not '

@@ -1,5 +1,7 @@
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/sync/domain/usecases/refresh_catalog_use_case.dart';
+import 'package:donuts/core/sync/domain/usecases/seed_local_data_use_case.dart';
+import 'package:donuts/core/sync/presentation/seed_cubit.dart';
 import 'package:donuts/features/auth/domain/params/otp_params.dart';
 import 'package:donuts/features/auth/domain/params/registration_params.dart';
 import 'package:donuts/features/auth/domain/repositories/auth_repository.dart';
@@ -11,6 +13,7 @@ import 'package:donuts/features/auth/domain/usecases/restore_session_use_case.da
 import 'package:donuts/features/auth/domain/usecases/verify_otp_use_case.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository;
@@ -26,6 +29,18 @@ class MockVerifyOtpUseCase extends Mock implements VerifyOtpUseCase;
 class MockRegisterUseCase extends Mock implements RegisterUseCase;
 
 class MockRefreshCatalogUseCase extends Mock implements RefreshCatalogUseCase;
+
+class MockSeedLocalDataUseCase extends Mock implements SeedLocalDataUseCase;
+
+/// An idle [SeedCubit], as screens see it once bootstrap has seeded.
+/// Closed when the test ends.
+SeedCubit seededCubit() {
+  final seed = MockSeedLocalDataUseCase();
+  when(seed.call).thenAnswer((_) async => const Success(null));
+  final cubit = SeedCubit(seed);
+  addTearDown(cubit.close);
+  return cubit;
+}
 
 /// Call once in `setUpAll` before stubbing use cases with `any()`.
 void registerAuthFallbacks() {

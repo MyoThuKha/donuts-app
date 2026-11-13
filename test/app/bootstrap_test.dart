@@ -5,6 +5,7 @@ import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_state.dart';
+import 'package:donuts/core/sync/presentation/seed_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
 import 'package:drift/native.dart';
@@ -37,6 +38,7 @@ void main() {
     expect((await db.memberDao.watchProfile().first)?.totalPoints, 680300);
     expect(getIt<SessionCubit>().state, isA<SessionSignedOut>());
     expect(getIt<ConnectivityCubit>().state, ConnectivityStatus.offline);
+    expect(getIt<SeedCubit>().state, SeedStatus.done);
     expect(getIt<CatalogSyncCubit>().state.status, CatalogSyncStatus.idle);
     expect(probe.calls, 0);
   });

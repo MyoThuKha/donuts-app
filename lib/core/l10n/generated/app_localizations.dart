@@ -598,6 +598,18 @@ abstract class AppLocalizations {
   /// **'We couldn’t load this section.'**
   String get homeSectionError;
 
+  /// Title on Home when the bundled donuts, shops and rewards fail to load into the app on first launch
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t set up your app'**
+  String get homeSeedError;
+
+  /// Hint under homeSeedError
+  ///
+  /// In en, this message translates to:
+  /// **'Your donuts, shops and rewards didn’t load. Give it another try.'**
+  String get homeSeedErrorHint;
+
   /// Retry button in a failed Home section
   ///
   /// In en, this message translates to:

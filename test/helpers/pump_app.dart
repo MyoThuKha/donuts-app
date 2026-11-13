@@ -56,6 +56,7 @@ Future<void> pumpRouterApp(
         BlocProvider.value(value: session),
         BlocProvider.value(value: connectivity),
         BlocProvider.value(value: sync),
+        BlocProvider.value(value: seededCubit()),
       ],
       child: MaterialApp.router(
         localizationsDelegates: AppLocalizations.localizationsDelegates,

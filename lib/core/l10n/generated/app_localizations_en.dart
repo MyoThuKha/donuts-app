@@ -315,6 +315,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSectionError => 'We couldn’t load this section.';
 
   @override
+  String get homeSeedError => 'We couldn’t set up your app';
+
+  @override
+  String get homeSeedErrorHint =>
+      'Your donuts, shops and rewards didn’t load. Give it another try.';
+
+  @override
   String get homeRetry => 'Try again';
 
   @override

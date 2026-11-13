@@ -295,6 +295,14 @@
   "@homeSectionError": {
     "description": "Shown in a Home section that failed to load"
   },
+  "homeSeedError": "We couldn’t set up your app",
+  "@homeSeedError": {
+    "description": "Title on Home when the bundled donuts, shops and rewards fail to load into the app on first launch"
+  },
+  "homeSeedErrorHint": "Your donuts, shops and rewards didn’t load. Give it another try.",
+  "@homeSeedErrorHint": {
+    "description": "Hint under homeSeedError"
+  },
   "homeRetry": "Try again",
   "@homeRetry": {
     "description": "Retry button in a failed Home section"

@@ -3,6 +3,7 @@ import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
+import 'package:donuts/core/sync/presentation/seed_cubit.dart';
 import 'package:donuts/core/theme/app_theme.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +34,7 @@ class _DonutsAppState extends State<DonutsApp> {
         BlocProvider.value(value: _session),
         BlocProvider.value(value: getIt<ConnectivityCubit>()),
         BlocProvider.value(value: getIt<CatalogSyncCubit>()),
+        BlocProvider.value(value: getIt<SeedCubit>()),
       ],
       child: MaterialApp.router(
         onGenerateTitle: (context) => context.l10n.appTitle,

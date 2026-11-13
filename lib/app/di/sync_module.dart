@@ -13,6 +13,7 @@ import 'package:donuts/core/sync/domain/catalog_sync_repository.dart';
 import 'package:donuts/core/sync/domain/usecases/refresh_catalog_use_case.dart';
 import 'package:donuts/core/sync/domain/usecases/seed_local_data_use_case.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
+import 'package:donuts/core/sync/presentation/seed_cubit.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
@@ -45,6 +46,10 @@ void registerSyncModule(
       ),
     )
     ..registerLazySingleton(() => SeedLocalDataUseCase(getIt()))
+    ..registerLazySingleton(
+      () => SeedCubit(getIt()),
+      dispose: (cubit) => cubit.close(),
+    )
     ..registerLazySingleton(() => RefreshCatalogUseCase(getIt()));
   _registerConnectivity(getIt, config, connectivitySource, probe);
 }
