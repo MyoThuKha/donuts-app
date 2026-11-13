@@ -2,6 +2,7 @@ import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/sync/domain/usecases/refresh_catalog_use_case.dart';
 import 'package:donuts/features/auth/domain/params/otp_params.dart';
 import 'package:donuts/features/auth/domain/params/registration_params.dart';
+import 'package:donuts/features/auth/domain/repositories/auth_repository.dart';
 import 'package:donuts/features/auth/domain/types/auth_mode.dart';
 import 'package:donuts/features/auth/domain/usecases/log_out_use_case.dart';
 import 'package:donuts/features/auth/domain/usecases/register_use_case.dart';
@@ -11,6 +12,8 @@ import 'package:donuts/features/auth/domain/usecases/verify_otp_use_case.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:mocktail/mocktail.dart';
+
+class MockAuthRepository extends Mock implements AuthRepository;
 
 class MockRestoreSessionUseCase extends Mock implements RestoreSessionUseCase;
 
