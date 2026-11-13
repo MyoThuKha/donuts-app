@@ -1,4 +1,5 @@
 import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/sheets/app_sheet_route.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -15,6 +16,7 @@ extension SheetWidget on Widget {
         child: this,
         title: title,
         reduced: context.motion.reduced,
+        scrim: context.colors.scrim,
       );
 
   /// Pushes this widget as a sheet and completes with the value it pops.

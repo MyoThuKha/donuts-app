@@ -35,16 +35,14 @@ enum AppSnackBarTone {
 /// look can change in one place.
 ///
 /// It floats: a fixed snackbar slides out from under the bottom nav, which
-/// the Scaffold paints on top of it. Material's own box is left clear, and
-/// [AppSnackBarPill] draws the white pill in its place.
+/// the Scaffold paints on top of it. The theme leaves Material's own box
+/// clear, and [AppSnackBarPill] draws the white pill in its place.
 SnackBar appSnackBar(
   String message, {
   AppSnackBarTone tone = AppSnackBarTone.info,
 }) => SnackBar(
   content: AppSnackBarPill(message: message, tone: tone),
   behavior: SnackBarBehavior.floating,
-  backgroundColor: Colors.transparent,
-  elevation: 0,
   padding: EdgeInsets.zero,
   margin: const EdgeInsets.fromLTRB(
     AppSpacing.pageGutter,
