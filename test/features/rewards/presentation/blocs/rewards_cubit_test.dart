@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:donuts/features/rewards/domain/usecases/claim_challenge_use_case.dart';
+import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
+import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_cubit.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_state.dart';
@@ -17,13 +20,21 @@ void main() {
   late MockWatchChallengesUseCase challenges;
   late MockWatchGiftsUseCase gifts;
 
-  RewardsCubit build() =>
-      RewardsCubit(member: member, challenges: challenges, gifts: gifts);
+  late FakeRewardsRepository repository;
+
+  RewardsCubit build() => RewardsCubit(
+    member: member,
+    challenges: challenges,
+    gifts: gifts,
+    claim: ClaimChallengeUseCase(repository),
+    clearClaims: ClearRewardClaimsUseCase(repository),
+  );
 
   setUp(() {
     member = _MockWatchMember();
     challenges = MockWatchChallengesUseCase();
     gifts = MockWatchGiftsUseCase();
+    repository = FakeRewardsRepository();
     when(member.call).thenAnswer((_) => Stream.value(testMemberSummary));
     when(challenges.call).thenAnswer((_) => Stream.value(testChallenges));
     when(gifts.call).thenAnswer((_) => Stream.value(testGifts));
@@ -76,12 +87,48 @@ void main() {
     ],
   );
 
-  blocTest<RewardsCubit, RewardsState>(
-    'acknowledgeEarn remembers the challenge whose Earn was pressed',
-    build: build,
-    act: (cubit) => cubit.acknowledgeEarn('c_coco_donuts'),
-    verify: (cubit) => expect(cubit.state.acknowledgedEarns, {'c_coco_donuts'}),
-  );
+  test('earn claims a complete challenge and resetClaims undoes it', () async {
+    final cubit = RewardsCubit(
+      member: member,
+      challenges: WatchChallengesUseCase(repository),
+      gifts: gifts,
+      claim: ClaimChallengeUseCase(repository),
+      clearClaims: ClearRewardClaimsUseCase(repository),
+    )..start();
+    addTearDown(cubit.close);
+    await pumpEventQueue();
+
+    bool claimed(String id) =>
+        cubit.state.challenges.firstWhere((c) => c.id == id).claimed;
+
+    await cubit.earn('c_coco_donuts');
+    await pumpEventQueue();
+    expect(claimed('c_coco_donuts'), isTrue);
+
+    cubit.resetClaims();
+    await pumpEventQueue();
+    expect(claimed('c_coco_donuts'), isFalse);
+  });
+
+  test('earn leaves an incomplete challenge unclaimed', () async {
+    final cubit = RewardsCubit(
+      member: member,
+      challenges: WatchChallengesUseCase(repository),
+      gifts: gifts,
+      claim: ClaimChallengeUseCase(repository),
+      clearClaims: ClearRewardClaimsUseCase(repository),
+    )..start();
+    addTearDown(cubit.close);
+    await pumpEventQueue();
+
+    await cubit.earn('c_americano');
+    await pumpEventQueue();
+
+    expect(
+      cubit.state.challenges.firstWhere((c) => c.id == 'c_americano').claimed,
+      isFalse,
+    );
+  });
 
   blocTest<RewardsCubit, RewardsState>(
     'retry after a failure resubscribes and recovers',

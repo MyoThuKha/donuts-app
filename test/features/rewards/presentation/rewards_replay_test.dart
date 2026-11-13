@@ -115,7 +115,7 @@ void main() {
     },
   );
 
-  testWidgets('a pressed Earn stays still when the user comes back', (
+  testWidgets('a pressed Earn still says Earned when the user comes back', (
     tester,
   ) async {
     await pumpRouterApp(
@@ -137,6 +137,10 @@ void main() {
     await tester.pump();
     await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
 
-    expect(_earnPulse(tester), 1);
+    expect(find.text('EARNED'), findsOneWidget);
+    expect(
+      find.byWidgetPredicate((w) => w is EarnButton && w.active && w.pulse),
+      findsNothing,
+    );
   });
 }

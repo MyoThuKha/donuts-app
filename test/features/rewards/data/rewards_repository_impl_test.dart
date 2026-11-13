@@ -1,6 +1,7 @@
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/sync/data/catalog_importer.dart';
 import 'package:donuts/features/rewards/data/repositories/rewards_repository_impl.dart';
+import 'package:donuts/features/rewards/data/sources/reward_claims_memory_source.dart';
 import 'package:donuts/features/rewards/domain/types/challenge_kind.dart';
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
@@ -14,7 +15,10 @@ void main() {
 
   setUp(() async {
     db = AppDatabase.forTesting(NativeDatabase.memory());
-    repository = RewardsRepositoryImpl(db.memberDao);
+    repository = RewardsRepositoryImpl(
+      db.memberDao,
+      RewardClaimsMemorySource(),
+    );
     await CatalogImporter(
       db,
       now: () => DateTime.utc(2026, 11, 12),
@@ -35,11 +39,8 @@ void main() {
       ],
     );
     expect(challenges.first.title, 'Eat 4 Coco donuts');
-    expect(challenges.first.rewardPoints, 100);
-    expect(
-      challenges.first.imageAsset,
-      'assets/images/donut_pink_sprinkles.webp',
-    );
+    expect(challenges.first.rewardPoints, 200);
+    expect(challenges.first.imageAsset, 'assets/images/reward_donut.png');
   });
 
   test('a challenge with an unknown kind is left out', () async {

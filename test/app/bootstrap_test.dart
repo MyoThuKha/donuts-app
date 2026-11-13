@@ -33,8 +33,8 @@ void main() {
     await pumpEventQueue();
 
     final db = getIt<AppDatabase>();
-    expect(await db.select(db.productsTable).get(), hasLength(8));
-    expect((await db.memberDao.watchProfile().first)?.totalPoints, 680000);
+    expect(await db.select(db.productsTable).get(), hasLength(9));
+    expect((await db.memberDao.watchProfile().first)?.totalPoints, 680300);
     expect(getIt<SessionCubit>().state, isA<SessionSignedOut>());
     expect(getIt<ConnectivityCubit>().state, ConnectivityStatus.offline);
     expect(getIt<CatalogSyncCubit>().state.status, CatalogSyncStatus.idle);

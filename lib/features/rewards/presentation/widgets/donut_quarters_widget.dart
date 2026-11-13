@@ -8,12 +8,14 @@ import 'package:material_ui/material_ui.dart';
 class DonutQuartersWidget extends StatelessWidget {
   const new({
     required this.progress,
+    required this.url,
     required this.asset,
     required this.cacheWidth,
     super.key,
   });
 
   final Animation<double> progress;
+  final String? url;
   final String? asset;
   final int cacheWidth;
 
@@ -33,7 +35,7 @@ class DonutQuartersWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final image = AppNetworkImage(
-      url: null,
+      url: url,
       asset: asset,
       fit: BoxFit.contain,
       cacheWidth: cacheWidth,

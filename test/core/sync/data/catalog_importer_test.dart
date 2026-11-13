@@ -30,7 +30,7 @@ void main() {
       final outcome = await importer.importCatalog(seed, version: 1);
 
       expect(outcome, ImportOutcome.imported);
-      expect(await productCount(), 8);
+      expect(await productCount(), 9);
       expect(await db.catalogDao.watchSections().first, hasLength(3));
       expect(await db.catalogDao.watchBanners().first, hasLength(2));
       expect(await db.catalogDao.watchShops().first, hasLength(4));
@@ -50,7 +50,7 @@ void main() {
       expect(outcome, ImportOutcome.imported);
       expect(popular.first.id, 'p_toasted_coconut');
       expect(popular.first.imageAsset, isNull);
-      expect(await productCount(), 9);
+      expect(await productCount(), 10);
     },
   );
 
@@ -60,7 +60,7 @@ void main() {
     final outcome = await importer.importCatalog(seed, version: 1);
 
     expect(outcome, ImportOutcome.skipped);
-    expect(await productCount(), 9);
+    expect(await productCount(), 10);
     expect((await db.syncStateDao.find(SyncKeys.catalog))?.version, 2);
   });
 
@@ -140,14 +140,14 @@ void main() {
   });
 
   test(
-    'importMember stores one profile with 680,000 points and three tiers',
+    'importMember stores one profile with 680,300 points and three tiers',
     () async {
       final member = readMemberFile(seedMemberPath).data!;
 
       final outcome = await importer.importMember(member, version: 1);
 
       expect(outcome, ImportOutcome.imported);
-      expect((await db.memberDao.watchProfile().first)?.totalPoints, 680000);
+      expect((await db.memberDao.watchProfile().first)?.totalPoints, 680300);
       expect(await db.memberDao.watchTiers().first, hasLength(3));
       expect(await db.memberDao.watchChallenges().first, hasLength(3));
       expect((await db.syncStateDao.find(SyncKeys.member))?.version, 1);

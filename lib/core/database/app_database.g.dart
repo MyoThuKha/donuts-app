@@ -879,8 +879,37 @@ class $TiersTableTable extends TiersTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _imageUrlMeta = const VerificationMeta(
+    'imageUrl',
+  );
   @override
-  List<GeneratedColumn> get $columns => [id, name, minPoints, sortOrder];
+  late final GeneratedColumn<String> imageUrl = GeneratedColumn<String>(
+    'image_url',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _imageAssetMeta = const VerificationMeta(
+    'imageAsset',
+  );
+  @override
+  late final GeneratedColumn<String> imageAsset = GeneratedColumn<String>(
+    'image_asset',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    minPoints,
+    sortOrder,
+    imageUrl,
+    imageAsset,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -922,6 +951,18 @@ class $TiersTableTable extends TiersTable
     } else if (isInserting) {
       context.missing(_sortOrderMeta);
     }
+    if (data.containsKey('image_url')) {
+      context.handle(
+        _imageUrlMeta,
+        imageUrl.isAcceptableOrUnknown(data['image_url']!, _imageUrlMeta),
+      );
+    }
+    if (data.containsKey('image_asset')) {
+      context.handle(
+        _imageAssetMeta,
+        imageAsset.isAcceptableOrUnknown(data['image_asset']!, _imageAssetMeta),
+      );
+    }
     return context;
   }
 
@@ -947,6 +988,14 @@ class $TiersTableTable extends TiersTable
         DriftSqlType.int,
         data['${effectivePrefix}sort_order'],
       )!,
+      imageUrl: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image_url'],
+      ),
+      imageAsset: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image_asset'],
+      ),
     );
   }
 
@@ -961,11 +1010,15 @@ class TiersTableData extends DataClass implements Insertable<TiersTableData> {
   final String name;
   final int minPoints;
   final int sortOrder;
+  final String? imageUrl;
+  final String? imageAsset;
   const TiersTableData({
     required this.id,
     required this.name,
     required this.minPoints,
     required this.sortOrder,
+    this.imageUrl,
+    this.imageAsset,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -974,6 +1027,12 @@ class TiersTableData extends DataClass implements Insertable<TiersTableData> {
     map['name'] = Variable<String>(name);
     map['min_points'] = Variable<int>(minPoints);
     map['sort_order'] = Variable<int>(sortOrder);
+    if (!nullToAbsent || imageUrl != null) {
+      map['image_url'] = Variable<String>(imageUrl);
+    }
+    if (!nullToAbsent || imageAsset != null) {
+      map['image_asset'] = Variable<String>(imageAsset);
+    }
     return map;
   }
 
@@ -983,6 +1042,12 @@ class TiersTableData extends DataClass implements Insertable<TiersTableData> {
       name: Value(name),
       minPoints: Value(minPoints),
       sortOrder: Value(sortOrder),
+      imageUrl: imageUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imageUrl),
+      imageAsset: imageAsset == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imageAsset),
     );
   }
 
@@ -996,6 +1061,8 @@ class TiersTableData extends DataClass implements Insertable<TiersTableData> {
       name: serializer.fromJson<String>(json['name']),
       minPoints: serializer.fromJson<int>(json['minPoints']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      imageUrl: serializer.fromJson<String?>(json['imageUrl']),
+      imageAsset: serializer.fromJson<String?>(json['imageAsset']),
     );
   }
   @override
@@ -1006,6 +1073,8 @@ class TiersTableData extends DataClass implements Insertable<TiersTableData> {
       'name': serializer.toJson<String>(name),
       'minPoints': serializer.toJson<int>(minPoints),
       'sortOrder': serializer.toJson<int>(sortOrder),
+      'imageUrl': serializer.toJson<String?>(imageUrl),
+      'imageAsset': serializer.toJson<String?>(imageAsset),
     };
   }
 
@@ -1014,11 +1083,15 @@ class TiersTableData extends DataClass implements Insertable<TiersTableData> {
     String? name,
     int? minPoints,
     int? sortOrder,
+    Value<String?> imageUrl = const Value.absent(),
+    Value<String?> imageAsset = const Value.absent(),
   }) => TiersTableData(
     id: id ?? this.id,
     name: name ?? this.name,
     minPoints: minPoints ?? this.minPoints,
     sortOrder: sortOrder ?? this.sortOrder,
+    imageUrl: imageUrl.present ? imageUrl.value : this.imageUrl,
+    imageAsset: imageAsset.present ? imageAsset.value : this.imageAsset,
   );
   TiersTableData copyWithCompanion(TiersTableCompanion data) {
     return TiersTableData(
@@ -1026,6 +1099,10 @@ class TiersTableData extends DataClass implements Insertable<TiersTableData> {
       name: data.name.present ? data.name.value : this.name,
       minPoints: data.minPoints.present ? data.minPoints.value : this.minPoints,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      imageUrl: data.imageUrl.present ? data.imageUrl.value : this.imageUrl,
+      imageAsset: data.imageAsset.present
+          ? data.imageAsset.value
+          : this.imageAsset,
     );
   }
 
@@ -1035,13 +1112,16 @@ class TiersTableData extends DataClass implements Insertable<TiersTableData> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('minPoints: $minPoints, ')
-          ..write('sortOrder: $sortOrder')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('imageUrl: $imageUrl, ')
+          ..write('imageAsset: $imageAsset')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, minPoints, sortOrder);
+  int get hashCode =>
+      Object.hash(id, name, minPoints, sortOrder, imageUrl, imageAsset);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1049,7 +1129,9 @@ class TiersTableData extends DataClass implements Insertable<TiersTableData> {
           other.id == this.id &&
           other.name == this.name &&
           other.minPoints == this.minPoints &&
-          other.sortOrder == this.sortOrder);
+          other.sortOrder == this.sortOrder &&
+          other.imageUrl == this.imageUrl &&
+          other.imageAsset == this.imageAsset);
 }
 
 class TiersTableCompanion extends UpdateCompanion<TiersTableData> {
@@ -1057,12 +1139,16 @@ class TiersTableCompanion extends UpdateCompanion<TiersTableData> {
   final Value<String> name;
   final Value<int> minPoints;
   final Value<int> sortOrder;
+  final Value<String?> imageUrl;
+  final Value<String?> imageAsset;
   final Value<int> rowid;
   const TiersTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.minPoints = const Value.absent(),
     this.sortOrder = const Value.absent(),
+    this.imageUrl = const Value.absent(),
+    this.imageAsset = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TiersTableCompanion.insert({
@@ -1070,6 +1156,8 @@ class TiersTableCompanion extends UpdateCompanion<TiersTableData> {
     required String name,
     required int minPoints,
     required int sortOrder,
+    this.imageUrl = const Value.absent(),
+    this.imageAsset = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        name = Value(name),
@@ -1080,6 +1168,8 @@ class TiersTableCompanion extends UpdateCompanion<TiersTableData> {
     Expression<String>? name,
     Expression<int>? minPoints,
     Expression<int>? sortOrder,
+    Expression<String>? imageUrl,
+    Expression<String>? imageAsset,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1087,6 +1177,8 @@ class TiersTableCompanion extends UpdateCompanion<TiersTableData> {
       if (name != null) 'name': name,
       if (minPoints != null) 'min_points': minPoints,
       if (sortOrder != null) 'sort_order': sortOrder,
+      if (imageUrl != null) 'image_url': imageUrl,
+      if (imageAsset != null) 'image_asset': imageAsset,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1096,6 +1188,8 @@ class TiersTableCompanion extends UpdateCompanion<TiersTableData> {
     Value<String>? name,
     Value<int>? minPoints,
     Value<int>? sortOrder,
+    Value<String?>? imageUrl,
+    Value<String?>? imageAsset,
     Value<int>? rowid,
   }) {
     return TiersTableCompanion(
@@ -1103,6 +1197,8 @@ class TiersTableCompanion extends UpdateCompanion<TiersTableData> {
       name: name ?? this.name,
       minPoints: minPoints ?? this.minPoints,
       sortOrder: sortOrder ?? this.sortOrder,
+      imageUrl: imageUrl ?? this.imageUrl,
+      imageAsset: imageAsset ?? this.imageAsset,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1122,6 +1218,12 @@ class TiersTableCompanion extends UpdateCompanion<TiersTableData> {
     if (sortOrder.present) {
       map['sort_order'] = Variable<int>(sortOrder.value);
     }
+    if (imageUrl.present) {
+      map['image_url'] = Variable<String>(imageUrl.value);
+    }
+    if (imageAsset.present) {
+      map['image_asset'] = Variable<String>(imageAsset.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1135,6 +1237,8 @@ class TiersTableCompanion extends UpdateCompanion<TiersTableData> {
           ..write('name: $name, ')
           ..write('minPoints: $minPoints, ')
           ..write('sortOrder: $sortOrder, ')
+          ..write('imageUrl: $imageUrl, ')
+          ..write('imageAsset: $imageAsset, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3241,6 +3345,17 @@ class $ChallengesTableTable extends ChallengesTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _imageUrlMeta = const VerificationMeta(
+    'imageUrl',
+  );
+  @override
+  late final GeneratedColumn<String> imageUrl = GeneratedColumn<String>(
+    'image_url',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _imageAssetMeta = const VerificationMeta(
     'imageAsset',
   );
@@ -3271,6 +3386,7 @@ class $ChallengesTableTable extends ChallengesTable
     progress,
     target,
     rewardPoints,
+    imageUrl,
     imageAsset,
     sortOrder,
   ];
@@ -3334,6 +3450,12 @@ class $ChallengesTableTable extends ChallengesTable
     } else if (isInserting) {
       context.missing(_rewardPointsMeta);
     }
+    if (data.containsKey('image_url')) {
+      context.handle(
+        _imageUrlMeta,
+        imageUrl.isAcceptableOrUnknown(data['image_url']!, _imageUrlMeta),
+      );
+    }
     if (data.containsKey('image_asset')) {
       context.handle(
         _imageAssetMeta,
@@ -3381,6 +3503,10 @@ class $ChallengesTableTable extends ChallengesTable
         DriftSqlType.int,
         data['${effectivePrefix}reward_points'],
       )!,
+      imageUrl: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image_url'],
+      ),
       imageAsset: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}image_asset'],
@@ -3406,6 +3532,7 @@ class ChallengesTableData extends DataClass
   final int progress;
   final int target;
   final int rewardPoints;
+  final String? imageUrl;
   final String? imageAsset;
   final int sortOrder;
   const ChallengesTableData({
@@ -3415,6 +3542,7 @@ class ChallengesTableData extends DataClass
     required this.progress,
     required this.target,
     required this.rewardPoints,
+    this.imageUrl,
     this.imageAsset,
     required this.sortOrder,
   });
@@ -3427,6 +3555,9 @@ class ChallengesTableData extends DataClass
     map['progress'] = Variable<int>(progress);
     map['target'] = Variable<int>(target);
     map['reward_points'] = Variable<int>(rewardPoints);
+    if (!nullToAbsent || imageUrl != null) {
+      map['image_url'] = Variable<String>(imageUrl);
+    }
     if (!nullToAbsent || imageAsset != null) {
       map['image_asset'] = Variable<String>(imageAsset);
     }
@@ -3442,6 +3573,9 @@ class ChallengesTableData extends DataClass
       progress: Value(progress),
       target: Value(target),
       rewardPoints: Value(rewardPoints),
+      imageUrl: imageUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imageUrl),
       imageAsset: imageAsset == null && nullToAbsent
           ? const Value.absent()
           : Value(imageAsset),
@@ -3461,6 +3595,7 @@ class ChallengesTableData extends DataClass
       progress: serializer.fromJson<int>(json['progress']),
       target: serializer.fromJson<int>(json['target']),
       rewardPoints: serializer.fromJson<int>(json['rewardPoints']),
+      imageUrl: serializer.fromJson<String?>(json['imageUrl']),
       imageAsset: serializer.fromJson<String?>(json['imageAsset']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
     );
@@ -3475,6 +3610,7 @@ class ChallengesTableData extends DataClass
       'progress': serializer.toJson<int>(progress),
       'target': serializer.toJson<int>(target),
       'rewardPoints': serializer.toJson<int>(rewardPoints),
+      'imageUrl': serializer.toJson<String?>(imageUrl),
       'imageAsset': serializer.toJson<String?>(imageAsset),
       'sortOrder': serializer.toJson<int>(sortOrder),
     };
@@ -3487,6 +3623,7 @@ class ChallengesTableData extends DataClass
     int? progress,
     int? target,
     int? rewardPoints,
+    Value<String?> imageUrl = const Value.absent(),
     Value<String?> imageAsset = const Value.absent(),
     int? sortOrder,
   }) => ChallengesTableData(
@@ -3496,6 +3633,7 @@ class ChallengesTableData extends DataClass
     progress: progress ?? this.progress,
     target: target ?? this.target,
     rewardPoints: rewardPoints ?? this.rewardPoints,
+    imageUrl: imageUrl.present ? imageUrl.value : this.imageUrl,
     imageAsset: imageAsset.present ? imageAsset.value : this.imageAsset,
     sortOrder: sortOrder ?? this.sortOrder,
   );
@@ -3509,6 +3647,7 @@ class ChallengesTableData extends DataClass
       rewardPoints: data.rewardPoints.present
           ? data.rewardPoints.value
           : this.rewardPoints,
+      imageUrl: data.imageUrl.present ? data.imageUrl.value : this.imageUrl,
       imageAsset: data.imageAsset.present
           ? data.imageAsset.value
           : this.imageAsset,
@@ -3525,6 +3664,7 @@ class ChallengesTableData extends DataClass
           ..write('progress: $progress, ')
           ..write('target: $target, ')
           ..write('rewardPoints: $rewardPoints, ')
+          ..write('imageUrl: $imageUrl, ')
           ..write('imageAsset: $imageAsset, ')
           ..write('sortOrder: $sortOrder')
           ..write(')'))
@@ -3539,6 +3679,7 @@ class ChallengesTableData extends DataClass
     progress,
     target,
     rewardPoints,
+    imageUrl,
     imageAsset,
     sortOrder,
   );
@@ -3552,6 +3693,7 @@ class ChallengesTableData extends DataClass
           other.progress == this.progress &&
           other.target == this.target &&
           other.rewardPoints == this.rewardPoints &&
+          other.imageUrl == this.imageUrl &&
           other.imageAsset == this.imageAsset &&
           other.sortOrder == this.sortOrder);
 }
@@ -3563,6 +3705,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
   final Value<int> progress;
   final Value<int> target;
   final Value<int> rewardPoints;
+  final Value<String?> imageUrl;
   final Value<String?> imageAsset;
   final Value<int> sortOrder;
   final Value<int> rowid;
@@ -3573,6 +3716,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     this.progress = const Value.absent(),
     this.target = const Value.absent(),
     this.rewardPoints = const Value.absent(),
+    this.imageUrl = const Value.absent(),
     this.imageAsset = const Value.absent(),
     this.sortOrder = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -3584,6 +3728,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     required int progress,
     required int target,
     required int rewardPoints,
+    this.imageUrl = const Value.absent(),
     this.imageAsset = const Value.absent(),
     required int sortOrder,
     this.rowid = const Value.absent(),
@@ -3601,6 +3746,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     Expression<int>? progress,
     Expression<int>? target,
     Expression<int>? rewardPoints,
+    Expression<String>? imageUrl,
     Expression<String>? imageAsset,
     Expression<int>? sortOrder,
     Expression<int>? rowid,
@@ -3612,6 +3758,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
       if (progress != null) 'progress': progress,
       if (target != null) 'target': target,
       if (rewardPoints != null) 'reward_points': rewardPoints,
+      if (imageUrl != null) 'image_url': imageUrl,
       if (imageAsset != null) 'image_asset': imageAsset,
       if (sortOrder != null) 'sort_order': sortOrder,
       if (rowid != null) 'rowid': rowid,
@@ -3625,6 +3772,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     Value<int>? progress,
     Value<int>? target,
     Value<int>? rewardPoints,
+    Value<String?>? imageUrl,
     Value<String?>? imageAsset,
     Value<int>? sortOrder,
     Value<int>? rowid,
@@ -3636,6 +3784,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
       progress: progress ?? this.progress,
       target: target ?? this.target,
       rewardPoints: rewardPoints ?? this.rewardPoints,
+      imageUrl: imageUrl ?? this.imageUrl,
       imageAsset: imageAsset ?? this.imageAsset,
       sortOrder: sortOrder ?? this.sortOrder,
       rowid: rowid ?? this.rowid,
@@ -3663,6 +3812,9 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     if (rewardPoints.present) {
       map['reward_points'] = Variable<int>(rewardPoints.value);
     }
+    if (imageUrl.present) {
+      map['image_url'] = Variable<String>(imageUrl.value);
+    }
     if (imageAsset.present) {
       map['image_asset'] = Variable<String>(imageAsset.value);
     }
@@ -3684,6 +3836,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
           ..write('progress: $progress, ')
           ..write('target: $target, ')
           ..write('rewardPoints: $rewardPoints, ')
+          ..write('imageUrl: $imageUrl, ')
           ..write('imageAsset: $imageAsset, ')
           ..write('sortOrder: $sortOrder, ')
           ..write('rowid: $rowid')
@@ -3727,6 +3880,17 @@ class $GiftsTableTable extends GiftsTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _imageUrlMeta = const VerificationMeta(
+    'imageUrl',
+  );
+  @override
+  late final GeneratedColumn<String> imageUrl = GeneratedColumn<String>(
+    'image_url',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _imageAssetMeta = const VerificationMeta(
     'imageAsset',
   );
@@ -3754,6 +3918,7 @@ class $GiftsTableTable extends GiftsTable
     id,
     title,
     costPoints,
+    imageUrl,
     imageAsset,
     sortOrder,
   ];
@@ -3790,6 +3955,12 @@ class $GiftsTableTable extends GiftsTable
     } else if (isInserting) {
       context.missing(_costPointsMeta);
     }
+    if (data.containsKey('image_url')) {
+      context.handle(
+        _imageUrlMeta,
+        imageUrl.isAcceptableOrUnknown(data['image_url']!, _imageUrlMeta),
+      );
+    }
     if (data.containsKey('image_asset')) {
       context.handle(
         _imageAssetMeta,
@@ -3825,6 +3996,10 @@ class $GiftsTableTable extends GiftsTable
         DriftSqlType.int,
         data['${effectivePrefix}cost_points'],
       )!,
+      imageUrl: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image_url'],
+      ),
       imageAsset: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}image_asset'],
@@ -3846,12 +4021,14 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
   final String id;
   final String title;
   final int costPoints;
+  final String? imageUrl;
   final String? imageAsset;
   final int sortOrder;
   const GiftsTableData({
     required this.id,
     required this.title,
     required this.costPoints,
+    this.imageUrl,
     this.imageAsset,
     required this.sortOrder,
   });
@@ -3861,6 +4038,9 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
     map['id'] = Variable<String>(id);
     map['title'] = Variable<String>(title);
     map['cost_points'] = Variable<int>(costPoints);
+    if (!nullToAbsent || imageUrl != null) {
+      map['image_url'] = Variable<String>(imageUrl);
+    }
     if (!nullToAbsent || imageAsset != null) {
       map['image_asset'] = Variable<String>(imageAsset);
     }
@@ -3873,6 +4053,9 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
       id: Value(id),
       title: Value(title),
       costPoints: Value(costPoints),
+      imageUrl: imageUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imageUrl),
       imageAsset: imageAsset == null && nullToAbsent
           ? const Value.absent()
           : Value(imageAsset),
@@ -3889,6 +4072,7 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
       id: serializer.fromJson<String>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       costPoints: serializer.fromJson<int>(json['costPoints']),
+      imageUrl: serializer.fromJson<String?>(json['imageUrl']),
       imageAsset: serializer.fromJson<String?>(json['imageAsset']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
     );
@@ -3900,6 +4084,7 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
       'id': serializer.toJson<String>(id),
       'title': serializer.toJson<String>(title),
       'costPoints': serializer.toJson<int>(costPoints),
+      'imageUrl': serializer.toJson<String?>(imageUrl),
       'imageAsset': serializer.toJson<String?>(imageAsset),
       'sortOrder': serializer.toJson<int>(sortOrder),
     };
@@ -3909,12 +4094,14 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
     String? id,
     String? title,
     int? costPoints,
+    Value<String?> imageUrl = const Value.absent(),
     Value<String?> imageAsset = const Value.absent(),
     int? sortOrder,
   }) => GiftsTableData(
     id: id ?? this.id,
     title: title ?? this.title,
     costPoints: costPoints ?? this.costPoints,
+    imageUrl: imageUrl.present ? imageUrl.value : this.imageUrl,
     imageAsset: imageAsset.present ? imageAsset.value : this.imageAsset,
     sortOrder: sortOrder ?? this.sortOrder,
   );
@@ -3925,6 +4112,7 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
       costPoints: data.costPoints.present
           ? data.costPoints.value
           : this.costPoints,
+      imageUrl: data.imageUrl.present ? data.imageUrl.value : this.imageUrl,
       imageAsset: data.imageAsset.present
           ? data.imageAsset.value
           : this.imageAsset,
@@ -3938,6 +4126,7 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('costPoints: $costPoints, ')
+          ..write('imageUrl: $imageUrl, ')
           ..write('imageAsset: $imageAsset, ')
           ..write('sortOrder: $sortOrder')
           ..write(')'))
@@ -3945,7 +4134,8 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, title, costPoints, imageAsset, sortOrder);
+  int get hashCode =>
+      Object.hash(id, title, costPoints, imageUrl, imageAsset, sortOrder);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3953,6 +4143,7 @@ class GiftsTableData extends DataClass implements Insertable<GiftsTableData> {
           other.id == this.id &&
           other.title == this.title &&
           other.costPoints == this.costPoints &&
+          other.imageUrl == this.imageUrl &&
           other.imageAsset == this.imageAsset &&
           other.sortOrder == this.sortOrder);
 }
@@ -3961,6 +4152,7 @@ class GiftsTableCompanion extends UpdateCompanion<GiftsTableData> {
   final Value<String> id;
   final Value<String> title;
   final Value<int> costPoints;
+  final Value<String?> imageUrl;
   final Value<String?> imageAsset;
   final Value<int> sortOrder;
   final Value<int> rowid;
@@ -3968,6 +4160,7 @@ class GiftsTableCompanion extends UpdateCompanion<GiftsTableData> {
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.costPoints = const Value.absent(),
+    this.imageUrl = const Value.absent(),
     this.imageAsset = const Value.absent(),
     this.sortOrder = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -3976,6 +4169,7 @@ class GiftsTableCompanion extends UpdateCompanion<GiftsTableData> {
     required String id,
     required String title,
     required int costPoints,
+    this.imageUrl = const Value.absent(),
     this.imageAsset = const Value.absent(),
     required int sortOrder,
     this.rowid = const Value.absent(),
@@ -3987,6 +4181,7 @@ class GiftsTableCompanion extends UpdateCompanion<GiftsTableData> {
     Expression<String>? id,
     Expression<String>? title,
     Expression<int>? costPoints,
+    Expression<String>? imageUrl,
     Expression<String>? imageAsset,
     Expression<int>? sortOrder,
     Expression<int>? rowid,
@@ -3995,6 +4190,7 @@ class GiftsTableCompanion extends UpdateCompanion<GiftsTableData> {
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (costPoints != null) 'cost_points': costPoints,
+      if (imageUrl != null) 'image_url': imageUrl,
       if (imageAsset != null) 'image_asset': imageAsset,
       if (sortOrder != null) 'sort_order': sortOrder,
       if (rowid != null) 'rowid': rowid,
@@ -4005,6 +4201,7 @@ class GiftsTableCompanion extends UpdateCompanion<GiftsTableData> {
     Value<String>? id,
     Value<String>? title,
     Value<int>? costPoints,
+    Value<String?>? imageUrl,
     Value<String?>? imageAsset,
     Value<int>? sortOrder,
     Value<int>? rowid,
@@ -4013,6 +4210,7 @@ class GiftsTableCompanion extends UpdateCompanion<GiftsTableData> {
       id: id ?? this.id,
       title: title ?? this.title,
       costPoints: costPoints ?? this.costPoints,
+      imageUrl: imageUrl ?? this.imageUrl,
       imageAsset: imageAsset ?? this.imageAsset,
       sortOrder: sortOrder ?? this.sortOrder,
       rowid: rowid ?? this.rowid,
@@ -4030,6 +4228,9 @@ class GiftsTableCompanion extends UpdateCompanion<GiftsTableData> {
     }
     if (costPoints.present) {
       map['cost_points'] = Variable<int>(costPoints.value);
+    }
+    if (imageUrl.present) {
+      map['image_url'] = Variable<String>(imageUrl.value);
     }
     if (imageAsset.present) {
       map['image_asset'] = Variable<String>(imageAsset.value);
@@ -4049,6 +4250,7 @@ class GiftsTableCompanion extends UpdateCompanion<GiftsTableData> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('costPoints: $costPoints, ')
+          ..write('imageUrl: $imageUrl, ')
           ..write('imageAsset: $imageAsset, ')
           ..write('sortOrder: $sortOrder, ')
           ..write('rowid: $rowid')
@@ -5139,6 +5341,8 @@ typedef $$TiersTableTableCreateCompanionBuilder = TiersTableCompanion Function({
   required String name,
   required int minPoints,
   required int sortOrder,
+  Value<String?> imageUrl,
+  Value<String?> imageAsset,
   Value<int> rowid,
 });
 typedef $$TiersTableTableUpdateCompanionBuilder = TiersTableCompanion Function({
@@ -5146,6 +5350,8 @@ typedef $$TiersTableTableUpdateCompanionBuilder = TiersTableCompanion Function({
   Value<String> name,
   Value<int> minPoints,
   Value<int> sortOrder,
+  Value<String?> imageUrl,
+  Value<String?> imageAsset,
   Value<int> rowid,
 });
 
@@ -5175,6 +5381,16 @@ class $$TiersTableTableFilterComposer
 
   ColumnFilters<int> get sortOrder => $composableBuilder(
     column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get imageUrl => $composableBuilder(
+    column: $table.imageUrl,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get imageAsset => $composableBuilder(
+    column: $table.imageAsset,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -5207,6 +5423,16 @@ class $$TiersTableTableOrderingComposer
     column: $table.sortOrder,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get imageUrl => $composableBuilder(
+    column: $table.imageUrl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get imageAsset => $composableBuilder(
+    column: $table.imageAsset,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TiersTableTableAnnotationComposer
@@ -5229,6 +5455,14 @@ class $$TiersTableTableAnnotationComposer
 
   GeneratedColumn<int> get sortOrder =>
       $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<String> get imageUrl =>
+      $composableBuilder(column: $table.imageUrl, builder: (column) => column);
+
+  GeneratedColumn<String> get imageAsset => $composableBuilder(
+    column: $table.imageAsset,
+    builder: (column) => column,
+  );
 }
 
 class $$TiersTableTableTableManager
@@ -5266,12 +5500,16 @@ class $$TiersTableTableTableManager
                 Value<String> name = const Value.absent(),
                 Value<int> minPoints = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
+                Value<String?> imageUrl = const Value.absent(),
+                Value<String?> imageAsset = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TiersTableCompanion(
                 id: id,
                 name: name,
                 minPoints: minPoints,
                 sortOrder: sortOrder,
+                imageUrl: imageUrl,
+                imageAsset: imageAsset,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -5280,12 +5518,16 @@ class $$TiersTableTableTableManager
                 required String name,
                 required int minPoints,
                 required int sortOrder,
+                Value<String?> imageUrl = const Value.absent(),
+                Value<String?> imageAsset = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TiersTableCompanion.insert(
                 id: id,
                 name: name,
                 minPoints: minPoints,
                 sortOrder: sortOrder,
+                imageUrl: imageUrl,
+                imageAsset: imageAsset,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -6995,6 +7237,7 @@ typedef $$ChallengesTableTableCreateCompanionBuilder =
       required int progress,
       required int target,
       required int rewardPoints,
+      Value<String?> imageUrl,
       Value<String?> imageAsset,
       required int sortOrder,
       Value<int> rowid,
@@ -7007,6 +7250,7 @@ typedef $$ChallengesTableTableUpdateCompanionBuilder =
       Value<int> progress,
       Value<int> target,
       Value<int> rewardPoints,
+      Value<String?> imageUrl,
       Value<String?> imageAsset,
       Value<int> sortOrder,
       Value<int> rowid,
@@ -7048,6 +7292,11 @@ class $$ChallengesTableTableFilterComposer
 
   ColumnFilters<int> get rewardPoints => $composableBuilder(
     column: $table.rewardPoints,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get imageUrl => $composableBuilder(
+    column: $table.imageUrl,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7101,6 +7350,11 @@ class $$ChallengesTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get imageUrl => $composableBuilder(
+    column: $table.imageUrl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get imageAsset => $composableBuilder(
     column: $table.imageAsset,
     builder: (column) => ColumnOrderings(column),
@@ -7140,6 +7394,9 @@ class $$ChallengesTableTableAnnotationComposer
     column: $table.rewardPoints,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get imageUrl =>
+      $composableBuilder(column: $table.imageUrl, builder: (column) => column);
 
   GeneratedColumn<String> get imageAsset => $composableBuilder(
     column: $table.imageAsset,
@@ -7193,6 +7450,7 @@ class $$ChallengesTableTableTableManager
                 Value<int> progress = const Value.absent(),
                 Value<int> target = const Value.absent(),
                 Value<int> rewardPoints = const Value.absent(),
+                Value<String?> imageUrl = const Value.absent(),
                 Value<String?> imageAsset = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -7203,6 +7461,7 @@ class $$ChallengesTableTableTableManager
                 progress: progress,
                 target: target,
                 rewardPoints: rewardPoints,
+                imageUrl: imageUrl,
                 imageAsset: imageAsset,
                 sortOrder: sortOrder,
                 rowid: rowid,
@@ -7215,6 +7474,7 @@ class $$ChallengesTableTableTableManager
                 required int progress,
                 required int target,
                 required int rewardPoints,
+                Value<String?> imageUrl = const Value.absent(),
                 Value<String?> imageAsset = const Value.absent(),
                 required int sortOrder,
                 Value<int> rowid = const Value.absent(),
@@ -7225,6 +7485,7 @@ class $$ChallengesTableTableTableManager
                 progress: progress,
                 target: target,
                 rewardPoints: rewardPoints,
+                imageUrl: imageUrl,
                 imageAsset: imageAsset,
                 sortOrder: sortOrder,
                 rowid: rowid,
@@ -7273,6 +7534,7 @@ typedef $$GiftsTableTableCreateCompanionBuilder = GiftsTableCompanion Function({
   required String id,
   required String title,
   required int costPoints,
+  Value<String?> imageUrl,
   Value<String?> imageAsset,
   required int sortOrder,
   Value<int> rowid,
@@ -7281,6 +7543,7 @@ typedef $$GiftsTableTableUpdateCompanionBuilder = GiftsTableCompanion Function({
   Value<String> id,
   Value<String> title,
   Value<int> costPoints,
+  Value<String?> imageUrl,
   Value<String?> imageAsset,
   Value<int> sortOrder,
   Value<int> rowid,
@@ -7307,6 +7570,11 @@ class $$GiftsTableTableFilterComposer
 
   ColumnFilters<int> get costPoints => $composableBuilder(
     column: $table.costPoints,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get imageUrl => $composableBuilder(
+    column: $table.imageUrl,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7345,6 +7613,11 @@ class $$GiftsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get imageUrl => $composableBuilder(
+    column: $table.imageUrl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get imageAsset => $composableBuilder(
     column: $table.imageAsset,
     builder: (column) => ColumnOrderings(column),
@@ -7375,6 +7648,9 @@ class $$GiftsTableTableAnnotationComposer
     column: $table.costPoints,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get imageUrl =>
+      $composableBuilder(column: $table.imageUrl, builder: (column) => column);
 
   GeneratedColumn<String> get imageAsset => $composableBuilder(
     column: $table.imageAsset,
@@ -7419,6 +7695,7 @@ class $$GiftsTableTableTableManager
                 Value<String> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<int> costPoints = const Value.absent(),
+                Value<String?> imageUrl = const Value.absent(),
                 Value<String?> imageAsset = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -7426,6 +7703,7 @@ class $$GiftsTableTableTableManager
                 id: id,
                 title: title,
                 costPoints: costPoints,
+                imageUrl: imageUrl,
                 imageAsset: imageAsset,
                 sortOrder: sortOrder,
                 rowid: rowid,
@@ -7435,6 +7713,7 @@ class $$GiftsTableTableTableManager
                 required String id,
                 required String title,
                 required int costPoints,
+                Value<String?> imageUrl = const Value.absent(),
                 Value<String?> imageAsset = const Value.absent(),
                 required int sortOrder,
                 Value<int> rowid = const Value.absent(),
@@ -7442,6 +7721,7 @@ class $$GiftsTableTableTableManager
                 id: id,
                 title: title,
                 costPoints: costPoints,
+                imageUrl: imageUrl,
                 imageAsset: imageAsset,
                 sortOrder: sortOrder,
                 rowid: rowid,

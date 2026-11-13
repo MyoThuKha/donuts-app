@@ -15,7 +15,6 @@ final class RewardsState extends Equatable {
     this.challenges = const [],
     this.gifts = const [],
     this.tab = RewardsTab.challenges,
-    this.acknowledgedEarns = const {},
   });
 
   final RewardsStatus status;
@@ -26,23 +25,17 @@ final class RewardsState extends Equatable {
   final List<GiftVO> gifts;
   final RewardsTab tab;
 
-  /// Challenges whose Earn button the user has pressed, so it stops
-  /// pulsing for the rest of the session.
-  final Set<String> acknowledgedEarns;
-
   RewardsState copyWith({
     RewardsStatus? status,
     List<ChallengeVO>? challenges,
     List<GiftVO>? gifts,
     RewardsTab? tab,
-    Set<String>? acknowledgedEarns,
   }) => RewardsState(
     status: status ?? this.status,
     member: member,
     challenges: challenges ?? this.challenges,
     gifts: gifts ?? this.gifts,
     tab: tab ?? this.tab,
-    acknowledgedEarns: acknowledgedEarns ?? this.acknowledgedEarns,
   );
 
   /// The same lists and tab with a new [member]: ready when there is one,
@@ -53,16 +46,8 @@ final class RewardsState extends Equatable {
     challenges: challenges,
     gifts: gifts,
     tab: tab,
-    acknowledgedEarns: acknowledgedEarns,
   );
 
   @override
-  List<Object?> get props => [
-    status,
-    member,
-    challenges,
-    gifts,
-    tab,
-    acknowledgedEarns,
-  ];
+  List<Object?> get props => [status, member, challenges, gifts, tab];
 }

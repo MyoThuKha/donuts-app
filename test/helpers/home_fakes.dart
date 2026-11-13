@@ -6,9 +6,11 @@ import 'package:donuts/features/home/domain/vo/banner_vo.dart';
 import 'package:donuts/features/home/domain/vo/home_section_vo.dart';
 import 'package:donuts/features/home/domain/vo/shop_vo.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
+import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 import 'home_fixtures.dart';
+import 'rewards_fakes.dart';
 
 /// A Home repository that emits the seed-shaped fixtures once.
 class FakeHomeRepository implements HomeRepository {
@@ -46,6 +48,7 @@ void registerHomeFakes(GetIt getIt) {
         banners: getIt(),
         sections: getIt(),
         shops: getIt(),
+        clearRewardClaims: ClearRewardClaimsUseCase(FakeRewardsRepository()),
       ),
     );
   }

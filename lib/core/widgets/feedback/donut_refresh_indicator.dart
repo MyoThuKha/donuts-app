@@ -14,12 +14,18 @@ class DonutRefreshIndicator extends StatefulWidget {
     required this.onRefresh,
     required this.child,
     this.edgeOffset = 0,
+    this.nested = false,
     super.key,
   });
 
   final Future<void> Function() onRefresh;
   final Widget child;
   final double edgeOffset;
+
+  /// Listens to vertical scrolls at any depth, for a [NestedScrollView]
+  /// whose header and inner lists scroll separately. Otherwise only the
+  /// direct child's scrolls count.
+  final bool nested;
 
   /// How far the user pulls before a release refreshes.
   static const double triggerDistance = 100;
@@ -80,6 +86,8 @@ class _DonutRefreshIndicatorState extends State<DonutRefreshIndicator>
   /// How far the donut turns over a full pull.
   static const double _turnsPerPull = 0.5;
 
+  bool _accepts(int depth) => widget.nested || depth == 0;
+
   bool get _dragging => _mode == _Mode.drag || _mode == _Mode.armed;
 
   @override
@@ -92,7 +100,7 @@ class _DonutRefreshIndicatorState extends State<DonutRefreshIndicator>
   }
 
   bool _handleScroll(ScrollNotification notification) {
-    if (notification.depth != 0 ||
+    if (!_accepts(notification.depth) ||
         notification.metrics.axisDirection != AxisDirection.down) {
       return false;
     }
@@ -127,7 +135,7 @@ class _DonutRefreshIndicatorState extends State<DonutRefreshIndicator>
 
   /// Hides the platform's glow or stretch while the donut is out.
   bool _handleOverscrollIndicator(OverscrollIndicatorNotification n) {
-    if (n.depth != 0 || !n.leading || !_dragging) return false;
+    if (!_accepts(n.depth) || !n.leading || !_dragging) return false;
     n.disallowIndicator();
     return true;
   }

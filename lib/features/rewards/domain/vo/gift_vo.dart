@@ -11,6 +11,7 @@ abstract class GiftVO with _$GiftVO {
     required String id,
     required String title,
     required int costPoints,
+    String? imageUrl,
     String? imageAsset,
   }) = _GiftVO;
 }

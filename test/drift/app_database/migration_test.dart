@@ -7,6 +7,7 @@ import 'generated/schema.dart';
 import 'generated/schema_v1.dart' as v1;
 import 'generated/schema_v2.dart' as v2;
 import 'generated/schema_v3.dart' as v3;
+import 'generated/schema_v4.dart' as v4;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -113,4 +114,35 @@ void main() {
       );
     },
   );
+
+  test('upgrading from v3 to v4 keeps tiers, adds empty image columns and '
+      'forgets every import so the seed loads again', () async {
+    const oldTier = v3.TiersData(
+      id: 'silver',
+      name: 'Silver',
+      minPoints: 678500,
+      sortOrder: 0,
+    );
+    const oldSync = v3.SyncStateData(key: 'member', version: 1, fetchedAt: 0);
+
+    await verifier.testWithDataIntegrity(
+      oldVersion: 3,
+      newVersion: 4,
+      createOld: v3.DatabaseAtV3.new,
+      createNew: v4.DatabaseAtV4.new,
+      openTestedDatabase: AppDatabase.forTesting,
+      createItems: (batch, oldDb) {
+        batch
+          ..insertAll(oldDb.tiers, [oldTier])
+          ..insertAll(oldDb.syncState, [oldSync]);
+      },
+      validateItems: (newDb) async {
+        final tiers = await newDb.select(newDb.tiers).get();
+        expect(tiers.map((t) => (t.id, t.imageUrl, t.imageAsset)), [
+          ('silver', null, null),
+        ]);
+        expect(await newDb.select(newDb.syncState).get(), isEmpty);
+      },
+    );
+  });
 }

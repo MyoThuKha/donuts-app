@@ -77,6 +77,8 @@ _TierDto _$TierDtoFromJson(Map<String, dynamic> json) =>
         name: $checkedConvert('name', (v) => v as String),
         minPoints: $checkedConvert('minPoints', (v) => (v as num).toInt()),
         sortOrder: $checkedConvert('sortOrder', (v) => (v as num).toInt()),
+        imageUrl: $checkedConvert('imageUrl', (v) => v as String?),
+        imageAsset: $checkedConvert('imageAsset', (v) => v as String?),
       );
       return val;
     });
@@ -86,6 +88,8 @@ Map<String, dynamic> _$TierDtoToJson(_TierDto instance) => <String, dynamic>{
   'name': instance.name,
   'minPoints': instance.minPoints,
   'sortOrder': instance.sortOrder,
+  'imageUrl': instance.imageUrl,
+  'imageAsset': instance.imageAsset,
 };
 
 _ChallengeDto _$ChallengeDtoFromJson(Map<String, dynamic> json) =>
@@ -104,6 +108,7 @@ _ChallengeDto _$ChallengeDtoFromJson(Map<String, dynamic> json) =>
           (v) => (v as num).toInt(),
         ),
         sortOrder: $checkedConvert('sortOrder', (v) => (v as num).toInt()),
+        imageUrl: $checkedConvert('imageUrl', (v) => v as String?),
         imageAsset: $checkedConvert('imageAsset', (v) => v as String?),
       );
       return val;
@@ -118,6 +123,7 @@ Map<String, dynamic> _$ChallengeDtoToJson(_ChallengeDto instance) =>
       'target': instance.target,
       'rewardPoints': instance.rewardPoints,
       'sortOrder': instance.sortOrder,
+      'imageUrl': instance.imageUrl,
       'imageAsset': instance.imageAsset,
     };
 
@@ -133,6 +139,7 @@ _GiftDto _$GiftDtoFromJson(Map<String, dynamic> json) =>
         title: $checkedConvert('title', (v) => v as String),
         costPoints: $checkedConvert('costPoints', (v) => (v as num).toInt()),
         sortOrder: $checkedConvert('sortOrder', (v) => (v as num).toInt()),
+        imageUrl: $checkedConvert('imageUrl', (v) => v as String?),
         imageAsset: $checkedConvert('imageAsset', (v) => v as String?),
       );
       return val;
@@ -143,5 +150,6 @@ Map<String, dynamic> _$GiftDtoToJson(_GiftDto instance) => <String, dynamic>{
   'title': instance.title,
   'costPoints': instance.costPoints,
   'sortOrder': instance.sortOrder,
+  'imageUrl': instance.imageUrl,
   'imageAsset': instance.imageAsset,
 };

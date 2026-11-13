@@ -37,6 +37,7 @@ void main() {
     expect(sections[1].products.map((p) => p.id), [
       'p_strawberry_chocolate',
       'p_dalgona',
+      'p_americano',
       'p_coconut',
       'p_blueberry',
     ]);

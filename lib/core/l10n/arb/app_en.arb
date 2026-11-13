@@ -387,6 +387,10 @@
   "@rewardsEarn": {
     "description": "Button on a challenge card"
   },
+  "rewardsEarned": "Earned",
+  "@rewardsEarned": {
+    "description": "Grey button on a challenge whose points were already earned"
+  },
   "rewardsRedeem": "Redeem",
   "@rewardsRedeem": {
     "description": "Button on a gift card"

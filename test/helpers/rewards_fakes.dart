@@ -1,5 +1,10 @@
+import 'package:donuts/core/result/result.dart';
+import 'package:donuts/core/streams/combine_latest.dart';
+import 'package:donuts/features/rewards/data/sources/reward_claims_memory_source.dart';
 import 'package:donuts/features/rewards/domain/repositories/rewards_repository.dart';
 import 'package:donuts/features/rewards/domain/types/challenge_kind.dart';
+import 'package:donuts/features/rewards/domain/usecases/claim_challenge_use_case.dart';
+import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_gifts_use_case.dart';
 import 'package:donuts/features/rewards/domain/vo/challenge_vo.dart';
@@ -47,18 +52,38 @@ const List<GiftVO> testGifts = [
   GiftVO(id: 'g_box_of_six', title: 'Box of 6 donuts', costPoints: 90000),
 ];
 
-/// A rewards repository that emits [challenges] and [gifts] once.
+/// A rewards repository that emits [challenges] and [gifts], with Earn
+/// claims kept in memory like the real one.
 class FakeRewardsRepository implements RewardsRepository {
   new({this.challenges = testChallenges, this.gifts = testGifts});
 
   final List<ChallengeVO> challenges;
   final List<GiftVO> gifts;
+  final RewardClaimsMemorySource claims = RewardClaimsMemorySource();
 
   @override
-  Stream<List<ChallengeVO>> watchChallenges() => Stream.value(challenges);
+  Stream<List<ChallengeVO>> watchChallenges() => combineLatest2(
+    Stream.value(challenges),
+    claims.watch(),
+    (list, claimed) => [
+      for (final c in list) c.copyWith(claimed: claimed.containsKey(c.id)),
+    ],
+  );
 
   @override
   Stream<List<GiftVO>> watchGifts() => Stream.value(gifts);
+
+  @override
+  Future<Result<void>> claimChallenge(String challengeId) async {
+    final challenge = challenges.where((c) => c.id == challengeId).firstOrNull;
+    if (challenge != null && challenge.isComplete) {
+      claims.claim(challengeId, challenge.rewardPoints);
+    }
+    return const Success(null);
+  }
+
+  @override
+  void clearClaims() => claims.clear();
 }
 
 /// Fakes for the rewards screen's get_it dependencies, used by
@@ -76,9 +101,21 @@ void registerRewardsFakes(GetIt getIt) {
   if (!getIt.isRegistered<WatchGiftsUseCase>()) {
     getIt.registerSingleton(WatchGiftsUseCase(getIt()));
   }
+  if (!getIt.isRegistered<ClaimChallengeUseCase>()) {
+    getIt.registerSingleton(ClaimChallengeUseCase(getIt()));
+  }
+  if (!getIt.isRegistered<ClearRewardClaimsUseCase>()) {
+    getIt.registerSingleton(ClearRewardClaimsUseCase(getIt()));
+  }
   if (!getIt.isRegistered<RewardsCubit>()) {
     getIt.registerFactory(
-      () => RewardsCubit(member: getIt(), challenges: getIt(), gifts: getIt()),
+      () => RewardsCubit(
+        member: getIt(),
+        challenges: getIt(),
+        gifts: getIt(),
+        claim: getIt(),
+        clearClaims: getIt(),
+      ),
     );
   }
 }

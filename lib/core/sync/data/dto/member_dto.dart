@@ -40,6 +40,8 @@ abstract class TierDto with _$TierDto {
     required String name,
     required int minPoints,
     required int sortOrder,
+    String? imageUrl,
+    String? imageAsset,
   }) = _TierDto;
 
   factory fromJson(Map<String, dynamic> json) => _$TierDtoFromJson(json);
@@ -58,6 +60,7 @@ abstract class ChallengeDto with _$ChallengeDto {
     required int target,
     required int rewardPoints,
     required int sortOrder,
+    String? imageUrl,
     String? imageAsset,
   }) = _ChallengeDto;
 
@@ -71,6 +74,7 @@ abstract class GiftDto with _$GiftDto {
     required String title,
     required int costPoints,
     required int sortOrder,
+    String? imageUrl,
     String? imageAsset,
   }) = _GiftDto;
 

@@ -1,12 +1,12 @@
-import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/images/network_image.dart';
 import 'package:donuts/features/rewards/domain/vo/tier_vo.dart';
-import 'package:donuts/features/rewards/presentation/painters/shield_painter.dart';
 import 'package:donuts/features/rewards/presentation/rewards_dimens.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// A tier's shield. It scales in with [pop], and with [glow] it gets a soft
-/// accent halo. A null [tier] draws a grey stand-in while loading.
+/// A tier's badge, cached from the network with the bundled image as the
+/// fallback. It scales in with [pop], and with [glow] it gets a soft accent
+/// halo. A null [tier] shows a plain box while loading.
 class TierShieldWidget extends StatelessWidget {
   const new({required this.tier, required this.pop, this.glow, super.key});
 
@@ -16,9 +16,22 @@ class TierShieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tier = this.tier;
     final shield = SizedBox.fromSize(
       size: RewardsDimens.shield,
-      child: RepaintBoundary(child: CustomPaint(painter: _painter(context))),
+      child: Semantics(
+        label: tier?.name,
+        image: tier != null,
+        child: AppNetworkImage(
+          url: tier?.imageUrl,
+          asset: tier?.imageAsset,
+          fit: BoxFit.contain,
+          cacheWidth:
+              (RewardsDimens.shield.width *
+                      MediaQuery.devicePixelRatioOf(context))
+                  .round(),
+        ),
+      ),
     );
     final glow = this.glow;
     return ScaleTransition(
@@ -26,33 +39,6 @@ class TierShieldWidget extends StatelessWidget {
       child: glow == null ? shield : _Glow(glow: glow, child: shield),
     );
   }
-
-  ShieldPainter _painter(BuildContext context) {
-    final colors = context.colors;
-    final tier = this.tier;
-    final letter = context.text.label;
-    if (tier == null) {
-      return ShieldPainter(
-        fill: colors.disabled,
-        stars: 1,
-        letter: '',
-        letterStyle: letter,
-      );
-    }
-    return ShieldPainter(
-      fill: _fill(colors, tier.sortOrder),
-      stars: tier.sortOrder + 1,
-      letter: tier.name.characters.first.toUpperCase(),
-      letterStyle: letter,
-    );
-  }
-
-  /// Silver, gold, then platinum for every tier above.
-  static Color _fill(DonutsColors colors, int sortOrder) => switch (sortOrder) {
-    <= 0 => colors.tierSilver,
-    1 => colors.tierGold,
-    _ => colors.tierPlatinum,
-  };
 }
 
 class _Glow extends StatelessWidget {
