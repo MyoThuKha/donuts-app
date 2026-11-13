@@ -9,14 +9,13 @@ import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner_frame.dart';
 import 'package:donuts/core/widgets/feedback/page_state_view.dart';
 import 'package:donuts/core/widgets/images/product_hero_tag.dart';
+import 'package:donuts/core/widgets/inputs/quantity_stepper.dart';
 import 'package:donuts/features/cart/domain/cart_rules.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_cubit.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_state.dart';
-import 'package:donuts/features/product/presentation/product_dimens.dart';
 import 'package:donuts/features/product/presentation/views/add_to_cart_bar_view.dart';
 import 'package:donuts/features/product/presentation/views/product_card_view.dart';
 import 'package:donuts/features/product/presentation/views/product_description_view.dart';
-import 'package:donuts/features/product/presentation/widgets/quantity_stepper_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -150,11 +149,11 @@ class _ProductBody extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                  bottom: ProductDimens.stepperHeight / 2,
+                  bottom: QuantityStepper.height / 2,
                 ),
                 child: ProductCardView(product: product, heroTag: heroTag),
               ),
-              QuantityStepperWidget(
+              QuantityStepper(
                 quantity: state.quantity,
                 onDecrement: ready && state.quantity > CartRules.minQuantity
                     ? cubit.decrement

@@ -1,7 +1,7 @@
-import 'package:donuts/features/product/presentation/widgets/quantity_stepper_widget.dart';
+import 'package:donuts/core/widgets/inputs/quantity_stepper.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../../helpers/pump_app.dart';
+import '../../../helpers/pump_app.dart';
 
 void main() {
   testWidgets('screen readers can press plus and minus', (tester) async {
@@ -10,7 +10,7 @@ void main() {
     var decrements = 0;
     await pumpThemed(
       tester,
-      QuantityStepperWidget(
+      QuantityStepper(
         quantity: 2,
         onIncrement: () => increments++,
         onDecrement: () => decrements++,
