@@ -1,4 +1,5 @@
 import 'package:donuts/core/network/connectivity_cubit.dart';
+import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/widgets/badges/discount_badge.dart';
 import 'package:donuts/core/widgets/buttons/circle_filled_button.dart';
@@ -18,6 +19,7 @@ import 'package:donuts/features/home/presentation/items/product_tile_item.dart';
 import 'package:donuts/features/home/presentation/views/banner_carousel_view.dart';
 import 'package:donuts/features/home/presentation/views/home_header_view.dart';
 import 'package:donuts/features/home/presentation/views/member_panel_view.dart';
+import 'package:donuts/features/home/presentation/views/product_section_view.dart';
 import 'package:donuts/features/home/presentation/views/shops_band_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -48,6 +50,11 @@ void main() {
     expect(_inside<HomeHeaderView>(find.byType(Skeleton)), findsWidgets);
     expect(_inside<BannerCarouselView>(find.byType(Skeleton)), findsWidgets);
     expect(_inside<ShopsBandView>(find.byType(Skeleton)), findsWidgets);
+    // The banner skeleton starts at the page gutter, like the real card.
+    expect(
+      tester.getTopLeft(_inside<BannerCarouselView>(find.byType(Skeleton))).dx,
+      AppSpacing.pageGutter,
+    );
     expect(find.byType(ProductTileItem), findsNothing);
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.byType(SectionEmptyState), findsNothing);
@@ -178,14 +185,13 @@ void main() {
   testWidgets('an empty section shows its empty message and the others still '
       'render', (tester) async {
     await pumpHomeScreen(tester, streams);
+    streams.rowStart['seasonal'] = const [];
     streams
       ..member.add(testMemberSummary)
       ..banners.add(const [])
-      ..sections.add([
-        testHomeSections[0].copyWith(products: const []),
-        ...testHomeSections.skip(1),
-      ])
+      ..sections.add(testHomeSections)
       ..shops.add(testShops);
+    await tester.pump();
     await tester.pump();
 
     expect(find.text('Nothing here yet.'), findsNWidgets(2));
@@ -221,6 +227,74 @@ void main() {
     expect(streams.sectionSubscriptions, 2);
     expect(find.byType(SectionErrorState), findsNothing);
     expect(find.text('Popular'), findsOneWidget);
+  });
+
+  testWidgets('a row shows tile skeletons under its title until its '
+      'products arrive', (tester) async {
+    await pumpHomeScreen(tester, streams);
+    streams.rowStart.remove('popular');
+    streams.emitAll();
+    await tester.pump(_entrance);
+
+    Finder popularRow() => find.ancestor(
+      of: find.text('Popular'),
+      matching: find.byType(ProductSectionView),
+    );
+    expect(
+      find.descendant(of: popularRow(), matching: find.byType(Skeleton)),
+      findsWidgets,
+    );
+    expect(find.text('Mistletoe Romance box'), findsOneWidget);
+
+    streams.row('popular').add(testSectionProducts['popular']!);
+    await tester.pump();
+
+    expect(
+      find.descendant(of: popularRow(), matching: find.byType(Skeleton)),
+      findsNothing,
+    );
+    expect(find.text('Coconut Donut'), findsOneWidget);
+  });
+
+  testWidgets('a failed row shows its error under its title, the other rows '
+      'render, and Try again reloads only that row', (tester) async {
+    await pumpHomeScreen(tester, streams);
+    streams.rowStart.remove('popular');
+    streams.emitAll();
+    await tester.pump();
+    streams.row('popular').addError(StateError('corrupt row'));
+    await tester.pump(_entrance);
+
+    expect(find.byType(SectionErrorState), findsOneWidget);
+    expect(find.text('Popular'), findsOneWidget);
+    expect(find.text('Mistletoe Romance box'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Try again'));
+    await tester.pump();
+    streams.row('popular').add(testSectionProducts['popular']!);
+    await tester.pump();
+
+    expect(find.byType(SectionErrorState), findsNothing);
+    expect(find.text('Coconut Donut'), findsOneWidget);
+    expect(streams.rowSubscriptions['popular'], 2);
+    expect(streams.rowSubscriptions['seasonal'], 1);
+  });
+
+  testWidgets('a missing member shows a boxed message in the header', (
+    tester,
+  ) async {
+    await pumpHomeScreen(tester, streams);
+    streams.member.add(null);
+    await tester.pump(_entrance);
+
+    expect(
+      _inside<HomeHeaderView>(find.byType(SectionEmptyState)),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Your membership details aren’t ready yet.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('the shops band says there are 4 shops near you', (tester) async {

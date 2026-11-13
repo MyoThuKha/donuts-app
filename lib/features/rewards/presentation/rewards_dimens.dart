@@ -33,4 +33,8 @@ abstract final class RewardsDimens {
   static const double earnMinWidth = 72;
   static const double earnHeight = 44;
   static const double pulseScale = 1.06;
+
+  /// Placeholder cards while a list loads, about a challenge card's height.
+  static const int skeletonCards = 3;
+  static const double skeletonCardHeight = 128;
 }

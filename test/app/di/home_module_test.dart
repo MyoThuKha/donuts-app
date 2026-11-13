@@ -2,8 +2,8 @@ import 'package:donuts/app/bootstrap.dart';
 import 'package:donuts/app/di/di.dart';
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/di/locator.dart';
+import 'package:donuts/core/state/section_state.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
-import 'package:donuts/features/home/presentation/blocs/section_state.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -35,5 +35,7 @@ void main() {
     expect(cubit.state.banners, isA<SectionReady<Object?>>());
     expect(cubit.state.sections, isA<SectionReady<Object?>>());
     expect(cubit.state.shops, isA<SectionReady<Object?>>());
+    expect(cubit.state.rows, hasLength(3));
+    expect(cubit.state.rows.values, everyElement(isA<SectionReady<Object?>>()));
   });
 }

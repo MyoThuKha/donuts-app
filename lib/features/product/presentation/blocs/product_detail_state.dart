@@ -2,7 +2,7 @@ import 'package:donuts/features/product/domain/product_rules.dart';
 import 'package:donuts/features/product/domain/vo/product_detail_vo.dart';
 import 'package:equatable/equatable.dart';
 
-enum ProductLoadStatus { loading, ready, notFound }
+enum ProductLoadStatus { loading, ready, notFound, failed }
 
 enum CartAddStatus { idle, adding, added, failed }
 

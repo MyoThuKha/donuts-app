@@ -189,4 +189,42 @@ void main() {
     expect: () => <ProductDetailState>[],
     verify: (_) => verifyNever(() => addToCart(any())),
   );
+
+  blocTest<ProductDetailCubit, ProductDetailState>(
+    'a stream error emits failed and keeps the quantity',
+    build: build,
+    seed: () => _ready.copyWith(quantity: 2),
+    act: (cubit) {
+      cubit.start();
+      products.addError(const DatabaseFailure());
+    },
+    expect: () => [
+      const ProductDetailState(status: ProductLoadStatus.failed, quantity: 2),
+    ],
+    errors: () => [isA<DatabaseFailure>()],
+  );
+
+  blocTest<ProductDetailCubit, ProductDetailState>(
+    'retry after a failure shows loading, then the product',
+    setUp: () {
+      var calls = 0;
+      when(() => watchProduct('p_coconut')).thenAnswer(
+        (_) => calls++ == 0
+            ? Stream.error(const DatabaseFailure())
+            : Stream.value(testCoconut),
+      );
+    },
+    build: build,
+    act: (cubit) async {
+      cubit.start();
+      await Future<void>.delayed(Duration.zero);
+      cubit.retry();
+    },
+    expect: () => [
+      const ProductDetailState(status: ProductLoadStatus.failed),
+      const ProductDetailState(),
+      _ready,
+    ],
+    errors: () => [isA<DatabaseFailure>()],
+  );
 }

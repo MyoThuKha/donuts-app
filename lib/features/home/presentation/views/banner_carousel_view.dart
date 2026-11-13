@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/state/section_state.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
@@ -10,7 +11,6 @@ import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/features/home/domain/vo/banner_vo.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:donuts/features/home/presentation/blocs/home_state.dart';
-import 'package:donuts/features/home/presentation/blocs/section_state.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/items/banner_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +32,7 @@ class BannerCarouselView extends StatelessWidget {
         child: SkeletonGroup(child: _CardSlot(child: Skeleton())),
       ),
       SectionReady(:final data) => _Band(child: _Pager(banners: data)),
+      // Boxed: the panel behind is the tier's blue backdrop.
       SectionEmpty() => SectionEmptyState(message: l10n.homeSectionEmpty),
       SectionFailed() => SectionErrorState(
         message: l10n.homeSectionError,
@@ -67,12 +68,18 @@ class _CardSlot extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => FractionallySizedBox(
+  // The Align takes the full width. Without it the band's loose width lets
+  // the slot shrink to the card, and the overflow box centres it. Its
+  // constraints are loose, so heightFactor keeps the card at full height.
+  Widget build(BuildContext context) => Align(
     alignment: Alignment.centerLeft,
-    widthFactor: HomeDimens.bannerViewportFraction,
-    child: Padding(
-      padding: const EdgeInsets.only(left: AppSpacing.pageGutter),
-      child: child,
+    child: FractionallySizedBox(
+      widthFactor: HomeDimens.bannerViewportFraction,
+      heightFactor: 1,
+      child: Padding(
+        padding: const EdgeInsets.only(left: AppSpacing.pageGutter),
+        child: child,
+      ),
     ),
   );
 }

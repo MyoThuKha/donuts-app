@@ -35,42 +35,46 @@ final List<BannerVO> testBanners = [
   ),
 ];
 
-final List<HomeSectionVO> testHomeSections = [
+const List<HomeSectionVO> testHomeSections = [
   HomeSectionVO(
     id: 'seasonal',
     titleKey: 'seasonal',
     kind: HomeSectionKind.seasonal,
-    products: [
-      _product('p_mistletoe_box', 'Mistletoe Romance box', discountPercent: 50),
-      _product('p_christmas_family_box', 'Christmas Mix Family box'),
-    ],
   ),
   HomeSectionVO(
     id: 'popular',
     titleKey: 'popular',
     kind: HomeSectionKind.popular,
-    products: [
-      _product('p_strawberry_chocolate', 'Strawberry Chocolate Donuts'),
-      _dalgona,
-      _product('p_coconut', 'Coconut Donut'),
-      _product('p_blueberry', 'Blueberry Glazed Donut'),
-    ],
   ),
   HomeSectionVO(
     id: 'order_again',
     titleKey: 'order_again',
     kind: HomeSectionKind.orderAgain,
-    products: [
-      _product(
-        'p_santa_cookies',
-        "Santa's favorite cookies set",
-        discountPercent: 20,
-      ),
-      _product('p_caramel_crunch', 'Caramel Crunch Donut', discountPercent: 20),
-      _dalgona,
-    ],
   ),
 ];
+
+/// Each of [testHomeSections]' products, by row id.
+final Map<String, List<HomeProductVO>> testSectionProducts = {
+  'seasonal': [
+    _product('p_mistletoe_box', 'Mistletoe Romance box', discountPercent: 50),
+    _product('p_christmas_family_box', 'Christmas Mix Family box'),
+  ],
+  'popular': [
+    _product('p_strawberry_chocolate', 'Strawberry Chocolate Donuts'),
+    _dalgona,
+    _product('p_coconut', 'Coconut Donut'),
+    _product('p_blueberry', 'Blueberry Glazed Donut'),
+  ],
+  'order_again': [
+    _product(
+      'p_santa_cookies',
+      "Santa's favorite cookies set",
+      discountPercent: 20,
+    ),
+    _product('p_caramel_crunch', 'Caramel Crunch Donut', discountPercent: 20),
+    _dalgona,
+  ],
+};
 
 final List<ShopVO> testShops = [
   for (final (i, name) in [

@@ -1,8 +1,8 @@
 import 'package:donuts/core/motion/stagger.dart';
+import 'package:donuts/core/state/section_state.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/images/tier_backdrop.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
-import 'package:donuts/features/home/presentation/blocs/section_state.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/views/banner_carousel_view.dart';
 import 'package:donuts/features/home/presentation/views/home_header_view.dart';

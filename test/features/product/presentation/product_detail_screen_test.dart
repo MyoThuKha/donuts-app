@@ -5,11 +5,15 @@ import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/theme/app_theme.dart';
+import 'package:donuts/core/widgets/feedback/page_state_view.dart';
+import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/features/product/domain/usecases/add_to_cart_use_case.dart';
 import 'package:donuts/features/product/domain/usecases/watch_product_use_case.dart';
+import 'package:donuts/features/product/domain/vo/product_detail_vo.dart';
 import 'package:donuts/features/product/presentation/product_detail_screen.dart';
 import 'package:donuts/features/product/presentation/views/add_to_cart_bar_view.dart';
 import 'package:donuts/features/product/presentation/views/product_card_view.dart';
+import 'package:donuts/features/product/presentation/views/product_description_view.dart';
 import 'package:donuts/features/product/presentation/widgets/quantity_stepper_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -279,10 +283,73 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('This product isn’t available any more.'), findsOneWidget);
+    expect(find.text('It may have sold out or left the menu.'), findsOneWidget);
 
     await tester.tap(find.bySemanticsLabel('Back'));
     await tester.pumpAndSettle();
 
     expect(find.text('previous page'), findsOneWidget);
+  });
+
+  /// Replaces the fake product source with [source].
+  Future<void> watchFrom(Stream<ProductDetailVO?> Function() source) async {
+    final watch = MockWatchProductUseCase();
+    when(() => watch(any())).thenAnswer((_) => source());
+    await getIt.unregister<WatchProductUseCase>();
+    getIt.registerSingleton<WatchProductUseCase>(watch);
+  }
+
+  testWidgets('shows skeleton lines until the product arrives', (tester) async {
+    final product = StreamController<ProductDetailVO?>();
+    addTearDown(product.close);
+    await watchFrom(() => product.stream);
+    await pumpDetail(tester, reduceMotion: true);
+
+    expect(
+      find.descendant(
+        of: find.byType(ProductCardView),
+        matching: find.byType(Skeleton),
+      ),
+      findsWidgets,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(ProductDescriptionView),
+        matching: find.byType(Skeleton),
+      ),
+      findsWidgets,
+    );
+    expect(find.byType(AddToCartBarView), findsNothing);
+
+    product.add(testCoconut);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(Skeleton), findsNothing);
+    expect(find.text('Coconut Donut'), findsOneWidget);
+  });
+
+  testWidgets('a failed read shows the error, and Try again loads the '
+      'product', (tester) async {
+    var calls = 0;
+    await watchFrom(
+      () => calls++ == 0
+          ? Stream.error(const DatabaseFailure())
+          : Stream.value(testCoconut),
+    );
+    await pumpDetail(tester, reduceMotion: true);
+
+    expect(find.byType(PageStateView), findsOneWidget);
+    expect(find.text('We couldn’t load this product.'), findsOneWidget);
+    expect(
+      find.text('Something went wrong on our side. Give it another try.'),
+      findsOneWidget,
+    );
+    expect(find.byType(AddToCartBarView), findsNothing);
+
+    await tester.tap(find.bySemanticsLabel('Try again'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(PageStateView), findsNothing);
+    expect(find.text('Coconut Donut'), findsOneWidget);
   });
 }

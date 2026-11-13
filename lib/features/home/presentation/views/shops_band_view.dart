@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/state/section_state.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/pill_button.dart';
@@ -11,7 +12,6 @@ import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/features/home/domain/vo/shop_vo.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:donuts/features/home/presentation/blocs/home_state.dart';
-import 'package:donuts/features/home/presentation/blocs/section_state.dart';
 import 'package:donuts/features/home/presentation/home_assets.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/items/shop_card_item.dart';
@@ -72,6 +72,7 @@ class ShopsBandView extends StatelessWidget {
     child: switch (shops) {
       SectionReady(:final data) => _Shops(shops: data),
       SectionLoading() => const _ShopsSkeleton(),
+      // Boxed: the band behind is a sky-and-garden scene.
       SectionEmpty() => SectionEmptyState(message: l10n.homeSectionEmpty),
       SectionFailed() => SectionErrorState(
         message: l10n.homeSectionError,

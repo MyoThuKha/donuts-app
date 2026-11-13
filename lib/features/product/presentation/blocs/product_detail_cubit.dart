@@ -22,10 +22,19 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
   StreamSubscription<ProductDetailVO?>? _subscription;
 
   /// Follows the product. A null product, from an unknown id or a refresh
-  /// that removed it, becomes [ProductLoadStatus.notFound].
+  /// that removed it, becomes [ProductLoadStatus.notFound]. A stream error
+  /// becomes [ProductLoadStatus.failed] until [retry].
   void start() {
     unawaited(_subscription?.cancel());
-    _subscription = _watchProduct(_productId).listen(_productChanged);
+    _subscription = _watchProduct(_productId)
+        .listen(_productChanged, onError: _fail);
+  }
+
+  /// Shows the product as loading again, keeping the chosen quantity, and
+  /// follows it afresh.
+  void retry() {
+    emit(ProductDetailState(quantity: state.quantity));
+    start();
   }
 
   void increment() => _setQuantity(state.quantity + 1);
@@ -64,6 +73,18 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
             addedQuantity: state.addedQuantity,
           ),
   );
+
+  void _fail(Object error, StackTrace stackTrace) {
+    addError(error, stackTrace);
+    unawaited(_subscription?.cancel());
+    _subscription = null;
+    emit(
+      ProductDetailState(
+        status: ProductLoadStatus.failed,
+        quantity: state.quantity,
+      ),
+    );
+  }
 
   /// Clamps to [ProductRules]. A change after an add or a failed add
   /// returns the add status to idle, so its snackbar shows only once.

@@ -1,7 +1,13 @@
+import 'dart:async';
+
 import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/widgets/feedback/section_error_state.dart';
+import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
+import 'package:donuts/features/rewards/domain/vo/challenge_vo.dart';
+import 'package:donuts/features/rewards/presentation/items/challenge_card_item.dart';
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
 import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
@@ -245,5 +251,49 @@ void main() {
     await tester.pump();
 
     expect(find.text('This feature is coming soon.'), findsOneWidget);
+  });
+
+  testWidgets('the cards show skeletons until the challenges arrive', (
+    tester,
+  ) async {
+    final stream = StreamController<List<ChallengeVO>>();
+    addTearDown(stream.close);
+    final challenges = MockWatchChallengesUseCase();
+    when(challenges.call).thenAnswer((_) => stream.stream);
+    getIt.registerSingleton<WatchChallengesUseCase>(challenges);
+
+    await _pumpRewards(tester);
+
+    expect(find.byType(Skeleton), findsWidgets);
+    // A skeleton with no width of its own once collapsed to nothing.
+    final skeletons = find.byType(Skeleton);
+    for (var i = 0; i < skeletons.evaluate().length; i++) {
+      final size = tester.getSize(skeletons.at(i));
+      expect(size.width, greaterThan(0));
+      expect(size.height, greaterThan(0));
+    }
+    expect(find.text('Nothing to show yet.'), findsNothing);
+    expect(find.byType(ChallengeCardItem), findsNothing);
+
+    stream.add(testChallenges);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(Skeleton), findsNothing);
+    expect(find.byType(ChallengeCardItem), findsWidgets);
+  });
+
+  testWidgets('a failed member shows its error above cards that still load', (
+    tester,
+  ) async {
+    final member = _MockWatchMember();
+    when(member.call)
+        .thenAnswer((_) => Stream.error(StateError('database closed')));
+    getIt.registerSingleton<WatchMemberSummaryUseCase>(member);
+
+    await _pumpRewards(tester);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SectionErrorState), findsOneWidget);
+    expect(find.byType(ChallengeCardItem), findsWidgets);
   });
 }
