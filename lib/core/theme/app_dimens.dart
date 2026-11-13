@@ -28,7 +28,11 @@ abstract final class AppRadii {
 
 /// Fixed component sizes.
 abstract final class AppSizes {
+  /// Minimum tap target for icon and text buttons.
   static const double button = 48;
+
+  /// Height of the filled stadium buttons, as the design draws them.
+  static const double filledButton = 52;
   static const double field = 56;
   static const Size otpBox = Size(48, 52);
 

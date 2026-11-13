@@ -3,17 +3,24 @@ import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// The stadium call-to-action. It shrinks on press, and while [loading] it
-/// morphs into a circle holding a spinner and ignores taps.
+/// The filled stadium call-to-action, shared by every screen. It shrinks on
+/// press, and while [loading] it morphs into a circle holding a spinner and
+/// ignores taps.
 class AppPrimaryButton extends StatefulWidget {
   const new({
     required this.label,
+    this.child,
     this.onPressed,
     this.loading = false,
     super.key,
   });
 
+  /// Read by screen readers, and shown in capitals when there's no [child].
   final String label;
+
+  /// Content in place of the capitalised [label], such as Add to cart's
+  /// running total. Style it with `context.text.button`.
+  final Widget? child;
 
   /// `null` disables the button.
   final VoidCallback? onPressed;
@@ -64,12 +71,15 @@ class _AppPrimaryButtonState extends State<AppPrimaryButton> {
 
   Widget _body(BuildContext context, double fullWidth) {
     final colors = context.colors;
+    // heightFactor 1: in a Scaffold's bottom slot, a plain Center would take
+    // the whole screen height.
     return Center(
+      heightFactor: 1,
       child: AnimatedContainer(
         duration: context.motion.of(AppMotion.medium),
         curve: AppMotion.emphasized,
-        width: widget.loading ? AppSizes.button : fullWidth,
-        height: AppSizes.button,
+        width: widget.loading ? AppSizes.filledButton : fullWidth,
+        height: AppSizes.filledButton,
         decoration: ShapeDecoration(
           color: widget.onPressed == null ? colors.disabled : colors.primary,
           shape: const StadiumBorder(),
@@ -88,12 +98,17 @@ class _AppPrimaryButtonState extends State<AppPrimaryButton> {
     child: CircularProgressIndicator(strokeWidth: _spinnerStroke, color: color),
   );
 
-  Widget _label(BuildContext context) => FittedBox(
-    fit: BoxFit.scaleDown,
-    child: Text(
-      widget.label.toUpperCase(),
-      maxLines: 1,
-      style: context.text.button,
+  Widget _label(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.l),
+    child: FittedBox(
+      fit: BoxFit.scaleDown,
+      child:
+          widget.child ??
+          Text(
+            widget.label.toUpperCase(),
+            maxLines: 1,
+            style: context.text.button,
+          ),
     ),
   );
 }
