@@ -87,8 +87,9 @@ abstract final class AppSizes {
   static const double snackBar = refreshIndicator;
 
   /// An icon tag flush with the right edge, such as the Home bell and the
-  /// Settings cart: its height, icon and count badge.
-  static const double edgeTagHeight = 32;
-  static const double edgeTagIcon = 18;
+  /// Settings cart: its height, icon and count badge, measured from the
+  /// design's bell.
+  static const double edgeTagHeight = 36;
+  static const double edgeTagIcon = 20;
   static const double edgeTagBadge = 18;
 }

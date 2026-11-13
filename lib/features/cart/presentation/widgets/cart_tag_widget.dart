@@ -31,10 +31,7 @@ class CartTagWidget extends StatelessWidget {
           color: colors.highlight,
           height: AppSizes.edgeTagHeight,
           rim: colors.surface,
-          padding: const EdgeInsets.only(
-            left: AppSpacing.m,
-            right: AppSpacing.l,
-          ),
+          padding: EdgeTag.iconPadding,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             spacing: AppSpacing.s,
