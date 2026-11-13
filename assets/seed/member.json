@@ -1,0 +1,77 @@
+{
+  "data": {
+    "profile": {
+      "totalPoints": 680300,
+      "avatarUrl": "assets/member/avatar.webp",
+      "avatarAsset": "assets/images/avatar_member.webp",
+      "notificationCount": 2,
+      "rewardsCount": 3
+    },
+    "tiers": [
+      {
+        "id": "silver",
+        "name": "Silver",
+        "minPoints": 678500,
+        "sortOrder": 0,
+        "imageUrl": "assets/rewards/silver-badge.webp",
+        "imageAsset": "assets/seed/images/rewards/silver-badge.webp"
+      },
+      {
+        "id": "gold",
+        "name": "Gold",
+        "minPoints": 680500,
+        "sortOrder": 1,
+        "imageUrl": "assets/rewards/gold-badge.webp",
+        "imageAsset": "assets/seed/images/rewards/gold-badge.webp"
+      },
+      {
+        "id": "platinum",
+        "name": "Platinum",
+        "minPoints": 1000000,
+        "sortOrder": 2,
+        "imageUrl": "assets/rewards/platinum-badge.webp",
+        "imageAsset": "assets/seed/images/rewards/platinum-badge.webp"
+      }
+    ],
+    "challenges": [
+      {
+        "id": "c_coco_donuts",
+        "title": "Eat 4 Coco donuts",
+        "kind": "donutQuarters",
+        "progress": 4,
+        "target": 4,
+        "rewardPoints": 200,
+        "sortOrder": 0,
+        "imageUrl": "assets/rewards/reward-donut.webp",
+        "imageAsset": "assets/seed/images/rewards/reward-donut.webp"
+      },
+      {
+        "id": "c_americano",
+        "title": "Drink 12 cups americano",
+        "kind": "coffeeArc",
+        "progress": 9,
+        "target": 12,
+        "rewardPoints": 100,
+        "sortOrder": 1,
+        "imageUrl": "assets/home/americano.webp",
+        "imageAsset": "assets/seed/images/home/americano.webp"
+      },
+      {
+        "id": "c_strawberry_donuts",
+        "title": "Eat 4 Strawberry donuts",
+        "kind": "donutQuarters",
+        "progress": 1,
+        "target": 4,
+        "rewardPoints": 100,
+        "sortOrder": 2,
+        "imageUrl": "assets/rewards/reward-donut.webp",
+        "imageAsset": "assets/seed/images/rewards/reward-donut.webp"
+      }
+    ]
+  },
+  "error": null,
+  "meta": {
+    "version": 2,
+    "generatedAt": "2026-11-12T00:00:00Z"
+  }
+}

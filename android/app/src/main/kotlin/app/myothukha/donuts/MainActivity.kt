@@ -1,0 +1,5 @@
+package app.myothukha.donuts
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()

@@ -1,0 +1,137 @@
+name: release
+
+# Pushing a tag like v1.0.0+1 that points at a commit on main builds a release
+# APK and publishes it on a GitHub release page. The tag sets the version:
+# v1.0.0+1 builds versionName 1.0.0 with versionCode 1. A tag with a
+# pre-release part, like v1.1.0-beta.1+5, makes a pre-release.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  android-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The main-branch check and the release notes need every commit and tag.
+          fetch-depth: 0
+          # Only `gh release create` needs the token, and it gets it from GH_TOKEN.
+          persist-credentials: false
+
+      - name: Check the tag is on main
+        run: |
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::Tag $GITHUB_REF_NAME points at $GITHUB_SHA, which is not on main. Tag a commit on main to release."
+            exit 1
+          fi
+
+      - name: Read the version from the tag
+        id: version
+        run: |
+          tag="$GITHUB_REF_NAME"
+          pattern='^v([0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?)(\+([0-9]+))?$'
+          if [[ ! "$tag" =~ $pattern ]]; then
+            echo "::error::Tag $tag doesn't match vMAJOR.MINOR.PATCH[-PRERELEASE][+BUILD], for example v1.0.0+1."
+            exit 1
+          fi
+          name="${BASH_REMATCH[1]}"
+          number="${BASH_REMATCH[4]:-$GITHUB_RUN_NUMBER}"
+          prerelease=false
+          [[ -n "${BASH_REMATCH[2]}" ]] && prerelease=true
+
+          pubspec_version="$(grep -E '^version:' pubspec.yaml | awk '{print $2}')"
+          if [[ "$pubspec_version" != "$name+$number" ]]; then
+            echo "::warning::pubspec.yaml says $pubspec_version but the tag says $name+$number. The APK uses the tag's version."
+          fi
+
+          {
+            echo "name=$name"
+            echo "number=$number"
+            echo "prerelease=$prerelease"
+            echo "apk=jdonuts-$name-build$number.apk"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      # Pinned to a commit because this job can write releases.
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: 3.50.0
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
+      - name: Write the release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          for name in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::Repo secret ANDROID_$name is missing. Every release needs the same signing key, or installed copies can't update."
+              exit 1
+            fi
+          done
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/release.jks
+          {
+            echo "storeFile=app/release.jks"
+            echo "storePassword=$KEYSTORE_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+          } > android/key.properties
+
+      - name: Build the release APK
+        run: |
+          flutter build apk --release \
+            --build-name="${{ steps.version.outputs.name }}" \
+            --build-number="${{ steps.version.outputs.number }}"
+          apk=build/app/outputs/flutter-apk/app-release.apk
+          # Fail if the APK carries the debug certificate instead of the release key.
+          apksigner="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)"
+          if "$apksigner" verify --print-certs "$apk" | grep -q 'CN=Android Debug'; then
+            echo "::error::The APK is signed with the debug key. Check android/key.properties."
+            exit 1
+          fi
+          cp "$apk" "${{ steps.version.outputs.apk }}"
+
+      - name: Write the release notes
+        run: |
+          .github/scripts/release-notes.sh "$GITHUB_REF_NAME" \
+            "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" > release-notes.md
+          cat release-notes.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          args=()
+          [[ "${{ steps.version.outputs.prerelease }}" == true ]] && args+=(--prerelease)
+          gh release create "$GITHUB_REF_NAME" "${{ steps.version.outputs.apk }}" \
+            --verify-tag \
+            --title "J'Donuts $GITHUB_REF_NAME" \
+            --notes-file release-notes.md \
+            "${args[@]}"

@@ -1,0 +1,489 @@
+{
+  "@@locale": "en",
+  "appTitle": "J’Donuts",
+  "@appTitle": {
+    "description": "App name shown by the OS task switcher."
+  },
+  "tabHome": "Home",
+  "@tabHome": {
+    "description": "Bottom navigation label for the Home tab."
+  },
+  "tabReward": "Reward",
+  "@tabReward": {
+    "description": "Bottom navigation label for the Rewards tab."
+  },
+  "tabExplore": "Explore",
+  "@tabExplore": {
+    "description": "Bottom navigation label for the Explore tab."
+  },
+  "tabWallet": "Wallet",
+  "@tabWallet": {
+    "description": "Bottom navigation label for the Wallet tab."
+  },
+  "tabSettings": "Settings",
+  "@tabSettings": {
+    "description": "Bottom navigation label for the Settings tab."
+  },
+  "placeholderComingSoon": "{tab} is coming soon",
+  "@placeholderComingSoon": {
+    "description": "Body of a tab that is not built yet.",
+    "placeholders": {
+      "tab": {
+        "type": "String",
+        "example": "Wallet"
+      }
+    }
+  },
+  "welcomeTitle": "Welcome to the world of J’donuts",
+  "onboardingTitle": "Round food for every mood",
+  "getStarted": "Let’s get started",
+  "alreadyHaveAccount": "Already have an account?",
+  "logIn": "Log In",
+  "termsPrefix": "By continuing, you acknowledge that you have read and agree to our",
+  "termsOfUse": "Terms of Use",
+  "and": "and",
+  "privacyPolicy": "Privacy Policy",
+  "termsSuffix": ".",
+  "@termsSuffix": {
+    "description": "Text after the Privacy Policy link in the terms notice. Holds its own leading space, so languages that put the verb after the links can finish the sentence here."
+  },
+  "comingSoonTitle": "Coming soon",
+  "featureComingSoon": "This feature is coming soon.",
+  "@featureComingSoon": {
+    "description": "Snackbar for buttons whose feature isn’t built yet"
+  },
+  "close": "Close",
+  "logOut": "Log out",
+  "logOutConfirm": "Log out of J’Donuts?",
+  "cancel": "Cancel",
+  "accountDateOfBirth": "Date of birth",
+  "accountAge": "Age",
+  "accountAgeYears": "{years, plural, =1{1 year} other{{years} years}}",
+  "@accountAgeYears": {
+    "placeholders": {
+      "years": {
+        "type": "int",
+        "example": "45"
+      }
+    }
+  },
+  "settingsLanguage": "Language",
+  "@settingsLanguage": {
+    "description": "Settings row and sheet title for the app language"
+  },
+  "languageSystem": "Device language",
+  "@languageSystem": {
+    "description": "Language option that follows the phone's language"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English's own name. Never translate it."
+  },
+  "languageBurmese": "မြန်မာ",
+  "@languageBurmese": {
+    "description": "Burmese's own name, in Myanmar script. Never translate it."
+  },
+  "settingsVersion": "J’Donuts {version}",
+  "@settingsVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
+  "continueWith": "Continue with {provider}",
+  "@continueWith": {
+    "description": "Accessibility label for a social sign-in button.",
+    "placeholders": {
+      "provider": {
+        "type": "String",
+        "example": "Google"
+      }
+    }
+  },
+  "socialSignInUnavailable": "{provider} sign-in isn’t available in this demo",
+  "@socialSignInUnavailable": {
+    "description": "Placeholder sheet body for social sign-in.",
+    "placeholders": {
+      "provider": {
+        "type": "String",
+        "example": "Google"
+      }
+    }
+  },
+  "documentUnavailable": "The {document} will be available here soon.",
+  "@documentUnavailable": {
+    "description": "Placeholder sheet body for legal documents.",
+    "placeholders": {
+      "document": {
+        "type": "String",
+        "example": "Terms of Use"
+      }
+    }
+  },
+  "stepOf": "Step {step} of {total}",
+  "@stepOf": {
+    "description": "Screen-reader label for the registration progress ring.",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "back": "Back",
+  "phoneTitle": "Enter your phone number",
+  "phoneHint": "09xxxxxxxxx",
+  "phoneInvalid": "Enter a Myanmar mobile number, like 09 254 135 592",
+  "notRegistered": "This number isn’t registered yet.",
+  "registerInstead": "Register instead",
+  "alreadyRegistered": "This number is already registered.",
+  "logInInstead": "Log in instead",
+  "genericError": "Something went wrong. Try again.",
+  "continueLabel": "Continue",
+  "otpTitle": "Verify your number",
+  "otpWrong": "That code isn’t right. Try again.",
+  "otpLocked": "Too many wrong codes. Tap Resend to get a new one.",
+  "didntReceive": "Didn’t receive the code?",
+  "resend": "Resend",
+  "firstNameRequired": "Enter your first name",
+  "nameInvalid": "Use letters and spaces only",
+  "dobInvalid": "That date doesn’t exist",
+  "dobFuture": "Date of birth can’t be in the future",
+  "otpSent": "We’ve sent a 6 digit OTP to {phone}",
+  "@otpSent": {
+    "placeholders": {
+      "phone": {
+        "type": "String",
+        "example": "+959254135592"
+      }
+    }
+  },
+  "resendIn": "resend in {time} min",
+  "@resendIn": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "4:58"
+      }
+    }
+  },
+  "nameTooLong": "Use {max} characters or fewer",
+  "@nameTooLong": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "dobTooYoung": "You need to be at least {age} to join",
+  "@dobTooYoung": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "nameTitle": "What’s your name?",
+  "firstNameHint": "First Name",
+  "lastNameHint": "Last Name",
+  "dobTitle": "What’s your date of birth?",
+  "monthHint": "Month",
+  "dayHint": "Day",
+  "yearHint": "Year",
+  "dobPickerTitle": "Select your birthday",
+  "@dobPickerTitle": {
+    "description": "Title of the sheet with the date of birth wheel"
+  },
+  "select": "Select",
+  "@select": {
+    "description": "Button that confirms the value chosen in a picker sheet"
+  },
+  "letsExplore": "Let’s explore",
+  "imageUnavailable": "Image unavailable",
+  "@imageUnavailable": {
+    "description": "Screen reader label for an image that failed to load"
+  },
+  "homeMemberTier": "{tier} member",
+  "@homeMemberTier": {
+    "description": "Member tier under the name on Home",
+    "placeholders": {
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "homePointsToNextTier": "{points} points left to become {tier} Member",
+  "@homePointsToNextTier": {
+    "description": "Chip under the Home header; points is pre-formatted",
+    "placeholders": {
+      "points": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "homeMemberEmpty": "Your membership details aren’t ready yet.",
+  "@homeMemberEmpty": {
+    "description": "Home header when there is no member record"
+  },
+  "homeTopTier": "You’re at our top tier",
+  "@homeTopTier": {
+    "description": "Home header chip when there is no next tier"
+  },
+  "homeNotifications": "{count, plural, =0{No notifications} =1{1 notification} other{{count} notifications}}",
+  "@homeNotifications": {
+    "description": "Screen reader label for the notification bell",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeSectionSeasonal": "Seasonal specials",
+  "@homeSectionSeasonal": {
+    "description": "Home section title"
+  },
+  "homeSectionPopular": "Popular",
+  "@homeSectionPopular": {
+    "description": "Home section title"
+  },
+  "homeSectionOrderAgain": "Order again",
+  "@homeSectionOrderAgain": {
+    "description": "Home section title"
+  },
+  "homeSectionOther": "More to try",
+  "@homeSectionOther": {
+    "description": "Title for a Home section the app has no name for, such as one a newer catalog adds"
+  },
+  "homeSectionPopularEmoji": "🔥",
+  "@homeSectionPopularEmoji": {
+    "description": "Decoration after the Popular title, as in the design. Screen readers skip it"
+  },
+  "homeSeeAll": "See all",
+  "@homeSeeAll": {
+    "description": "Chevron button next to a Home section title"
+  },
+  "discountOff": "{percent}% off",
+  "@discountOff": {
+    "description": "Discount badge on product tiles and Product detail",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "homeShopsTitle": "{count, plural, =1{There is 1 J’Donut shop near you. 😋} other{There are {count} J’Donut shops near you. 😋}}",
+  "@homeShopsTitle": {
+    "description": "Title of the nearby shops band. Non-breaking spaces keep \"near you. 😋\" on one line.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeExploreNow": "Explore now",
+  "@homeExploreNow": {
+    "description": "Button in the nearby shops band"
+  },
+  "homeOrderOnline": "Order online",
+  "@homeOrderOnline": {
+    "description": "Link on a shop card"
+  },
+  "homeOffline": "You’re offline. Showing saved data.",
+  "@homeOffline": {
+    "description": "Banner at the top of Home while offline"
+  },
+  "refreshLoading": "Loading",
+  "@refreshLoading": {
+    "description": "Label in the pull-to-refresh pill while the refresh runs"
+  },
+  "homeRefreshFailed": "Couldn’t refresh. Showing saved data.",
+  "@homeRefreshFailed": {
+    "description": "Snackbar after a failed pull-to-refresh"
+  },
+  "homeSectionEmpty": "Nothing here yet.",
+  "@homeSectionEmpty": {
+    "description": "Shown in a Home section with no items"
+  },
+  "homeSectionError": "We couldn’t load this section.",
+  "@homeSectionError": {
+    "description": "Shown in a Home section that failed to load"
+  },
+  "homeSeedError": "We couldn’t set up your app",
+  "@homeSeedError": {
+    "description": "Title on Home when the bundled donuts, shops and rewards fail to load into the app on first launch"
+  },
+  "homeSeedErrorHint": "Your donuts, shops and rewards didn’t load. Give it another try.",
+  "@homeSeedErrorHint": {
+    "description": "Hint under homeSeedError"
+  },
+  "homeRetry": "Try again",
+  "@homeRetry": {
+    "description": "Retry button in a failed Home section"
+  },
+  "productNew": "New",
+  "@productNew": {
+    "description": "Badge on a new product"
+  },
+  "productWhatsThis": "What’s this?",
+  "@productWhatsThis": {
+    "description": "Label next to the product description"
+  },
+  "productAddToCart": "Add to cart",
+  "@productAddToCart": {
+    "description": "Add to cart button"
+  },
+  "productPrice": "{amount} MMK",
+  "@productPrice": {
+    "description": "A price in Myanmar kyat; amount is pre-formatted",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "productAddedToCart": "{count, plural, =1{Added 1 {name} to your cart} other{Added {count} {name} to your cart}}",
+  "@productAddedToCart": {
+    "description": "Snackbar after adding to the cart",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "productDecrease": "Decrease quantity",
+  "@productDecrease": {
+    "description": "Screen reader label for the minus button"
+  },
+  "productIncrease": "Increase quantity",
+  "@productIncrease": {
+    "description": "Screen reader label for the plus button"
+  },
+  "productNotFound": "This product isn’t available any more.",
+  "@productNotFound": {
+    "description": "Product detail for a product the catalog no longer has"
+  },
+  "productAddFailed": "Couldn’t add to your cart. Try again.",
+  "@productAddFailed": {
+    "description": "Snackbar when adding to the cart fails"
+  },
+  "productLoadError": "We couldn’t load this product.",
+  "@productLoadError": {
+    "description": "Product detail when reading the product fails"
+  },
+  "productLoadErrorHint": "Something went wrong on our side. Give it another try.",
+  "@productLoadErrorHint": {
+    "description": "Line under the Product detail load error"
+  },
+  "productNotFoundHint": "It may have sold out or left the menu.",
+  "@productNotFoundHint": {
+    "description": "Line under the Product detail not-found title"
+  },
+  "rewardsTitle": "J' Donuts Rewards",
+  "@rewardsTitle": {
+    "description": "Rewards screen title"
+  },
+  "rewardsPill": "Rewards",
+  "@rewardsPill": {
+    "description": "Pill next to the Rewards title"
+  },
+  "rewardsAvailable": "{count, plural, =1{1 reward available} other{{count} rewards available}}",
+  "@rewardsAvailable": {
+    "description": "Screen reader label for the Rewards pill badge",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardsTierCurrent": "You’re here now",
+  "@rewardsTierCurrent": {
+    "description": "Caption under the current tier"
+  },
+  "rewardsTierRemaining": "{points} pts Remaining to become {tier}",
+  "@rewardsTierRemaining": {
+    "description": "Caption under the next tier; points is pre-formatted",
+    "placeholders": {
+      "points": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsTierUpcoming": "You’ll be here soon",
+  "@rewardsTierUpcoming": {
+    "description": "Caption under tiers beyond the next one"
+  },
+  "rewardsTierReached": "Reached",
+  "@rewardsTierReached": {
+    "description": "Caption under tiers below the current one"
+  },
+  "rewardsTotalPoints": "Total points",
+  "@rewardsTotalPoints": {
+    "description": "Label inside the points ring"
+  },
+  "rewardsTabChallenges": "Eat more earn more",
+  "@rewardsTabChallenges": {
+    "description": "Rewards tab"
+  },
+  "rewardsTabGifts": "Gift",
+  "@rewardsTabGifts": {
+    "description": "Rewards tab"
+  },
+  "rewardsEarn": "Earn",
+  "@rewardsEarn": {
+    "description": "Button on a challenge card"
+  },
+  "rewardsEarned": "Earned",
+  "@rewardsEarned": {
+    "description": "Grey button on a challenge whose points were already earned"
+  },
+  "rewardsRedeem": "Redeem",
+  "@rewardsRedeem": {
+    "description": "Button on a gift card"
+  },
+  "rewardsPoints": "{points} pts",
+  "@rewardsPoints": {
+    "description": "Points value; points is pre-formatted",
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsProgress": "{progress}/{target}",
+  "@rewardsProgress": {
+    "description": "Challenge progress",
+    "placeholders": {
+      "progress": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardsEmpty": "Nothing to show yet.",
+  "@rewardsEmpty": {
+    "description": "Rewards with no member data"
+  },
+  "rewardsError": "We couldn’t load your rewards.",
+  "@rewardsError": {
+    "description": "Rewards when its data fails to load"
+  },
+  "rewardsRetry": "Try again",
+  "@rewardsRetry": {
+    "description": "Retry button on the Rewards error state"
+  }
+}

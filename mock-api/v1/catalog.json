@@ -1,0 +1,258 @@
+{
+  "data": {
+    "products": [
+      {
+        "id": "p_mistletoe_box",
+        "code": "JD011201",
+        "name": "Mistletoe Romance box",
+        "priceMmk": 24000,
+        "isNew": false,
+        "discountPercent": 50,
+        "description": "Six festive donuts in red, green and white, boxed for sharing.",
+        "imageUrl": "assets/home/romance.jpeg",
+        "imageAsset": "assets/seed/images/home/romance.jpeg",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_christmas_family_box",
+        "code": "JD011202",
+        "name": "Christmas Mix Family box",
+        "priceMmk": 42000,
+        "isNew": true,
+        "discountPercent": null,
+        "description": "Twelve holiday donuts in two rows, enough for the whole family.",
+        "imageUrl": "assets/home/box.jpg",
+        "imageAsset": "assets/seed/images/home/box.jpg",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_strawberry_chocolate",
+        "code": "JD022110",
+        "name": "Strawberry Chocolate Donuts",
+        "priceMmk": 2800,
+        "isNew": false,
+        "discountPercent": null,
+        "description": "Strawberry glaze topped with dark chocolate sprinkles.",
+        "imageUrl": "assets/home/donuts/strawberry-chocolate-glaze.png",
+        "imageAsset": "assets/seed/images/home/donuts/strawberry-chocolate-glaze.png",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_dalgona",
+        "code": "JD031005",
+        "name": "Dalgona Creamy Coffee",
+        "priceMmk": 4500,
+        "isNew": false,
+        "discountPercent": null,
+        "description": "Iced milk under a thick layer of whipped coffee foam.",
+        "imageUrl": "assets/home/daigona-coffee.png",
+        "imageAsset": "assets/seed/images/home/daigona-coffee.png",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_americano",
+        "code": "JD031006",
+        "name": "Americano",
+        "priceMmk": 3500,
+        "isNew": true,
+        "discountPercent": null,
+        "description": "A double shot of espresso, poured long over ice and cold water.",
+        "imageUrl": "assets/home/americano.webp",
+        "imageAsset": "assets/seed/images/home/americano.webp",
+        "updatedAt": "2026-11-13T00:00:00Z"
+      },
+      {
+        "id": "p_coconut",
+        "code": "JD022123",
+        "name": "Coconut Donut",
+        "priceMmk": 3200,
+        "isNew": true,
+        "discountPercent": null,
+        "description": "Enjoy our scrumptious donuts – soft, sweet, and satisfying in every bite. Choose from classic glazed, rich chocolate, or fun sprinkles. Dive into deliciousness now!",
+        "imageUrl": "assets/home/donuts/chocolate-strawberry-glaze.png",
+        "imageAsset": "assets/seed/images/home/donuts/chocolate-strawberry-glaze.png",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_blueberry",
+        "code": "JD022115",
+        "name": "Blueberry Glazed Donut",
+        "priceMmk": 2800,
+        "isNew": false,
+        "discountPercent": null,
+        "description": "A glossy blueberry glaze with a few lilac sprinkles.",
+        "imageUrl": "assets/home/donuts/blueberry-sprinkle.png",
+        "imageAsset": "assets/seed/images/home/donuts/blueberry-sprinkle.png",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_santa_cookies",
+        "code": "JD041210",
+        "name": "Santa's favorite cookies set",
+        "priceMmk": 6500,
+        "isNew": false,
+        "discountPercent": 20,
+        "description": "Iced sugar cookies in star, tree and snowflake shapes.",
+        "imageUrl": "assets/home/donuts/strawberry-chocolate-glaze.png",
+        "imageAsset": "assets/seed/images/home/donuts/strawberry-chocolate-glaze.png",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_santa_cookies_coffee",
+        "code": "JD041211",
+        "name": "Santa's favorite cookies set",
+        "priceMmk": 9500,
+        "isNew": false,
+        "discountPercent": 20,
+        "description": "Iced sugar cookies in star, tree and snowflake shapes, with a Dalgona Creamy Coffee.",
+        "imageUrl": "assets/home/daigona-coffee.png",
+        "imageAsset": "assets/seed/images/home/daigona-coffee.png",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_caramel_crunch",
+        "code": "JD022118",
+        "name": "Caramel Crunch Donut",
+        "priceMmk": 3000,
+        "isNew": false,
+        "discountPercent": 20,
+        "description": "Amber caramel glaze with crushed toffee on top.",
+        "imageUrl": "assets/home/donuts/starwberry-chocolate-sprinkle.png",
+        "imageAsset": "assets/seed/images/home/donuts/starwberry-chocolate-sprinkle.png",
+        "updatedAt": "2026-11-12T00:00:00Z"
+      },
+      {
+        "id": "p_toasted_coconut",
+        "code": "JD022130",
+        "name": "Toasted Coconut Donut",
+        "priceMmk": 3400,
+        "isNew": true,
+        "discountPercent": null,
+        "description": "Vanilla glaze under a thick layer of toasted coconut flakes.",
+        "imageUrl": "assets/home/donuts/starwberry-chocolate-sprinkle.png",
+        "imageAsset": null,
+        "updatedAt": "2026-11-12T00:00:00Z"
+      }
+    ],
+    "sections": [
+      {
+        "id": "seasonal",
+        "titleKey": "seasonal",
+        "sortOrder": 0,
+        "productIds": [
+          "p_mistletoe_box",
+          "p_christmas_family_box"
+        ]
+      },
+      {
+        "id": "popular",
+        "titleKey": "popular",
+        "sortOrder": 1,
+        "productIds": [
+          "p_toasted_coconut",
+          "p_strawberry_chocolate",
+          "p_dalgona",
+          "p_americano",
+          "p_coconut",
+          "p_blueberry"
+        ]
+      },
+      {
+        "id": "order_again",
+        "titleKey": "order_again",
+        "sortOrder": 2,
+        "productIds": [
+          "p_santa_cookies",
+          "p_santa_cookies_coffee",
+          "p_caramel_crunch",
+          "p_dalgona"
+        ]
+      }
+    ],
+    "banners": [
+      {
+        "id": "b_central_boulevard",
+        "tag": "New shop",
+        "title": "We are now at Central Boulevard",
+        "style": "indigo",
+        "imageUrl": "assets/home/shop.jpg",
+        "imageAsset": "assets/seed/images/home/shop.jpg",
+        "sortOrder": 0
+      },
+      {
+        "id": "b_hot_drinks",
+        "tag": "50% off",
+        "title": "Hot drinks are here",
+        "style": "sky",
+        "imageUrl": "assets/home/shop.jpg",
+        "imageAsset": "assets/seed/images/home/shop.jpg",
+        "sortOrder": 1
+      }
+    ],
+    "shops": [
+      {
+        "id": "s_myaynigone",
+        "name": "J'Donuts Myaynigone",
+        "address": "Bayint Naung Road, Hlaing Township, Yangon",
+        "imageUrl": "assets/home/shop.jpg",
+        "imageAsset": "assets/seed/images/home/shop.jpg",
+        "sortOrder": 0
+      },
+      {
+        "id": "s_sanchaung",
+        "name": "J'Donuts Sanchaung",
+        "address": "Sanchaung Street, Sanchaung Township, Yangon",
+        "imageUrl": "assets/home/shop.jpg",
+        "imageAsset": "assets/seed/images/home/shop.jpg",
+        "sortOrder": 1
+      },
+      {
+        "id": "s_downtown",
+        "name": "J'Donuts Downtown",
+        "address": "Bogyoke Aung San Road, Pabedan Township, Yangon",
+        "imageUrl": "assets/home/shop.jpg",
+        "imageAsset": "assets/seed/images/home/shop.jpg",
+        "sortOrder": 2
+      },
+      {
+        "id": "s_central_boulevard",
+        "name": "J'Donuts Central Boulevard",
+        "address": "Kabar Aye Pagoda Road, Yankin Township, Yangon",
+        "imageUrl": "assets/home/shop.jpg",
+        "imageAsset": "assets/seed/images/home/shop.jpg",
+        "sortOrder": 3
+      }
+    ],
+    "gifts": [
+      {
+        "id": "g_classic_donut",
+        "title": "Free classic donut",
+        "costPoints": 20000,
+        "imageUrl": "assets/home/donuts/blueberry-sprinkle.png",
+        "imageAsset": "assets/seed/images/home/donuts/blueberry-sprinkle.png",
+        "sortOrder": 0
+      },
+      {
+        "id": "g_iced_latte",
+        "title": "Free iced latte",
+        "costPoints": 35000,
+        "imageUrl": "assets/home/daigona-coffee.png",
+        "imageAsset": "assets/seed/images/home/daigona-coffee.png",
+        "sortOrder": 1
+      },
+      {
+        "id": "g_box_of_six",
+        "title": "Box of 6 donuts",
+        "costPoints": 90000,
+        "imageUrl": "assets/home/box.jpg",
+        "imageAsset": "assets/seed/images/home/box.jpg",
+        "sortOrder": 2
+      }
+    ]
+  },
+  "error": null,
+  "meta": {
+    "version": 5,
+    "generatedAt": "2026-11-13T00:00:00Z"
+  }
+}
