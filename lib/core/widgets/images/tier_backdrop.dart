@@ -48,8 +48,8 @@ class TierBackdrop extends StatelessWidget {
                     image: AssetImage(asset),
                     fit: BoxFit.cover,
                     alignment: alignment,
-                    // A missing image leaves the colour showing.
-                    onError: (_, _) {},
+                    // No onError: a missing image is reported to
+                    // FlutterError.onError and leaves the colour showing.
                   ),
                 ),
                 child: const SizedBox.expand(),

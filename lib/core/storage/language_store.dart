@@ -14,7 +14,8 @@ abstract interface class LanguageStore {
 /// Keeps the choice in secure storage, the app's only key-value store.
 ///
 /// A language is a preference, not data, so a storage error falls back to
-/// the device language instead of reaching the UI.
+/// the device language instead of reaching the UI. The error still goes to
+/// [FlutterError.reportError] for the logs.
 class SecureLanguageStore implements LanguageStore {
   const new(this._storage);
 
@@ -26,8 +27,8 @@ class SecureLanguageStore implements LanguageStore {
   Future<String?> readCode() async {
     try {
       return await _storage.read(key: codeKey);
-    } on PlatformException catch (error) {
-      debugPrint('Reading the language failed: $error');
+    } on PlatformException catch (error, stackTrace) {
+      _report(error, stackTrace, 'reading the language');
       return null;
     }
   }
@@ -40,8 +41,18 @@ class SecureLanguageStore implements LanguageStore {
       } else {
         await _storage.write(key: codeKey, value: code);
       }
-    } on PlatformException catch (error) {
-      debugPrint('Saving the language failed: $error');
+    } on PlatformException catch (error, stackTrace) {
+      _report(error, stackTrace, 'saving the language');
     }
   }
+
+  static void _report(Object error, StackTrace stackTrace, String action) =>
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: error,
+          stack: stackTrace,
+          library: 'language store',
+          context: ErrorDescription('while $action'),
+        ),
+      );
 }
