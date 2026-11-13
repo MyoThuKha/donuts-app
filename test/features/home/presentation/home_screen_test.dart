@@ -145,10 +145,13 @@ void main() {
     streams.member.add(testMemberSummary);
     await tester.pump(_entrance);
 
-    final placeholder = tester.widget<ColoredBox>(
+    final placeholder = tester.widget<DecoratedBox>(
       _inside<HomeHeaderView>(find.byKey(AppNetworkImage.placeholderKey)),
     );
-    expect(placeholder.color, DonutsColors.light.surface);
+    expect(
+      (placeholder.decoration as ShapeDecoration).color,
+      DonutsColors.light.surface,
+    );
   });
 
   testWidgets('the header shows the first name, Silver member and 500 points '

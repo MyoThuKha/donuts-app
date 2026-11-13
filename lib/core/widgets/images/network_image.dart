@@ -10,7 +10,7 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// While it loads, and when the download fails, it shows the bundled
 /// [asset]. Without an asset it shows a plain box while loading and an
-/// error tile on failure, both in [placeholderColor].
+/// error tile on failure, both in [placeholderColor] and [placeholderShape].
 class AppNetworkImage extends StatelessWidget {
   const new({
     required this.url,
@@ -20,6 +20,7 @@ class AppNetworkImage extends StatelessWidget {
     this.cacheManager,
     this.fade = true,
     this.placeholderColor,
+    this.placeholderShape = const RoundedRectangleBorder(),
     super.key,
   });
 
@@ -47,10 +48,15 @@ class AppNetworkImage extends StatelessWidget {
   /// grey; a photo on a white card passes white so the card stays visible.
   final Color? placeholderColor;
 
+  /// Outline of the loading box and the error tile, so a stand-in matches
+  /// the shape the real image draws, such as a circle for a round badge.
+  /// The image itself is never clipped. Defaults to a square box.
+  final ShapeBorder placeholderShape;
+
   @override
   Widget build(BuildContext context) {
     final url = this.url;
-    if (url == null) return _assetOr(_PlaceholderBox(placeholderColor));
+    if (url == null) return _assetOr(_placeholder());
     return CachedNetworkImage(
       imageUrl: url,
       cacheManager: cacheManager,
@@ -58,10 +64,13 @@ class AppNetworkImage extends StatelessWidget {
       fit: fit,
       fadeInDuration: fade ? _fadeIn : Duration.zero,
       fadeOutDuration: fade ? _fadeOut : Duration.zero,
-      placeholder: (_, _) => _assetOr(_PlaceholderBox(placeholderColor)),
-      errorWidget: (_, _, _) => _assetOr(_ErrorTile(placeholderColor)),
+      placeholder: (_, _) => _assetOr(_placeholder()),
+      errorWidget: (_, _, _) =>
+          _assetOr(_ErrorTile(placeholderColor, placeholderShape)),
     );
   }
+
+  Widget _placeholder() => _PlaceholderBox(placeholderColor, placeholderShape);
 
   Widget _assetOr(Widget fallback) {
     final asset = this.asset;
@@ -73,37 +82,45 @@ class AppNetworkImage extends StatelessWidget {
       // Until the first frame decodes, Image paints nothing, and whatever
       // sits behind it shows for a frame. A cached asset decodes at once.
       frameBuilder: (_, child, frame, _) =>
-          frame == null ? _PlaceholderBox(placeholderColor) : child,
-      errorBuilder: (_, _, _) => _PlaceholderBox(placeholderColor),
+          frame == null ? _placeholder() : child,
+      errorBuilder: (_, _, _) => _placeholder(),
     );
   }
 }
 
 class _PlaceholderBox extends StatelessWidget {
-  const new(this.color);
+  const new(this.color, this.shape);
 
   final Color? color;
+  final ShapeBorder shape;
 
   @override
-  Widget build(BuildContext context) => ColoredBox(
+  Widget build(BuildContext context) => DecoratedBox(
     key: AppNetworkImage.placeholderKey,
-    color: color ?? context.colors.canvas,
+    decoration: ShapeDecoration(
+      color: color ?? context.colors.canvas,
+      shape: shape,
+    ),
     child: const SizedBox.expand(),
   );
 }
 
 class _ErrorTile extends StatelessWidget {
-  const new(this.color);
+  const new(this.color, this.shape);
 
   final Color? color;
+  final ShapeBorder shape;
 
   @override
   Widget build(BuildContext context) => Semantics(
     key: AppNetworkImage.errorKey,
     label: context.l10n.imageUnavailable,
     image: true,
-    child: ColoredBox(
-      color: color ?? context.colors.canvas,
+    child: DecoratedBox(
+      decoration: ShapeDecoration(
+        color: color ?? context.colors.canvas,
+        shape: shape,
+      ),
       child: Center(
         child: Icon(
           LucideIcons.imageOff,

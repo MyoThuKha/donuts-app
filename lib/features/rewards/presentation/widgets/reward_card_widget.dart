@@ -13,6 +13,16 @@ class RewardCard extends StatelessWidget {
     super.key,
   });
 
+  static const double _padding = AppSpacing.xl;
+
+  /// Outline for the art's stand-in while its image is missing, with a
+  /// corner concentric with the card's.
+  static final ShapeBorder artPlaceholderShape = RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(
+      AppRadii.concentric(AppRadii.card, _padding, minimum: AppRadii.tile),
+    ),
+  );
+
   final Widget art;
   final String title;
   final List<Widget> details;
@@ -25,7 +35,7 @@ class RewardCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.all(_padding),
         child: Row(
           spacing: AppSpacing.l,
           children: [

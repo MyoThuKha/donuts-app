@@ -6,7 +6,7 @@ import 'package:material_ui/material_ui.dart';
 
 /// A tier's badge, cached from the network with the bundled image as the
 /// fallback. It scales in with [pop], and with [glow] it gets a soft accent
-/// halo. A null [tier] shows a plain box while loading.
+/// halo. Without an image, or while [tier] is null, it shows a plain circle.
 class TierShieldWidget extends StatelessWidget {
   const new({required this.tier, required this.pop, this.glow, super.key});
 
@@ -26,6 +26,7 @@ class TierShieldWidget extends StatelessWidget {
           url: tier?.imageUrl,
           asset: tier?.imageAsset,
           fit: BoxFit.contain,
+          placeholderShape: const CircleBorder(),
           cacheWidth:
               (RewardsDimens.shield.width *
                       MediaQuery.devicePixelRatioOf(context))

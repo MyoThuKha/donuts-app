@@ -43,6 +43,18 @@ void main() {
     expect(find.byKey(AppNetworkImage.errorKey), findsNothing);
   });
 
+  testWidgets('draws the placeholder box in the given shape', (tester) async {
+    await _pumpImage(
+      tester,
+      const AppNetworkImage(url: null, placeholderShape: CircleBorder()),
+    );
+
+    final box = tester.widget<DecoratedBox>(
+      find.byKey(AppNetworkImage.placeholderKey),
+    );
+    expect((box.decoration as ShapeDecoration).shape, const CircleBorder());
+  });
+
   testWidgets(
     'shows the error tile with its label when the download fails and there '
     'is no asset',
