@@ -269,6 +269,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSectionOrderAgain => 'Order again';
 
   @override
+  String get homeSectionOther => 'More to try';
+
+  @override
+  String get homeSectionPopularEmoji => '🔥';
+
+  @override
   String get homeSeeAll => 'See all';
 
   @override

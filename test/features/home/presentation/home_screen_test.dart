@@ -12,6 +12,7 @@ import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/core/widgets/images/network_image.dart';
 import 'package:donuts/core/widgets/images/profile_avatar.dart';
 import 'package:donuts/core/widgets/images/tier_backdrop.dart';
+import 'package:donuts/features/home/domain/vo/home_section_vo.dart';
 import 'package:donuts/features/home/presentation/home_assets.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/items/banner_item.dart';
@@ -195,6 +196,29 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Dalgona Creamy Coffee'), findsNWidgets(2));
+  });
+
+  testWidgets('a section the app has no name for shows a generic title, not '
+      'its raw key', (tester) async {
+    await pumpHomeScreen(tester, streams);
+    streams.rowStart['summer_specials'] = testSectionProducts['popular']!;
+    streams
+      ..member.add(testMemberSummary)
+      ..banners.add(testBanners)
+      ..sections.add(const [
+        HomeSectionVO(
+          id: 'summer_specials',
+          titleKey: 'summer_specials',
+          kind: HomeSectionKind.other,
+        ),
+      ])
+      ..shops.add(testShops);
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('More to try'), findsOneWidget);
+    expect(find.text('summer_specials'), findsNothing);
+    expect(find.text('🔥'), findsNothing);
   });
 
   testWidgets('an empty section shows its empty message and the others still '

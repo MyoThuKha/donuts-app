@@ -16,9 +16,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Follows the Popular title, as in the design.
-const String _popularEmoji = '🔥';
-
 /// One Home row: its title, then its products side by side. The products
 /// load, empty and fail on their own, under the title.
 class ProductSectionView extends StatelessWidget {
@@ -97,7 +94,7 @@ class _SectionTitle extends StatelessWidget {
       HomeSectionKind.seasonal => l10n.homeSectionSeasonal,
       HomeSectionKind.popular => l10n.homeSectionPopular,
       HomeSectionKind.orderAgain => l10n.homeSectionOrderAgain,
-      HomeSectionKind.other => section.titleKey,
+      HomeSectionKind.other => l10n.homeSectionOther,
     };
     return Padding(
       padding: const EdgeInsets.only(
@@ -118,7 +115,10 @@ class _SectionTitle extends StatelessWidget {
                 ),
                 if (section.kind == HomeSectionKind.popular)
                   ExcludeSemantics(
-                    child: Text(_popularEmoji, style: context.text.headline),
+                    child: Text(
+                      l10n.homeSectionPopularEmoji,
+                      style: context.text.headline,
+                    ),
                   ),
               ],
             ),

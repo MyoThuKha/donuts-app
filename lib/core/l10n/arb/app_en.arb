@@ -237,6 +237,14 @@
   "@homeSectionOrderAgain": {
     "description": "Home section title"
   },
+  "homeSectionOther": "More to try",
+  "@homeSectionOther": {
+    "description": "Title for a Home section the app has no name for, such as one a newer catalog adds"
+  },
+  "homeSectionPopularEmoji": "🔥",
+  "@homeSectionPopularEmoji": {
+    "description": "Decoration after the Popular title, as in the design. Screen readers skip it"
+  },
   "homeSeeAll": "See all",
   "@homeSeeAll": {
     "description": "Chevron button next to a Home section title"

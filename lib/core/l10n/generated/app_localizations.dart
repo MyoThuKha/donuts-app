@@ -526,6 +526,18 @@ abstract class AppLocalizations {
   /// **'Order again'**
   String get homeSectionOrderAgain;
 
+  /// Title for a Home section the app has no name for, such as one a newer catalog adds
+  ///
+  /// In en, this message translates to:
+  /// **'More to try'**
+  String get homeSectionOther;
+
+  /// Decoration after the Popular title, as in the design. Screen readers skip it
+  ///
+  /// In en, this message translates to:
+  /// **'🔥'**
+  String get homeSectionPopularEmoji;
+
   /// Chevron button next to a Home section title
   ///
   /// In en, this message translates to:
