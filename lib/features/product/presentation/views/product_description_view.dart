@@ -1,6 +1,7 @@
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/features/product/presentation/product_dimens.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -8,7 +9,8 @@ import 'package:material_ui/material_ui.dart';
 class ProductDescriptionView extends StatelessWidget {
   const new({required this.description, super.key});
 
-  final String description;
+  /// Null while the product loads. Skeleton lines stand in for it.
+  final String? description;
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +45,37 @@ class ProductDescriptionView extends StatelessWidget {
             child: const SizedBox(width: ProductDimens.dividerThickness),
           ),
           Expanded(
-            child: Text(
-              description,
-              style: text.bodySmall.copyWith(color: colors.inkMuted),
-            ),
+            child: switch (description) {
+              final description? => Text(
+                description,
+                style: text.bodySmall.copyWith(color: colors.inkMuted),
+              ),
+              null => const _DescriptionSkeleton(),
+            },
           ),
         ],
       ),
     );
   }
+}
+
+class _DescriptionSkeleton extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) => SkeletonGroup(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: AppSpacing.s,
+      children: [
+        for (var i = 0; i < ProductDimens.skeletonDescriptionLines; i++)
+          FractionallySizedBox(
+            widthFactor: i == ProductDimens.skeletonDescriptionLines - 1
+                ? ProductDimens.skeletonLastLineFactor
+                : 1,
+            child: const Skeleton(height: ProductDimens.skeletonSmallLine),
+          ),
+      ],
+    ),
+  );
 }
