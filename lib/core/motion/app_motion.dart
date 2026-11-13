@@ -9,6 +9,10 @@ abstract final class AppMotion {
   static const Duration showcase = Duration(milliseconds: 1200);
   static const Duration stagger = Duration(milliseconds: 60);
 
+  /// Welcome's title waits until its four donut tiles have landed: the
+  /// last starts at 3 × [stagger] and runs for [slow].
+  static const Duration welcomeTitleDelay = Duration(milliseconds: 680);
+
   /// How long a downloaded photo takes to fade in over its stand-in, and
   /// the stand-in to fade out under it (cached_network_image's defaults).
   static const Duration imageFadeIn = slow;

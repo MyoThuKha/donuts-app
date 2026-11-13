@@ -1,4 +1,5 @@
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
@@ -50,9 +51,6 @@ class _WelcomePage extends StatelessWidget {
 class _WelcomeActions extends StatelessWidget {
   const new();
 
-  /// The title fades up once all four tiles have started sliding in.
-  static const int _afterTiles = 5;
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -66,8 +64,10 @@ class _WelcomeActions extends StatelessWidget {
       child: Column(
         spacing: AppSpacing.xxl,
         children: [
+          // The title fades up once the tiles have landed, then the button.
           StaggeredEntrance(
-            index: _afterTiles,
+            index: 1,
+            delay: AppMotion.welcomeTitleDelay,
             child: Text(
               l10n.welcomeTitle,
               style: context.text.display,
@@ -75,7 +75,8 @@ class _WelcomeActions extends StatelessWidget {
             ),
           ),
           StaggeredEntrance(
-            index: _afterTiles + 1,
+            index: 1,
+            delay: AppMotion.welcomeTitleDelay + AppMotion.stagger,
             child: AppPrimaryButton(
               label: l10n.letsExplore,
               onPressed: context.read<SessionCubit>().welcomeSeen,
