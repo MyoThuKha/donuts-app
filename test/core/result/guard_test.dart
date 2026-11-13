@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -116,6 +117,47 @@ void main() {
 
     test('lets programming errors through instead of hiding them', () {
       expect(guard<int>(() async => throw StateError('bug')), throwsStateError);
+    });
+  });
+
+  group('guarded stream', () {
+    test('passes values through', () async {
+      expect(await Stream.fromIterable([1, 2]).guarded().toList(), [1, 2]);
+    });
+
+    test('turns a SQLite error into a DatabaseFailure event', () async {
+      final stream = Stream<int>.error(
+        SqliteException(extendedResultCode: 10, message: 'disk I/O error'),
+      ).guarded();
+
+      await expectLater(stream, emitsError(isA<DatabaseFailure>()));
+    });
+
+    test('turns any other exception into an UnknownFailure event', () async {
+      final stream = Stream<int>.error(Exception('boom')).guarded();
+
+      await expectLater(stream, emitsError(isA<UnknownFailure>()));
+    });
+
+    test('lets an Error through unchanged, because it is a bug', () async {
+      final stream = Stream<int>.error(StateError('bug')).guarded();
+
+      await expectLater(stream, emitsError(isA<StateError>()));
+    });
+
+    test('keeps emitting after a failure', () async {
+      final controller = StreamController<int>();
+      final seen = expectLater(
+        controller.stream.guarded(),
+        emitsInOrder([1, emitsError(isA<ParsingFailure>()), 2]),
+      );
+
+      controller
+        ..add(1)
+        ..addError(const FormatException('bad row'))
+        ..add(2);
+      await controller.close();
+      await seen;
     });
   });
 }

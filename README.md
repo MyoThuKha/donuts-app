@@ -110,7 +110,7 @@ features/home/
 
 The rules that hold everywhere:
 
-- Repositories catch exceptions and return `Result<T>` with a typed `AppFailure`. Nothing above a repository sees an exception, and no error is dropped silently.
+- Repositories catch exceptions and return `Result<T>` with a typed `AppFailure`. Their database streams go through `guarded()`, which turns an exception into the same `AppFailure` as an error event. Nothing above a repository sees an exception, and no error is dropped silently.
 - `AuthRepository` is an interface with `FakeAuthRepository` behind it. The fake waits about a second and keeps users in the local database, and a real API client can replace it in `lib/app/di/auth_module.dart` without touching any screen.
 - Validators are pure functions in `features/auth/domain/validators/`, each with unit tests.
 - Colours, type, spacing and motion come from tokens in `lib/core/theme/` and `lib/core/motion/`. Feature code holds no colour values or text-style overrides.

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -15,22 +16,36 @@ import 'package:json_annotation/json_annotation.dart';
 Future<Result<T>> guard<T>(Future<T> Function() run) async {
   try {
     return Success(await run());
-  } on SqliteException catch (e, s) {
-    return Failure(DatabaseFailure(error: e, stackTrace: s));
-  } on DriftWrappedException catch (e, s) {
-    return Failure(DatabaseFailure(error: e, stackTrace: s));
-  } on DioException catch (e, s) {
-    return Failure(_fromDio(e, s));
-  } on ApiException catch (e, s) {
-    return Failure(ServerFailure(error: e, stackTrace: s));
-  } on CheckedFromJsonException catch (e, s) {
-    return Failure(ParsingFailure(error: e, stackTrace: s));
-  } on FormatException catch (e, s) {
-    return Failure(ParsingFailure(error: e, stackTrace: s));
   } on Exception catch (e, s) {
-    return Failure(UnknownFailure(error: e, stackTrace: s));
+    return Failure(failureFrom(e, s));
   }
 }
+
+/// The stream form of [guard], for repositories that follow the database.
+extension GuardedStream<T> on Stream<T> {
+  /// Turns every [Exception] the stream emits into its [AppFailure], so a
+  /// cubit following a repository stream gets the same typed failures as a
+  /// [Result]. An [Error] passes through unchanged, because it is a bug.
+  Stream<T> guarded() => transform(
+    StreamTransformer.fromHandlers(
+      handleError: (error, stackTrace, sink) => sink.addError(
+        error is Exception ? failureFrom(error, stackTrace) : error,
+        stackTrace,
+      ),
+    ),
+  );
+}
+
+/// The [AppFailure] that [e] stands for.
+AppFailure failureFrom(Exception e, StackTrace s) => switch (e) {
+  SqliteException() ||
+  DriftWrappedException() => DatabaseFailure(error: e, stackTrace: s),
+  DioException() => _fromDio(e, s),
+  ApiException() => ServerFailure(error: e, stackTrace: s),
+  CheckedFromJsonException() ||
+  FormatException() => ParsingFailure(error: e, stackTrace: s),
+  _ => UnknownFailure(error: e, stackTrace: s),
+};
 
 AppFailure _fromDio(DioException e, StackTrace s) => switch (e.type) {
   DioExceptionType.connectionTimeout ||

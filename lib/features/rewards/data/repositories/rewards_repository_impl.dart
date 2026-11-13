@@ -16,13 +16,16 @@ class RewardsRepositoryImpl implements RewardsRepository {
   final CatalogDao _catalog;
 
   @override
-  Stream<List<ChallengeVO>> watchChallenges() => _dao.watchChallenges().map(
-    (rows) => [for (final row in rows) ?row.toVO()],
-  );
+  Stream<List<ChallengeVO>> watchChallenges() => _dao
+      .watchChallenges()
+      .map((rows) => [for (final row in rows) ?row.toVO()])
+      .guarded();
 
   @override
-  Stream<List<GiftVO>> watchGifts() =>
-      _catalog.watchGifts().map((rows) => [for (final row in rows) row.toVO()]);
+  Stream<List<GiftVO>> watchGifts() => _catalog
+      .watchGifts()
+      .map((rows) => [for (final row in rows) row.toVO()])
+      .guarded();
 
   @override
   Future<Result<void>> claimChallenge(String challengeId) =>

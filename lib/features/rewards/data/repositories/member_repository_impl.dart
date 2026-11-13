@@ -1,4 +1,5 @@
 import 'package:donuts/core/database/daos/member_dao.dart';
+import 'package:donuts/core/result/guard.dart';
 import 'package:donuts/features/rewards/data/mapper/member_db_mapper.dart';
 import 'package:donuts/features/rewards/domain/repositories/member_repository.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
@@ -18,5 +19,5 @@ class MemberRepositoryImpl implements MemberRepository {
         if (profile == null) return null;
         final tiers = await _dao.watchTiers().first;
         return profile.toSummary([for (final t in tiers) t.toVO()]);
-      });
+      }).guarded();
 }
