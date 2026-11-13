@@ -10,7 +10,7 @@
         "discountPercent": 50,
         "description": "Six festive donuts in red, green and white, boxed for sharing.",
         "imageUrl": "assets/home/romance.jpeg",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/romance.jpeg",
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
@@ -22,7 +22,7 @@
         "discountPercent": null,
         "description": "Twelve holiday donuts in two rows, enough for the whole family.",
         "imageUrl": "assets/home/box.jpg",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/box.jpg",
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
@@ -34,7 +34,7 @@
         "discountPercent": null,
         "description": "Strawberry glaze topped with dark chocolate sprinkles.",
         "imageUrl": "assets/home/donuts/strawberry-chocolate-glaze.png",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/donuts/strawberry-chocolate-glaze.png",
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
@@ -46,7 +46,7 @@
         "discountPercent": null,
         "description": "Iced milk under a thick layer of whipped coffee foam.",
         "imageUrl": "assets/home/daigona-coffee.png",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/daigona-coffee.png",
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
@@ -58,6 +58,7 @@
         "discountPercent": null,
         "description": "A double shot of espresso, poured long over ice and cold water.",
         "imageUrl": "assets/home/americano.webp",
+        "imageAsset": "assets/seed/images/home/americano.webp",
         "updatedAt": "2026-11-13T00:00:00Z"
       },
       {
@@ -69,7 +70,7 @@
         "discountPercent": null,
         "description": "Enjoy our scrumptious donuts – soft, sweet, and satisfying in every bite. Choose from classic glazed, rich chocolate, or fun sprinkles. Dive into deliciousness now!",
         "imageUrl": "assets/home/donuts/chocolate-strawberry-glaze.png",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/donuts/chocolate-strawberry-glaze.png",
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
@@ -81,7 +82,7 @@
         "discountPercent": null,
         "description": "A glossy blueberry glaze with a few lilac sprinkles.",
         "imageUrl": "assets/home/donuts/blueberry-sprinkle.png",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/donuts/blueberry-sprinkle.png",
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
@@ -93,7 +94,7 @@
         "discountPercent": 20,
         "description": "Iced sugar cookies in star, tree and snowflake shapes.",
         "imageUrl": "assets/home/donuts/strawberry-chocolate-glaze.png",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/donuts/strawberry-chocolate-glaze.png",
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
@@ -105,7 +106,7 @@
         "discountPercent": 20,
         "description": "Iced sugar cookies in star, tree and snowflake shapes, with a Dalgona Creamy Coffee.",
         "imageUrl": "assets/home/daigona-coffee.png",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/daigona-coffee.png",
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
@@ -117,7 +118,7 @@
         "discountPercent": 20,
         "description": "Amber caramel glaze with crushed toffee on top.",
         "imageUrl": "assets/home/donuts/starwberry-chocolate-sprinkle.png",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/donuts/starwberry-chocolate-sprinkle.png",
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
@@ -175,7 +176,7 @@
         "title": "We are now at Central Boulevard",
         "style": "indigo",
         "imageUrl": "assets/home/shop.jpg",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/shop.jpg",
         "sortOrder": 0
       },
       {
@@ -184,7 +185,7 @@
         "title": "Hot drinks are here",
         "style": "sky",
         "imageUrl": "assets/home/shop.jpg",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/shop.jpg",
         "sortOrder": 1
       }
     ],
@@ -194,7 +195,7 @@
         "name": "J'Donuts Myaynigone",
         "address": "Bayint Naung Road, Hlaing Township, Yangon",
         "imageUrl": "assets/home/shop.jpg",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/shop.jpg",
         "sortOrder": 0
       },
       {
@@ -202,7 +203,7 @@
         "name": "J'Donuts Sanchaung",
         "address": "Sanchaung Street, Sanchaung Township, Yangon",
         "imageUrl": "assets/home/shop.jpg",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/shop.jpg",
         "sortOrder": 1
       },
       {
@@ -210,7 +211,7 @@
         "name": "J'Donuts Downtown",
         "address": "Bogyoke Aung San Road, Pabedan Township, Yangon",
         "imageUrl": "assets/home/shop.jpg",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/shop.jpg",
         "sortOrder": 2
       },
       {
@@ -218,7 +219,7 @@
         "name": "J'Donuts Central Boulevard",
         "address": "Kabar Aye Pagoda Road, Yankin Township, Yangon",
         "imageUrl": "assets/home/shop.jpg",
-        "imageAsset": null,
+        "imageAsset": "assets/seed/images/home/shop.jpg",
         "sortOrder": 3
       }
     ],
@@ -228,6 +229,7 @@
         "title": "Free classic donut",
         "costPoints": 20000,
         "imageUrl": "assets/home/donuts/blueberry-sprinkle.png",
+        "imageAsset": "assets/seed/images/home/donuts/blueberry-sprinkle.png",
         "sortOrder": 0
       },
       {
@@ -235,6 +237,7 @@
         "title": "Free iced latte",
         "costPoints": 35000,
         "imageUrl": "assets/home/daigona-coffee.png",
+        "imageAsset": "assets/seed/images/home/daigona-coffee.png",
         "sortOrder": 1
       },
       {
@@ -242,13 +245,14 @@
         "title": "Box of 6 donuts",
         "costPoints": 90000,
         "imageUrl": "assets/home/box.jpg",
+        "imageAsset": "assets/seed/images/home/box.jpg",
         "sortOrder": 2
       }
     ]
   },
   "error": null,
   "meta": {
-    "version": 4,
+    "version": 5,
     "generatedAt": "2026-11-13T00:00:00Z"
   }
 }

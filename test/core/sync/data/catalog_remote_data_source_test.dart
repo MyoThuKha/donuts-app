@@ -17,7 +17,7 @@ void main() {
     final envelope = await _sourceReplying(ScriptedResponse(200, body))
         .fetchCatalog();
 
-    expect(envelope.meta.version, 4);
+    expect(envelope.meta.version, 5);
     expect(envelope.data!.products, hasLength(11));
   });
 
