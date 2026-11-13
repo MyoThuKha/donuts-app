@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 abstract final class HomeDimens {
   static const double avatar = 52;
   static const double bellIcon = 18;
+  static const double bellTagHeight = 32;
   static const double bellBadge = 18;
   static const double chipHeight = 24;
   static const double seeAllButton = 28;

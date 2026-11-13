@@ -20,10 +20,16 @@ abstract final class AppSpacing {
 
 /// Corner radii. Buttons and pills use stadium shapes instead.
 abstract final class AppRadii {
+  /// Small labels such as "New".
+  static const double badge = 6;
   static const double field = 8;
   static const double tile = 12;
   static const double card = 20;
   static const double nav = 32;
+
+  /// The corner radius of a container that holds a shape of radius [inner]
+  /// [inset] in from its corner, so the two curves share a centre.
+  static double enclosing(double inner, double inset) => inner + inset;
 }
 
 /// Fixed component sizes.
@@ -39,4 +45,7 @@ abstract final class AppSizes {
   /// The bottom nav panel's height above the home indicator.
   static const double navBar = 80;
   static const double imageErrorIcon = 24;
+
+  /// The thin white outline around badges that sit on photos.
+  static const double rim = 1.5;
 }
