@@ -58,4 +58,28 @@ void main() {
       expect(_check(2013, 11, 13), _invalid(ValidationError.tooYoung));
     });
   });
+
+  group('dateOfBirthRange', () {
+    test('runs from 120 years ago to 13 years ago, both accepted', () {
+      final range = dateOfBirthRange(_today);
+
+      expect(range.earliest, DateTime(1906, 11, 12));
+      expect(range.latest, DateTime(2013, 11, 12));
+      for (final date in [range.earliest, range.latest]) {
+        expect(_check(date.year, date.month, date.day), isA<Valid<DateTime>>());
+      }
+    });
+
+    test('ends on 28 February when today is 29 February', () {
+      final leapDay = DateTime(2028, 2, 29);
+      final range = dateOfBirthRange(leapDay);
+
+      expect(range.earliest, DateTime(1908, 2, 29));
+      expect(range.latest, DateTime(2015, 2, 28));
+      expect(
+        validateDateOfBirth(year: 2015, month: 2, day: 28, today: leapDay),
+        isA<Valid<DateTime>>(),
+      );
+    });
+  });
 }

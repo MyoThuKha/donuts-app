@@ -226,6 +226,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yearHint => 'Year';
 
   @override
+  String get dobPickerTitle => 'Select your birthday';
+
+  @override
+  String get select => 'Select';
+
+  @override
   String get letsExplore => 'Let’s explore';
 
   @override
