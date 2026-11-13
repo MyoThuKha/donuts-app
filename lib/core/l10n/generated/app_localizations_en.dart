@@ -459,4 +459,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rewardsRetry => 'Try again';
+
+  @override
+  String get cartTitle => 'Cart';
+
+  @override
+  String get cartEmptyTitle => 'Your cart is empty';
+
+  @override
+  String get cartEmptyMessage => 'Add a donut from any product page.';
+
+  @override
+  String get cartBrowse => 'Browse donuts';
+
+  @override
+  String get cartErrorTitle => 'Couldn\'t load your cart';
+
+  @override
+  String get cartErrorMessage =>
+      'Something went wrong reading it. Try again in a moment.';
+
+  @override
+  String get cartRetry => 'Try again';
+
+  @override
+  String get cartCheckout => 'Checkout';
+
+  @override
+  String get cartRemove => 'Remove';
+
+  @override
+  String get cartUndo => 'Undo';
+
+  @override
+  String get cartChangeFailed => 'Couldn\'t update your cart';
+
+  @override
+  String cartRemoved(String name) {
+    return '$name removed';
+  }
+
+  @override
+  String cartOpen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Cart, $count items',
+      one: 'Cart, 1 item',
+      zero: 'Cart, empty',
+    );
+    return '$_temp0';
+  }
 }

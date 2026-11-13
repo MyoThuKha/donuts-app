@@ -841,6 +841,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get rewardsRetry;
+
+  /// Cart screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Cart'**
+  String get cartTitle;
+
+  /// Cart empty state title
+  ///
+  /// In en, this message translates to:
+  /// **'Your cart is empty'**
+  String get cartEmptyTitle;
+
+  /// Cart empty state message
+  ///
+  /// In en, this message translates to:
+  /// **'Add a donut from any product page.'**
+  String get cartEmptyMessage;
+
+  /// Cart empty state button that goes Home
+  ///
+  /// In en, this message translates to:
+  /// **'Browse donuts'**
+  String get cartBrowse;
+
+  /// Cart error state title
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your cart'**
+  String get cartErrorTitle;
+
+  /// Cart error state message
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong reading it. Try again in a moment.'**
+  String get cartErrorMessage;
+
+  /// Cart error state retry button
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get cartRetry;
+
+  /// Checkout button label on the cart's total bar
+  ///
+  /// In en, this message translates to:
+  /// **'Checkout'**
+  String get cartCheckout;
+
+  /// Screen reader label of the trash button that takes an item out of the cart
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get cartRemove;
+
+  /// Snackbar action that puts a removed item back
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get cartUndo;
+
+  /// Snackbar when a cart change fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update your cart'**
+  String get cartChangeFailed;
+
+  /// Snackbar after an item is taken out of the cart
+  ///
+  /// In en, this message translates to:
+  /// **'{name} removed'**
+  String cartRemoved(String name);
+
+  /// Screen reader label of the Settings cart tag
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Cart, empty} =1{Cart, 1 item} other{Cart, {count} items}}'**
+  String cartOpen(int count);
 }
 
 class _AppLocalizationsDelegate

@@ -85,4 +85,10 @@ abstract final class AppSizes {
   /// The snackbar's height for a one-line message, matching the
   /// pull-to-refresh pill.
   static const double snackBar = refreshIndicator;
+
+  /// An icon tag flush with the right edge, such as the Home bell and the
+  /// Settings cart: its height, icon and count badge.
+  static const double edgeTagHeight = 32;
+  static const double edgeTagIcon = 18;
+  static const double edgeTagBadge = 18;
 }

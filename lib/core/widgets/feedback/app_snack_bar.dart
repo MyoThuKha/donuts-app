@@ -3,6 +3,7 @@ import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/app_shadows.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/text_button.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -40,8 +41,9 @@ enum AppSnackBarTone {
 SnackBar appSnackBar(
   String message, {
   AppSnackBarTone tone = AppSnackBarTone.info,
+  AppSnackBarAction? action,
 }) => SnackBar(
-  content: AppSnackBarPill(message: message, tone: tone),
+  content: AppSnackBarPill(message: message, tone: tone, action: action),
   behavior: SnackBarBehavior.floating,
   padding: EdgeInsets.zero,
   margin: const EdgeInsets.fromLTRB(
@@ -54,18 +56,29 @@ SnackBar appSnackBar(
   clipBehavior: Clip.none,
 );
 
-/// The white pill a snackbar shows: a coloured badge for its [tone], then
-/// the message. It hugs its text and centres itself, and springs up as it
-/// appears.
+/// A button at the end of a snackbar, such as Undo. Tapping it closes the
+/// snackbar, then runs [onPressed].
+final class AppSnackBarAction {
+  const new({required this.label, required this.onPressed});
+
+  final String label;
+  final VoidCallback onPressed;
+}
+
+/// The white pill a snackbar shows: a coloured badge for its [tone], the
+/// message, then the [action] if there is one. It hugs its text and centres
+/// itself, and springs up as it appears.
 class AppSnackBarPill extends StatelessWidget {
   const new({
     required this.message,
     this.tone = AppSnackBarTone.info,
+    this.action,
     super.key,
   });
 
   final String message;
   final AppSnackBarTone tone;
+  final AppSnackBarAction? action;
 
   /// The scale and drop the pill springs up from.
   static const double _enterScale = 0.85;
@@ -107,6 +120,7 @@ class AppSnackBarPill extends StatelessWidget {
                 children: [
                   _ToneBadge(tone: tone),
                   Flexible(child: Text(message, style: context.text.label)),
+                  if (action case final action?) _ActionButton(action: action),
                 ],
               ),
             ),
@@ -115,6 +129,21 @@ class AppSnackBarPill extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ActionButton extends StatelessWidget {
+  const new({required this.action});
+
+  final AppSnackBarAction action;
+
+  @override
+  Widget build(BuildContext context) => AppTextButton(
+    label: action.label,
+    onPressed: () {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      action.onPressed();
+    },
+  );
 }
 
 /// The filled circle in front of the message, in the [tone]'s colour.
@@ -152,9 +181,10 @@ extension AppSnackBarMessenger on ScaffoldMessengerState {
   void showMessage(
     String message, {
     AppSnackBarTone tone = AppSnackBarTone.info,
+    AppSnackBarAction? action,
   }) => this
     ..hideCurrentSnackBar()
-    ..showSnackBar(appSnackBar(message, tone: tone));
+    ..showSnackBar(appSnackBar(message, tone: tone, action: action));
 }
 
 /// Shows the app's snackbar from a widget's context.
@@ -163,5 +193,8 @@ extension AppSnackBarContext on BuildContext {
   void showMessage(
     String message, {
     AppSnackBarTone tone = AppSnackBarTone.info,
-  }) => ScaffoldMessenger.of(this).showMessage(message, tone: tone);
+    AppSnackBarAction? action,
+  }) =>
+      ScaffoldMessenger.of(this)
+          .showMessage(message, tone: tone, action: action);
 }

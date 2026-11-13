@@ -1,20 +1,24 @@
 import 'dart:math' as math;
 
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/images/profile_avatar.dart';
 import 'package:donuts/core/widgets/images/tier_backdrop.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:donuts/features/auth/presentation/session/user_initials.dart';
+import 'package:donuts/features/cart/presentation/blocs/cart_count_cubit.dart';
+import 'package:donuts/features/cart/presentation/widgets/cart_tag_widget.dart';
 import 'package:donuts/features/settings/presentation/blocs/settings_member_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The band at the top of Settings, as a sliver: the member's avatar, name,
-/// tier and phone number. It sits on the backdrop of the member's tier,
-/// read from the local database, and shows plain light blue until that
-/// loads.
+/// tier and phone number, and the cart tag that opens the cart. It sits on
+/// the backdrop of the member's tier, read from the local database, and
+/// shows plain light blue until that loads.
 ///
 /// It runs up under the status bar and stretches when the page is pulled
 /// down, so the backdrop never comes apart from the top.
@@ -93,10 +97,27 @@ class SettingsHeaderView extends StatelessWidget {
               tierName: tier?.name,
             ),
           ),
+          // Level with the top of the avatar, flush with the right edge,
+          // where Home puts its bell.
+          Positioned(
+            right: 0,
+            bottom: contentHeight - _verticalInset - AppSizes.edgeTagHeight,
+            child: const _CartTag(),
+          ),
         ],
       ),
     );
   }
+}
+
+class _CartTag extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) => CartTagWidget(
+    count: context.watch<CartCountCubit>().state,
+    onTap: () => context.push(AppRoutes.cart),
+  );
 }
 
 class _HeaderRow extends StatelessWidget {

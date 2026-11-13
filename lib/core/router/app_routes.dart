@@ -10,6 +10,9 @@ abstract final class AppRoutes {
   static const String product = '/product/:id';
   static String productDetail(String id) => '/product/$id';
 
+  /// The cart, above the shell. Settings opens it.
+  static const String cart = '/cart';
+
   static const String onboarding = '/onboarding';
   static const String welcome = '/welcome';
 

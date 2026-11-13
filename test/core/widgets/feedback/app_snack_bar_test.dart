@@ -74,4 +74,30 @@ void main() {
     expect(find.text('First'), findsNothing);
     expect(find.text('Second'), findsOneWidget);
   });
+
+  testWidgets('an action shows its label, runs once and closes the snackbar', (
+    tester,
+  ) async {
+    var undone = 0;
+    await pumpThemed(
+      tester,
+      Builder(
+        builder: (context) => TextButton(
+          onPressed: () => context.showMessage(
+            'Coconut Donut removed',
+            action: AppSnackBarAction(label: 'Undo', onPressed: () => undone++),
+          ),
+          child: const Text('show'),
+        ),
+      ),
+    );
+    await tester.tap(find.text('show'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+
+    expect(undone, 1);
+    expect(find.text('Coconut Donut removed'), findsNothing);
+  });
 }

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 
+import 'cart_fakes.dart';
 import 'home_fakes.dart';
 import 'member_fakes.dart';
 import 'product_fakes.dart';
@@ -14,6 +15,7 @@ import 'settings_fakes.dart';
 void registerFeatureFakes(GetIt getIt) {
   registerMemberFakes(getIt);
   registerHomeFakes(getIt);
+  registerCartFakes(getIt);
   registerProductFakes(getIt);
   registerRewardsFakes(getIt);
   registerSettingsFakes(getIt);

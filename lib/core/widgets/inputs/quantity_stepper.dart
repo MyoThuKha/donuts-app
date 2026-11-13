@@ -7,18 +7,23 @@ import 'package:material_ui/material_ui.dart';
 
 /// A grey stadium with a white rim, with minus and plus buttons around a
 /// rolling quantity. A null callback disables its button.
-
+///
+/// With [minusRemoves], the minus is a trash icon labelled Remove, as the
+/// cart shows it at the lowest quantity.
 class QuantityStepper extends StatelessWidget {
   const new({
     required this.quantity,
     this.onDecrement,
     this.onIncrement,
+    this.minusRemoves = false,
     super.key,
   });
 
   final int quantity;
   final VoidCallback? onDecrement;
   final VoidCallback? onIncrement;
+  final bool minusRemoves;
+
   static const double height = 52;
 
   /// The visible circle of a button. Its tap area is larger.
@@ -51,8 +56,8 @@ class QuantityStepper extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               _StepperButton(
-                icon: LucideIcons.minus,
-                label: l10n.productDecrease,
+                icon: minusRemoves ? LucideIcons.trash2 : LucideIcons.minus,
+                label: minusRemoves ? l10n.cartRemove : l10n.productDecrease,
                 onPressed: onDecrement,
               ),
               SizedBox(
