@@ -1,11 +1,12 @@
 import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/press_grow.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// The filled stadium call-to-action, shared by every screen. It shrinks on
-/// press, and while [loading] it morphs into a circle holding a spinner and
-/// ignores taps.
+/// The filled stadium call-to-action, shared by every screen. It grows a
+/// little while held, and while [loading] it morphs into a circle holding a
+/// spinner and ignores taps.
 class AppPrimaryButton extends StatefulWidget {
   const new({
     required this.label,
@@ -34,36 +35,22 @@ class _AppPrimaryButtonState extends State<AppPrimaryButton> {
   static const double _spinnerSize = 22;
   static const double _spinnerStroke = 2.5;
 
-  bool _pressed = false;
-
   bool get _enabled => widget.onPressed != null && !widget.loading;
-
-  void _setPressed(bool pressed) {
-    if (_enabled && pressed != _pressed) setState(() => _pressed = pressed);
-  }
 
   @override
   Widget build(BuildContext context) {
-    final motion = context.motion;
     return Semantics(
       button: true,
       enabled: _enabled,
       label: widget.label,
       excludeSemantics: true,
       onTap: _enabled ? widget.onPressed : null,
-      child: GestureDetector(
-        onTapDown: (_) => _setPressed(true),
-        onTapUp: (_) => _setPressed(false),
-        onTapCancel: () => _setPressed(false),
+      child: AppPressGrow(
         onTap: _enabled ? widget.onPressed : null,
-        child: AnimatedScale(
-          scale: _pressed ? AppMotion.pressScale : 1,
-          duration: motion.of(AppMotion.fast),
-          curve: AppMotion.standard,
-          child: LayoutBuilder(
-            builder: (context, constraints) =>
-                _body(context, constraints.maxWidth),
-          ),
+        pressedScale: AppMotion.pressGrowWide,
+        child: LayoutBuilder(
+          builder: (context, constraints) =>
+              _body(context, constraints.maxWidth),
         ),
       ),
     );
