@@ -20,6 +20,7 @@ void main() {
     await CatalogImporter(
       db,
       now: () => DateTime.utc(2026, 11, 12),
+      imageBase: testImageBase,
     ).importCatalog(readCatalogFile(seedCatalogPath).data!, version: 1);
   });
   tearDown(() => db.close());
@@ -43,8 +44,11 @@ void main() {
     final mistletoe = sections[0].products.first;
     expect(mistletoe.name, 'Mistletoe Romance box');
     expect(mistletoe.discountPercent, 50);
-    expect(mistletoe.imageAsset, 'assets/images/box_mistletoe_romance.webp');
-    expect(mistletoe.imageUrl, endsWith('box_mistletoe_romance.webp'));
+    expect(mistletoe.imageAsset, isNull);
+    expect(
+      mistletoe.imageUrl,
+      testImageBase.resolve('assets/home/romance.jpeg').toString(),
+    );
     expect(sections[1].products.first.discountPercent, isNull);
   });
 
@@ -84,7 +88,8 @@ void main() {
     ]);
     expect(shops.first.name, 'J’Donuts Myaynigone');
     expect(shops.first.address, 'Bayint Naung Road, Hlaing Township, Yangon');
-    expect(shops.first.imageAsset, 'assets/images/shop_myaynigone.webp');
+    expect(shops.first.imageUrl, 'http://localhost:8080/assets/home/shop.jpg');
+    expect(shops.first.imageAsset, isNull);
   });
 
   test('a section titleKey nobody knows maps to other', () async {

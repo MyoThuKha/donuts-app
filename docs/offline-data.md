@@ -53,4 +53,8 @@ dart run tool/mock_server.dart --port 8080 --delay-ms 0
 
 ## Images
 
-`AppNetworkImage` caches downloads on disk, so an image that has loaded once still shows offline. While loading, and if the download fails, it shows the bundled asset named in the data. Until the real image files are committed, those assets are missing, and the widget shows a plain coloured box (or an "image unavailable" tile when there is no asset at all).
+Catalog images (products, banners, shops) live in `mock-api/assets/` and are served by the mock API like the JSON. An `imageUrl` in the catalog can be relative, such as `assets/home/shop.jpg`. `CatalogImporter` resolves it against `API_BASE_URL` and stores the absolute URL, so the images come from GitHub raw by default and from `tool/mock_server.dart` when you run against it. An absolute `imageUrl` is stored as it is.
+
+Because the URL is resolved at import, data imported under one base URL keeps that URL until a newer catalog version arrives. After switching `API_BASE_URL`, reinstall the app or bump `meta.version` in `mock-api/v1/catalog.json`.
+
+`AppNetworkImage` caches downloads on disk, so an image that has loaded once still shows offline. While loading, and if the download fails, it shows the bundled asset named in `imageAsset`. Images served from `mock-api/` have no bundled copy (`imageAsset` is null), so they show a plain coloured box until the first download, and an "image unavailable" tile if it fails.

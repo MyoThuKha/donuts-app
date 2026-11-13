@@ -24,3 +24,6 @@ ApiEnvelope<MemberSeedDto> readMemberFile(String path) =>
 
 Map<String, dynamic> _readJson(String path) =>
     jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+
+/// The API base the importer resolves relative image paths against in tests.
+final Uri testImageBase = Uri.parse('http://localhost:8080/');

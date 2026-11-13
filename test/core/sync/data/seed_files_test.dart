@@ -15,12 +15,12 @@ void main() {
     final seed = readCatalogFile(seedCatalogPath);
 
     expect(seed.meta.version, 1);
-    expect(seed.data!.products, hasLength(8));
+    expect(seed.data!.products, hasLength(9));
     expect(seed.data!.shops, hasLength(4));
   });
 
   test(
-    'the remote catalog has version 2 and exactly one product the seed lacks',
+    'the remote catalog has version 3 and exactly one product the seed lacks',
     () {
       final seedIds = {
         for (final p in readCatalogFile(seedCatalogPath).data!.products) p.id,
@@ -28,7 +28,7 @@ void main() {
       final remote = readCatalogFile(remoteCatalogPath);
       final added = remote.data!.products.where((p) => !seedIds.contains(p.id));
 
-      expect(remote.meta.version, 2);
+      expect(remote.meta.version, 3);
       expect(added.map((p) => p.id), ['p_toasted_coconut']);
       expect(added.single.imageAsset, isNull);
     },
