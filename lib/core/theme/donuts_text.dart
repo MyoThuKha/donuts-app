@@ -9,6 +9,7 @@ class DonutsText extends ThemeExtension<DonutsText> {
     required this.title,
     required this.headline,
     required this.sectionTitle,
+    required this.subtitle,
     required this.body,
     required this.bodySmall,
     required this.label,
@@ -23,6 +24,7 @@ class DonutsText extends ThemeExtension<DonutsText> {
     title: rounded(_style(26, FontWeight.w700, c.ink, height: 1.2)),
     headline: rounded(_style(22, FontWeight.w800, c.ink, height: 1.2)),
     sectionTitle: rounded(_style(18, FontWeight.w700, c.ink)),
+    subtitle: rounded(_style(16, FontWeight.w700, c.ink)),
     body: _style(15, FontWeight.w400, c.inkMuted),
     bodySmall: _style(13, FontWeight.w500, c.inkMuted),
     label: _style(14, FontWeight.w700, c.ink),
@@ -48,6 +50,10 @@ class DonutsText extends ThemeExtension<DonutsText> {
   final TextStyle title;
   final TextStyle headline;
   final TextStyle sectionTitle;
+
+  /// A heading one step below [sectionTitle], such as the tier names on
+  /// the Rewards ladder.
+  final TextStyle subtitle;
   final TextStyle body;
   final TextStyle bodySmall;
   final TextStyle label;
@@ -87,6 +93,7 @@ class DonutsText extends ThemeExtension<DonutsText> {
       title: mix(title, other.title),
       headline: mix(headline, other.headline),
       sectionTitle: mix(sectionTitle, other.sectionTitle),
+      subtitle: mix(subtitle, other.subtitle),
       body: mix(body, other.body),
       bodySmall: mix(bodySmall, other.bodySmall),
       label: mix(label, other.label),
