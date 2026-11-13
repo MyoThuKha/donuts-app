@@ -2,28 +2,57 @@
 
 A working slice of the J'Donuts customer app in Flutter. It covers onboarding with a fake login and registration, an offline-first Home and Product detail, and an animated Rewards screen. It runs on Android and iOS, in English and Burmese, with local data only.
 
-## Versions
+## At a glance
 
-| Tool | Version |
+| | |
 |---|---|
-| Flutter | 3.50.0 (stable) |
-| Dart | 3.14.0 |
-| App | 1.0.0+1 |
+| OTP code | **`123456`** for every number |
+| Sample phone number | `09254135592`, typed after the fixed +95 |
+| Download | [Latest release](https://github.com/MyoThuKha/donuts-app/releases/latest): signed APK and zipped iOS Simulator app |
+| Flutter / Dart | 3.50.0 (stable) / 3.14.0 |
+| App version | 1.0.0+2 |
+| Languages | English, Burmese (pick one in Settings) |
+| Back end | None. Data is bundled JSON plus an optional mock API |
+
+**Contents.** [Run it](#run-it) · [Try the flow](#try-the-flow) · [Sign-up rules](#sign-up-rules) · [Architecture](#architecture-and-folder-map) · [State management](#state-management) · [Offline strategy](#offline-strategy) · [Animations](#animations) · [Tests and CI](#tests-and-ci) · [Known gaps](#known-gaps) · [Time spent](#time-spent)
 
 ## Run it
 
 ```bash
 flutter pub get
+```
+
+```bash
 flutter run
 ```
 
-Pick an iOS Simulator or Android emulator when asked, or pass `-d <device id>` (list them with `flutter devices`). Generated code (Drift, freezed, json_serializable and l10n output) is committed, so a clean clone needs no `build_runner` step.
+Pick an iOS Simulator or Android emulator when asked, or pass `-d <device id>` (`flutter devices` lists them). Generated code (Drift, freezed, json_serializable and l10n) is committed, so a clean clone needs no `build_runner` step.
 
-The app needs no server. On first launch it loads its data from JSON bundled in the app. When it has a network connection, it also refreshes the catalog from the mock API, which by default is the `mock-api/` folder of this repository's `main` branch on GitHub. To serve that folder from your own machine instead:
+### Commands
 
-```bash
-dart run tool/mock_server.dart --port 8080
-```
+| To | Run |
+|---|---|
+| Analyze | `flutter analyze` |
+| Run unit and widget tests | `flutter test` |
+| Run the end-to-end test | `flutter test integration_test -d <device id>` |
+| Build the release APK | `flutter build apk --release` |
+| Build the iOS Simulator app | `flutter build ios --simulator` |
+| Serve the mock API locally | `dart run tool/mock_server.dart --port 8080` |
+
+The end-to-end test needs a booted simulator, emulator or attached phone. It starts the whole app with an empty in-memory database, an in-memory session and no network, so every run registers a new user and Home renders from the bundled seed.
+
+### Builds
+
+| Build | Lands in | Notes |
+|---|---|---|
+| APK | `build/app/outputs/flutter-apk/app-release.apk` | Without `android/key.properties` it is signed with the debug key and installs on any device |
+| iOS Simulator app | `build/ios/iphonesimulator/Runner.app` | Debug mode, the only mode Flutter builds for simulators |
+
+To hand over the simulator app, zip it with `ditto -c -k --keepParent build/ios/iphonesimulator/Runner.app Runner.zip`. To install it, unzip it and drag `Runner.app` onto a booted simulator. Every [GitHub release](https://github.com/MyoThuKha/donuts-app/releases) already has both files attached.
+
+### Mock API
+
+The app needs no server. On first launch it loads its data from JSON bundled in the app. Once online, it refreshes the catalog from the mock API, which by default is the `mock-api/` folder of this repository's `main` branch on GitHub. To use a local copy, start the mock server from the table above, then:
 
 ```bash
 flutter run --dart-define=API_BASE_URL=http://localhost:8080/
@@ -31,44 +60,34 @@ flutter run --dart-define=API_BASE_URL=http://localhost:8080/
 
 On an Android phone over USB, run `adb reverse tcp:8080 tcp:8080` first. [docs/offline-data.md](docs/offline-data.md) has the details.
 
-### Check the code
+## Try the flow
 
-```bash
-flutter analyze
-flutter test
-```
+1. **Register.** On Onboarding, tap Let's get started. Enter `09254135592`, then the code `123456`, a first name and a date of birth. Welcome leads to Home.
+2. **Log out.** Open the Settings tab, tap Log out and confirm.
+3. **Log in.** Tap Log in on Onboarding, enter the same number and `123456`. It goes straight to Home.
+4. **Browse.** Tap any product tile to open Product detail, then switch to the Reward tab.
+5. **Go offline.** Turn on airplane mode and repeat. Home, Product detail and Rewards still render from the local database, images included.
 
-The end-to-end test (register, Home, Product detail) needs a booted simulator, emulator or attached phone. It starts the whole app with an empty in-memory database, an in-memory session and no network, so every run registers a new user and Home renders from the bundled seed:
+The session survives a relaunch. Explore and Wallet in the bottom nav are placeholder tabs.
 
-```bash
-flutter test integration_test -d <device id>
-```
+## Sign-up rules
 
-### Build the deliverables
+Validators are pure functions in `lib/features/auth/domain/validators/`, and the limits are named constants in `auth_rules.dart`.
 
-```bash
-flutter build apk --release
-```
+| Field | Rule | When it fails |
+|---|---|---|
+| Phone | After +95, spaces, dashes and one leading 0 are dropped. The rest is 9 followed by 7 to 9 digits, so `09254135592` is stored as `+959254135592` | Continue stays off. The message shows once the field loses focus |
+| OTP | 6 digits. Only `123456` passes | The boxes shake and clear. 3 wrong codes lock entry until Resend |
+| Resend | Counts down from 5:00 and restarts when tapped | |
+| First name | Required, 1 to 50 characters after trimming. Letters and spaces, Myanmar script included, no digits | Inline message |
+| Last name | Optional, same characters as the first name | Inline message |
+| Date of birth | A real date, not in the future, age 13 to 120 | The date wheel offers only dates that pass, so the inline message is a backstop |
 
-```bash
-flutter build ios --simulator
-```
-
-The APK lands in `build/app/outputs/flutter-apk/app-release.apk`. Without `android/key.properties` it is signed with the debug key, so it installs on any device. The iOS Simulator app lands in `build/ios/iphonesimulator/Runner.app`. Flutter builds simulator apps in debug mode only. Zip it with `ditto -c -k --keepParent build/ios/iphonesimulator/Runner.app Runner.zip`, and to install it, unzip it and drag `Runner.app` onto a booted simulator.
-
-Each GitHub release already has both files attached. The end of [Tests](#tests) explains the release workflow.
-
-## Fake OTP code
-
-The code is **123456** for every number. Anything else is wrong: the boxes shake and clear, and three wrong codes lock entry until Resend. Resend counts down from 5:00.
-
-Phone numbers are Myanmar numbers after the fixed +95, such as `09254135592`. Spaces, dashes and one leading 0 are dropped, so that number is stored as `+959254135592`.
-
-A number registers once. Logging in with a number that hasn't registered shows a link to register, and registering a known number shows a link to log in.
+A number registers once. Logging in with an unregistered number offers a link to register, and registering a known number offers a link to log in. Either link keeps the typed number.
 
 ## Architecture and folder map
 
-The code is feature-first. Each feature has `data`, `domain` and `presentation` layers, and the domain layer imports nothing from Flutter or Dio. A test (`test/features/auth/domain/domain_purity_test.dart`) fails the build if it does.
+The code is feature-first. Each feature has `data`, `domain` and `presentation` layers, and the domain layer imports nothing from Flutter or Dio. `test/features/auth/domain/domain_purity_test.dart` fails if it does.
 
 ```text
 lib/
@@ -110,23 +129,39 @@ features/home/
     └── home_screen.dart
 ```
 
-The rules that hold everywhere:
+There is no `datasources/` folder inside a feature, on purpose. Several features read the same tables, so the data sources are shared in `core`, and each repository takes the ones it needs:
 
-- Repositories catch exceptions and return `Result<T>` with a typed `AppFailure`. Their database streams go through `guarded()`, which turns an exception into the same `AppFailure` as an error event. Nothing above a repository sees an exception, and no error is dropped silently.
-- `AuthRepository` is an interface with `FakeAuthRepository` behind it. The fake waits about a second and keeps users in the local database, and a real API client can replace it in `lib/app/di/auth_module.dart` without touching any screen.
-- Validators are pure functions in `features/auth/domain/validators/`, each with unit tests.
-- Colours, type, spacing and motion come from tokens in `lib/core/theme/` and `lib/core/motion/`. Feature code holds no colour values or text-style overrides.
-- Every string is in `lib/core/l10n/arb/`. English is the template, and Burmese (`my`) is complete. The language can be picked in Settings.
+| Data source | Where | Used by |
+|---|---|---|
+| Local database | Drift DAOs in `lib/core/database/daos/` | Every repository, such as `HomeRepositoryImpl(CatalogDao)` |
+| Remote API and bundled seed | `CatalogRemoteDataSource` and `SeedSource` in `lib/core/sync/data/` | Only the catalog sync, which writes into the database |
+| Session | `SessionStore` in `lib/core/storage/` | `FakeAuthRepository` |
+
+No feature repository talks to the network. Screens read the database, and the sync only refreshes it.
+
+These rules hold everywhere:
+
+- **Errors are values.** Repositories catch exceptions and return `Result<T>` with a typed `AppFailure`. Their database streams go through `guarded()`, which turns an exception into the same `AppFailure` as an error event. Nothing above a repository sees an exception.
+- **Auth can be swapped.** `AuthRepository` is an interface with `FakeAuthRepository` behind it. The fake waits about a second and keeps users in the local database. A real API client can replace it in `lib/app/di/auth_module.dart` without touching any screen.
+- **Styles come from tokens.** Colours, type, spacing and motion live in `lib/core/theme/` and `lib/core/motion/`. Feature code holds no colour values or text-style overrides.
+- **Strings come from ARB files.** Every string is in `lib/core/l10n/arb/`. English is the template and Burmese (`my`) is complete.
 
 ## State management
 
 The app uses [flutter_bloc](https://pub.dev/packages/flutter_bloc) Cubits, with [get_it](https://pub.dev/packages/get_it) for dependency injection. The brief allows BLoC or Riverpod. Cubits fit here for three reasons:
 
-- Each screen's state is an explicit immutable class, so its loading, ready, empty and failed cases are visible in one place, and `bloc_test` tests every transition.
+- Each screen's state is an explicit immutable class, so its loading, ready, empty and failed cases sit in one place, and `bloc_test` tests every transition.
 - Most screens follow a stream from the database. A Cubit subscribes once and re-emits, with no event classes for the simple cases.
 - get_it keeps object creation out of widgets. Each feature registers its repositories, use cases and cubits in its own module under `lib/app/di/`, and tests swap any of them through `configureDependencies(...)`.
 
-App-wide cubits live above the router: `SessionCubit` (signed in or out, which drives the auth guard), `ConnectivityCubit`, `CatalogSyncCubit`, `SeedCubit` and `LanguageCubit`. Screen cubits are created per screen from get_it factories.
+| Cubit | Scope | Holds |
+|---|---|---|
+| `SessionCubit` | App | Signed in or out. Drives the router's auth guard |
+| `ConnectivityCubit` | App | Online or offline, from the network interface and a reachability check |
+| `CatalogSyncCubit` | App | Background refresh of the catalog |
+| `SeedCubit` | App | First-launch seeding, with Try again on failure |
+| `LanguageCubit` | App | The picked language, or the device's |
+| Screen cubits | One screen | Created per screen from get_it factories |
 
 ## Offline strategy
 
@@ -135,46 +170,70 @@ The local Drift database is the single source of truth. Screens read only from i
 1. **First launch.** `bootstrap()` loads `assets/seed/catalog_v1.json` and `assets/seed/member.json` into the database before the first frame. Every image they name is bundled under `assets/seed/images/`, so a first launch in airplane mode shows the full app, images included. If seeding fails, Home says so and offers Try again.
 2. **Going online.** `ConnectivityCubit` reports online only when a network interface is up and the API host answers a HEAD request. On every change to online, and on pull-to-refresh, `CatalogSyncCubit` fetches `mock-api/v1/catalog.json` (a versioned `{data, error, meta}` envelope) and imports it in one transaction. An older or equal version changes nothing, so stale data can't roll the database back.
 3. **Images.** Downloads are cached on disk. While one loads, or if it fails, the bundled copy shows instead.
-4. **Offline.** A small banner shows at the top of Home. Everything else works from the database: Home, Product detail, Rewards and Settings.
+4. **Offline.** A small banner opens at the top of Home, Product detail and Rewards and pushes the screen down. Home, Product detail, Rewards and Settings all keep working from the database.
 
 Home, Rewards and Settings read the same member record, so their points and tier always agree. Member data is only ever seeded, never refreshed. [docs/offline-data.md](docs/offline-data.md) covers versioning, image URLs and how to change the data.
 
 ## Animations
 
-All durations and curves are named constants in `lib/core/motion/app_motion.dart`. Every animation reads them through `context.motion`, which skips decorative motion and shortens state cues when Android's "Remove animations" or iOS's "Reduce Motion" is on.
+All durations and curves are named constants in `lib/core/motion/app_motion.dart`. Every animation reads them through `context.motion`, which skips decorative motion and shortens state cues when Android's "Remove animations" or iOS's "Reduce Motion" is on. All motion uses Flutter's own APIs, with no Lottie or Rive. The points ring, the tier line and the coffee arc are `CustomPainter`s. The donut challenge colours in through a `CustomClipper` over its photo, because the photo loads through the shared image widget with its cache and bundled fallback.
 
 | Where | What moves |
 |---|---|
 | Onboarding | Donut photos drift in, then the title and buttons enter staggered |
-| Sign-up steps | Shared-axis transition between steps; the step ring fills 25%, 50%, 75%, 100% and turns into a check |
-| Inputs | Focus and error states animate; the OTP boxes shake on a wrong code |
-| Buttons | Grow while held and spring back; Continue morphs into a loading circle |
+| Sign-up steps | Shared-axis transition between steps. The step ring fills 25%, 50%, 75%, 100% and turns into a check |
+| Inputs | Focus and error states animate. The OTP boxes shake on a wrong code |
+| Buttons | Grow while held and spring back. Continue morphs into a loading circle |
 | Welcome | Donut tiles slide in staggered, then the title fades up |
-| Home | Skeleton shimmer while loading, sections enter staggered, the banner carousel auto-plays, a ring round the avatar sweeps to the next tier, and pull-to-refresh spins a donut |
-| Product detail | Hero flight of the product image from its tile; the quantity rolls to its new value |
-| Rewards | The points ring sweeps while the total counts up; Silver, Gold and Platinum pop in order and the line to the next tier fills; a blue pill slides between the tabs; challenge cards enter staggered and their art fills (donut by quarters, coffee arc to 9/12); a complete Earn pulses; the Rewards badge pops in |
+| Home | Skeleton shimmer while loading, staggered sections, an auto-playing banner carousel, a ring round the avatar that sweeps to the next tier, and a spinning donut on pull-to-refresh |
+| Product detail | The product image flies in from its tile. The quantity rolls to its new value |
+| Rewards | See below |
 | Bottom nav | The active pill slides and stretches between tabs |
 | Sheets | Open and close on a spring |
 
-All motion uses Flutter's own APIs and `CustomPainter`, with no Lottie or Rive.
+On Rewards:
 
-## Tests
+- The points ring sweeps while the total counts up to 680,000.
+- Silver, Gold and Platinum pop in order, and the line to the next tier fills.
+- A blue pill slides between the Eat more earn more and Gift tabs.
+- Challenge cards enter staggered, and their art fills: the donut by quarters, the coffee arc to 9/12.
+- A complete Earn button pulses.
+- The Rewards badge pops in.
 
-`flutter test` runs about 600 tests. The folders under `test/` mirror `lib/`.
+## Tests and CI
 
-- **Unit:** every validator rule, every use case, the repositories, the cubits, the sync and import logic, and the Drift migrations from each schema version.
-- **Widget:** every screen's loading, empty, error and ready states; sign-up and log-in validation; double taps; Reduce Motion; and every screen at 1.3x text on a 4.7-inch phone.
-- **Integration:** `integration_test/register_to_product_detail_test.dart`, on a device.
+`flutter test` runs about 620 tests. The folders under `test/` mirror `lib/`.
 
-CI (`.github/workflows/ci.yml`) checks formatting, runs `flutter analyze` and runs `flutter test` on every push and pull request. A `v*` tag on `main` runs `.github/workflows/release.yml`. It runs the analyzer and the tests once, builds a signed release APK on Linux and a zipped iOS Simulator app on macOS, then publishes both on one GitHub release. The tag sets the version, so `v1.0.0+1` builds version 1.0.0 with build number 1.
+| Kind | Covers |
+|---|---|
+| Unit | Every validator rule, every use case, the repositories, the cubits, the sync and import logic, and the Drift migrations from each schema version |
+| Widget | Every screen's loading, empty, error and ready states, sign-up and log-in validation, double taps, Reduce Motion, and every screen at 1.3x text on a 4.7-inch phone |
+| Integration | `integration_test/register_to_product_detail_test.dart`: register, reach Home, open a product. Runs on a device |
+
+| Workflow | Runs on | Does |
+|---|---|---|
+| `.github/workflows/ci.yml` | Every push and pull request | Checks formatting, runs `flutter analyze` and `flutter test` |
+| `.github/workflows/release.yml` | A `v*` tag on `main` | Runs the analyzer and tests once, builds a signed APK on Linux and a zipped iOS Simulator app on macOS, then publishes both on one GitHub release |
+
+The tag sets the version, so `v1.0.0+1` builds version 1.0.0 with build number 1.
 
 ## Known gaps
 
-- There is no back end. Sign-in is the fake repository above, and the catalog comes from static JSON.
-- Google, Apple, Facebook, Terms of Use and Privacy Policy open a placeholder sheet. Explore and Wallet in the bottom nav are placeholder tabs.
-- Earn adds a completed challenge's points to the member's total in the local database. Redeem on a gift says it's coming soon, as do See all, Explore now and Order online on Home.
-- Add to cart stores the item in the local database, but there is no cart screen or cart badge yet.
-- The OTP step verifies on its own once the sixth digit is in, so it has no Continue button. After three wrong codes, Resend is available at once rather than after the countdown.
+Not built:
+
+- There is no back end. Sign-in is the fake repository, and the catalog comes from static JSON.
+- Google, Apple, Facebook, Terms of Use and Privacy Policy open a placeholder sheet. Explore and Wallet are placeholder tabs.
+- Redeem on a gift says it's coming soon, as do See all, Explore now and Order online on Home.
+- Add to cart stores the item in the local database, but there is no cart screen or cart badge.
+
+Different from the brief:
+
+- The OTP step verifies on its own once the sixth digit is in, so it has no Continue button.
+- After three wrong codes, Resend is available at once rather than after the countdown.
+- Earn adds a completed challenge's points to the member's total in the local database. The brief asks for no action.
+
+Limits:
+
 - The member record is seeded only. A refresh updates the public catalog, not the member's points.
 - One product exists only on the server (`p_toasted_coconut`), so it has no bundled image and shows a plain box until its photo has downloaded once.
 - Android release builds block plain HTTP, so they can't reach the local mock server and use the GitHub-hosted mock API instead.
