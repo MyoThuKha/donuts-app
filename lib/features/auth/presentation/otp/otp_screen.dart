@@ -81,7 +81,8 @@ class _OtpBody extends StatelessWidget {
           trigger: state.shakeCount,
           child: OtpInputWidget(
             code: state.code,
-            enabled: !state.locked && state.status != OtpStatus.verifying,
+            enabled: !state.locked,
+            busy: state.status == OtpStatus.verifying,
             onChanged: cubit.changed,
           ),
         ),
@@ -127,7 +128,22 @@ class _OtpMessage extends StatelessWidget {
     if (message == null) return const SizedBox(height: AppSpacing.l);
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.s),
-      child: Text(message, style: context.text.error),
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Text(message, style: context.text.error),
+          // A check that failed for another reason than a wrong code can
+          // run again on the same six digits.
+          if (state.status == OtpStatus.failed && !state.locked)
+            TextButton(
+              onPressed: context.read<OtpCubit>().verify,
+              style: TextButton.styleFrom(
+                minimumSize: const Size(AppSizes.button, AppSizes.button),
+              ),
+              child: Text(l10n.otpRetry, style: context.text.link),
+            ),
+        ],
+      ),
     );
   }
 }
