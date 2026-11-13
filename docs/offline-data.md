@@ -20,7 +20,7 @@ The member data is private, so it is only ever seeded. Refresh updates the publi
 
 - To change what a refresh delivers, edit `mock-api/v1/catalog.json` and increase `meta.version`. Without the bump, devices that already have that version ignore the change.
 - To change what a fresh install starts with, edit the files in `assets/seed/`. Existing installs keep their data.
-- `test/core/sync/data/seed_files_test.dart` checks that the files parse and that every section names products that exist.
+- `test/core/sync/data/seed_files_test.dart` checks that the files parse, that every section names products that exist, and that every seed image is bundled (see [Images](#images)).
 
 ## Running against a different API
 
@@ -59,4 +59,8 @@ Catalog and Rewards images (products, banners, shops, gifts, tier badges and cha
 
 Because the URL is resolved at import, data imported under one base URL keeps that URL until a newer catalog version arrives. After switching `API_BASE_URL`, reinstall the app or bump `meta.version` in `mock-api/v1/catalog.json`.
 
-`AppNetworkImage` caches downloads on disk, so an image that has loaded once still shows offline. While loading, and if the download fails, it shows the bundled asset named in `imageAsset`. Images served from `mock-api/` have no bundled copy (`imageAsset` is null), so they show a plain coloured box until the first download, and an "image unavailable" tile if it fails.
+`AppNetworkImage` caches downloads on disk, so an image that has loaded once still shows offline. While loading, and if the download fails, it shows the bundled asset named in `imageAsset`.
+
+Every image the seed files name is also bundled in the app, under `assets/seed/images/` with the same layout as `mock-api/assets/`: `assets/home/shop.jpg` is bundled as `assets/seed/images/home/shop.jpg`. So a first launch in airplane mode shows every seed image, and a downloaded image replaces the bundled one once it arrives. The remote catalog names the same `imageAsset` for every item the seed has, so a refresh doesn't take the bundled copy away. A product that only the server has (`p_toasted_coconut`) has no bundled copy. It shows a plain coloured box until the first download, and an "image unavailable" tile if that fails.
+
+When you add or change a seed image, put the file in both `mock-api/assets/` and `assets/seed/images/`, and declare any new folder in `pubspec.yaml`. `seed_files_test.dart` fails if a seed image has no bundled copy, if the two files differ, or if the folder isn't declared.
