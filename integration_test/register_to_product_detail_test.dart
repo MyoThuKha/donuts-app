@@ -4,6 +4,7 @@ import 'package:donuts/app/bootstrap.dart';
 import 'package:donuts/app/di/di.dart';
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/di/locator.dart';
+import 'package:donuts/core/storage/language_store.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
 import 'package:donuts/features/auth/presentation/dob/dob_screen.dart';
 import 'package:donuts/features/auth/presentation/name/name_screen.dart';
@@ -20,7 +21,6 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../test/helpers/fake_connectivity.dart';
-import '../test/helpers/fake_language_store.dart';
 import '../test/helpers/memory_session_store.dart';
 
 /*
@@ -90,7 +90,7 @@ Future<void> _startApp(
     sessionStore: sessionStore,
     // The finders read English text, whatever language the device uses or
     // the app last saved.
-    languageStore: FakeLanguageStore('en'),
+    languageStore: _EnglishLanguageStore(),
     connectivitySource: FakeConnectivitySource(),
     probe: FakeReachabilityProbe(reachable: false),
   );
@@ -189,4 +189,14 @@ Future<void> _waitUntil(
     if (done()) return;
   }
   fail('Timed out waiting for $what');
+}
+
+/// Always reads English. Bootstrap clears a saved language on a new install,
+/// and the in-memory database makes every run a new install.
+class _EnglishLanguageStore implements LanguageStore {
+  @override
+  Future<String?> readCode() async => 'en';
+
+  @override
+  Future<void> writeCode(String? code) async {}
 }
