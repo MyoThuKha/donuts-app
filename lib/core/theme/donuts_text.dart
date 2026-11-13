@@ -15,22 +15,34 @@ class DonutsText extends ThemeExtension<DonutsText> {
     required this.button,
     required this.caption,
     required this.points,
+    required this.badge,
   });
 
   factory fromColors(DonutsColors c) => DonutsText(
-    display: _style(28, FontWeight.w800, c.ink, height: 1.2),
-    title: _style(26, FontWeight.w700, c.ink, height: 1.2),
-    headline: _style(22, FontWeight.w700, c.ink),
-    sectionTitle: _style(18, FontWeight.w700, c.ink),
+    display: rounded(_style(28, FontWeight.w800, c.ink, height: 1.2)),
+    title: rounded(_style(26, FontWeight.w700, c.ink, height: 1.2)),
+    headline: rounded(_style(22, FontWeight.w800, c.ink, height: 1.2)),
+    sectionTitle: rounded(_style(18, FontWeight.w700, c.ink)),
     body: _style(15, FontWeight.w400, c.inkMuted),
     bodySmall: _style(13, FontWeight.w500, c.inkMuted),
-    label: _style(13, FontWeight.w600, c.ink),
-    button: _style(14, FontWeight.w800, c.onPrimary, letterSpacing: 1.2),
+    label: _style(14, FontWeight.w700, c.ink),
+    button: rounded(
+      _style(14, FontWeight.w800, c.onPrimary, letterSpacing: 1.2),
+    ),
     caption: _style(11, FontWeight.w400, c.inkSubtle),
-    points: _style(34, FontWeight.w800, c.accent),
+    points: rounded(_style(34, FontWeight.w800, c.accent)),
+    badge: _style(13, FontWeight.w700, c.onPrimary, height: 1),
   );
 
-  static const String fontFamily = 'PlusJakartaSans';
+  /// Schibsted Grotesk, declared in pubspec: body text, labels and buttons.
+  static const String fontFamily = 'SchibstedGrotesk';
+
+  /// The design's rounded heading face.
+  static const String roundedFamily = 'Nunito';
+
+  /// [style] in Nunito, declared in pubspec at weights 500 to 800.
+  static TextStyle rounded(TextStyle style) =>
+      style.copyWith(fontFamily: roundedFamily);
 
   final TextStyle display;
   final TextStyle title;
@@ -42,6 +54,10 @@ class DonutsText extends ThemeExtension<DonutsText> {
   final TextStyle button;
   final TextStyle caption;
   final TextStyle points;
+
+  /// Badge labels such as "50% off". The line is exactly the font's size,
+  /// so the badge's height comes from its padding.
+  final TextStyle badge;
 
   static TextStyle _style(
     double size,
@@ -77,6 +93,7 @@ class DonutsText extends ThemeExtension<DonutsText> {
       button: mix(button, other.button),
       caption: mix(caption, other.caption),
       points: mix(points, other.points),
+      badge: mix(badge, other.badge),
     );
   }
 }

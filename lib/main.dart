@@ -7,13 +7,17 @@ import 'package:material_ui/material_ui.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  LicenseRegistry.addLicense(_fontLicense);
+  LicenseRegistry.addLicense(_fontLicenses);
   await configureDependencies();
   await bootstrap();
   runApp(const DonutsApp());
 }
 
-Stream<LicenseEntry> _fontLicense() async* {
-  final licence = await rootBundle.loadString('assets/fonts/OFL.txt');
-  yield LicenseEntryWithLineBreaks(['PlusJakartaSans'], licence);
+Stream<LicenseEntry> _fontLicenses() async* {
+  final schibsted = await rootBundle.loadString(
+    'assets/fonts/schibsted_grotesk/OFL.txt',
+  );
+  yield LicenseEntryWithLineBreaks(['SchibstedGrotesk'], schibsted);
+  final nunito = await rootBundle.loadString('assets/fonts/nunito/OFL.txt');
+  yield LicenseEntryWithLineBreaks(['Nunito'], nunito);
 }

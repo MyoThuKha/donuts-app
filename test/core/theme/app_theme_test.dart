@@ -7,10 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('light theme uses the bundled Plus Jakarta Sans family', () {
+  test('light theme uses the bundled Schibsted Grotesk family', () {
     expect(
       AppTheme.light().textTheme.bodyMedium?.fontFamily,
-      'PlusJakartaSans',
+      'SchibstedGrotesk',
     );
   });
 
@@ -43,7 +43,7 @@ void main() {
       'ExtraBold',
     ]) {
       final data = await rootBundle.load(
-        'assets/fonts/PlusJakartaSans-$weight.ttf',
+        'assets/fonts/schibsted_grotesk/SchibstedGrotesk-$weight.ttf',
       );
       expect(data.lengthInBytes, greaterThan(0));
     }
@@ -66,6 +66,46 @@ void main() {
       expect(weights, unorderedEquals([400, 500, 600, 700, 800]));
     },
   );
+
+  test(
+    'headings and buttons use Nunito, body text stays Schibsted Grotesk',
+    () {
+      final text = AppTheme.light().extension<DonutsText>()!;
+
+      for (final heading in [
+        text.display,
+        text.title,
+        text.headline,
+        text.sectionTitle,
+        text.points,
+        text.button,
+      ]) {
+        expect(heading.fontFamily, DonutsText.roundedFamily);
+      }
+      for (final plain in [text.body, text.label, text.caption]) {
+        expect(plain.fontFamily, DonutsText.fontFamily);
+      }
+    },
+  );
+
+  testWidgets('font manifest registers Nunito at weights 500 to 800', (
+    tester,
+  ) async {
+    // Real asset I/O, outside the test's fake clock.
+    final source = await tester.runAsync(
+      () => rootBundle.loadString('FontManifest.json', cache: false),
+    );
+    final manifest = jsonDecode(source!) as List<dynamic>;
+    final family = manifest.cast<Map<String, dynamic>>().singleWhere(
+      (entry) => entry['family'] == DonutsText.roundedFamily,
+    );
+    final weights = [
+      for (final font in family['fonts'] as List<dynamic>)
+        (font as Map<String, dynamic>)['weight'],
+    ];
+
+    expect(weights, unorderedEquals([500, 600, 700, 800]));
+  });
 
   test('error colour is the danger token, not the link pink', () {
     expect(AppTheme.light().colorScheme.error, DonutsColors.light.danger);

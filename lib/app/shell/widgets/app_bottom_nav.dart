@@ -55,6 +55,7 @@ class AppBottomNav extends StatelessWidget {
             height: AppSizes.navBar / 2 + bottomInset,
             child: ColoredBox(color: colors.accent),
           ),
+
           // The panel runs a rim's width past the bottom, so its outline
           // shows only on the top and sides.
           Positioned(
@@ -74,6 +75,7 @@ class AppBottomNav extends StatelessWidget {
               ),
             ),
           ),
+
           Positioned(
             left: AppSpacing.pageGutter,
             right: AppSpacing.pageGutter,
