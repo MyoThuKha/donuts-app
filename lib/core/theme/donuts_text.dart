@@ -46,6 +46,14 @@ class DonutsText extends ThemeExtension<DonutsText> {
   /// The design's rounded heading face.
   static const String roundedFamily = 'Nunito';
 
+  /// Noto Sans Myanmar, declared in pubspec at weights 400 to 800.
+  static const String myanmarFamily = 'NotoSansMyanmar';
+
+  /// Families for the letters the main faces lack. Neither face has Myanmar
+  /// script, and without a bundled fallback each platform picks its own
+  /// font, with only Regular and Bold to match the type scale's weights.
+  static const List<String> fallback = [myanmarFamily];
+
   /// [style] in Nunito, declared in pubspec at weights 500 to 800.
   static TextStyle rounded(TextStyle style) =>
       style.copyWith(fontFamily: roundedFamily);
@@ -85,6 +93,7 @@ class DonutsText extends ThemeExtension<DonutsText> {
     double? letterSpacing,
   }) => TextStyle(
     fontFamily: fontFamily,
+    fontFamilyFallback: fallback,
     fontSize: size,
     fontWeight: weight,
     color: color,

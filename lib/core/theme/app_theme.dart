@@ -21,6 +21,7 @@ abstract final class AppTheme {
         onSurface: colors.ink,
       ),
       fontFamily: DonutsText.fontFamily,
+      fontFamilyFallback: DonutsText.fallback,
       scaffoldBackgroundColor: colors.canvas,
       extensions: [colors, text],
     );

@@ -22,4 +22,8 @@ Stream<LicenseEntry> _fontLicenses() async* {
   yield LicenseEntryWithLineBreaks(['SchibstedGrotesk'], schibsted);
   final nunito = await rootBundle.loadString('assets/fonts/nunito/OFL.txt');
   yield LicenseEntryWithLineBreaks(['Nunito'], nunito);
+  final notoMyanmar = await rootBundle.loadString(
+    'assets/fonts/noto_sans_myanmar/OFL.txt',
+  );
+  yield LicenseEntryWithLineBreaks(['NotoSansMyanmar'], notoMyanmar);
 }
