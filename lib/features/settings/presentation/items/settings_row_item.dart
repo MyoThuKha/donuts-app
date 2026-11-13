@@ -50,7 +50,17 @@ class SettingsRowItem extends StatelessWidget {
               children: [
                 _icon(context),
                 Expanded(child: Text(label, style: context.text.sectionTitle)),
-                if (value != null) Text(value, style: context.text.body),
+                // Shares the row with the label, so a long value such as
+                // "Device language" wraps on small phones at large text
+                // instead of overflowing, and stays flush right.
+                if (value != null)
+                  Expanded(
+                    child: Text(
+                      value,
+                      textAlign: TextAlign.end,
+                      style: context.text.body,
+                    ),
+                  ),
                 if (onTap != null)
                   Icon(
                     LucideIcons.chevronRight,

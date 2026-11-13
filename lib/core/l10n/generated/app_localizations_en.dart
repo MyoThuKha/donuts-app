@@ -61,6 +61,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyPolicy => 'Privacy Policy';
 
   @override
+  String get termsSuffix => '.';
+
+  @override
   String get comingSoonTitle => 'Coming soon';
 
   @override
@@ -94,6 +97,18 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get settingsLanguage => 'Language';
+
+  @override
+  String get languageSystem => 'Device language';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageBurmese => 'မြန်မာ';
 
   @override
   String settingsVersion(String version) {

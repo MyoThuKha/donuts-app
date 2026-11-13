@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
+import 'app_localizations_my.dart';
 
 // ignore_for_file: type=lint
 
@@ -92,7 +93,10 @@ abstract class AppLocalizations {
       ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('my'),
+  ];
 
   /// App name shown by the OS task switcher.
   ///
@@ -190,6 +194,12 @@ abstract class AppLocalizations {
   /// **'Privacy Policy'**
   String get privacyPolicy;
 
+  /// Text after the Privacy Policy link in the terms notice. Holds its own leading space, so languages that put the verb after the links can finish the sentence here.
+  ///
+  /// In en, this message translates to:
+  /// **'.'**
+  String get termsSuffix;
+
   /// No description provided for @comingSoonTitle.
   ///
   /// In en, this message translates to:
@@ -243,6 +253,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{years, plural, =1{1 year} other{{years} years}}'**
   String accountAgeYears(int years);
+
+  /// Settings row and sheet title for the app language
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguage;
+
+  /// Language option that follows the phone's language
+  ///
+  /// In en, this message translates to:
+  /// **'Device language'**
+  String get languageSystem;
+
+  /// English's own name. Never translate it.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// Burmese's own name, in Myanmar script. Never translate it.
+  ///
+  /// In en, this message translates to:
+  /// **'မြန်မာ'**
+  String get languageBurmese;
 
   /// No description provided for @settingsVersion.
   ///
@@ -784,7 +818,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en'].contains(locale.languageCode);
+      <String>['en', 'my'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -795,6 +829,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en':
       return AppLocalizationsEn();
+    case 'my':
+      return AppLocalizationsMy();
   }
 
   throw FlutterError(

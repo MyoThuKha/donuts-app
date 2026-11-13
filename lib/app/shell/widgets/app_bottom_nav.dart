@@ -185,18 +185,26 @@ class _NavItem extends StatelessWidget {
             minWidth: AppSizes.button,
             minHeight: AppSizes.button,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                item.icon,
-                key: ValueKey(item.icon),
-                width: AppBottomNav.iconSize,
-                height: AppBottomNav.iconSize,
-                colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-              ),
-              if (selected) _label(context),
-            ],
+          // The selected item keeps its icon and label off the pill's
+          // rounded ends. Myanmar glyphs draw past their measured width, so
+          // a label scaled to the full width would be clipped.
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: selected ? AppSpacing.s : 0,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  item.icon,
+                  key: ValueKey(item.icon),
+                  width: AppBottomNav.iconSize,
+                  height: AppBottomNav.iconSize,
+                  colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                ),
+                if (selected) _label(context),
+              ],
+            ),
           ),
         ),
       ),

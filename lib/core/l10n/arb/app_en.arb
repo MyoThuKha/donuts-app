@@ -43,6 +43,10 @@
   "termsOfUse": "Terms of Use",
   "and": "and",
   "privacyPolicy": "Privacy Policy",
+  "termsSuffix": ".",
+  "@termsSuffix": {
+    "description": "Text after the Privacy Policy link in the terms notice. Holds its own leading space, so languages that put the verb after the links can finish the sentence here."
+  },
   "comingSoonTitle": "Coming soon",
   "featureComingSoon": "This feature is coming soon.",
   "@featureComingSoon": {
@@ -62,6 +66,22 @@
         "example": "45"
       }
     }
+  },
+  "settingsLanguage": "Language",
+  "@settingsLanguage": {
+    "description": "Settings row and sheet title for the app language"
+  },
+  "languageSystem": "Device language",
+  "@languageSystem": {
+    "description": "Language option that follows the phone's language"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English's own name. Never translate it."
+  },
+  "languageBurmese": "မြန်မာ",
+  "@languageBurmese": {
+    "description": "Burmese's own name, in Myanmar script. Never translate it."
   },
   "settingsVersion": "J’Donuts {version}",
   "@settingsVersion": {

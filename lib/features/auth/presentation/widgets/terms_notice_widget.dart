@@ -44,7 +44,7 @@ class _TermsNoticeWidgetState extends State<TermsNoticeWidget> {
           TextSpan(text: l10n.termsOfUse, style: link, recognizer: _terms),
           TextSpan(text: ' ${l10n.and} '),
           TextSpan(text: l10n.privacyPolicy, style: link, recognizer: _privacy),
-          const TextSpan(text: '.'),
+          TextSpan(text: l10n.termsSuffix),
         ],
       ),
       textAlign: TextAlign.center,

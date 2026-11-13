@@ -1,6 +1,9 @@
 import 'package:donuts/app/router/app_router.dart';
 import 'package:donuts/core/di/locator.dart';
+import 'package:donuts/core/l10n/app_language.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/l10n/language_cubit.dart';
+import 'package:donuts/core/l10n/language_semantics.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/router/app_routes.dart';
@@ -14,6 +17,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'fake_connectivity.dart';
+import 'fake_language_store.dart';
 import 'fakes.dart';
 import 'feature_fakes.dart';
 
@@ -26,6 +30,7 @@ Future<void> pumpRouterApp(
   WidgetTester tester, {
   required SessionCubit session,
   String initialLocation = AppRoutes.home,
+  AppLanguage language = AppLanguage.system,
 }) async {
   registerFeatureFakes(getIt);
   addTearDown(getIt.reset);
@@ -46,9 +51,12 @@ Future<void> pumpRouterApp(
     connectivity: connectivity,
     now: DateTime.now,
   );
+  final languageCubit = LanguageCubit(FakeLanguageStore(language.code));
+  await languageCubit.restore();
   addTearDown(() async {
     await sync.close();
     await connectivity.close();
+    await languageCubit.close();
   });
   await tester.pumpWidget(
     MultiBlocProvider(
@@ -56,26 +64,47 @@ Future<void> pumpRouterApp(
         BlocProvider.value(value: session),
         BlocProvider.value(value: connectivity),
         BlocProvider.value(value: sync),
+        BlocProvider.value(value: languageCubit),
       ],
-      child: MaterialApp.router(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        theme: AppTheme.light(),
-        routerConfig: router,
+      child: BlocBuilder<LanguageCubit, AppLanguage>(
+        builder: (context, state) => MaterialApp.router(
+          locale: state.locale,
+          localizationsDelegates: appLocalizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppTheme.light(),
+          routerConfig: router,
+          builder: (context, child) =>
+              LanguageSemantics(locale: state.locale, child: child!),
+        ),
       ),
     ),
   );
   await tester.pumpAndSettle();
 }
 
-/// Pumps [child] with the app theme and localisations.
-Future<void> pumpThemed(WidgetTester tester, Widget child) async {
+/// Pumps [child] with the app theme and localisations, in [language]'s
+/// locale. Without one it uses a cubit on the device language.
+Future<void> pumpThemed(
+  WidgetTester tester,
+  Widget child, {
+  LanguageCubit? language,
+}) async {
+  final cubit = language ?? LanguageCubit(FakeLanguageStore());
+  if (language == null) addTearDown(cubit.close);
   await tester.pumpWidget(
-    MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: AppTheme.light(),
-      home: Scaffold(body: child),
+    BlocProvider.value(
+      value: cubit,
+      child: BlocBuilder<LanguageCubit, AppLanguage>(
+        builder: (context, state) => MaterialApp(
+          locale: state.locale,
+          localizationsDelegates: appLocalizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppTheme.light(),
+          home: Scaffold(body: child),
+          builder: (context, child) =>
+              LanguageSemantics(locale: state.locale, child: child!),
+        ),
+      ),
     ),
   );
 }

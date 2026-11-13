@@ -10,6 +10,7 @@ import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/network/api_config.dart';
 import 'package:donuts/core/network/connectivity_source.dart';
 import 'package:donuts/core/network/reachability_probe.dart';
+import 'package:donuts/core/storage/language_store.dart';
 import 'package:donuts/core/storage/session_store.dart';
 import 'package:donuts/core/sync/data/seed_source.dart';
 import 'package:donuts/features/auth/data/repositories/fake_auth_repository.dart';
@@ -18,6 +19,7 @@ import 'package:donuts/features/auth/data/repositories/fake_auth_repository.dart
 Future<void> configureDependencies({
   AppDatabase? database,
   SessionStore? sessionStore,
+  LanguageStore? languageStore,
   Duration authLatency = FakeAuthRepository.defaultLatency,
   ApiConfig? apiConfig,
   SeedSource? seedSource,
@@ -25,7 +27,12 @@ Future<void> configureDependencies({
   ReachabilityProbe? probe,
 }) async {
   await getIt.reset();
-  registerCoreModule(getIt, database: database, sessionStore: sessionStore);
+  registerCoreModule(
+    getIt,
+    database: database,
+    sessionStore: sessionStore,
+    languageStore: languageStore,
+  );
   registerAuthModule(getIt, latency: authLatency);
   registerSyncModule(
     getIt,

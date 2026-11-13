@@ -1,4 +1,6 @@
 import 'package:donuts/core/di/locator.dart';
+import 'package:donuts/core/l10n/app_language.dart';
+import 'package:donuts/core/l10n/language_cubit.dart';
 import 'package:donuts/core/widgets/images/profile_avatar.dart';
 import 'package:donuts/core/widgets/images/tier_backdrop.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../helpers/fake_language_store.dart';
 import '../../helpers/fakes.dart';
 import '../../helpers/member_fakes.dart';
 import '../../helpers/pump_app.dart';
@@ -143,5 +146,34 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(session.state, SessionSignedIn(testUser));
+  });
+
+  testWidgets('picking မြန်မာ switches the app to Burmese and stores it', (
+    tester,
+  ) async {
+    final session = testSessionCubit()..signedIn(testUser);
+    final store = FakeLanguageStore();
+    final language = LanguageCubit(store);
+    addTearDown(language.close);
+    await pumpThemed(
+      tester,
+      BlocProvider.value(
+        value: session,
+        child: SettingsScreen(readVersion: () async => '1.0.0'),
+      ),
+      language: language,
+    );
+
+    expect(find.text('Device language'), findsOneWidget);
+    await tester.tap(find.text('Language'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('မြန်မာ'));
+    await tester.pumpAndSettle();
+
+    expect(language.state, AppLanguage.burmese);
+    expect(store.code, 'my');
+    expect(find.text('ဘာသာစကား'), findsOneWidget, reason: 'sheet closed');
+    expect(find.text('မြန်မာ'), findsOneWidget, reason: 'row value');
+    expect(find.text('အကောင့်မှ ထွက်ရန်'), findsOneWidget);
   });
 }
