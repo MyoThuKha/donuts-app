@@ -1,6 +1,5 @@
 // Freezed's redirecting factory must keep the class name.
 // ignore_for_file: unnecessary_type_name_in_constructor
-import 'package:donuts/features/home/domain/vo/home_product_vo.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'home_section_vo.freezed.dart';
@@ -21,7 +20,8 @@ enum HomeSectionKind {
   };
 }
 
-/// One horizontal product row on Home.
+/// One horizontal product row on Home. Its products load on their own,
+/// through `WatchSectionProductsUseCase`.
 @freezed
 abstract class HomeSectionVO with _$HomeSectionVO {
   const factory HomeSectionVO({
@@ -30,6 +30,5 @@ abstract class HomeSectionVO with _$HomeSectionVO {
     /// The catalog's title key. Shown as is when [kind] is `other`.
     required String titleKey,
     required HomeSectionKind kind,
-    required List<HomeProductVO> products,
   }) = _HomeSectionVO;
 }

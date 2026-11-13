@@ -1,8 +1,10 @@
 import 'package:donuts/core/format/number_format.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/state/section_state.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/badges/app_tag.dart';
+import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/core/widgets/images/profile_avatar.dart';
@@ -11,7 +13,6 @@ import 'package:donuts/features/auth/presentation/session/blocs/session_state.da
 import 'package:donuts/features/auth/presentation/session/user_initials.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:donuts/features/home/presentation/blocs/home_state.dart';
-import 'package:donuts/features/home/presentation/blocs/section_state.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/widgets/notification_bell_widget.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
@@ -84,13 +85,18 @@ class HomeHeaderView extends StatelessWidget {
         ),
       ),
     ],
+    // Boxed: the header sits on the tier's blue backdrop. No gutter of
+    // their own, since the header already pads them.
     SectionFailed() => [
       SectionErrorState(
         message: context.l10n.homeSectionError,
+        gutter: false,
         onRetry: () => context.read<HomeCubit>().retry(HomeSectionId.member),
       ),
     ],
-    SectionEmpty() => const [],
+    SectionEmpty() => [
+      SectionEmptyState(message: context.l10n.homeMemberEmpty, gutter: false),
+    ],
     SectionReady() => [_PointsChip(summary: summary!)],
   };
 }

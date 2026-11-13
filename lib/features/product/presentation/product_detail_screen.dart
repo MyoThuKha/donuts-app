@@ -4,7 +4,9 @@ import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/back_button.dart';
+import 'package:donuts/core/widgets/buttons/primary_button.dart';
 import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
+import 'package:donuts/core/widgets/feedback/page_state_view.dart';
 import 'package:donuts/core/widgets/images/product_hero_tag.dart';
 import 'package:donuts/features/product/domain/product_rules.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_cubit.dart';
@@ -16,6 +18,7 @@ import 'package:donuts/features/product/presentation/views/product_description_v
 import 'package:donuts/features/product/presentation/widgets/quantity_stepper_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Product detail (screen 9).
@@ -80,7 +83,12 @@ class _ProductDetailPage extends StatelessWidget {
               ),
               ...switch (state.status) {
                 ProductLoadStatus.notFound => const [
-                  SliverFillRemaining(hasScrollBody: false, child: _NotFound()),
+                  SliverFillRemaining(child: _NotFound()),
+                ],
+                // The retry button lays out with a LayoutBuilder, which
+                // can't report the intrinsic height hasScrollBody: false needs.
+                ProductLoadStatus.failed => const [
+                  SliverFillRemaining(child: _Failed()),
                 ],
                 ProductLoadStatus.loading ||
                 ProductLoadStatus.ready => [_ProductBody(heroTag: heroTag)],
@@ -142,11 +150,10 @@ class _ProductBody extends StatelessWidget {
               ),
             ],
           ),
-          if (product != null)
-            Padding(
-              padding: const EdgeInsets.only(top: AppSpacing.xxxl),
-              child: ProductDescriptionView(description: product.description),
-            ),
+          Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.xxxl),
+            child: ProductDescriptionView(description: product?.description),
+          ),
         ],
       ),
     );
@@ -188,14 +195,31 @@ class _NotFound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.pageGutter),
-        child: Text(
-          context.l10n.productNotFound,
-          style: context.text.body,
-          textAlign: TextAlign.center,
-        ),
+    final l10n = context.l10n;
+    return PageStateView(
+      icon: LucideIcons.searchX,
+      iconColor: context.colors.inkSubtle,
+      title: l10n.productNotFound,
+      message: l10n.productNotFoundHint,
+    );
+  }
+}
+
+/// Shown when reading the product fails, with a retry.
+class _Failed extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return PageStateView(
+      icon: LucideIcons.cloudAlert,
+      iconColor: context.colors.danger,
+      title: l10n.productLoadError,
+      message: l10n.productLoadErrorHint,
+      action: AppPrimaryButton(
+        label: l10n.homeRetry,
+        onPressed: context.read<ProductDetailCubit>().retry,
       ),
     );
   }

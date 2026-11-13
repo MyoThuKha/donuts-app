@@ -91,66 +91,6 @@ void main() {
     expect(shops.map((s) => s.id), ['first', 'second']);
   });
 
-  test('watchHomeSections returns sections in order with their products '
-      'in order', () async {
-    await db.catalogDao.replaceCatalog((
-      products: [productRow('a'), productRow('b'), productRow('c')],
-      sections: [sectionRow('second', sortOrder: 1), sectionRow('first')],
-      sectionProducts: [
-        linkRow('second', 'a', 1),
-        linkRow('first', 'c', 0),
-        linkRow('second', 'b', 0),
-        linkRow('first', 'a', 1),
-      ],
-      banners: const [],
-      shops: const [],
-      gifts: const [],
-    ));
-
-    final sections = await db.catalogDao.watchHomeSections().first;
-
-    expect(sections.map((s) => s.section.id), ['first', 'second']);
-    expect(sections[0].products.map((p) => p.id), ['c', 'a']);
-    expect(sections[1].products.map((p) => p.id), ['b', 'a']);
-  });
-
-  test('a section with no products is listed with an empty list', () async {
-    await db.catalogDao.replaceCatalog((
-      products: [productRow('a')],
-      sections: [sectionRow('popular'), sectionRow('empty', sortOrder: 1)],
-      sectionProducts: [linkRow('popular', 'a', 0)],
-      banners: const [],
-      shops: const [],
-      gifts: const [],
-    ));
-
-    final sections = await db.catalogDao.watchHomeSections().first;
-
-    expect(sections.map((s) => s.section.id), ['popular', 'empty']);
-    expect(sections[1].products, isEmpty);
-  });
-
-  test('watchHomeSections emits again after replaceCatalog', () async {
-    final sections = db.catalogDao.watchHomeSections();
-    final expectation = expectLater(
-      sections.map(
-        (rows) => [
-          for (final row in rows)
-            '${row.section.id}:${row.products.map((p) => p.id).join(',')}',
-        ],
-      ),
-      emitsInOrder([
-        <String>[],
-        ['popular:a,b'],
-      ]),
-    );
-
-    await pumpEventQueue();
-    await db.catalogDao.replaceCatalog(catalogRows(['a', 'b']));
-
-    await expectation;
-  });
-
   test(
     'replaceCatalog keeps the listed gifts in order and drops the rest',
     () async {

@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-/// Where one Home section stands. Each section loads, fails and empties
-/// on its own, so one bad stream never blanks the others.
+/// Where one part of a screen stands, such as a Home section or a Rewards
+/// list. Each part loads, fails and empties on its own, so one bad stream
+/// never blanks the others.
 sealed class SectionState<T> extends Equatable {
   const new();
 
@@ -33,3 +34,7 @@ final class SectionEmpty<T> extends SectionState<T> {
 final class SectionFailed<T> extends SectionState<T> {
   const new();
 }
+
+/// [SectionReady] for a non-empty list, [SectionEmpty] otherwise.
+SectionState<List<E>> listSection<E>(List<E> items) =>
+    items.isEmpty ? SectionEmpty<List<E>>() : SectionReady(items);

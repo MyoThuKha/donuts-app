@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$HomeSectionVO {
 
  String get id;/// The catalog's title key. Shown as is when [kind] is `other`.
- String get titleKey; HomeSectionKind get kind; List<HomeProductVO> get products;
+ String get titleKey; HomeSectionKind get kind;
 /// Create a copy of HomeSectionVO
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,20 +28,20 @@ $HomeSectionVOCopyWith<HomeSectionVO> get copyWith => _$HomeSectionVOCopyWithImp
 @override
 bool operator ==(Object other) {
   final _this = this as HomeSectionVO;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeSectionVO&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.titleKey, _this.titleKey) || other.titleKey == _this.titleKey)&&(identical(other.kind, _this.kind) || other.kind == _this.kind)&&const DeepCollectionEquality().equals(other.products, _this.products));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeSectionVO&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.titleKey, _this.titleKey) || other.titleKey == _this.titleKey)&&(identical(other.kind, _this.kind) || other.kind == _this.kind));
 }
 
 
 @override
 int get hashCode {
   final _this = this as HomeSectionVO;
-  return Object.hash(runtimeType,_this.id,_this.titleKey,_this.kind,const DeepCollectionEquality().hash(_this.products));
+  return Object.hash(runtimeType,_this.id,_this.titleKey,_this.kind);
 }
 
 @override
 String toString() {
   final _this = this as HomeSectionVO;
-  return 'HomeSectionVO(id: ${_this.id}, titleKey: ${_this.titleKey}, kind: ${_this.kind}, products: ${_this.products})';
+  return 'HomeSectionVO(id: ${_this.id}, titleKey: ${_this.titleKey}, kind: ${_this.kind})';
 }
 
 
@@ -52,7 +52,7 @@ abstract mixin class $HomeSectionVOCopyWith<$Res>  {
   factory $HomeSectionVOCopyWith(HomeSectionVO value, $Res Function(HomeSectionVO) _then) = _$HomeSectionVOCopyWithImpl;
 @useResult
 $Res call({
- String id, String titleKey, HomeSectionKind kind, List<HomeProductVO> products
+ String id, String titleKey, HomeSectionKind kind
 });
 
 
@@ -69,13 +69,12 @@ class _$HomeSectionVOCopyWithImpl<$Res>
 
 /// Create a copy of HomeSectionVO
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? titleKey = null,Object? kind = null,Object? products = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? titleKey = null,Object? kind = null,}) {
   return _then(HomeSectionVO(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,titleKey: null == titleKey ? _self.titleKey : titleKey // ignore: cast_nullable_to_non_nullable
 as String,kind: null == kind ? _self.kind : kind // ignore: cast_nullable_to_non_nullable
-as HomeSectionKind,products: null == products ? _self.products : products // ignore: cast_nullable_to_non_nullable
-as List<HomeProductVO>,
+as HomeSectionKind,
   ));
 }
 
@@ -160,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String titleKey,  HomeSectionKind kind,  List<HomeProductVO> products)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String titleKey,  HomeSectionKind kind)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeSectionVO() when $default != null:
-return $default(_that.id,_that.titleKey,_that.kind,_that.products);case _:
+return $default(_that.id,_that.titleKey,_that.kind);case _:
   return orElse();
 
 }
@@ -181,10 +180,10 @@ return $default(_that.id,_that.titleKey,_that.kind,_that.products);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String titleKey,  HomeSectionKind kind,  List<HomeProductVO> products)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String titleKey,  HomeSectionKind kind)  $default,) {final _that = this;
 switch (_that) {
 case _HomeSectionVO():
-return $default(_that.id,_that.titleKey,_that.kind,_that.products);case _:
+return $default(_that.id,_that.titleKey,_that.kind);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +200,10 @@ return $default(_that.id,_that.titleKey,_that.kind,_that.products);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String titleKey,  HomeSectionKind kind,  List<HomeProductVO> products)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String titleKey,  HomeSectionKind kind)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeSectionVO() when $default != null:
-return $default(_that.id,_that.titleKey,_that.kind,_that.products);case _:
+return $default(_that.id,_that.titleKey,_that.kind);case _:
   return null;
 
 }
@@ -216,20 +215,13 @@ return $default(_that.id,_that.titleKey,_that.kind,_that.products);case _:
 
 
 class _HomeSectionVO implements HomeSectionVO {
-  const _HomeSectionVO({required this.id, required this.titleKey, required this.kind, required  List<HomeProductVO> products}): _products = products;
+  const _HomeSectionVO({required this.id, required this.titleKey, required this.kind});
   
 
 @override final  String id;
 /// The catalog's title key. Shown as is when [kind] is `other`.
 @override final  String titleKey;
 @override final  HomeSectionKind kind;
- final  List<HomeProductVO> _products;
-@override List<HomeProductVO> get products {
-  if (_products is EqualUnmodifiableListView) return _products;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_products);
-}
-
 
 /// Create a copy of HomeSectionVO
 /// with the given fields replaced by the non-null parameter values.
@@ -241,18 +233,18 @@ _$HomeSectionVOCopyWith<_HomeSectionVO> get copyWith => __$HomeSectionVOCopyWith
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeSectionVO&&(identical(other.id, id) || other.id == id)&&(identical(other.titleKey, titleKey) || other.titleKey == titleKey)&&(identical(other.kind, kind) || other.kind == kind)&&const DeepCollectionEquality().equals(other.products, _products));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeSectionVO&&(identical(other.id, id) || other.id == id)&&(identical(other.titleKey, titleKey) || other.titleKey == titleKey)&&(identical(other.kind, kind) || other.kind == kind));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,titleKey,kind,const DeepCollectionEquality().hash(_products));
+    return Object.hash(runtimeType,id,titleKey,kind);
 }
 
 @override
 String toString() {
-    return 'HomeSectionVO(id: $id, titleKey: $titleKey, kind: $kind, products: $products)';
+    return 'HomeSectionVO(id: $id, titleKey: $titleKey, kind: $kind)';
 }
 
 
@@ -263,7 +255,7 @@ abstract mixin class _$HomeSectionVOCopyWith<$Res> implements $HomeSectionVOCopy
   factory _$HomeSectionVOCopyWith(_HomeSectionVO value, $Res Function(_HomeSectionVO) _then) = __$HomeSectionVOCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String titleKey, HomeSectionKind kind, List<HomeProductVO> products
+ String id, String titleKey, HomeSectionKind kind
 });
 
 
@@ -280,13 +272,12 @@ class __$HomeSectionVOCopyWithImpl<$Res>
 
 /// Create a copy of HomeSectionVO
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? titleKey = null,Object? kind = null,Object? products = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? titleKey = null,Object? kind = null,}) {
   return _then(_HomeSectionVO(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,titleKey: null == titleKey ? _self.titleKey : titleKey // ignore: cast_nullable_to_non_nullable
 as String,kind: null == kind ? _self.kind : kind // ignore: cast_nullable_to_non_nullable
-as HomeSectionKind,products: null == products ? _self._products : products // ignore: cast_nullable_to_non_nullable
-as List<HomeProductVO>,
+as HomeSectionKind,
   ));
 }
 

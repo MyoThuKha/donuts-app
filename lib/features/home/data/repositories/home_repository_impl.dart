@@ -2,6 +2,7 @@ import 'package:donuts/core/database/daos/catalog_dao.dart';
 import 'package:donuts/features/home/data/mapper/home_db_mapper.dart';
 import 'package:donuts/features/home/domain/repositories/home_repository.dart';
 import 'package:donuts/features/home/domain/vo/banner_vo.dart';
+import 'package:donuts/features/home/domain/vo/home_product_vo.dart';
 import 'package:donuts/features/home/domain/vo/home_section_vo.dart';
 import 'package:donuts/features/home/domain/vo/shop_vo.dart';
 
@@ -15,9 +16,13 @@ class HomeRepositoryImpl implements HomeRepository {
       _dao.watchBanners().map((rows) => [for (final row in rows) row.toVO()]);
 
   @override
-  Stream<List<HomeSectionVO>> watchSections() => _dao.watchHomeSections().map(
-    (rows) => [for (final row in rows) row.toVO()],
-  );
+  Stream<List<HomeSectionVO>> watchSections() =>
+      _dao.watchSections().map((rows) => [for (final row in rows) row.toVO()]);
+
+  @override
+  Stream<List<HomeProductVO>> watchSectionProducts(String sectionId) => _dao
+      .watchSectionProducts(sectionId)
+      .map((rows) => [for (final row in rows) row.toHomeProductVO()]);
 
   @override
   Stream<List<ShopVO>> watchShops() =>
