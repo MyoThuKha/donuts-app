@@ -55,6 +55,9 @@ flutter:
     - assets/images/welcome/
     - assets/logos/
     - assets/seed/
+    - assets/seed/images/home/
+    - assets/seed/images/home/donuts/
+    - assets/seed/images/rewards/
 
   fonts:
     - family: SchibstedGrotesk
