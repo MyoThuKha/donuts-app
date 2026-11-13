@@ -5,7 +5,7 @@ import 'package:material_ui/material_ui.dart';
 /// Opens any widget as the app's bottom sheet:
 ///
 /// ```dart
-/// await const ProfileDetailView().sheet(context, title: 'Profile Detail');
+/// await const MySheetBody().sheet(context, title: 'Coming soon');
 /// ```
 extension SheetWidget on Widget {
   /// Builds the route without pushing it, for callers that push routes

@@ -3,7 +3,7 @@ import 'package:donuts/core/widgets/images/network_image.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The member's photo in a circle with a white rim, [size] across. Home's
-/// header, the Settings header and Profile Detail all use it.
+/// header and the Settings header both use it.
 ///
 /// While the photo loads, and when there is none or it fails, it shows
 /// [initials] on the pink accent.
