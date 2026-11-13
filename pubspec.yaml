@@ -51,6 +51,7 @@ flutter:
     - assets/fonts/schibsted_grotesk/OFL.txt
     - assets/icons/
     - assets/images/
+    - assets/images/welcome/
     - assets/logos/
     - assets/seed/
 

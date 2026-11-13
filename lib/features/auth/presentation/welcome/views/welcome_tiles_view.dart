@@ -1,44 +1,20 @@
 import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
-import 'package:donuts/core/theme/donuts_colors.dart';
-import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/effects/progressive_fade.dart';
-import 'package:donuts/core/widgets/images/donut_placeholder.dart';
+import 'package:donuts/features/auth/presentation/auth_assets.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// A tinted tile holding a donut. Its rect is in fractions of the view's size.
-typedef WelcomeTile = ({
-  Rect rect,
-  Color Function(DonutsColors c) tint,
-  Color Function(DonutsColors c) glaze,
-});
-
-/// Tile tint strength over the page background.
-const double _tintAlpha = 0.45;
+/// A rounded tile holding a donut photo. Its rect is in fractions of the
+/// view's size.
+typedef WelcomeTile = ({Rect rect, String image});
 
 /// The four donut tiles from design screen 7. The right column bleeds off
 /// the edge and sits lower, as drawn.
-final List<WelcomeTile> welcomeTiles = [
-  (
-    rect: const Rect.fromLTRB(0, 0, 0.54, 0.46),
-    tint: (c) => c.primary,
-    glaze: (c) => c.bannerIndigo,
-  ),
-  (
-    rect: const Rect.fromLTRB(0.6, 0.08, 1.08, 0.52),
-    tint: (c) => c.accent,
-    glaze: (c) => c.inkMuted,
-  ),
-  (
-    rect: const Rect.fromLTRB(0, 0.5, 0.54, 0.96),
-    tint: (c) => c.highlight,
-    glaze: (c) => c.accent,
-  ),
-  (
-    rect: const Rect.fromLTRB(0.6, 0.56, 1.08, 1),
-    tint: (c) => c.highlight,
-    glaze: (c) => c.inkMuted,
-  ),
+const List<WelcomeTile> welcomeTiles = [
+  (rect: Rect.fromLTRB(0, 0, 0.54, 0.46), image: AuthAssets.purpleDonut),
+  (rect: Rect.fromLTRB(0.6, 0.08, 1.08, 0.52), image: AuthAssets.stripedDonut),
+  (rect: Rect.fromLTRB(0, 0.5, 0.54, 0.96), image: AuthAssets.sprinkledDonut),
+  (rect: Rect.fromLTRB(0.6, 0.56, 1.08, 1), image: AuthAssets.chocolateDonut),
 ];
 
 class WelcomeTilesView extends StatelessWidget {
@@ -86,23 +62,25 @@ class WelcomeTilesView extends StatelessWidget {
 class WelcomeTileItem extends StatelessWidget {
   const new({required this.tile, super.key});
 
-  /// Share of the tile's shorter side the donut fills.
-  static const double donutShare = 0.78;
+  /// How far the photo is enlarged inside the tile, so the donut fills it
+  /// as in the design.
+  static const double zoom = 1.8;
 
   final WelcomeTile tile;
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: tile.tint(colors).withValues(alpha: _tintAlpha),
-        borderRadius: BorderRadius.circular(AppRadii.card),
-      ),
-      child: FractionallySizedBox(
-        widthFactor: donutShare,
-        heightFactor: donutShare,
-        child: DonutPlaceholder(glaze: tile.glaze(colors)),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppRadii.card),
+      child: Transform.scale(
+        scale: zoom,
+        child: Image.asset(
+          tile.image,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          excludeFromSemantics: true,
+        ),
       ),
     );
   }

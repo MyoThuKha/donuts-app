@@ -59,10 +59,7 @@ class _LogInRow extends StatelessWidget {
           style: TextButton.styleFrom(
             minimumSize: const Size(AppSizes.button, AppSizes.button),
           ),
-          child: Text(
-            l10n.logIn,
-            style: context.text.label.copyWith(color: context.colors.accent),
-          ),
+          child: Text(l10n.logIn, style: context.text.pointsLabel),
         ),
       ],
     );
