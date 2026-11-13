@@ -94,16 +94,16 @@ class _ProductDetailPage extends StatelessWidget {
 
   void _showAddResult(BuildContext context, ProductDetailState state) {
     final l10n = context.l10n;
-    final message = switch (state.addStatus) {
-      CartAddStatus.added => l10n.productAddedToCart(
-        state.addedQuantity,
-        state.product?.name ?? '',
+    final (message, tone) = switch (state.addStatus) {
+      CartAddStatus.added => (
+        l10n.productAddedToCart(state.addedQuantity, state.product?.name ?? ''),
+        AppSnackBarTone.success,
       ),
-      CartAddStatus.failed => l10n.productAddFailed,
-      CartAddStatus.idle || CartAddStatus.adding => null,
+      CartAddStatus.failed => (l10n.productAddFailed, AppSnackBarTone.error),
+      CartAddStatus.idle || CartAddStatus.adding => (null, null),
     };
-    if (message == null) return;
-    context.showMessage(message);
+    if (message == null || tone == null) return;
+    context.showMessage(message, tone: tone);
   }
 }
 

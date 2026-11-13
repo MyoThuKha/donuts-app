@@ -87,7 +87,7 @@ class _HomePage extends StatelessWidget {
       await sync.refresh();
     }
     if (sync.state.status != CatalogSyncStatus.failed) return;
-    messenger.showMessage(failedMessage);
+    messenger.showMessage(failedMessage, tone: AppSnackBarTone.error);
   }
 
   List<Widget> _slivers(BuildContext context) {
