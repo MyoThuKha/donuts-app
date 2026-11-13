@@ -8,6 +8,7 @@ import 'generated/schema_v1.dart' as v1;
 import 'generated/schema_v2.dart' as v2;
 import 'generated/schema_v3.dart' as v3;
 import 'generated/schema_v4.dart' as v4;
+import 'generated/schema_v5.dart' as v5;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -142,6 +143,35 @@ void main() {
           ('silver', null, null),
         ]);
         expect(await newDb.select(newDb.syncState).get(), isEmpty);
+      },
+    );
+  });
+
+  test('upgrading from v4 to v5 keeps challenges and starts them '
+      'unclaimed', () async {
+    const oldChallenge = v4.ChallengesData(
+      id: 'c_coco_donuts',
+      title: 'Eat 4 Coco donuts',
+      kind: 'donutQuarters',
+      progress: 4,
+      target: 4,
+      rewardPoints: 200,
+      sortOrder: 0,
+    );
+
+    await verifier.testWithDataIntegrity(
+      oldVersion: 4,
+      newVersion: 5,
+      createOld: v4.DatabaseAtV4.new,
+      createNew: v5.DatabaseAtV5.new,
+      openTestedDatabase: AppDatabase.forTesting,
+      createItems: (batch, oldDb) =>
+          batch.insertAll(oldDb.challenges, [oldChallenge]),
+      validateItems: (newDb) async {
+        final challenges = await newDb.select(newDb.challenges).get();
+        expect(challenges.map((c) => (c.id, c.progress, c.claimed)), [
+          ('c_coco_donuts', 4, 0),
+        ]);
       },
     );
   });

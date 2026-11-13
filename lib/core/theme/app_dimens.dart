@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 /// Spacing scale and page gutters, in logical pixels.
@@ -30,6 +31,13 @@ abstract final class AppRadii {
   /// The corner radius of a container that holds a shape of radius [inner]
   /// [inset] in from its corner, so the two curves share a centre.
   static double enclosing(double inner, double inset) => inner + inset;
+
+  /// The corner radius of a shape [inset] in from the corner of a container
+  /// of radius [outer], so the two curves share a centre. An inset as large
+  /// as the outer radius would give a square corner, so the result never
+  /// drops below [minimum].
+  static double concentric(double outer, double inset, {double minimum = 0}) =>
+      math.max(outer - inset, minimum);
 }
 
 /// Fixed component sizes.

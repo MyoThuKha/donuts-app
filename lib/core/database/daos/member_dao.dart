@@ -33,7 +33,41 @@ class MemberDao extends DatabaseAccessor<AppDatabase> with _$MemberDaoMixin {
     challengesTable,
   )..orderBy([(c) => OrderingTerm.asc(c.sortOrder)])).watch();
 
-  /// Replaces the member's data whole.
+  /// Earn: marks challenge [id] claimed and adds its points to the
+  /// profile's total, both in one transaction. Returns false and writes
+  /// nothing when the challenge doesn't exist, isn't complete or is
+  /// already claimed. Throws [MissingMemberProfileException] when there is
+  /// no profile row.
+  Future<bool> claimChallenge(String id) => transaction(() async {
+    final challenge = await (select(
+      challengesTable,
+    )..where((c) => c.id.equals(id))).getSingleOrNull();
+    if (challenge == null ||
+        challenge.claimed ||
+        challenge.progress < challenge.target) {
+      return false;
+    }
+    await (update(challengesTable)..where((c) => c.id.equals(id))).write(
+      const ChallengesTableCompanion(claimed: Value(true)),
+    );
+    final updated =
+        await (update(
+          memberProfileTable,
+        )..where((p) => p.id.equals(profileId))).write(
+          MemberProfileTableCompanion.custom(
+            totalPoints:
+                memberProfileTable.totalPoints +
+                Constant(challenge.rewardPoints),
+          ),
+        );
+    // Throwing rolls the claim back, so a challenge never reads claimed
+    // without its points.
+    if (updated == 0) throw const MissingMemberProfileException();
+    return true;
+  });
+
+  /// Replaces the member's data whole. Claims start over with the new
+  /// challenge rows.
   Future<void> replaceMember(MemberRows rows) => transaction(() async {
     await delete(tiersTable).go();
     await delete(challengesTable).go();
@@ -44,4 +78,12 @@ class MemberDao extends DatabaseAccessor<AppDatabase> with _$MemberDaoMixin {
         ..insertAll(challengesTable, rows.challenges);
     });
   });
+}
+
+/// Earn found no member profile row to add the points to.
+class MissingMemberProfileException implements Exception {
+  const new();
+
+  @override
+  String toString() => 'MissingMemberProfileException: no member profile';
 }
