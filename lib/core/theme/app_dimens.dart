@@ -60,4 +60,8 @@ abstract final class AppSizes {
 
   /// The donut inside the pull-to-refresh circle.
   static const double refreshDonut = 36;
+
+  /// The snackbar's height for a one-line message, matching the
+  /// pull-to-refresh pill.
+  static const double snackBar = refreshIndicator;
 }
