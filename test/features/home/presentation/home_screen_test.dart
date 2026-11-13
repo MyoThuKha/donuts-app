@@ -19,6 +19,7 @@ import 'package:donuts/features/home/presentation/views/banner_carousel_view.dar
 import 'package:donuts/features/home/presentation/views/home_header_view.dart';
 import 'package:donuts/features/home/presentation/views/member_panel_view.dart';
 import 'package:donuts/features/home/presentation/views/shops_band_view.dart';
+import 'package:donuts/features/home/presentation/widgets/tier_ring_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -136,6 +137,20 @@ void main() {
     expect(avatar.imageUrl, testMemberSummary.avatarUrl);
     expect(avatar.size, HomeDimens.avatar);
     expect(_inside<ProfileAvatar>(find.text('YP')), findsOneWidget);
+  });
+
+  testWidgets('a ring round the avatar shows the way to the next tier', (
+    tester,
+  ) async {
+    await pumpHomeScreen(tester, streams);
+    streams.member.add(testMemberSummary);
+    await tester.pump(_entrance);
+
+    final ring = tester.widget<TierRingWidget>(
+      _inside<HomeHeaderView>(find.byType(TierRingWidget)),
+    );
+    expect(ring.progress, testMemberSummary.tierProgress.progress);
+    expect(_inside<TierRingWidget>(find.byType(ProfileAvatar)), findsOneWidget);
   });
 
   testWidgets('the header shows the first name, Silver member and 500 points '
