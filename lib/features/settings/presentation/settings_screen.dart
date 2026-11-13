@@ -1,3 +1,4 @@
+import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
@@ -5,6 +6,7 @@ import 'package:donuts/features/auth/domain/age.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
+import 'package:donuts/features/settings/presentation/blocs/settings_member_cubit.dart';
 import 'package:donuts/features/settings/presentation/items/settings_row_item.dart';
 import 'package:donuts/features/settings/presentation/views/settings_header_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,8 +21,9 @@ typedef VersionReader = Future<String> Function();
 Future<String> _platformVersion() async =>
     (await PackageInfo.fromPlatform()).version;
 
-/// The Settings tab: the member's header, their date of birth and age, Log
-/// out and the app version. It runs edge to edge under the status bar.
+/// The Settings tab: the member's header on their tier's backdrop, their
+/// date of birth and age, Log out and the app version. It runs edge to edge
+/// under the status bar.
 class SettingsScreen extends StatelessWidget {
   const new({
     this.now = DateTime.now,
@@ -34,8 +37,10 @@ class SettingsScreen extends StatelessWidget {
   final VersionReader readVersion;
 
   @override
-  Widget build(BuildContext context) =>
-      _SettingsPage(now: now, readVersion: readVersion);
+  Widget build(BuildContext context) => BlocProvider(
+    create: (_) => getIt<SettingsMemberCubit>()..start(),
+    child: _SettingsPage(now: now, readVersion: readVersion),
+  );
 }
 
 class _SettingsPage extends StatelessWidget {

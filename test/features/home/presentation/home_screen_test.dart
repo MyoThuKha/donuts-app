@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/widgets/badges/discount_badge.dart';
@@ -11,6 +9,8 @@ import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/core/widgets/images/network_image.dart';
+import 'package:donuts/core/widgets/images/profile_avatar.dart';
+import 'package:donuts/core/widgets/images/tier_backdrop.dart';
 import 'package:donuts/features/home/presentation/home_assets.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/items/banner_item.dart';
@@ -87,22 +87,7 @@ void main() {
 
     streams.member.add(testMemberSummary);
     await tester.pump(_entrance);
-    expect(backdropAsset(tester), HomeAssets.headerBackdrop('silver'));
-  });
-
-  test('each tier has its own backdrop, and others have none', () {
-    final tiers = ['silver', 'gold', 'platinum'];
-    final assets = {for (final id in tiers) HomeAssets.headerBackdrop(id)};
-    expect(assets, hasLength(tiers.length));
-    expect(assets, isNot(contains(null)));
-    expect(HomeAssets.headerBackdrop('bronze'), isNull);
-    expect(HomeAssets.headerBackdrop(null), isNull);
-  });
-
-  test('every tier backdrop is bundled', () {
-    for (final id in ['silver', 'gold', 'platinum']) {
-      expect(File(HomeAssets.headerBackdrop(id)!).existsSync(), isTrue);
-    }
+    expect(backdropAsset(tester), TierBackdrop.assetFor('silver'));
   });
 
   testWidgets('the panel cuts the banners off at its bottom edge', (
@@ -138,17 +123,19 @@ void main() {
     expect(scene.alignment, Alignment.bottomCenter);
   });
 
-  testWidgets('the avatar is a white circle when its photo is missing', (
+  testWidgets('the avatar shows the initials until its photo loads', (
     tester,
   ) async {
     await pumpHomeScreen(tester, streams);
     streams.member.add(testMemberSummary);
     await tester.pump(_entrance);
 
-    final placeholder = tester.widget<ColoredBox>(
-      _inside<HomeHeaderView>(find.byKey(AppNetworkImage.placeholderKey)),
+    final avatar = tester.widget<ProfileAvatar>(
+      _inside<HomeHeaderView>(find.byType(ProfileAvatar)),
     );
-    expect(placeholder.color, DonutsColors.light.surface);
+    expect(avatar.imageUrl, testMemberSummary.avatarUrl);
+    expect(avatar.size, HomeDimens.avatar);
+    expect(_inside<ProfileAvatar>(find.text('YP')), findsOneWidget);
   });
 
   testWidgets('the header shows the first name, Silver member and 500 points '

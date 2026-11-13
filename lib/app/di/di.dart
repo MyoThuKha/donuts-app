@@ -3,6 +3,7 @@ import 'package:donuts/app/di/core_module.dart';
 import 'package:donuts/app/di/home_module.dart';
 import 'package:donuts/app/di/product_module.dart';
 import 'package:donuts/app/di/rewards_module.dart';
+import 'package:donuts/app/di/settings_module.dart';
 import 'package:donuts/app/di/sync_module.dart';
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/di/locator.dart';
@@ -36,4 +37,5 @@ Future<void> configureDependencies({
   registerHomeModule(getIt);
   registerProductModule(getIt);
   registerRewardsModule(getIt);
+  registerSettingsModule(getIt);
 }
