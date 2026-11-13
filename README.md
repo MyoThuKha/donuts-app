@@ -176,7 +176,7 @@ Home, Rewards and Settings read the same member record, so their points and tier
 
 ## Animations
 
-All durations and curves are named constants in `lib/core/motion/app_motion.dart`. Every animation reads them through `context.motion`, which skips decorative motion and shortens state cues when Android's "Remove animations" or iOS's "Reduce Motion" is on. All motion uses Flutter's own APIs, with no Lottie or Rive. The points ring, the tier line and the coffee arc are `CustomPainter`s. The donut challenge colours in through a `CustomClipper` over its photo, because the photo loads through the shared image widget with its cache and bundled fallback.
+All durations and curves are named constants in `lib/core/motion/app_motion.dart`. Every animation reads them through `context.motion`, which skips decorative motion and shortens state cues when Android's "Remove animations" or iOS's "Reduce Motion" is on. All motion uses Flutter's own APIs, with no Lottie or Rive. The points ring, the tier line, the coffee arc and the donut challenge's quarters are `CustomPainter`s. The donut painter draws the full-colour photo inside a growing sector over a faded copy, which loads through the shared image widget with its cache and bundled fallback.
 
 | Where | What moves |
 |---|---|

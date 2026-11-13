@@ -10,8 +10,8 @@ import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_cas
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
 import 'package:donuts/features/rewards/domain/vo/challenge_vo.dart';
 import 'package:donuts/features/rewards/presentation/items/challenge_card_item.dart';
+import 'package:donuts/features/rewards/presentation/painters/donut_quarters_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
-import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
 import 'package:donuts/features/rewards/presentation/rewards_screen.dart';
 import 'package:donuts/features/rewards/presentation/views/rewards_header_view.dart';
 import 'package:donuts/features/rewards/presentation/widgets/count_up_text_widget.dart';
@@ -147,10 +147,10 @@ void main() {
     await tester.pumpAndSettle();
 
     final clips = tester
-        .widgetList<ClipPath>(find.byType(ClipPath))
-        .map((c) => c.clipper)
-        .whereType<QuarterClipper>()
-        .map((c) => c.fraction);
+        .widgetList<CustomPaint>(find.byType(CustomPaint))
+        .map((c) => c.foregroundPainter)
+        .whereType<DonutQuartersPainter>()
+        .map((c) => c.progress.value);
     expect(clips, [1.0, 0.25]);
   });
 

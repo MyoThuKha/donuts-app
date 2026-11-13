@@ -1,7 +1,7 @@
 import 'package:donuts/app/shell/widgets/nav_icons.dart';
 import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/features/rewards/presentation/painters/donut_quarters_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
-import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
 import 'package:donuts/features/rewards/presentation/widgets/earn_button_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -91,11 +91,12 @@ void main() {
     'coming back to the Rewards tab replays the cards and their art',
     (tester) async {
       double cocoDonut() => tester
-          .widgetList<ClipPath>(find.byType(ClipPath))
-          .map((c) => c.clipper)
-          .whereType<QuarterClipper>()
+          .widgetList<CustomPaint>(find.byType(CustomPaint))
+          .map((c) => c.foregroundPainter)
+          .whereType<DonutQuartersPainter>()
           .first
-          .fraction;
+          .progress
+          .value;
       await pumpRouterApp(
         tester,
         session: testSessionCubit()..signedIn(testUser),

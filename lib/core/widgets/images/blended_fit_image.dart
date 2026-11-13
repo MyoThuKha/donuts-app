@@ -1,3 +1,4 @@
+import 'package:donuts/core/widgets/images/image_subscription.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Paints [image] centred in its box at a size eased from the size [from]
@@ -48,8 +49,8 @@ class BlendedFitImage extends StatefulWidget {
 }
 
 class _BlendedFitImageState extends State<BlendedFitImage> {
-  final _main = _ImageSubscription();
-  final _fallback = _ImageSubscription();
+  final _main = ImageSubscription();
+  final _fallback = ImageSubscription();
 
   @override
   void didChangeDependencies() {
@@ -144,39 +145,5 @@ class _BlendedFitImageState extends State<BlendedFitImage> {
       source.width * fitted.destination.width / fitted.source.width,
       source.height * fitted.destination.height / fitted.source.height,
     );
-  }
-}
-
-/// One image stream and the latest picture it delivered.
-class _ImageSubscription {
-  ImageStream? _stream;
-  ImageStreamListener? _listener;
-  ImageInfo? info;
-
-  /// Listens to [stream] unless it is the one already followed.
-  void listen(
-    ImageStream stream, {
-    required VoidCallback onImage,
-    VoidCallback? onError,
-  }) {
-    if (stream.key == _stream?.key) return;
-    _unlisten();
-    final listener = ImageStreamListener((image, _) {
-      info?.dispose();
-      info = image;
-      onImage();
-    }, onError: (_, _) => onError?.call());
-    _stream = stream..addListener(listener);
-    _listener = listener;
-  }
-
-  void _unlisten() {
-    final listener = _listener;
-    if (listener != null) _stream?.removeListener(listener);
-  }
-
-  void dispose() {
-    _unlisten();
-    info?.dispose();
   }
 }
