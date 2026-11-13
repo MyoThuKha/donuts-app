@@ -152,8 +152,10 @@ class _AccountNotice extends StatelessWidget {
     );
   }
 
+  /// Opens the other path with the number already typed.
   Widget _link(BuildContext context, String action, String route) => TextButton(
-    onPressed: () => context.go(route),
+    onPressed: () =>
+        context.go(route, extra: context.read<PhoneCubit>().state.input),
     style: TextButton.styleFrom(
       minimumSize: const Size(AppSizes.button, AppSizes.button),
     ),
