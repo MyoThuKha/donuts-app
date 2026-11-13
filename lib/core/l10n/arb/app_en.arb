@@ -261,6 +261,10 @@
   "@homeOffline": {
     "description": "Banner at the top of Home while offline"
   },
+  "refreshLoading": "Loading",
+  "@refreshLoading": {
+    "description": "Label in the pull-to-refresh pill while the refresh runs"
+  },
   "homeRefreshFailed": "Couldn’t refresh. Showing saved data.",
   "@homeRefreshFailed": {
     "description": "Snackbar after a failed pull-to-refresh"

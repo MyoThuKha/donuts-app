@@ -556,6 +556,12 @@ abstract class AppLocalizations {
   /// **'You’re offline. Showing saved data.'**
   String get homeOffline;
 
+  /// Label in the pull-to-refresh pill while the refresh runs
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get refreshLoading;
+
   /// Snackbar after a failed pull-to-refresh
   ///
   /// In en, this message translates to:

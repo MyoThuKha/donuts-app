@@ -53,4 +53,11 @@ abstract final class AppSizes {
   /// area is [button] square.
   static const double circleButton = 28;
   static const double circleButtonIcon = 16;
+
+  /// The white circle of the pull-to-refresh indicator, and the height of
+  /// the pill it grows into while loading.
+  static const double refreshIndicator = 56;
+
+  /// The donut inside the pull-to-refresh circle.
+  static const double refreshDonut = 36;
 }

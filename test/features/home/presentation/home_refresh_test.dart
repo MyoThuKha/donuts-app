@@ -13,9 +13,8 @@ import '../../../helpers/fake_connectivity.dart';
 import '../../../helpers/fakes.dart';
 import '../../../helpers/home_harness.dart';
 
-/// RefreshIndicator arms after a quarter of the viewport's height, and
-/// the tall test surface is 3000 pt, so the pull is long.
-const Offset _pull = Offset(0, 1200);
+/// Well past the donut indicator's trigger distance.
+const Offset _pull = Offset(0, 400);
 
 const String _refreshFailed = 'Couldn’t refresh. Showing saved data.';
 
@@ -107,7 +106,7 @@ void main() {
     for (var i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 100));
     }
-    expect(find.byType(RefreshProgressIndicator), findsOneWidget);
+    expect(find.text('Loading'), findsOneWidget);
 
     background.complete(const Failure(NetworkFailure()));
     await tester.pumpAndSettle();
