@@ -69,6 +69,20 @@ void main() {
     expect(await db.cartDao.quantityOf('a'), 99);
   });
 
+  test('changing a quantity keeps the line where it is', () async {
+    await db.cartDao.add('a', 1, at: at);
+    await db.cartDao.add('b', 1, at: at.add(const Duration(minutes: 1)));
+
+    await db.cartDao.setQuantity(
+      'a',
+      2,
+      at: at.add(const Duration(minutes: 2)),
+    );
+
+    final lines = await db.cartDao.watchLines().first;
+    expect([for (final l in lines) l.product.id], ['b', 'a']);
+  });
+
   test('watchLines joins each item with its product, newest first', () async {
     await db.cartDao.add('a', 2, at: at);
     await db.cartDao.add('b', 1, at: at.add(const Duration(minutes: 1)));

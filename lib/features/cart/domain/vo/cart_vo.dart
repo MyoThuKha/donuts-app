@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'cart_vo.freezed.dart';
 
-/// The whole cart, most recently changed item first.
+/// The whole cart, the most recently added item first.
 @freezed
 abstract class CartVO with _$CartVO {
   const factory CartVO({required List<CartItemVO> items}) = _CartVO;

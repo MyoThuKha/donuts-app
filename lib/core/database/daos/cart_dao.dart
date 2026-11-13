@@ -64,18 +64,17 @@ class CartDao extends DatabaseAccessor<AppDatabase> with _$CartDaoMixin {
   /// Empties the cart.
   Future<void> clear() => delete(cartItemsTable).go();
 
-  /// Every cart row with its product, most recently changed first.
+  /// Every cart row with its product, the most recently added first. A
+  /// quantity change keeps a row in place, so a tile doesn't move while
+  /// it's being stepped.
   Stream<List<CartLineRow>> watchLines() {
-    final query =
-        select(cartItemsTable).join([
-          innerJoin(
-            productsTable,
-            productsTable.id.equalsExp(cartItemsTable.productId),
-          ),
-        ])..orderBy([
-          OrderingTerm.desc(cartItemsTable.updatedAt),
-          OrderingTerm.asc(cartItemsTable.productId),
-        ]);
+    final query = select(cartItemsTable).join([
+      innerJoin(
+        productsTable,
+        productsTable.id.equalsExp(cartItemsTable.productId),
+      ),
+      // An upsert keeps the rowid, so rowid order is the order of adding.
+    ])..orderBy([OrderingTerm.desc(cartItemsTable.rowId)]);
     return query.watch().map(
       (rows) => [
         for (final row in rows)
