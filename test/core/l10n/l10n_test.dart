@@ -25,8 +25,14 @@ void main() {
   test('screen 8 to 10 strings read as designed', () async {
     final l10n = await AppLocalizations.delegate.load(const Locale('en'));
 
-    expect(l10n.homeShopsTitle(4), "There are 4 J'Donut shops near you");
-    expect(l10n.homeShopsTitle(1), "There is 1 J'Donut shop near you");
+    expect(
+      l10n.homeShopsTitle(4),
+      'There are 4 J’Donut shops near\u00A0you.\u00A0😋',
+    );
+    expect(
+      l10n.homeShopsTitle(1),
+      'There is 1 J’Donut shop near\u00A0you.\u00A0😋',
+    );
     expect(l10n.productPrice('3,200'), '3,200 MMK');
     expect(
       l10n.rewardsTierRemaining('500', 'Gold'),

@@ -236,9 +236,9 @@
       }
     }
   },
-  "homeShopsTitle": "{count, plural, =1{There is 1 J'Donut shop near you} other{There are {count} J'Donut shops near you}}",
+  "homeShopsTitle": "{count, plural, =1{There is 1 J’Donut shop near you. 😋} other{There are {count} J’Donut shops near you. 😋}}",
   "@homeShopsTitle": {
-    "description": "Title of the nearby shops band",
+    "description": "Title of the nearby shops band. Non-breaking spaces keep \"near you. 😋\" on one line.",
     "placeholders": {
       "count": {
         "type": "int"

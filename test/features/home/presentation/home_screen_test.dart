@@ -1,14 +1,20 @@
+import 'dart:io';
+
 import 'package:donuts/core/network/connectivity_cubit.dart';
+import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/widgets/badges/discount_badge.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/core/widgets/images/network_image.dart';
+import 'package:donuts/features/home/presentation/home_assets.dart';
+import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/items/banner_item.dart';
 import 'package:donuts/features/home/presentation/items/product_tile_item.dart';
 import 'package:donuts/features/home/presentation/views/banner_carousel_view.dart';
 import 'package:donuts/features/home/presentation/views/home_header_view.dart';
+import 'package:donuts/features/home/presentation/views/member_panel_view.dart';
 import 'package:donuts/features/home/presentation/views/shops_band_view.dart';
 import 'package:donuts/features/home/presentation/widgets/see_all_button_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -51,6 +57,98 @@ void main() {
     expect(_inside<ShopsBandView>(find.byType(Skeleton)), findsWidgets);
   });
 
+  /// The asset behind the member panel, or null when it shows none.
+  String? backdropAsset(WidgetTester tester) => tester
+      .widgetList<DecoratedBox>(
+        _inside<MemberPanelView>(find.byType(DecoratedBox)),
+      )
+      .map((box) => box.decoration)
+      .whereType<BoxDecoration>()
+      .map((decoration) => decoration.image?.image)
+      .whereType<AssetImage>()
+      .map((image) => image.assetName)
+      .lastOrNull;
+
+  testWidgets('the panel is plain blue until the member loads, then shows '
+      'the backdrop of their tier', (tester) async {
+    await pumpHomeScreen(tester, streams);
+    await tester.pump();
+    expect(backdropAsset(tester), isNull);
+    expect(
+      _inside<MemberPanelView>(
+        find.byWidgetPredicate(
+          (w) => w is ColoredBox && w.color == DonutsColors.light.primary,
+        ),
+      ),
+      findsOneWidget,
+    );
+
+    streams.member.add(testMemberSummary);
+    await tester.pump(_entrance);
+    expect(backdropAsset(tester), HomeAssets.headerBackdrop('silver'));
+  });
+
+  test('each tier has its own backdrop, and others have none', () {
+    final tiers = ['silver', 'gold', 'platinum'];
+    final assets = {for (final id in tiers) HomeAssets.headerBackdrop(id)};
+    expect(assets, hasLength(tiers.length));
+    expect(assets, isNot(contains(null)));
+    expect(HomeAssets.headerBackdrop('bronze'), isNull);
+    expect(HomeAssets.headerBackdrop(null), isNull);
+  });
+
+  test('every tier backdrop is bundled', () {
+    for (final id in ['silver', 'gold', 'platinum']) {
+      expect(File(HomeAssets.headerBackdrop(id)!).existsSync(), isTrue);
+    }
+  });
+
+  testWidgets('the panel cuts the banners off at its bottom edge', (
+    tester,
+  ) async {
+    await pumpHomeScreen(tester, streams);
+    streams.banners.add(testBanners);
+    await tester.pump(_entrance);
+
+    final panelBottom = tester
+        .getBottomLeft(_inside<MemberPanelView>(find.byType(ClipRRect)).first)
+        .dy;
+    final bannerTop = tester.getTopLeft(find.byType(BannerItem).first).dy;
+    final bannerBottom = tester.getBottomLeft(find.byType(BannerItem).first).dy;
+    expect(bannerBottom - bannerTop, HomeDimens.bannerHeight);
+    expect(panelBottom - bannerTop, HomeDimens.bannerVisibleHeight);
+  });
+
+  testWidgets('the shops band sits on the garden scene, anchored at the '
+      'bottom', (tester) async {
+    await pumpHomeScreen(tester, streams);
+    await tester.pump(_entrance);
+
+    final scene = tester
+        .widgetList<DecoratedBox>(
+          _inside<ShopsBandView>(find.byType(DecoratedBox)),
+        )
+        .map((box) => box.decoration)
+        .whereType<BoxDecoration>()
+        .singleWhere((decoration) => decoration.image != null)
+        .image!;
+    expect((scene.image as AssetImage).assetName, HomeAssets.shopsBackdrop);
+    expect(scene.alignment, Alignment.bottomCenter);
+  });
+
+  testWidgets('the avatar is a white circle when its photo is missing', (
+    tester,
+  ) async {
+    await pumpHomeScreen(tester, streams);
+    streams.member.add(testMemberSummary);
+    await tester.pump(_entrance);
+
+    final placeholder = tester.widget<ColoredBox>(
+      _inside<HomeHeaderView>(find.byKey(AppNetworkImage.placeholderKey)),
+    );
+    expect(placeholder.color, DonutsColors.light.surface);
+  });
+
   testWidgets('the header shows the first name, Silver member and 500 points '
       'left to become Gold Member', (tester) async {
     await pumpHomeScreen(tester, streams);
@@ -70,6 +168,7 @@ void main() {
 
     expect(find.text('Seasonal specials'), findsOneWidget);
     expect(find.text('Popular'), findsOneWidget);
+    expect(find.text('🔥'), findsOneWidget);
     expect(find.text('Order again'), findsOneWidget);
     final mistletoe = find.ancestor(
       of: find.text('Mistletoe Romance box'),
@@ -140,7 +239,10 @@ void main() {
     streams.emitAll();
     await tester.pump();
 
-    expect(find.text("There are 4 J'Donut shops near you"), findsOneWidget);
+    expect(
+      find.text('There are 4 J’Donut shops near\u00A0you.\u00A0😋'),
+      findsOneWidget,
+    );
     expect(find.text('Explore now'.toUpperCase()), findsOneWidget);
     expect(find.text('Order online'), findsNWidgets(4));
   });

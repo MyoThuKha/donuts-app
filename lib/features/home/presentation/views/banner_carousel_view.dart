@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
-import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
@@ -17,8 +16,8 @@ import 'package:donuts/features/home/presentation/items/banner_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// The banner carousel. Its top half sits on the header colour, so the
-/// cards straddle the header's edge as in the design.
+/// The banner carousel, inside the member panel. The panel's bottom edge
+/// cuts the cards off, as in the design.
 class BannerCarouselView extends StatelessWidget {
   const new({super.key});
 
@@ -42,27 +41,23 @@ class BannerCarouselView extends StatelessWidget {
   }
 }
 
-/// The two-tone strip behind the cards.
+/// Lays the cards out at full height but takes only their visible part,
+/// so the panel's clip cuts off their bottoms.
 class _Band extends StatelessWidget {
   const new({required this.child});
 
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [colors.memberHeader, colors.memberHeader, colors.canvas],
-          stops: const [0, 0.5, 0.5],
-        ),
-      ),
-      child: SizedBox(height: HomeDimens.bannerHeight, child: child),
-    );
-  }
+  Widget build(BuildContext context) => SizedBox(
+    height: HomeDimens.bannerVisibleHeight,
+    child: OverflowBox(
+      alignment: Alignment.topCenter,
+      minHeight: HomeDimens.bannerHeight,
+      maxHeight: HomeDimens.bannerHeight,
+      child: child,
+    ),
+  );
 }
 
 /// Places one card where the carousel's first page sits.

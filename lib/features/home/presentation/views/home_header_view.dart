@@ -2,6 +2,7 @@ import 'package:donuts/core/format/number_format.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/badges/app_tag.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/core/widgets/images/network_image.dart';
@@ -31,10 +32,12 @@ class HomeHeaderView extends StatelessWidget {
       _ => null,
     };
     return Padding(
+      // No right padding: the bell tag runs off the right edge. Everything
+      // under it keeps the gutter.
       padding: EdgeInsets.fromLTRB(
         AppSpacing.pageGutter,
         MediaQuery.paddingOf(context).top + AppSpacing.l,
-        AppSpacing.pageGutter,
+        0,
         AppSpacing.l,
       ),
       child: Column(
@@ -42,7 +45,11 @@ class HomeHeaderView extends StatelessWidget {
         spacing: AppSpacing.m,
         children: [
           _identityRow(context, member, summary),
-          ..._standing(context, member, summary),
+          for (final item in _standing(context, member, summary))
+            Padding(
+              padding: const EdgeInsets.only(right: AppSpacing.pageGutter),
+              child: item,
+            ),
         ],
       ),
     );
@@ -104,15 +111,22 @@ class _Avatar extends StatelessWidget {
         ),
       );
     }
+    // White behind the photo and in its place while it loads or is
+    // missing, like the product cards.
+    final surface = context.colors.surface;
     return ClipOval(
-      child: SizedBox.square(
-        dimension: HomeDimens.avatar,
-        child: AppNetworkImage(
-          url: summary?.avatarUrl,
-          asset: summary?.avatarAsset,
-          cacheWidth:
-              (HomeDimens.avatar * MediaQuery.devicePixelRatioOf(context))
-                  .round(),
+      child: ColoredBox(
+        color: surface,
+        child: SizedBox.square(
+          dimension: HomeDimens.avatar,
+          child: AppNetworkImage(
+            url: summary?.avatarUrl,
+            asset: summary?.avatarAsset,
+            placeholderColor: surface,
+            cacheWidth:
+                (HomeDimens.avatar * MediaQuery.devicePixelRatioOf(context))
+                    .round(),
+          ),
         ),
       ),
     );
@@ -142,7 +156,7 @@ class _NameAndTier extends StatelessWidget {
           firstName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: context.text.headline,
+          style: context.text.display,
         ),
         if (member is SectionLoading)
           const SkeletonGroup(
@@ -154,7 +168,7 @@ class _NameAndTier extends StatelessWidget {
         if (tier != null)
           Text(
             context.l10n.homeMemberTier(tier.name),
-            style: context.text.bodySmall,
+            style: context.text.body,
           ),
       ],
     );
@@ -175,21 +189,6 @@ class _PointsChip extends StatelessWidget {
     final label = next == null || pointsToNext == null
         ? l10n.homeTopTier
         : l10n.homePointsToNextTier(formatGrouped(pointsToNext), next.name);
-    return DecoratedBox(
-      decoration: ShapeDecoration(
-        color: context.colors.surface,
-        shape: const StadiumBorder(),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.m,
-          vertical: AppSpacing.xs,
-        ),
-        child: Text(
-          label,
-          style: context.text.caption.copyWith(color: context.colors.inkMuted),
-        ),
-      ),
-    );
+    return AppTag.plain(label: label);
   }
 }

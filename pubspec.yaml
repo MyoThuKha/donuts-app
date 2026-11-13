@@ -50,6 +50,7 @@ flutter:
     - assets/fonts/nunito/OFL.txt
     - assets/fonts/schibsted_grotesk/OFL.txt
     - assets/icons/
+    - assets/images/
     - assets/logos/
     - assets/seed/
 

@@ -26,7 +26,6 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     required this.tierGold,
     required this.tierPlatinum,
     required this.danger,
-    required this.memberHeader,
   });
 
   factory _fromValues(List<Color> v) => DonutsColors(
@@ -52,7 +51,6 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     tierGold: v[19],
     tierPlatinum: v[20],
     danger: v[21],
-    memberHeader: v[22],
   );
 
   static const DonutsColors light = DonutsColors(
@@ -78,7 +76,6 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     tierGold: Color(0xFFE9D27A),
     tierPlatinum: Color(0xFFBFE3F2),
     danger: Color(0xFFD9534F),
-    memberHeader: Color(0xFFFCF0E4),
   );
 
   final Color primary;
@@ -114,9 +111,6 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
   /// errors don't read as accent-pink links.
   final Color danger;
 
-  /// The peach behind the Home header.
-  final Color memberHeader;
-
   List<Color> get _values => [
     primary,
     onPrimary,
@@ -140,7 +134,6 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     tierGold,
     tierPlatinum,
     danger,
-    memberHeader,
   ];
 
   /// The design has a single light palette, so tokens are never overridden

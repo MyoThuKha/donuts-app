@@ -6,8 +6,10 @@ import 'package:donuts/features/home/domain/vo/home_section_vo.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/items/product_tile_item.dart';
 import 'package:donuts/features/home/presentation/widgets/see_all_button_widget.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
+
+/// Follows the Popular title, as in the design.
+const String _popularEmoji = '🔥';
 
 /// One Home row: its title, then its products side by side.
 class ProductSectionView extends StatelessWidget {
@@ -62,16 +64,12 @@ class _SectionTitle extends StatelessWidget {
                 Flexible(
                   child: Semantics(
                     header: true,
-                    child: Text(title, style: context.text.sectionTitle),
+                    child: Text(title, style: context.text.headline),
                   ),
                 ),
                 if (section.kind == HomeSectionKind.popular)
                   ExcludeSemantics(
-                    child: Icon(
-                      LucideIcons.flame,
-                      size: HomeDimens.flameIcon,
-                      color: context.colors.highlight,
-                    ),
+                    child: Text(_popularEmoji, style: context.text.headline),
                   ),
               ],
             ),
@@ -103,6 +101,7 @@ class _ProductRow extends StatelessWidget {
               product: product,
               sectionId: section.id,
               imageSize: imageSize,
+              fillsTile: HomeDimens.fillsTile(section.kind),
             ),
         ],
       ),

@@ -42,7 +42,7 @@ class ShopCardItem extends StatelessWidget {
                 shop.address,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: text.caption,
+                style: text.bodySmall,
               ),
               _orderOnline(context),
             ],

@@ -526,10 +526,10 @@ abstract class AppLocalizations {
   /// **'{percent}% off'**
   String discountOff(int percent);
 
-  /// Title of the nearby shops band
+  /// Title of the nearby shops band. Non-breaking spaces keep "near you. 😋" on one line.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{There is 1 J\'Donut shop near you} other{There are {count} J\'Donut shops near you}}'**
+  /// **'{count, plural, =1{There is 1 J’Donut shop near you. 😋} other{There are {count} J’Donut shops near you. 😋}}'**
   String homeShopsTitle(int count);
 
   /// Button in the nearby shops band

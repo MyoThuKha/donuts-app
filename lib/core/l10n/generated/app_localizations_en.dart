@@ -275,8 +275,8 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'There are $count J\'Donut shops near you',
-      one: 'There is 1 J\'Donut shop near you',
+      other: 'There are $count J’Donut shops near you. 😋',
+      one: 'There is 1 J’Donut shop near you. 😋',
     );
     return '$_temp0';
   }
