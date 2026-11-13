@@ -5,18 +5,16 @@ import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/images/profile_avatar.dart';
 import 'package:donuts/core/widgets/images/tier_backdrop.dart';
-import 'package:donuts/core/widgets/sheets/sheet_extension.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:donuts/features/auth/presentation/session/user_initials.dart';
 import 'package:donuts/features/settings/presentation/blocs/settings_member_cubit.dart';
-import 'package:donuts/features/settings/presentation/views/profile_detail_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The band at the top of Settings, as a sliver: the member's avatar, name,
-/// tier and phone number, and EDIT, which opens Profile Detail. It sits on
-/// the backdrop of the member's tier, read from the local database, and
-/// shows plain light blue until that loads.
+/// tier and phone number. It sits on the backdrop of the member's tier,
+/// read from the local database, and shows plain light blue until that
+/// loads.
 ///
 /// It runs up under the status bar and stretches when the page is pulled
 /// down, so the backdrop never comes apart from the top.
@@ -76,7 +74,8 @@ class SettingsHeaderView extends StatelessWidget {
             background: TierBackdrop(
               tierId: tier?.id,
               color: colors.settingsHeader,
-              // Keeps the hexagon's star out from behind EDIT.
+              // The band is shorter than Home's panel, so it shows the
+              // lower part of the hexagon.
               alignment: Alignment.bottomRight,
             ),
           ),
@@ -125,8 +124,7 @@ class _HeaderRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: AppSpacing.xs,
               children: [
-                // One line each, so the band's height holds. Profile Detail
-                // shows the whole name.
+                // One line each, so the band's height holds.
                 Text(
                   user.displayName,
                   maxLines: 1,
@@ -142,16 +140,6 @@ class _HeaderRow extends StatelessWidget {
                   ),
                 Text(user.phone, style: text.body),
               ],
-            ),
-          ),
-          TextButton(
-            onPressed: () => ProfileDetailView(
-              user: user,
-              avatarUrl: avatarUrl,
-            ).sheet<void>(context, title: context.l10n.profileDetailTitle),
-            child: Text(
-              context.l10n.settingsEdit.toUpperCase(),
-              style: text.button.copyWith(color: context.colors.accent),
             ),
           ),
         ],

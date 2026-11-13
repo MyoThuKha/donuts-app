@@ -244,18 +244,6 @@ abstract class AppLocalizations {
   /// **'{years, plural, =1{1 year} other{{years} years}}'**
   String accountAgeYears(int years);
 
-  /// No description provided for @settingsEdit.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit'**
-  String get settingsEdit;
-
-  /// No description provided for @profileDetailTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile Detail'**
-  String get profileDetailTitle;
-
   /// No description provided for @settingsVersion.
   ///
   /// In en, this message translates to:

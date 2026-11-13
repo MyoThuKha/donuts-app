@@ -89,26 +89,6 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('EDIT opens Profile Detail with the name and phone', (
-    tester,
-  ) async {
-    final session = testSessionCubit()..signedIn(testUser);
-    await pumpThemed(
-      tester,
-      BlocProvider.value(
-        value: session,
-        child: SettingsScreen(readVersion: () async => '1.0.0'),
-      ),
-    );
-
-    await tester.tap(find.text('EDIT'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Profile Detail'), findsOneWidget);
-    expect(find.text('Ye Min Phyoe Win'), findsNWidgets(2));
-    expect(find.text('+959254135592'), findsNWidgets(2));
-  });
-
   testWidgets('no version line when the version cannot be read', (
     tester,
   ) async {
