@@ -195,7 +195,7 @@ class _NavItem extends StatelessWidget {
                 height: AppBottomNav.iconSize,
                 colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
               ),
-              if (selected) _label(context, color),
+              if (selected) _label(context),
             ],
           ),
         ),
@@ -203,7 +203,7 @@ class _NavItem extends StatelessWidget {
     );
   }
 
-  Widget _label(BuildContext context, Color color) {
+  Widget _label(BuildContext context) {
     return Flexible(
       child: Padding(
         padding: const EdgeInsets.only(left: AppSpacing.s),
@@ -218,7 +218,9 @@ class _NavItem extends StatelessWidget {
             child: Text(
               item.label,
               maxLines: 1,
-              style: context.text.label.copyWith(color: color),
+              // The design's label is about 12pt bold white. Badge is the
+              // nearest role.
+              style: context.text.badge,
             ),
           ),
         ),
