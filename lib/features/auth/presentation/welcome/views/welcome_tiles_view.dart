@@ -2,6 +2,7 @@ import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/effects/progressive_fade.dart';
 import 'package:donuts/core/widgets/images/donut_placeholder.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -46,29 +47,36 @@ class WelcomeTilesView extends StatelessWidget {
   /// How far, in tile widths, each tile slides in from its side.
   static const double _slide = 0.4;
 
+  /// Where the fade starts, as a share of the view's height.
+  static const double _fadeStart = 0.62;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final size = constraints.biggest;
-        return Stack(
-          clipBehavior: Clip.none,
-          children: [
-            for (final (i, tile) in welcomeTiles.indexed)
-              Positioned.fromRect(
-                rect: Rect.fromLTRB(
-                  tile.rect.left * size.width,
-                  tile.rect.top * size.height,
-                  tile.rect.right * size.width,
-                  tile.rect.bottom * size.height,
+        // The lower tiles dissolve into the pink above the title.
+        return ProgressiveFade(
+          start: _fadeStart,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              for (final (i, tile) in welcomeTiles.indexed)
+                Positioned.fromRect(
+                  rect: Rect.fromLTRB(
+                    tile.rect.left * size.width,
+                    tile.rect.top * size.height,
+                    tile.rect.right * size.width,
+                    tile.rect.bottom * size.height,
+                  ),
+                  child: StaggeredEntrance(
+                    index: i,
+                    from: Offset(i.isEven ? -_slide : _slide, 0),
+                    child: WelcomeTileItem(tile: tile),
+                  ),
                 ),
-                child: StaggeredEntrance(
-                  index: i,
-                  from: Offset(i.isEven ? -_slide : _slide, 0),
-                  child: WelcomeTileItem(tile: tile),
-                ),
-              ),
-          ],
+            ],
+          ),
         );
       },
     );
