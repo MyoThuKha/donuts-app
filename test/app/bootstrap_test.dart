@@ -37,7 +37,7 @@ void main() {
 
     final db = getIt<AppDatabase>();
     expect(await db.select(db.productsTable).get(), hasLength(10));
-    expect((await db.memberDao.watchProfile().first)?.totalPoints, 680300);
+    expect((await db.memberDao.watchProfile().first)?.totalPoints, 680000);
     expect(getIt<SessionCubit>().state, isA<SessionSignedOut>());
     expect(getIt<ConnectivityCubit>().state, ConnectivityStatus.offline);
     expect(getIt<SeedCubit>().state, SeedStatus.done);

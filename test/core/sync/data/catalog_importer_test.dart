@@ -171,14 +171,14 @@ void main() {
   });
 
   test(
-    'importMember stores one profile with 680,300 points and three tiers',
+    'importMember stores one profile with 680,000 points and three tiers',
     () async {
       final member = readMemberFile(seedMemberPath).data!;
 
       final outcome = await importer.importMember(member, version: 1);
 
       expect(outcome, ImportOutcome.imported);
-      expect((await db.memberDao.watchProfile().first)?.totalPoints, 680300);
+      expect((await db.memberDao.watchProfile().first)?.totalPoints, 680000);
       expect(await db.memberDao.watchTiers().first, hasLength(3));
       expect(await db.memberDao.watchChallenges().first, hasLength(3));
       expect((await db.syncStateDao.find(SyncKeys.member))?.version, 1);

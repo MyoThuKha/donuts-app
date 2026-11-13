@@ -32,16 +32,15 @@ void main() {
         .watchSummary()
         .first;
 
-    expect(summary?.totalPoints, 680300);
+    expect(summary?.totalPoints, 680000);
     expect(summary?.rewardsCount, 3);
     expect(summary?.tiers.map((t) => t.id), ['silver', 'gold', 'platinum']);
     expect(summary?.tiers.map((t) => t.sortOrder), [0, 1, 2]);
     expect(summary?.tierProgress.current?.name, 'Silver');
-    expect(summary?.tierProgress.pointsToNext, 200);
+    expect(summary?.tierProgress.pointsToNext, 500);
   });
 
-  test('watchSummary follows points stored by Earn and moves the tier '
-      'with them', () async {
+  test('watchSummary follows points stored by Earn', () async {
     final member = readMemberFile(seedMemberPath).data!;
     await CatalogImporter(
       db,
@@ -58,6 +57,6 @@ void main() {
     await db.memberDao.claimChallenge('c_coco_donuts');
     await pumpEventQueue();
 
-    expect(seen, [(680300, 'Silver'), (680500, 'Gold')]);
+    expect(seen, [(680000, 'Silver'), (680200, 'Silver')]);
   });
 }

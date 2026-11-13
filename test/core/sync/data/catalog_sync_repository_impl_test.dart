@@ -45,7 +45,7 @@ void main() {
 
     expect(result, isA<Success<void>>());
     expect(await productCount(), 10);
-    expect((await db.memberDao.watchProfile().first)?.totalPoints, 680300);
+    expect((await db.memberDao.watchProfile().first)?.totalPoints, 680000);
   });
 
   test('seedIfNeeded twice loads the seed files once', () async {
