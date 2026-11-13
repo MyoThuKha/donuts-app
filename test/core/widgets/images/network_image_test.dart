@@ -105,4 +105,25 @@ void main() {
 
     expect(find.byKey(AppNetworkImage.placeholderKey), findsOneWidget);
   });
+
+  testWidgets('a fallback replaces the box and the error tile', (tester) async {
+    const fallback = Text('YP');
+    await _pumpImage(
+      tester,
+      const AppNetworkImage(url: null, fallback: fallback),
+    );
+    expect(find.text('YP'), findsOneWidget);
+    expect(find.byKey(AppNetworkImage.placeholderKey), findsNothing);
+
+    await _pumpImage(
+      tester,
+      AppNetworkImage(
+        url: _url,
+        cacheManager: _FailingCacheManager(),
+        fallback: fallback,
+      ),
+    );
+    expect(find.text('YP'), findsOneWidget);
+    expect(find.byKey(AppNetworkImage.errorKey), findsNothing);
+  });
 }

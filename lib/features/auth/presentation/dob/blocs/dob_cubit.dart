@@ -29,6 +29,9 @@ class DobCubit extends Cubit<DobState> {
   final RegistrationDraftCubit _draft;
   final DateTime Function() _now;
 
+  /// The dates of birth the rules accept today, for the picker's limits.
+  ({DateTime earliest, DateTime latest}) get range => dateOfBirthRange(_now());
+
   void changed({int? day, int? month, int? year}) {
     _draft.dobEntered(day: day, month: month, year: year);
     emit(

@@ -50,7 +50,10 @@ void main() {
       challenges.first.imageUrl,
       'http://localhost:8080/assets/rewards/reward-donut.webp',
     );
-    expect(challenges.first.imageAsset, isNull);
+    expect(
+      challenges.first.imageAsset,
+      'assets/seed/images/rewards/reward-donut.webp',
+    );
   });
 
   test('a challenge with an unknown kind is left out', () async {
@@ -96,7 +99,10 @@ void main() {
         'http://localhost:8080/assets/home/box.jpg',
       ],
     );
-    expect(gifts.first.imageAsset, isNull);
+    expect(
+      gifts.first.imageAsset,
+      'assets/seed/images/home/donuts/blueberry-sprinkle.png',
+    );
   });
 
   group('claimChallenge', () {

@@ -1,15 +1,17 @@
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/images/profile_avatar.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
-import 'package:donuts/features/settings/presentation/widgets/initials_avatar_widget.dart';
+import 'package:donuts/features/auth/presentation/session/user_initials.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The Profile Detail sheet's body: the avatar in a white card, then the
 /// member's name and phone number in another.
 class ProfileDetailView extends StatelessWidget {
-  const new({required this.user, super.key});
+  const new({required this.user, this.avatarUrl, super.key});
 
   final UserVO user;
+  final String? avatarUrl;
 
   static const double avatarCard = 240;
   static const double avatarSize = 160;
@@ -33,7 +35,11 @@ class ProfileDetailView extends StatelessWidget {
               color: colors.surface,
               borderRadius: BorderRadius.circular(cardRadius),
             ),
-            child: InitialsAvatarWidget(user: user, size: avatarSize),
+            child: ProfileAvatar(
+              imageUrl: avatarUrl,
+              size: avatarSize,
+              initials: user.initials,
+            ),
           ),
         ),
         DecoratedBox(
