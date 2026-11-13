@@ -48,6 +48,7 @@ class HomeCubit extends Cubit<HomeState>
       id,
       _sections().map(listSection),
       _putSections,
+      then: _followRows,
     ),
     HomeSectionId.shops => watchSection(
       id,
@@ -64,24 +65,35 @@ class HomeCubit extends Cubit<HomeState>
     (section) => state.withRow(sectionId, section),
   );
 
-  /// Starts following the products of rows that arrived and stops
-  /// following rows that left, then stores [section].
+  /// The row ids whose products are being followed.
+  Set<String> _rowIds = {};
+
+  /// Stores [section]. When it is ready, keeps the rows that are still in
+  /// it and shows new ones as loading, ready for [_followRows].
   HomeState _putSections(SectionState<List<HomeSectionVO>> section) {
     if (section case SectionReady(:final data)) {
-      final ids = {for (final row in data) row.id};
-      for (final gone in state.rows.keys.where((id) => !ids.contains(id))) {
-        unwatchSection((row: gone));
-      }
-      ids.where((id) => !state.rows.containsKey(id)).forEach(retryRow);
       return state.copyWith(
         sections: section,
         rows: {
-          for (final entry in state.rows.entries)
-            if (ids.contains(entry.key)) entry.key: entry.value,
+          for (final row in data)
+            row.id: state.rows[row.id] ?? const SectionLoading(),
         },
       );
     }
     return state.copyWith(sections: section);
+  }
+
+  /// Starts following the products of rows that arrived and stops
+  /// following rows that left.
+  void _followRows(SectionState<List<HomeSectionVO>> section) {
+    if (section is! SectionReady<List<HomeSectionVO>>) return;
+    final ids = {for (final row in section.data) row.id};
+    for (final gone in _rowIds.difference(ids)) {
+      unwatchSection((row: gone));
+    }
+    final arrived = ids.difference(_rowIds);
+    _rowIds = ids;
+    arrived.forEach(retryRow);
   }
 
   static SectionState<MemberSummary> _memberState(MemberSummary? summary) =>
