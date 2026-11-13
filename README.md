@@ -27,6 +27,12 @@ flutter analyze
 flutter test
 ```
 
+Run the end-to-end test (Register → Home → Product detail) on a booted simulator, emulator or attached phone. It starts the whole app with an empty in-memory database, an in-memory session and no network, so every run registers a new user and Home renders from the bundled seed:
+
+```bash
+flutter test integration_test -d <device id>
+```
+
 ## Fake OTP code
 
 To come with registration.
