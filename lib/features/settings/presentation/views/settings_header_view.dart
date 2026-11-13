@@ -88,6 +88,7 @@ class SettingsHeaderView extends StatelessWidget {
               child: _HeaderRow(
                 user: user,
                 avatarUrl: member?.avatarUrl,
+                avatarAsset: member?.avatarAsset,
                 tierName: tier?.name,
               ),
             ),
@@ -99,10 +100,16 @@ class SettingsHeaderView extends StatelessWidget {
 }
 
 class _HeaderRow extends StatelessWidget {
-  const new({required this.user, this.avatarUrl, this.tierName});
+  const new({
+    required this.user,
+    this.avatarUrl,
+    this.avatarAsset,
+    this.tierName,
+  });
 
   final UserVO user;
   final String? avatarUrl;
+  final String? avatarAsset;
   final String? tierName;
 
   @override
@@ -115,6 +122,7 @@ class _HeaderRow extends StatelessWidget {
         children: [
           ProfileAvatar(
             imageUrl: avatarUrl,
+            asset: avatarAsset,
             size: SettingsHeaderView.avatarSize,
             initials: user.initials,
           ),

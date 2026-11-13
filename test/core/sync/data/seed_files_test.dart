@@ -64,6 +64,15 @@ void main() {
     }
   });
 
+  test('the member photo is bundled at the avatarAsset the seed names', () {
+    final profile = readMemberFile(seedMemberPath).data!.profile;
+    final asset = profile.avatarAsset;
+
+    expect(asset, 'assets/images/avatar_member.webp');
+    expect(File(asset!).existsSync(), isTrue);
+    expect(profile.avatarUrl, endsWith('/$asset'));
+  });
+
   test('the remote catalog names the same bundled copy as the seed for '
       'every product, banner, shop and gift the seed has', () {
     final seedAssets = {

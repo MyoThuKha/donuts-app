@@ -120,6 +120,7 @@ class _Avatar extends StatelessWidget {
     }
     return ProfileAvatar(
       imageUrl: summary?.avatarUrl,
+      asset: summary?.avatarAsset,
       size: HomeDimens.avatar,
       initials: initials,
     );
