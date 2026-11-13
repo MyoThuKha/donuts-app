@@ -19,17 +19,12 @@ class ChallengeCardItem extends StatefulWidget {
   const new({
     required this.challenge,
     required this.index,
-    this.acknowledged = false,
     this.onEarnPressed,
     super.key,
   });
 
   final ChallengeVO challenge;
   final int index;
-
-  /// True once the user has pressed this challenge's Earn, which stops
-  /// its pulse.
-  final bool acknowledged;
   final VoidCallback? onEarnPressed;
 
   @override
@@ -86,6 +81,7 @@ class _ChallengeCardItemState extends State<ChallengeCardItem>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final challenge = widget.challenge;
+    final earnable = challenge.isComplete && !challenge.claimed;
     return RewardCard(
       art: _art(context, _fill.drive(Tween(begin: 0, end: _target))),
       title: challenge.title,
@@ -96,9 +92,9 @@ class _ChallengeCardItemState extends State<ChallengeCardItem>
         ),
         RewardCardAction(
           button: EarnButton(
-            active: challenge.isComplete,
-            pulse: challenge.isComplete && !widget.acknowledged,
-            label: l10n.rewardsEarn,
+            active: earnable,
+            pulse: earnable,
+            label: challenge.claimed ? l10n.rewardsEarned : l10n.rewardsEarn,
             onPressed: widget.onEarnPressed,
           ),
           points: l10n.rewardsPoints(formatGrouped(challenge.rewardPoints)),
@@ -111,15 +107,18 @@ class _ChallengeCardItemState extends State<ChallengeCardItem>
     final cacheWidth =
         (RewardsDimens.cardArt * MediaQuery.devicePixelRatioOf(context))
             .round();
+    final url = widget.challenge.imageUrl;
     final asset = widget.challenge.imageAsset;
     return switch (widget.challenge.kind) {
       ChallengeKind.donutQuarters => DonutQuartersWidget(
         progress: progress,
+        url: url,
         asset: asset,
         cacheWidth: cacheWidth,
       ),
       ChallengeKind.coffeeArc => _CoffeeArt(
         progress: progress,
+        url: url,
         asset: asset,
         cacheWidth: cacheWidth,
       ),
@@ -130,11 +129,13 @@ class _ChallengeCardItemState extends State<ChallengeCardItem>
 class _CoffeeArt extends StatelessWidget {
   const new({
     required this.progress,
+    required this.url,
     required this.asset,
     required this.cacheWidth,
   });
 
   final Animation<double> progress;
+  final String? url;
   final String? asset;
   final int cacheWidth;
 
@@ -157,7 +158,7 @@ class _CoffeeArt extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(RewardsDimens.coffeeCupInset),
           child: AppNetworkImage(
-            url: null,
+            url: url,
             asset: asset,
             fit: BoxFit.contain,
             cacheWidth: cacheWidth,

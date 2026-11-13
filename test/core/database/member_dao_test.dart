@@ -37,14 +37,6 @@ MemberRows _member({int totalPoints = 680000}) => (
       sortOrder: 0,
     ),
   ],
-  gifts: [
-    GiftsTableCompanion.insert(
-      id: 'g1',
-      title: 'Free classic donut',
-      costPoints: 20000,
-      sortOrder: 0,
-    ),
-  ],
 );
 
 void main() {
@@ -71,14 +63,10 @@ void main() {
     expect(tiers.map((t) => t.id), ['silver', 'gold']);
   });
 
-  test(
-    'watchProfile, watchChallenges and watchGifts read the stored rows',
-    () async {
-      await db.memberDao.replaceMember(_member());
+  test('watchProfile and watchChallenges read the stored rows', () async {
+    await db.memberDao.replaceMember(_member());
 
-      expect((await db.memberDao.watchProfile().first)?.rewardsCount, 3);
-      expect((await db.memberDao.watchChallenges().first).single.id, 'c1');
-      expect((await db.memberDao.watchGifts().first).single.id, 'g1');
-    },
-  );
+    expect((await db.memberDao.watchProfile().first)?.rewardsCount, 3);
+    expect((await db.memberDao.watchChallenges().first).single.id, 'c1');
+  });
 }

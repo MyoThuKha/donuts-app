@@ -6,6 +6,8 @@ class TiersTable extends Table {
   TextColumn get name => text()();
   IntColumn get minPoints => integer()();
   IntColumn get sortOrder => integer()();
+  TextColumn get imageUrl => text().nullable()();
+  TextColumn get imageAsset => text().nullable()();
 
   @override
   Set<Column<Object>> get primaryKey => {id};

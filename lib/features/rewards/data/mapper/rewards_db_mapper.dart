@@ -15,6 +15,7 @@ extension ChallengesTableDataMapper on ChallengesTableData {
       progress: progress,
       target: target,
       rewardPoints: rewardPoints,
+      imageUrl: imageUrl,
       imageAsset: imageAsset,
     );
   }
@@ -25,6 +26,7 @@ extension GiftsTableDataMapper on GiftsTableData {
     id: id,
     title: title,
     costPoints: costPoints,
+    imageUrl: imageUrl,
     imageAsset: imageAsset,
   );
 }

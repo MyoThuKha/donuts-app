@@ -35,7 +35,7 @@ class RewardCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: AppSpacing.s,
                 children: [
-                  Text(title, style: context.text.sectionTitle),
+                  Text(title, style: context.text.cardTitle),
                   ...details,
                 ],
               ),

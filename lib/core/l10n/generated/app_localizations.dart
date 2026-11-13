@@ -706,6 +706,12 @@ abstract class AppLocalizations {
   /// **'Earn'**
   String get rewardsEarn;
 
+  /// Grey button on a challenge whose points were already earned
+  ///
+  /// In en, this message translates to:
+  /// **'Earned'**
+  String get rewardsEarned;
+
   /// Button on a gift card
   ///
   /// In en, this message translates to:

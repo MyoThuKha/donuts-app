@@ -8,7 +8,6 @@ mixin _$MemberDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.memberProfileTable;
   $TiersTableTable get tiersTable => attachedDatabase.tiersTable;
   $ChallengesTableTable get challengesTable => attachedDatabase.challengesTable;
-  $GiftsTableTable get giftsTable => attachedDatabase.giftsTable;
   MemberDaoManager get managers => MemberDaoManager(this);
 }
 
@@ -27,6 +26,4 @@ class MemberDaoManager {
         _db.attachedDatabase,
         _db.challengesTable,
       );
-  $$GiftsTableTableTableManager get giftsTable =>
-      $$GiftsTableTableTableManager(_db.attachedDatabase, _db.giftsTable);
 }

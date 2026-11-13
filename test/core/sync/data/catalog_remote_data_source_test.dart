@@ -17,8 +17,8 @@ void main() {
     final envelope = await _sourceReplying(ScriptedResponse(200, body))
         .fetchCatalog();
 
-    expect(envelope.meta.version, 3);
-    expect(envelope.data!.products, hasLength(10));
+    expect(envelope.meta.version, 4);
+    expect(envelope.data!.products, hasLength(11));
   });
 
   test('an envelope with an error throws ApiException', () async {

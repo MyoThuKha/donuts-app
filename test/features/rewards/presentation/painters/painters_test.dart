@@ -1,7 +1,6 @@
 import 'package:donuts/features/rewards/presentation/painters/coffee_arc_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
-import 'package:donuts/features/rewards/presentation/painters/shield_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/tier_line_painter.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -9,7 +8,6 @@ import 'package:material_ui/material_ui.dart';
 const _track = Color(0xFFF1F3F3);
 const _fill = Color(0xFFE87BAC);
 const _other = Color(0xFFF3984B);
-const _letter = TextStyle(fontSize: 14, color: Color(0xFF878787));
 
 Future<void> _paint(WidgetTester tester, CustomPainter painter) async {
   await tester.pumpWidget(
@@ -44,13 +42,6 @@ void main() {
   TierLinePainter line({Color filled = _fill}) =>
       TierLinePainter(fill: progress, track: _track, filled: filled);
 
-  ShieldPainter shield({Color fill = _fill, int stars = 1}) => ShieldPainter(
-    fill: fill,
-    stars: stars,
-    letter: 'S',
-    letterStyle: _letter,
-  );
-
   group('painters repaint only when their values change', () {
     test('the points ring', () {
       expect(ring().shouldRepaint(ring()), isFalse);
@@ -67,12 +58,6 @@ void main() {
     test('the tier line', () {
       expect(line().shouldRepaint(line()), isFalse);
       expect(line(filled: _other).shouldRepaint(line()), isTrue);
-    });
-
-    test('the shield', () {
-      expect(shield().shouldRepaint(shield()), isFalse);
-      expect(shield(fill: _other).shouldRepaint(shield()), isTrue);
-      expect(shield(stars: 2).shouldRepaint(shield()), isTrue);
     });
 
     test('the quarter clipper', () {
@@ -126,10 +111,10 @@ void main() {
     }
   });
 
-  testWidgets('the shield, tier line and coffee arc paint without errors', (
+  testWidgets('the tier line and coffee arc paint without errors', (
     tester,
   ) async {
-    for (final painter in <CustomPainter>[shield(stars: 3), line(), arc()]) {
+    for (final painter in <CustomPainter>[line(), arc()]) {
       await _paint(tester, painter);
       expect(tester.takeException(), isNull);
     }

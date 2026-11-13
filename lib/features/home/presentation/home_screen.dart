@@ -1,13 +1,10 @@
 import 'package:donuts/core/di/locator.dart';
-import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
-import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
-import 'package:donuts/core/sync/presentation/catalog_sync_state.dart';
+import 'package:donuts/core/sync/presentation/pull_to_refresh.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
-import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/feedback/donut_refresh_indicator.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
@@ -72,22 +69,11 @@ class _HomePage extends StatelessWidget {
     );
   }
 
-  /// Refreshes the catalog, or waits for the refresh already running, and
-  /// reports a failure in a snackbar. The rows keep showing the saved data.
-  /// Only this pull reports failures: background refreshes stay silent.
-  Future<void> _refresh(BuildContext context) async {
-    final sync = context.read<CatalogSyncCubit>();
-    final messenger = ScaffoldMessenger.of(context);
-    final failedMessage = context.l10n.homeRefreshFailed;
-    if (sync.state.status == CatalogSyncStatus.syncing) {
-      await sync.stream.firstWhere(
-        (state) => state.status != CatalogSyncStatus.syncing,
-      );
-    } else {
-      await sync.refresh();
-    }
-    if (sync.state.status != CatalogSyncStatus.failed) return;
-    messenger.showMessage(failedMessage, tone: AppSnackBarTone.error);
+  /// Undoes any Earn, so the header shows the stored points again, and
+  /// refreshes the catalog.
+  Future<void> _refresh(BuildContext context) {
+    context.read<HomeCubit>().resetRewardClaims();
+    return refreshCatalogFromPull(context);
   }
 
   List<Widget> _slivers(BuildContext context) {

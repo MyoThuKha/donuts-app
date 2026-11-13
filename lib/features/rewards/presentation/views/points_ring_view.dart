@@ -1,4 +1,5 @@
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
@@ -34,18 +35,28 @@ class PointsRingView extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            RepaintBoundary(
-              child: CustomPaint(
-                painter: _painter(
-                  context,
-                  member == null
-                      ? const AlwaysStoppedAnimation(0)
-                      : sweep.drive(
-                          Tween(begin: 0, end: member.tierProgress.progress),
-                        ),
+            if (member == null)
+              RepaintBoundary(
+                child: CustomPaint(
+                  painter: _painter(context, const AlwaysStoppedAnimation(0)),
+                ),
+              )
+            else
+              // A later change in progress, such as after Earn, sweeps on
+              // from where the ring stood.
+              TweenAnimationBuilder<double>(
+                tween: Tween(end: member.tierProgress.progress),
+                duration: context.motion.of(AppMotion.slow),
+                curve: AppMotion.standard,
+                builder: (context, progress, _) => RepaintBoundary(
+                  child: CustomPaint(
+                    painter: _painter(
+                      context,
+                      sweep.drive(Tween(begin: 0, end: progress)),
+                    ),
+                  ),
                 ),
               ),
-            ),
             if (member != null) _total(context, member.totalPoints, sweep),
           ],
         ),
@@ -66,7 +77,6 @@ class PointsRingView extends StatelessWidget {
   }
 
   Widget _total(BuildContext context, int total, Animation<double> sweep) {
-    final colors = context.colors;
     return Padding(
       padding: const EdgeInsets.all(RewardsDimens.ringStroke + AppSpacing.s),
       child: Center(
@@ -77,7 +87,7 @@ class PointsRingView extends StatelessWidget {
             children: [
               Text(
                 context.l10n.rewardsTotalPoints,
-                style: context.text.label.copyWith(color: colors.accent),
+                style: context.text.pointsLabel,
               ),
               CountUpText(
                 progress: sweep,

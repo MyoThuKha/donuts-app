@@ -5,6 +5,7 @@ class GiftsTable extends Table {
   TextColumn get id => text()();
   TextColumn get title => text()();
   IntColumn get costPoints => integer()();
+  TextColumn get imageUrl => text().nullable()();
   TextColumn get imageAsset => text().nullable()();
   IntColumn get sortOrder => integer()();
 

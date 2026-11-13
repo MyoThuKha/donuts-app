@@ -8,6 +8,7 @@ class ChallengesTable extends Table {
   IntColumn get progress => integer()();
   IntColumn get target => integer()();
   IntColumn get rewardPoints => integer()();
+  TextColumn get imageUrl => text().nullable()();
   TextColumn get imageAsset => text().nullable()();
   IntColumn get sortOrder => integer()();
 

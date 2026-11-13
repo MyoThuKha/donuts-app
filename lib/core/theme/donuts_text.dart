@@ -9,13 +9,15 @@ class DonutsText extends ThemeExtension<DonutsText> {
     required this.title,
     required this.headline,
     required this.sectionTitle,
-    required this.subtitle,
+    required this.tabActive,
+    required this.cardTitle,
     required this.body,
     required this.bodySmall,
     required this.label,
     required this.button,
     required this.caption,
     required this.points,
+    required this.pointsLabel,
     required this.badge,
   });
 
@@ -24,7 +26,8 @@ class DonutsText extends ThemeExtension<DonutsText> {
     title: rounded(_style(26, FontWeight.w700, c.ink, height: 1.2)),
     headline: rounded(_style(22, FontWeight.w800, c.ink, height: 1.2)),
     sectionTitle: rounded(_style(18, FontWeight.w700, c.ink)),
-    subtitle: rounded(_style(16, FontWeight.w700, c.ink)),
+    tabActive: rounded(_style(18, FontWeight.w700, c.onPrimary)),
+    cardTitle: _style(16, FontWeight.w800, c.ink),
     body: _style(15, FontWeight.w400, c.inkMuted),
     bodySmall: _style(13, FontWeight.w500, c.inkMuted),
     label: _style(14, FontWeight.w700, c.ink),
@@ -33,6 +36,7 @@ class DonutsText extends ThemeExtension<DonutsText> {
     ),
     caption: _style(11, FontWeight.w400, c.inkSubtle),
     points: rounded(_style(34, FontWeight.w800, c.accent)),
+    pointsLabel: _style(14, FontWeight.w700, c.accent),
     badge: _style(13, FontWeight.w700, c.onPrimary, height: 1),
   );
 
@@ -51,15 +55,23 @@ class DonutsText extends ThemeExtension<DonutsText> {
   final TextStyle headline;
   final TextStyle sectionTitle;
 
-  /// A heading one step below [sectionTitle], such as the tier names on
-  /// the Rewards ladder.
-  final TextStyle subtitle;
+  /// [sectionTitle] on a `primary` fill, such as the selected Rewards tab.
+  /// Lerp from [sectionTitle] to animate a selection.
+  final TextStyle tabActive;
+
+  /// The title on a content card, such as a Rewards challenge or gift, in
+  /// the plain face like the design's card titles.
+  final TextStyle cardTitle;
   final TextStyle body;
   final TextStyle bodySmall;
   final TextStyle label;
   final TextStyle button;
   final TextStyle caption;
   final TextStyle points;
+
+  /// The [label]-sized line that names a [points] value, in the same
+  /// `accent`.
+  final TextStyle pointsLabel;
 
   /// Badge labels such as "50% off". The line is exactly the font's size,
   /// so the badge's height comes from its padding.
@@ -93,13 +105,15 @@ class DonutsText extends ThemeExtension<DonutsText> {
       title: mix(title, other.title),
       headline: mix(headline, other.headline),
       sectionTitle: mix(sectionTitle, other.sectionTitle),
-      subtitle: mix(subtitle, other.subtitle),
+      tabActive: mix(tabActive, other.tabActive),
+      cardTitle: mix(cardTitle, other.cardTitle),
       body: mix(body, other.body),
       bodySmall: mix(bodySmall, other.bodySmall),
       label: mix(label, other.label),
       button: mix(button, other.button),
       caption: mix(caption, other.caption),
       points: mix(points, other.points),
+      pointsLabel: mix(pointsLabel, other.pointsLabel),
       badge: mix(badge, other.badge),
     );
   }

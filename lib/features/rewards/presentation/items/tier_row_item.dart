@@ -88,14 +88,8 @@ class TierRowItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: AppSpacing.xs,
       children: [
-        Text(tier.name, style: context.text.subtitle),
-        if (caption != null)
-          Text(
-            caption,
-            style: context.text.caption.copyWith(
-              color: context.colors.inkMuted,
-            ),
-          ),
+        Text(tier.name, style: context.text.label),
+        if (caption != null) Text(caption, style: context.text.caption),
       ],
     );
   }

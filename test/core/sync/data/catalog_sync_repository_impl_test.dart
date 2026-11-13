@@ -44,8 +44,8 @@ void main() {
     final result = await repositoryReplying(const []).seedIfNeeded();
 
     expect(result, isA<Success<void>>());
-    expect(await productCount(), 9);
-    expect((await db.memberDao.watchProfile().first)?.totalPoints, 680000);
+    expect(await productCount(), 10);
+    expect((await db.memberDao.watchProfile().first)?.totalPoints, 680300);
   });
 
   test('seedIfNeeded twice loads the seed files once', () async {
@@ -71,7 +71,7 @@ void main() {
         SyncOutcome.updated,
       ),
     );
-    expect(await productCount(), 10);
+    expect(await productCount(), 11);
   });
 
   test('refresh of the same version returns upToDate', () async {
@@ -105,7 +105,7 @@ void main() {
         isA<NetworkFailure>(),
       ),
     );
-    expect(await productCount(), 9);
+    expect(await productCount(), 10);
   });
 
   test('refresh that receives HTML keeps the cached catalog', () async {
@@ -124,6 +124,6 @@ void main() {
         isA<ParsingFailure>(),
       ),
     );
-    expect(await productCount(), 9);
+    expect(await productCount(), 10);
   });
 }

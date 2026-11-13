@@ -21,6 +21,7 @@ void main() {
       ],
       banners: const [],
       shops: const [],
+      gifts: const [],
     ));
 
     final products = await db.catalogDao.watchSectionProducts('popular').first;
@@ -49,6 +50,7 @@ void main() {
       sectionProducts: changed.sectionProducts,
       banners: changed.banners,
       shops: changed.shops,
+      gifts: changed.gifts,
     ));
 
     final product = await db.catalogDao.watchProduct('a').first;
@@ -79,6 +81,7 @@ void main() {
       sectionProducts: const [],
       banners: [bannerRow('late', sortOrder: 1), bannerRow('early')],
       shops: [shopRow('second', sortOrder: 1), shopRow('first')],
+      gifts: const [],
     ));
 
     final banners = await db.catalogDao.watchBanners().first;
@@ -101,6 +104,7 @@ void main() {
       ],
       banners: const [],
       shops: const [],
+      gifts: const [],
     ));
 
     final sections = await db.catalogDao.watchHomeSections().first;
@@ -117,6 +121,7 @@ void main() {
       sectionProducts: [linkRow('popular', 'a', 0)],
       banners: const [],
       shops: const [],
+      gifts: const [],
     ));
 
     final sections = await db.catalogDao.watchHomeSections().first;
@@ -145,4 +150,31 @@ void main() {
 
     await expectation;
   });
+
+  test(
+    'replaceCatalog keeps the listed gifts in order and drops the rest',
+    () async {
+      final first = catalogRows(['a']);
+      await db.catalogDao.replaceCatalog((
+        products: first.products,
+        sections: first.sections,
+        sectionProducts: first.sectionProducts,
+        banners: first.banners,
+        shops: first.shops,
+        gifts: [giftRow('old'), giftRow('later', sortOrder: 2)],
+      ));
+      await db.catalogDao.replaceCatalog((
+        products: first.products,
+        sections: first.sections,
+        sectionProducts: first.sectionProducts,
+        banners: first.banners,
+        shops: first.shops,
+        gifts: [giftRow('later', sortOrder: 2), giftRow('new', sortOrder: 1)],
+      ));
+
+      final gifts = await db.catalogDao.watchGifts().first;
+
+      expect(gifts.map((g) => g.id), ['new', 'later']);
+    },
+  );
 }

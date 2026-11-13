@@ -5,6 +5,7 @@ import 'package:donuts/features/home/domain/usecases/watch_home_sections_use_cas
 import 'package:donuts/features/home/domain/usecases/watch_shops_use_case.dart';
 import 'package:donuts/features/home/presentation/blocs/home_state.dart';
 import 'package:donuts/features/home/presentation/blocs/section_state.dart';
+import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,12 +17,14 @@ class HomeCubit extends Cubit<HomeState> {
     required this._banners,
     required this._sections,
     required this._shops,
+    required this._clearRewardClaims,
   }) : super(const HomeState());
 
   final WatchMemberSummaryUseCase _member;
   final WatchBannersUseCase _banners;
   final WatchHomeSectionsUseCase _sections;
   final WatchShopsUseCase _shops;
+  final ClearRewardClaimsUseCase _clearRewardClaims;
   final Map<HomeSectionId, StreamSubscription<Object?>> _subscriptions = {};
 
   /// Subscribes to every section.
@@ -29,6 +32,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   /// Shows [id] as loading again and subscribes to it afresh.
   void retry(HomeSectionId id) => _subscribe(id);
+
+  /// Undoes any Earn from Rewards. The header follows the member summary,
+  /// so it shows the stored points again.
+  void resetRewardClaims() => _clearRewardClaims();
 
   void _subscribe(HomeSectionId id) {
     unawaited(_subscriptions.remove(id)?.cancel());

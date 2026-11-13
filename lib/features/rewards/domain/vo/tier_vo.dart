@@ -14,5 +14,10 @@ abstract class TierVO with _$TierVO {
 
     /// Position on the ladder, 0 for the lowest tier.
     required int sortOrder,
+
+    /// The tier's badge, cached from the network with [imageAsset] as
+    /// the bundled fallback.
+    String? imageUrl,
+    String? imageAsset,
   }) = _TierVO;
 }

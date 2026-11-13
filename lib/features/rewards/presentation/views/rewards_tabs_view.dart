@@ -85,10 +85,8 @@ class _TabPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final selected = selection > 0.5;
-    final style = context.text.sectionTitle.copyWith(
-      color: Color.lerp(colors.ink, colors.onPrimary, selection),
-      fontWeight: FontWeight.lerp(FontWeight.w500, FontWeight.w700, selection),
-    );
+    final text = context.text;
+    final style = TextStyle.lerp(text.sectionTitle, text.tabActive, selection);
     return Semantics(
       button: true,
       selected: selected,

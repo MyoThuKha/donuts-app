@@ -50,6 +50,17 @@
         "updatedAt": "2026-11-12T00:00:00Z"
       },
       {
+        "id": "p_americano",
+        "code": "JD031006",
+        "name": "Americano",
+        "priceMmk": 3500,
+        "isNew": true,
+        "discountPercent": null,
+        "description": "A double shot of espresso, poured long over ice and cold water.",
+        "imageUrl": "assets/home/americano.webp",
+        "updatedAt": "2026-11-13T00:00:00Z"
+      },
+      {
         "id": "p_coconut",
         "code": "JD022123",
         "name": "Coconut Donut",
@@ -127,6 +138,7 @@
         "productIds": [
           "p_strawberry_chocolate",
           "p_dalgona",
+          "p_americano",
           "p_coconut",
           "p_blueberry"
         ]
@@ -196,11 +208,34 @@
         "imageAsset": null,
         "sortOrder": 3
       }
+    ],
+    "gifts": [
+      {
+        "id": "g_classic_donut",
+        "title": "Free classic donut",
+        "costPoints": 20000,
+        "imageUrl": "assets/home/donuts/blueberry-sprinkle.png",
+        "sortOrder": 0
+      },
+      {
+        "id": "g_iced_latte",
+        "title": "Free iced latte",
+        "costPoints": 35000,
+        "imageUrl": "assets/home/daigona-coffee.png",
+        "sortOrder": 1
+      },
+      {
+        "id": "g_box_of_six",
+        "title": "Box of 6 donuts",
+        "costPoints": 90000,
+        "imageUrl": "assets/home/box.jpg",
+        "sortOrder": 2
+      }
     ]
   },
   "error": null,
   "meta": {
-    "version": 1,
-    "generatedAt": "2026-11-12T00:00:00Z"
+    "version": 2,
+    "generatedAt": "2026-11-13T00:00:00Z"
   }
 }

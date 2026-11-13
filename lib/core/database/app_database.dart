@@ -44,7 +44,7 @@ class AppDatabase extends _$AppDatabase {
   new forTesting(super.e);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -52,9 +52,21 @@ class AppDatabase extends _$AppDatabase {
       from1To2: _addCatalogTables,
       // v3 adds `cart_items`, the persistent cart.
       from2To3: (m, schema) => m.createTable(schema.cartItems),
+      from3To4: _addRewardImages,
     ),
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
   );
+}
+
+/// v4 adds network images to tiers, challenges and gifts. It also forgets
+/// every import, so the next launch seeds the catalog and member data
+/// again with the new images and the Americano. Both hold seed data only.
+Future<void> _addRewardImages(Migrator m, Schema4 schema) async {
+  await m.addColumn(schema.tiers, schema.tiers.imageUrl);
+  await m.addColumn(schema.tiers, schema.tiers.imageAsset);
+  await m.addColumn(schema.challenges, schema.challenges.imageUrl);
+  await m.addColumn(schema.gifts, schema.gifts.imageUrl);
+  await m.database.delete(schema.syncState).go();
 }
 
 /// v2 adds the catalog, member and sync tables. `users` is unchanged.

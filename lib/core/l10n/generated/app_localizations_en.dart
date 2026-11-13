@@ -389,6 +389,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rewardsEarn => 'Earn';
 
   @override
+  String get rewardsEarned => 'Earned';
+
+  @override
   String get rewardsRedeem => 'Redeem';
 
   @override

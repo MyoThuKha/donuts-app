@@ -11,16 +11,16 @@ void _expectSectionsReferenceKnownProducts(CatalogDto catalog) {
 }
 
 void main() {
-  test('the seed catalog parses with version 1 and 8 products', () {
+  test('the seed catalog parses with version 2 and 10 products', () {
     final seed = readCatalogFile(seedCatalogPath);
 
-    expect(seed.meta.version, 1);
-    expect(seed.data!.products, hasLength(9));
+    expect(seed.meta.version, 2);
+    expect(seed.data!.products, hasLength(10));
     expect(seed.data!.shops, hasLength(4));
   });
 
   test(
-    'the remote catalog has version 3 and exactly one product the seed lacks',
+    'the remote catalog has version 4 and exactly one product the seed lacks',
     () {
       final seedIds = {
         for (final p in readCatalogFile(seedCatalogPath).data!.products) p.id,
@@ -28,7 +28,7 @@ void main() {
       final remote = readCatalogFile(remoteCatalogPath);
       final added = remote.data!.products.where((p) => !seedIds.contains(p.id));
 
-      expect(remote.meta.version, 3);
+      expect(remote.meta.version, 4);
       expect(added.map((p) => p.id), ['p_toasted_coconut']);
       expect(added.single.imageAsset, isNull);
     },
@@ -53,19 +53,21 @@ void main() {
     expect(coconut.discountPercent, isNull);
   });
 
-  test(
-    'the member seed puts 680,000 points at 75% of the way from Silver to Gold',
-    () {
-      final member = readMemberFile(seedMemberPath).data!;
-      final silver = member.tiers.singleWhere((t) => t.id == 'silver');
-      final gold = member.tiers.singleWhere((t) => t.id == 'gold');
-      final progress =
-          (member.profile.totalPoints - silver.minPoints) /
-          (gold.minPoints - silver.minPoints);
+  test('the member seed puts 680,300 points 200 short of Gold, which the '
+      'complete Coco challenge pays', () {
+    final member = readMemberFile(seedMemberPath).data!;
+    final silver = member.tiers.singleWhere((t) => t.id == 'silver');
+    final gold = member.tiers.singleWhere((t) => t.id == 'gold');
+    final progress =
+        (member.profile.totalPoints - silver.minPoints) /
+        (gold.minPoints - silver.minPoints);
 
-      expect(member.profile.totalPoints, 680000);
-      expect(progress, 0.75);
-      expect(gold.minPoints - member.profile.totalPoints, 500);
-    },
-  );
+    final coco = member.challenges.singleWhere((c) => c.id == 'c_coco_donuts');
+
+    expect(member.profile.totalPoints, 680300);
+    expect(progress, closeTo(0.9, 1e-9));
+    expect(gold.minPoints - member.profile.totalPoints, 200);
+    expect(coco.progress, coco.target);
+    expect(coco.rewardPoints, 200);
+  });
 }

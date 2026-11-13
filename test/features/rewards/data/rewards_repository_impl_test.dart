@@ -1,6 +1,7 @@
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/sync/data/catalog_importer.dart';
 import 'package:donuts/features/rewards/data/repositories/rewards_repository_impl.dart';
+import 'package:donuts/features/rewards/data/sources/reward_claims_memory_source.dart';
 import 'package:donuts/features/rewards/domain/types/challenge_kind.dart';
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
@@ -14,12 +15,24 @@ void main() {
 
   setUp(() async {
     db = AppDatabase.forTesting(NativeDatabase.memory());
-    repository = RewardsRepositoryImpl(db.memberDao);
-    await CatalogImporter(
+    repository = RewardsRepositoryImpl(
+      db.memberDao,
+      db.catalogDao,
+      RewardClaimsMemorySource(),
+    );
+    final importer = CatalogImporter(
       db,
       now: () => DateTime.utc(2026, 11, 12),
       imageBase: testImageBase,
-    ).importMember(readMemberFile(seedMemberPath).data!, version: 1);
+    );
+    await importer.importMember(
+      readMemberFile(seedMemberPath).data!,
+      version: 1,
+    );
+    await importer.importCatalog(
+      readCatalogFile(seedCatalogPath).data!,
+      version: 1,
+    );
   });
   tearDown(() => db.close());
 
@@ -36,11 +49,12 @@ void main() {
       ],
     );
     expect(challenges.first.title, 'Eat 4 Coco donuts');
-    expect(challenges.first.rewardPoints, 100);
+    expect(challenges.first.rewardPoints, 200);
     expect(
-      challenges.first.imageAsset,
-      'assets/images/donut_pink_sprinkles.webp',
+      challenges.first.imageUrl,
+      'http://localhost:8080/assets/rewards/reward-donut.webp',
     );
+    expect(challenges.first.imageAsset, isNull);
   });
 
   test('a challenge with an unknown kind is left out', () async {
@@ -65,7 +79,8 @@ void main() {
     expect(challenges, hasLength(3));
   });
 
-  test('the seeded gifts come in order with their costs', () async {
+  test('the catalog gifts come in order with their costs and Home images '
+      'from the mock server', () async {
     final gifts = await repository.watchGifts().first;
 
     expect(
@@ -77,6 +92,14 @@ void main() {
       ],
     );
     expect(gifts.first.title, 'Free classic donut');
-    expect(gifts.first.imageAsset, 'assets/images/donut_caramel_glaze.webp');
+    expect(
+      [for (final g in gifts) g.imageUrl],
+      [
+        'http://localhost:8080/assets/home/donuts/blueberry-sprinkle.png',
+        'http://localhost:8080/assets/home/daigona-coffee.png',
+        'http://localhost:8080/assets/home/box.jpg',
+      ],
+    );
+    expect(gifts.first.imageAsset, isNull);
   });
 }

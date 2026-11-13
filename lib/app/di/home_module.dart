@@ -23,6 +23,7 @@ void registerHomeModule(GetIt getIt) {
         banners: getIt(),
         sections: getIt(),
         shops: getIt(),
+        clearRewardClaims: getIt(),
       ),
     );
 }

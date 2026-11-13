@@ -1,5 +1,6 @@
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/database/tables/banners_table.dart';
+import 'package:donuts/core/database/tables/gifts_table.dart';
 import 'package:donuts/core/database/tables/home_sections_table.dart';
 import 'package:donuts/core/database/tables/products_table.dart';
 import 'package:donuts/core/database/tables/section_products_table.dart';
@@ -15,6 +16,7 @@ typedef CatalogRows = ({
   List<SectionProductsTableCompanion> sectionProducts,
   List<BannersTableCompanion> banners,
   List<ShopsTableCompanion> shops,
+  List<GiftsTableCompanion> gifts,
 });
 
 /// One Home section and its products, in display order.
@@ -23,7 +25,8 @@ typedef SectionWithProducts = ({
   List<ProductsTableData> products,
 });
 
-/// The public catalog: products, Home sections, banners and shops.
+/// The public catalog: products, Home sections, banners, shops and the
+/// Rewards gifts.
 @DriftAccessor(
   tables: [
     ProductsTable,
@@ -31,6 +34,7 @@ typedef SectionWithProducts = ({
     SectionProductsTable,
     BannersTable,
     ShopsTable,
+    GiftsTable,
   ],
 )
 class CatalogDao extends DatabaseAccessor<AppDatabase> with _$CatalogDaoMixin {
@@ -113,7 +117,8 @@ class CatalogDao extends DatabaseAccessor<AppDatabase> with _$CatalogDaoMixin {
         ..insertAllOnConflictUpdate(productsTable, rows.products)
         ..insertAllOnConflictUpdate(homeSectionsTable, rows.sections)
         ..insertAllOnConflictUpdate(bannersTable, rows.banners)
-        ..insertAllOnConflictUpdate(shopsTable, rows.shops);
+        ..insertAllOnConflictUpdate(shopsTable, rows.shops)
+        ..insertAllOnConflictUpdate(giftsTable, rows.gifts);
     });
     await _deleteAbsent(rows);
     await batch((b) => b.insertAll(sectionProductsTable, rows.sectionProducts));
@@ -124,11 +129,18 @@ class CatalogDao extends DatabaseAccessor<AppDatabase> with _$CatalogDaoMixin {
     final sectionIds = [for (final s in rows.sections) s.id.value];
     final bannerIds = [for (final b in rows.banners) b.id.value];
     final shopIds = [for (final s in rows.shops) s.id.value];
+    final giftIds = [for (final g in rows.gifts) g.id.value];
     await (delete(productsTable)..where((p) => p.id.isNotIn(productIds))).go();
     await (delete(
       homeSectionsTable,
     )..where((s) => s.id.isNotIn(sectionIds))).go();
     await (delete(bannersTable)..where((b) => b.id.isNotIn(bannerIds))).go();
     await (delete(shopsTable)..where((s) => s.id.isNotIn(shopIds))).go();
+    await (delete(giftsTable)..where((g) => g.id.isNotIn(giftIds))).go();
   }
+
+  /// The Rewards gifts in display order.
+  Stream<List<GiftsTableData>> watchGifts() => (select(
+    giftsTable,
+  )..orderBy([(g) => OrderingTerm.asc(g.sortOrder)])).watch();
 }

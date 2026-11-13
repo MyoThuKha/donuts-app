@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GiftVO {
 
- String get id; String get title; int get costPoints; String? get imageAsset;
+ String get id; String get title; int get costPoints; String? get imageUrl; String? get imageAsset;
 /// Create a copy of GiftVO
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,20 +27,20 @@ $GiftVOCopyWith<GiftVO> get copyWith => _$GiftVOCopyWithImpl<GiftVO>(this as Gif
 @override
 bool operator ==(Object other) {
   final _this = this as GiftVO;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GiftVO&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.costPoints, _this.costPoints) || other.costPoints == _this.costPoints)&&(identical(other.imageAsset, _this.imageAsset) || other.imageAsset == _this.imageAsset));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GiftVO&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.costPoints, _this.costPoints) || other.costPoints == _this.costPoints)&&(identical(other.imageUrl, _this.imageUrl) || other.imageUrl == _this.imageUrl)&&(identical(other.imageAsset, _this.imageAsset) || other.imageAsset == _this.imageAsset));
 }
 
 
 @override
 int get hashCode {
   final _this = this as GiftVO;
-  return Object.hash(runtimeType,_this.id,_this.title,_this.costPoints,_this.imageAsset);
+  return Object.hash(runtimeType,_this.id,_this.title,_this.costPoints,_this.imageUrl,_this.imageAsset);
 }
 
 @override
 String toString() {
   final _this = this as GiftVO;
-  return 'GiftVO(id: ${_this.id}, title: ${_this.title}, costPoints: ${_this.costPoints}, imageAsset: ${_this.imageAsset})';
+  return 'GiftVO(id: ${_this.id}, title: ${_this.title}, costPoints: ${_this.costPoints}, imageUrl: ${_this.imageUrl}, imageAsset: ${_this.imageAsset})';
 }
 
 
@@ -51,7 +51,7 @@ abstract mixin class $GiftVOCopyWith<$Res>  {
   factory $GiftVOCopyWith(GiftVO value, $Res Function(GiftVO) _then) = _$GiftVOCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, int costPoints, String? imageAsset
+ String id, String title, int costPoints, String? imageUrl, String? imageAsset
 });
 
 
@@ -68,12 +68,13 @@ class _$GiftVOCopyWithImpl<$Res>
 
 /// Create a copy of GiftVO
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? costPoints = null,Object? imageAsset = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? costPoints = null,Object? imageUrl = freezed,Object? imageAsset = freezed,}) {
   return _then(GiftVO(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,costPoints: null == costPoints ? _self.costPoints : costPoints // ignore: cast_nullable_to_non_nullable
-as int,imageAsset: freezed == imageAsset ? _self.imageAsset : imageAsset // ignore: cast_nullable_to_non_nullable
+as int,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
+as String?,imageAsset: freezed == imageAsset ? _self.imageAsset : imageAsset // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  int costPoints,  String? imageAsset)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  int costPoints,  String? imageUrl,  String? imageAsset)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GiftVO() when $default != null:
-return $default(_that.id,_that.title,_that.costPoints,_that.imageAsset);case _:
+return $default(_that.id,_that.title,_that.costPoints,_that.imageUrl,_that.imageAsset);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.id,_that.title,_that.costPoints,_that.imageAsset);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  int costPoints,  String? imageAsset)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  int costPoints,  String? imageUrl,  String? imageAsset)  $default,) {final _that = this;
 switch (_that) {
 case _GiftVO():
-return $default(_that.id,_that.title,_that.costPoints,_that.imageAsset);case _:
+return $default(_that.id,_that.title,_that.costPoints,_that.imageUrl,_that.imageAsset);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.id,_that.title,_that.costPoints,_that.imageAsset);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  int costPoints,  String? imageAsset)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  int costPoints,  String? imageUrl,  String? imageAsset)?  $default,) {final _that = this;
 switch (_that) {
 case _GiftVO() when $default != null:
-return $default(_that.id,_that.title,_that.costPoints,_that.imageAsset);case _:
+return $default(_that.id,_that.title,_that.costPoints,_that.imageUrl,_that.imageAsset);case _:
   return null;
 
 }
@@ -215,12 +216,13 @@ return $default(_that.id,_that.title,_that.costPoints,_that.imageAsset);case _:
 
 
 class _GiftVO implements GiftVO {
-  const _GiftVO({required this.id, required this.title, required this.costPoints, this.imageAsset});
+  const _GiftVO({required this.id, required this.title, required this.costPoints, this.imageUrl, this.imageAsset});
   
 
 @override final  String id;
 @override final  String title;
 @override final  int costPoints;
+@override final  String? imageUrl;
 @override final  String? imageAsset;
 
 /// Create a copy of GiftVO
@@ -233,18 +235,18 @@ _$GiftVOCopyWith<_GiftVO> get copyWith => __$GiftVOCopyWithImpl<_GiftVO>(this, _
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GiftVO&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.costPoints, costPoints) || other.costPoints == costPoints)&&(identical(other.imageAsset, imageAsset) || other.imageAsset == imageAsset));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GiftVO&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.costPoints, costPoints) || other.costPoints == costPoints)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.imageAsset, imageAsset) || other.imageAsset == imageAsset));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,title,costPoints,imageAsset);
+    return Object.hash(runtimeType,id,title,costPoints,imageUrl,imageAsset);
 }
 
 @override
 String toString() {
-    return 'GiftVO(id: $id, title: $title, costPoints: $costPoints, imageAsset: $imageAsset)';
+    return 'GiftVO(id: $id, title: $title, costPoints: $costPoints, imageUrl: $imageUrl, imageAsset: $imageAsset)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$GiftVOCopyWith<$Res> implements $GiftVOCopyWith<$Res> {
   factory _$GiftVOCopyWith(_GiftVO value, $Res Function(_GiftVO) _then) = __$GiftVOCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, int costPoints, String? imageAsset
+ String id, String title, int costPoints, String? imageUrl, String? imageAsset
 });
 
 
@@ -272,12 +274,13 @@ class __$GiftVOCopyWithImpl<$Res>
 
 /// Create a copy of GiftVO
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? costPoints = null,Object? imageAsset = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? costPoints = null,Object? imageUrl = freezed,Object? imageAsset = freezed,}) {
   return _then(_GiftVO(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,costPoints: null == costPoints ? _self.costPoints : costPoints // ignore: cast_nullable_to_non_nullable
-as int,imageAsset: freezed == imageAsset ? _self.imageAsset : imageAsset // ignore: cast_nullable_to_non_nullable
+as int,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
+as String?,imageAsset: freezed == imageAsset ? _self.imageAsset : imageAsset // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

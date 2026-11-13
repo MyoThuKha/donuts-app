@@ -6,12 +6,11 @@ import 'package:donuts/features/rewards/domain/vo/gift_vo.dart';
 import 'package:donuts/features/rewards/presentation/items/gift_card_item.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// The Gift tab's cards. A gift is redeemable when [totalPoints] covers it.
+/// The Gift tab's cards.
 class GiftListView extends StatelessWidget {
-  const new({required this.gifts, required this.totalPoints, super.key});
+  const new({required this.gifts, super.key});
 
   final List<GiftVO> gifts;
-  final int totalPoints;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +24,7 @@ class GiftListView extends StatelessWidget {
           StaggeredEntrance(
             key: ValueKey(gift.id),
             index: i,
-            child: GiftCardItem(
-              gift: gift,
-              affordable: totalPoints >= gift.costPoints,
-            ),
+            child: GiftCardItem(gift: gift),
           ),
       ],
     );

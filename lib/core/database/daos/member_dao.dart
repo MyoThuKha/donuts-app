@@ -1,6 +1,5 @@
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/database/tables/challenges_table.dart';
-import 'package:donuts/core/database/tables/gifts_table.dart';
 import 'package:donuts/core/database/tables/member_profile_table.dart';
 import 'package:donuts/core/database/tables/tiers_table.dart';
 import 'package:drift/drift.dart';
@@ -12,13 +11,10 @@ typedef MemberRows = ({
   MemberProfileTableCompanion profile,
   List<TiersTableCompanion> tiers,
   List<ChallengesTableCompanion> challenges,
-  List<GiftsTableCompanion> gifts,
 });
 
-/// The member's profile, tiers, challenges and gifts.
-@DriftAccessor(
-  tables: [MemberProfileTable, TiersTable, ChallengesTable, GiftsTable],
-)
+/// The member's profile, tiers and challenges.
+@DriftAccessor(tables: [MemberProfileTable, TiersTable, ChallengesTable])
 class MemberDao extends DatabaseAccessor<AppDatabase> with _$MemberDaoMixin {
   new(super.attachedDatabase);
 
@@ -37,21 +33,15 @@ class MemberDao extends DatabaseAccessor<AppDatabase> with _$MemberDaoMixin {
     challengesTable,
   )..orderBy([(c) => OrderingTerm.asc(c.sortOrder)])).watch();
 
-  Stream<List<GiftsTableData>> watchGifts() => (select(
-    giftsTable,
-  )..orderBy([(g) => OrderingTerm.asc(g.sortOrder)])).watch();
-
   /// Replaces the member's data whole.
   Future<void> replaceMember(MemberRows rows) => transaction(() async {
     await delete(tiersTable).go();
     await delete(challengesTable).go();
-    await delete(giftsTable).go();
     await batch((b) {
       b
         ..insertAllOnConflictUpdate(memberProfileTable, [rows.profile])
         ..insertAll(tiersTable, rows.tiers)
-        ..insertAll(challengesTable, rows.challenges)
-        ..insertAll(giftsTable, rows.gifts);
+        ..insertAll(challengesTable, rows.challenges);
     });
   });
 }

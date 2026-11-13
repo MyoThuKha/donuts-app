@@ -6,8 +6,8 @@ The app is offline-first. Screens read only from the local Drift database, throu
 
 | Source | When | Data |
 |---|---|---|
-| `assets/seed/catalog_v1.json` | First launch, if the database has no catalog | Products, Home sections, banners, shops |
-| `assets/seed/member.json` | First launch, if the database has no member data | Profile, tiers, challenges, gifts |
+| `assets/seed/catalog_v1.json` | First launch, if the database has no catalog | Products, Home sections, banners, shops, gifts |
+| `assets/seed/member.json` | First launch, if the database has no member data | Profile, tiers, challenges |
 | `mock-api/v1/catalog.json` | Every time the app goes online (start-up and each reconnect), and on pull-to-refresh | The public catalog |
 
 All three files use the same envelope as the API: `{data, error, meta}`. `meta.version` is the data version. The `v1` in the file and folder names is the API version, not the data version.
@@ -53,7 +53,9 @@ dart run tool/mock_server.dart --port 8080 --delay-ms 0
 
 ## Images
 
-Catalog images (products, banners, shops) live in `mock-api/assets/` and are served by the mock API like the JSON. An `imageUrl` in the catalog can be relative, such as `assets/home/shop.jpg`. `CatalogImporter` resolves it against `API_BASE_URL` and stores the absolute URL, so the images come from GitHub raw by default and from `tool/mock_server.dart` when you run against it. An absolute `imageUrl` is stored as it is.
+The catalog also carries the Rewards gifts, so a refresh updates them too. Gift images reuse the Home product images.
+
+Catalog and Rewards images (products, banners, shops, gifts, tier badges and challenge art) live in `mock-api/assets/` and are served by the mock API like the JSON. An `imageUrl` in the catalog or member seed can be relative, such as `assets/home/shop.jpg`. `CatalogImporter` resolves it against `API_BASE_URL` and stores the absolute URL, so the images come from GitHub raw by default and from `tool/mock_server.dart` when you run against it. An absolute `imageUrl` is stored as it is.
 
 Because the URL is resolved at import, data imported under one base URL keeps that URL until a newer catalog version arrives. After switching `API_BASE_URL`, reinstall the app or bump `meta.version` in `mock-api/v1/catalog.json`.
 

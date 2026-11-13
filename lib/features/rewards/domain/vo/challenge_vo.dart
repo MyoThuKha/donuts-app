@@ -15,7 +15,11 @@ abstract class ChallengeVO with _$ChallengeVO {
     required int progress,
     required int target,
     required int rewardPoints,
+    String? imageUrl,
     String? imageAsset,
+
+    /// True once the member has pressed Earn on the completed challenge.
+    @Default(false) bool claimed,
   }) = _ChallengeVO;
 
   const ChallengeVO._();

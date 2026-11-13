@@ -1,9 +1,11 @@
 import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/sync/presentation/pull_to_refresh.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
+import 'package:donuts/core/widgets/feedback/donut_refresh_indicator.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_cubit.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_state.dart';
 import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
@@ -15,6 +17,12 @@ import 'package:donuts/features/rewards/presentation/views/rewards_tabs_view.dar
 import 'package:donuts/features/rewards/presentation/views/tier_ladder_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
+
+/// Clamping like Home: a pull shows the donut without dragging the page
+/// down. Always scrollable, so a short list can still be pulled.
+const ScrollPhysics _pullable = AlwaysScrollableScrollPhysics(
+  parent: ClampingScrollPhysics(),
+);
 
 /// Rewards (screen 10): the tier ladder, the points ring and the
 /// challenge and gift cards, all read from the local database.
@@ -116,21 +124,34 @@ class _RewardsPageState extends State<_RewardsPage>
         color: context.colors.canvas,
         // The header and tabs scroll away together, and the lists below
         // them page sideways in a TabBarView.
-        child: NestedScrollView(
-          headerSliverBuilder: (context, _) => [
-            SliverToBoxAdapter(child: _top(context, state)),
-            if (state.status == RewardsStatus.ready)
-              SliverToBoxAdapter(
-                child: RewardsTabsView(
-                  controller: _tabs,
-                  onSelected: _selectTab,
+        child: DonutRefreshIndicator(
+          nested: true,
+          edgeOffset: MediaQuery.paddingOf(context).top,
+          onRefresh: () => _refresh(context),
+          child: NestedScrollView(
+            physics: _pullable,
+            headerSliverBuilder: (context, _) => [
+              SliverToBoxAdapter(child: _top(context, state)),
+              if (state.status == RewardsStatus.ready)
+                SliverToBoxAdapter(
+                  child: RewardsTabsView(
+                    controller: _tabs,
+                    onSelected: _selectTab,
+                  ),
                 ),
-              ),
-          ],
-          body: _body(context, state),
+            ],
+            body: _body(context, state),
+          ),
         ),
       ),
     );
+  }
+
+  /// Undoes any Earn, so the points and challenges read as stored, and
+  /// refreshes the catalog like Home's pull.
+  Future<void> _refresh(BuildContext context) {
+    context.read<RewardsCubit>().resetClaims();
+    return refreshCatalogFromPull(context);
   }
 
   /// The white upper half: the header, then the ladder and ring.
@@ -232,6 +253,7 @@ class _TabList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      physics: _pullable,
       slivers: [
         SliverPadding(
           padding: EdgeInsets.fromLTRB(
@@ -249,12 +271,8 @@ class _TabList extends StatelessWidget {
   Widget _list(BuildContext context) => switch (tab) {
     RewardsTab.challenges => ChallengeListView(
       challenges: state.challenges,
-      acknowledged: state.acknowledgedEarns,
-      onEarnPressed: context.read<RewardsCubit>().acknowledgeEarn,
+      onEarnPressed: context.read<RewardsCubit>().earn,
     ),
-    RewardsTab.gifts => GiftListView(
-      gifts: state.gifts,
-      totalPoints: state.member?.totalPoints ?? 0,
-    ),
+    RewardsTab.gifts => GiftListView(gifts: state.gifts),
   };
 }

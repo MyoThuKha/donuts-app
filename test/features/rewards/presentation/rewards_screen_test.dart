@@ -99,7 +99,7 @@ void main() {
     expect(buttons.where((b) => b.active), hasLength(1));
   });
 
-  testWidgets('pressing the pulsing Earn stops its pulse for good', (
+  testWidgets('pressing the pulsing Earn turns it into a grey Earned', (
     tester,
   ) async {
     await _pumpRewards(tester);
@@ -107,15 +107,18 @@ void main() {
     final pulse = find
         .descendant(of: earn, matching: find.byType(ScaleTransition))
         .first;
-    double scale() => tester.widget<ScaleTransition>(pulse).scale.value;
     await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
-    expect(scale(), greaterThan(1));
+    expect(tester.widget<ScaleTransition>(pulse).scale.value, greaterThan(1));
 
     await tester.ensureVisible(earn);
     await tester.tap(earn);
     await tester.pump(RewardsMotion.earnPulsePeriod * 0.75);
 
-    expect(scale(), 1);
+    final earned = find.byWidgetPredicate(
+      (w) => w is EarnButton && !w.active && !w.pulse && w.label == 'Earned',
+    );
+    expect(earned, findsOneWidget);
+    expect(find.text('EARNED'), findsOneWidget);
   });
 
   testWidgets('the donuts colour in to 4/4 and 1/4 after their cards enter', (
@@ -226,5 +229,21 @@ void main() {
     await tester.pump();
 
     verify(challenges.call).called(2);
+  });
+
+  testWidgets('Redeem on a gift says the feature is coming soon', (
+    tester,
+  ) async {
+    await _pumpRewards(tester);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Gift'));
+    await tester.pumpAndSettle();
+
+    final redeem = find.text('REDEEM').first;
+    await tester.ensureVisible(redeem);
+    await tester.tap(redeem);
+    await tester.pump();
+
+    expect(find.text('This feature is coming soon.'), findsOneWidget);
   });
 }

@@ -11,6 +11,7 @@ mixin _$CatalogDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.sectionProductsTable;
   $BannersTableTable get bannersTable => attachedDatabase.bannersTable;
   $ShopsTableTable get shopsTable => attachedDatabase.shopsTable;
+  $GiftsTableTable get giftsTable => attachedDatabase.giftsTable;
   CatalogDaoManager get managers => CatalogDaoManager(this);
 }
 
@@ -33,4 +34,6 @@ class CatalogDaoManager {
       $$BannersTableTableTableManager(_db.attachedDatabase, _db.bannersTable);
   $$ShopsTableTableTableManager get shopsTable =>
       $$ShopsTableTableTableManager(_db.attachedDatabase, _db.shopsTable);
+  $$GiftsTableTableTableManager get giftsTable =>
+      $$GiftsTableTableTableManager(_db.attachedDatabase, _db.giftsTable);
 }
