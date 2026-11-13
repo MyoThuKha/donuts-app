@@ -220,6 +220,42 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @accountDateOfBirth.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get accountDateOfBirth;
+
+  /// No description provided for @accountAge.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get accountAge;
+
+  /// No description provided for @accountAgeYears.
+  ///
+  /// In en, this message translates to:
+  /// **'{years, plural, =1{1 year} other{{years} years}}'**
+  String accountAgeYears(int years);
+
+  /// No description provided for @settingsEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get settingsEdit;
+
+  /// No description provided for @profileDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Detail'**
+  String get profileDetailTitle;
+
+  /// No description provided for @settingsVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'J’Donuts {version}'**
+  String settingsVersion(String version);
+
   /// Accessibility label for a social sign-in button.
   ///
   /// In en, this message translates to:

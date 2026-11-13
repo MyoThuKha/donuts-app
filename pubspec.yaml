@@ -29,6 +29,7 @@ dependencies:
   json_annotation: ^4.12.0
   lucide_icons_flutter: ^4.0.3
   material_ui: ^1.1.0
+  package_info_plus: ^10.2.2
 dev_dependencies:
   bloc_test: ^10.0.0
   build_runner: ^2.17.1

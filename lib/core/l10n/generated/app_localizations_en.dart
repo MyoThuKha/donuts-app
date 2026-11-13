@@ -76,6 +76,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get accountDateOfBirth => 'Date of birth';
+
+  @override
+  String get accountAge => 'Age';
+
+  @override
+  String accountAgeYears(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: '$years years',
+      one: '1 year',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsEdit => 'Edit';
+
+  @override
+  String get profileDetailTitle => 'Profile Detail';
+
+  @override
+  String settingsVersion(String version) {
+    return 'J’Donuts $version';
+  }
+
+  @override
   String continueWith(String provider) {
     return 'Continue with $provider';
   }

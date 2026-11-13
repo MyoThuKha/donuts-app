@@ -48,6 +48,28 @@
   "logOut": "Log out",
   "logOutConfirm": "Log out of J’Donuts?",
   "cancel": "Cancel",
+  "accountDateOfBirth": "Date of birth",
+  "accountAge": "Age",
+  "accountAgeYears": "{years, plural, =1{1 year} other{{years} years}}",
+  "@accountAgeYears": {
+    "placeholders": {
+      "years": {
+        "type": "int",
+        "example": "45"
+      }
+    }
+  },
+  "settingsEdit": "Edit",
+  "profileDetailTitle": "Profile Detail",
+  "settingsVersion": "J’Donuts {version}",
+  "@settingsVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
   "continueWith": "Continue with {provider}",
   "@continueWith": {
     "description": "Accessibility label for a social sign-in button.",
