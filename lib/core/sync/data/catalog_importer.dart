@@ -15,14 +15,19 @@ enum ImportOutcome { imported, skipped }
 /// Writes a parsed catalog or member seed into Drift. Seed files and API
 /// responses both come through here.
 ///
+/// Image paths in the catalog may be relative to the mock API, so the same
+/// file serves from GitHub or from `tool/mock_server.dart`. The importer
+/// resolves them against [_imageBase] and stores absolute URLs.
+///
 /// Each import is one transaction. A version that is not newer than the
 /// stored one changes nothing but the fetch time, so a stale copy can never
 /// roll the data back.
 class CatalogImporter {
-  new(this._db, {required this._now});
+  new(this._db, {required this._now, required this._imageBase});
 
   final AppDatabase _db;
   final DateTime Function() _now;
+  final Uri _imageBase;
 
   Future<bool> hasData(String key) async =>
       await _db.syncStateDao.find(key) != null;
@@ -35,7 +40,8 @@ class CatalogImporter {
     return await _importVersioned(
       SyncKeys.catalog,
       version,
-      () => _db.catalogDao.replaceCatalog(catalog.toRows()),
+      () =>
+          _db.catalogDao.replaceCatalog(catalog.toRows(imageBase: _imageBase)),
     );
   }
 

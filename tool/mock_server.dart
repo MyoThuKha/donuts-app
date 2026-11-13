@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 /// Serves `mock-api/` over HTTP, so a phone or simulator can run the app
-/// against a local copy of the mock API.
+/// against a local copy of the mock API: the JSON and the images it names.
 ///
 /// It listens on loopback only. The iOS Simulator shares the Mac's loopback,
 /// and a USB Android phone reaches it through `adb reverse`.
@@ -38,7 +38,7 @@ Future<void> _serve(HttpRequest request, Directory root) async {
   if ((method != 'GET' && method != 'HEAD') || file == null) {
     response.statusCode = HttpStatus.notFound;
   } else {
-    response.headers.contentType = ContentType.json;
+    response.headers.contentType = mockContentType(file);
     if (method == 'GET') await response.addStream(file.openRead());
   }
   await response.close();
@@ -56,6 +56,18 @@ File? resolveMockFile(Directory root, Uri uri) {
   final file = File([root.path, ...segments].join(Platform.pathSeparator));
   final insideRoot = file.absolute.path.startsWith(root.path);
   return insideRoot && file.existsSync() ? file : null;
+}
+
+/// The content type for [file], by its extension. JSON for anything unknown.
+ContentType mockContentType(File file) {
+  final name = file.path.toLowerCase();
+  final extension = name.substring(name.lastIndexOf('.') + 1);
+  return switch (extension) {
+    'png' => ContentType('image', 'png'),
+    'jpg' || 'jpeg' => ContentType('image', 'jpeg'),
+    'webp' => ContentType('image', 'webp'),
+    _ => ContentType.json,
+  };
 }
 
 String? _option(List<String> args, String name) {

@@ -20,5 +20,9 @@ class ApiConfig {
 
   final String baseUrl;
 
-  Uri get catalogUri => Uri.parse(baseUrl).resolve(catalogPath);
+  /// The base that relative paths in the API's data resolve against, such
+  /// as an image path like `assets/home/shop.jpg`.
+  Uri get baseUri => Uri.parse(baseUrl);
+
+  Uri get catalogUri => baseUri.resolve(catalogPath);
 }

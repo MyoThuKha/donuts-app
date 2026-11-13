@@ -18,6 +18,7 @@ void main() {
     await CatalogImporter(
       db,
       now: () => DateTime.utc(2026, 11, 12),
+      imageBase: testImageBase,
     ).importMember(readMemberFile(seedMemberPath).data!, version: 1);
   });
   tearDown(() => db.close());
