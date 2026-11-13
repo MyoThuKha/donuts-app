@@ -10,7 +10,6 @@ import 'package:donuts/features/rewards/domain/vo/challenge_vo.dart';
 import 'package:donuts/features/rewards/presentation/items/challenge_card_item.dart';
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
-import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:donuts/features/rewards/presentation/rewards_screen.dart';
 import 'package:donuts/features/rewards/presentation/widgets/count_up_text_widget.dart';
 import 'package:donuts/features/rewards/presentation/widgets/earn_button_widget.dart';

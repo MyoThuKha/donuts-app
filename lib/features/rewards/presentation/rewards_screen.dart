@@ -10,7 +10,6 @@ import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_cubit.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_state.dart';
-import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:donuts/features/rewards/presentation/views/points_ring_view.dart';
 import 'package:donuts/features/rewards/presentation/views/rewards_header_view.dart';
 import 'package:donuts/features/rewards/presentation/views/rewards_tab_list_view.dart';
