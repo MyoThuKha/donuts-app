@@ -1,11 +1,13 @@
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/circle_filled_button.dart';
+import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/features/home/domain/vo/home_section_vo.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/items/product_tile_item.dart';
-import 'package:donuts/features/home/presentation/widgets/see_all_button_widget.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Follows the Popular title, as in the design.
@@ -74,7 +76,12 @@ class _SectionTitle extends StatelessWidget {
               ],
             ),
           ),
-          const SeeAllButtonWidget(),
+          AppCircleFilledButton(
+            icon: LucideIcons.chevronRight,
+            semanticLabel: context.l10n.homeSeeAll,
+            onPressed: () =>
+                context.showMessage(context.l10n.featureComingSoon),
+          ),
         ],
       ),
     );

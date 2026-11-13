@@ -44,6 +44,10 @@
   "and": "and",
   "privacyPolicy": "Privacy Policy",
   "comingSoonTitle": "Coming soon",
+  "featureComingSoon": "This feature is coming soon.",
+  "@featureComingSoon": {
+    "description": "Snackbar for buttons whose feature isn’t built yet"
+  },
   "close": "Close",
   "logOut": "Log out",
   "logOutConfirm": "Log out of J’Donuts?",

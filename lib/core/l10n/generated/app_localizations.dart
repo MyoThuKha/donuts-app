@@ -196,6 +196,12 @@ abstract class AppLocalizations {
   /// **'Coming soon'**
   String get comingSoonTitle;
 
+  /// Snackbar for buttons whose feature isn’t built yet
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is coming soon.'**
+  String get featureComingSoon;
+
   /// No description provided for @close.
   ///
   /// In en, this message translates to:

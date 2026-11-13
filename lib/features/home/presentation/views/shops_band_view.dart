@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/pill_button.dart';
+import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
@@ -13,7 +15,6 @@ import 'package:donuts/features/home/presentation/blocs/section_state.dart';
 import 'package:donuts/features/home/presentation/home_assets.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/items/shop_card_item.dart';
-import 'package:donuts/features/home/presentation/widgets/press_scale_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -103,7 +104,11 @@ class _Shops extends StatelessWidget {
                 context.l10n.homeShopsTitle(shops.length),
                 style: context.text.headline.copyWith(color: colors.onPrimary),
               ),
-              const _ExploreNowButton(),
+              AppPillButton(
+                label: context.l10n.homeExploreNow,
+                onPressed: () =>
+                    context.showMessage(context.l10n.featureComingSoon),
+              ),
             ],
           ),
         ),
@@ -119,40 +124,6 @@ class _Shops extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// White stadium with primary text. Press feedback only.
-class _ExploreNowButton extends StatelessWidget {
-  const new();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final label = context.l10n.homeExploreNow;
-    return Semantics(
-      button: true,
-      label: label,
-      excludeSemantics: true,
-      child: PressScaleWidget(
-        child: DecoratedBox(
-          decoration: ShapeDecoration(
-            color: colors.surface,
-            shape: const StadiumBorder(),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.l,
-              vertical: AppSpacing.s,
-            ),
-            child: Text(
-              label.toUpperCase(),
-              style: context.text.button.copyWith(color: colors.primary),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

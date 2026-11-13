@@ -8,8 +8,6 @@ abstract final class HomeDimens {
   static const double bellTagHeight = 32;
   static const double bellBadge = 18;
   static const double chipHeight = 24;
-  static const double seeAllButton = 28;
-  static const double seeAllIcon = 16;
 
   static const double bannerHeight = 180;
 

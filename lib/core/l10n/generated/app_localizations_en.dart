@@ -64,6 +64,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get comingSoonTitle => 'Coming soon';
 
   @override
+  String get featureComingSoon => 'This feature is coming soon.';
+
+  @override
   String get close => 'Close';
 
   @override

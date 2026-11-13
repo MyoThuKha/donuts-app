@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/widgets/badges/discount_badge.dart';
+import 'package:donuts/core/widgets/buttons/circle_filled_button.dart';
+import 'package:donuts/core/widgets/buttons/pill_button.dart';
+import 'package:donuts/core/widgets/buttons/text_button.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
@@ -16,7 +19,6 @@ import 'package:donuts/features/home/presentation/views/banner_carousel_view.dar
 import 'package:donuts/features/home/presentation/views/home_header_view.dart';
 import 'package:donuts/features/home/presentation/views/member_panel_view.dart';
 import 'package:donuts/features/home/presentation/views/shops_band_view.dart';
-import 'package:donuts/features/home/presentation/widgets/see_all_button_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -280,12 +282,35 @@ void main() {
     streams.emitAll();
     await tester.pump(_entrance);
 
-    final buttons = find.byType(SeeAllButtonWidget);
+    final buttons = find.byType(AppCircleFilledButton);
     final rightEdges = {
       for (var i = 0; i < 3; i++) tester.getTopRight(buttons.at(i)).dx,
     };
-    expect(find.byType(SeeAllButtonWidget), findsNWidgets(3));
+    expect(find.byType(AppCircleFilledButton), findsNWidgets(3));
     expect(rightEdges, hasLength(1));
+  });
+
+  testWidgets('See all, Explore now and Order online say the feature is '
+      'coming soon', (tester) async {
+    await pumpHomeScreen(tester, streams);
+    streams.emitAll();
+    await tester.pump(_entrance);
+    const message = 'This feature is coming soon.';
+
+    for (final button in [
+      find.byType(AppCircleFilledButton).first,
+      find.byType(AppPillButton),
+      find.byType(AppTextButton).first,
+    ]) {
+      await tester.ensureVisible(button);
+      await tester.pumpAndSettle();
+      await tester.tap(button);
+      await tester.pump();
+      expect(find.text(message), findsOneWidget);
+      ScaffoldMessenger.of(tester.element(find.byType(ShopsBandView)))
+          .removeCurrentSnackBar();
+      await tester.pumpAndSettle();
+    }
   });
 
   testWidgets('the offline banner pushes the header down instead of '

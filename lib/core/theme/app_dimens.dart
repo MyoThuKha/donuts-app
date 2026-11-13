@@ -48,4 +48,9 @@ abstract final class AppSizes {
 
   /// The thin white outline around badges that sit on photos.
   static const double rim = 1.5;
+
+  /// The visible circle of a filled circle button and its icon. Its tap
+  /// area is [button] square.
+  static const double circleButton = 28;
+  static const double circleButtonIcon = 16;
 }

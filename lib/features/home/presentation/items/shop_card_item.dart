@@ -1,10 +1,11 @@
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/text_button.dart';
+import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/images/network_image.dart';
 import 'package:donuts/features/home/domain/vo/shop_vo.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
-import 'package:donuts/features/home/presentation/widgets/press_scale_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A nearby shop: photo, name, address and an Order online link that
@@ -71,13 +72,11 @@ class ShopCardItem extends StatelessWidget {
     ),
   );
 
-  Widget _orderOnline(BuildContext context) => Semantics(
-    button: true,
-    child: PressScaleWidget(
-      child: Text(
-        context.l10n.homeOrderOnline,
-        style: context.text.label.copyWith(color: context.colors.accent),
-      ),
-    ),
-  );
+  Widget _orderOnline(BuildContext context) {
+    final l10n = context.l10n;
+    return AppTextButton(
+      label: l10n.homeOrderOnline,
+      onPressed: () => context.showMessage(l10n.featureComingSoon),
+    );
+  }
 }
