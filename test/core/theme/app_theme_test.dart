@@ -17,10 +17,10 @@ void main() {
   test("light theme carries the J'Donuts colour tokens from the design", () {
     final colors = AppTheme.light().extension<DonutsColors>()!;
 
-    expect(colors.primary, const Color(0xFF88D4EC));
-    expect(colors.accent, const Color(0xFFE87BAC));
-    expect(colors.highlight, const Color(0xFFF3984B));
-    expect(colors.canvas, const Color(0xFFF1F3F3));
+    expect(colors.primary, const Color(0xFF58CFEC));
+    expect(colors.accent, const Color(0xFFEE589E));
+    expect(colors.highlight, const Color(0xFFFF7F1F));
+    expect(colors.canvas, const Color(0xFFEEF0F1));
     expect(colors.ink, const Color(0xFF1D2931));
   });
 

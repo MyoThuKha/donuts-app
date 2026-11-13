@@ -12,10 +12,10 @@ import 'package:material_ui/material_ui.dart';
 class StepProgressRing extends StatefulWidget {
   const new({required this.step, required this.of, super.key});
 
-  static const double size = 28;
+  static const double size = 32;
 
   /// Track opacity against the arc.
-  static const double trackAlpha = 0.4;
+  static const double trackAlpha = 0.45;
 
   final int step;
   final int of;

@@ -18,6 +18,7 @@ class _OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: AuthBackgroundWidget(
+        backdrop: AuthBackdrop.wash,
         child: SafeArea(
           top: false,
           child: Column(

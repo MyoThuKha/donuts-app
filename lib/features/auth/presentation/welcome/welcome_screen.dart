@@ -24,7 +24,7 @@ class _WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: AuthBackgroundWidget(
-        reversed: true,
+        backdrop: AuthBackdrop.wash,
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
@@ -57,7 +57,12 @@ class _WelcomeActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: const EdgeInsets.only(right: AppSpacing.l),
+      // The page pads the left by AppSpacing.l for the tiles; the actions
+      // sit inside the auth gutter on both sides.
+      padding: const EdgeInsets.only(
+        left: AppSpacing.authGutter - AppSpacing.l,
+        right: AppSpacing.authGutter,
+      ),
       child: Column(
         spacing: AppSpacing.xxl,
         children: [
