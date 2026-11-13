@@ -35,7 +35,7 @@ class _TermsNoticeWidgetState extends State<TermsNoticeWidget> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final style = context.text.caption;
-    final link = style.copyWith(color: context.colors.accent);
+    final link = context.text.captionLink;
     return Text.rich(
       TextSpan(
         style: style,

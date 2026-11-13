@@ -148,7 +148,7 @@ class _VersionFooterState extends State<_VersionFooter> {
       return Text(
         context.l10n.settingsVersion(version),
         textAlign: TextAlign.center,
-        style: context.text.label.copyWith(color: context.colors.inkSubtle),
+        style: context.text.bodySmall,
       );
     },
   );
@@ -169,10 +169,8 @@ class _LogOutDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: Text(
-            l10n.logOut,
-            style: TextStyle(color: context.colors.danger),
-          ),
+          style: TextButton.styleFrom(foregroundColor: context.colors.danger),
+          child: Text(l10n.logOut),
         ),
       ],
     );

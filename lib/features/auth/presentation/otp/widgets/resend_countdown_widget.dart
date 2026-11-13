@@ -39,10 +39,7 @@ class ResendCountdownWidget extends StatelessWidget {
               minimumSize: const Size(AppSizes.button, AppSizes.button),
               alignment: Alignment.centerLeft,
             ),
-            child: Text(
-              l10n.resend,
-              style: text.label.copyWith(color: context.colors.accent),
-            ),
+            child: Text(l10n.resend, style: text.link),
           )
         else
           _countdown(context),
@@ -61,10 +58,7 @@ class ResendCountdownWidget extends StatelessWidget {
         style: style,
         children: [
           TextSpan(text: sentence.substring(0, at)),
-          TextSpan(
-            text: time,
-            style: style.copyWith(color: context.colors.accent),
-          ),
+          TextSpan(text: time, style: context.text.highlight),
           TextSpan(text: sentence.substring(at + time.length)),
         ],
       ),

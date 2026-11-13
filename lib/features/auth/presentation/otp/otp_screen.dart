@@ -127,10 +127,7 @@ class _OtpMessage extends StatelessWidget {
     if (message == null) return const SizedBox(height: AppSpacing.l);
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.s),
-      child: Text(
-        message,
-        style: context.text.caption.copyWith(color: context.colors.danger),
-      ),
+      child: Text(message, style: context.text.error),
     );
   }
 }

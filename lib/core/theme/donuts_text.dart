@@ -19,6 +19,11 @@ class DonutsText extends ThemeExtension<DonutsText> {
     required this.points,
     required this.pointsLabel,
     required this.badge,
+    required this.bannerTitle,
+    required this.link,
+    required this.captionLink,
+    required this.highlight,
+    required this.error,
   });
 
   factory fromColors(DonutsColors c) => DonutsText(
@@ -38,6 +43,11 @@ class DonutsText extends ThemeExtension<DonutsText> {
     points: rounded(_style(34, FontWeight.w800, c.accent)),
     pointsLabel: _style(14, FontWeight.w700, c.accent),
     badge: _style(13, FontWeight.w700, c.onPrimary, height: 1),
+    bannerTitle: rounded(_style(22, FontWeight.w800, c.onPrimary, height: 1.2)),
+    link: _style(14, FontWeight.w700, c.accent),
+    captionLink: _style(11, FontWeight.w400, c.accent),
+    highlight: _style(13, FontWeight.w500, c.accent),
+    error: _style(11, FontWeight.w400, c.danger),
   );
 
   /// Schibsted Grotesk, declared in pubspec: body text, labels and buttons.
@@ -77,6 +87,21 @@ class DonutsText extends ThemeExtension<DonutsText> {
   /// so the badge's height comes from its padding.
   final TextStyle badge;
 
+  /// [headline] on a coloured fill, such as a banner or the shops band.
+  final TextStyle bannerTitle;
+
+  /// A tappable [label], such as Resend or "Log in instead".
+  final TextStyle link;
+
+  /// A link inside [caption] text, such as Terms of Use.
+  final TextStyle captionLink;
+
+  /// A run picked out inside [bodySmall] text, such as the resend timer.
+  final TextStyle highlight;
+
+  /// A [caption]-sized message under a field or a step, in `danger`.
+  final TextStyle error;
+
   static TextStyle _style(
     double size,
     FontWeight weight,
@@ -115,6 +140,11 @@ class DonutsText extends ThemeExtension<DonutsText> {
       points: mix(points, other.points),
       pointsLabel: mix(pointsLabel, other.pointsLabel),
       badge: mix(badge, other.badge),
+      bannerTitle: mix(bannerTitle, other.bannerTitle),
+      link: mix(link, other.link),
+      captionLink: mix(captionLink, other.captionLink),
+      highlight: mix(highlight, other.highlight),
+      error: mix(error, other.error),
     );
   }
 }

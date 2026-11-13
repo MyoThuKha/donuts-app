@@ -89,7 +89,6 @@ class _Shops extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: AppSpacing.l,
@@ -104,7 +103,7 @@ class _Shops extends StatelessWidget {
             children: [
               Text(
                 context.l10n.homeShopsTitle(shops.length),
-                style: context.text.headline.copyWith(color: colors.onPrimary),
+                style: context.text.bannerTitle,
               ),
               AppPillButton(
                 label: context.l10n.homeExploreNow,

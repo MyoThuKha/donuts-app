@@ -57,7 +57,6 @@ class BannerItem extends StatelessWidget {
   );
 
   Widget _text(BuildContext context) {
-    final colors = context.colors;
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.m),
       child: Column(
@@ -69,7 +68,7 @@ class BannerItem extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: context.text.headline.copyWith(color: colors.onPrimary),
+            style: context.text.bannerTitle,
           ),
         ],
       ),

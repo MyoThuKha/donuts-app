@@ -76,7 +76,6 @@ class _Heading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     final text = context.text;
     final discount = product.discountPercent;
     return Column(
@@ -85,12 +84,7 @@ class _Heading extends StatelessWidget {
         Row(
           spacing: AppSpacing.s,
           children: [
-            Expanded(
-              child: Text(
-                product.code,
-                style: text.caption.copyWith(color: colors.inkSubtle),
-              ),
-            ),
+            Expanded(child: Text(product.code, style: text.caption)),
             if (discount != null) DiscountBadge(percent: discount),
             if (product.isNew) const NewBadgeWidget(),
           ],
@@ -101,10 +95,7 @@ class _Heading extends StatelessWidget {
         ),
         Text(
           context.l10n.productPrice(formatGrouped(product.unitPriceMmk)),
-          style: text.body.copyWith(
-            color: colors.ink,
-            fontWeight: FontWeight.w700,
-          ),
+          style: text.label,
         ),
       ],
     );

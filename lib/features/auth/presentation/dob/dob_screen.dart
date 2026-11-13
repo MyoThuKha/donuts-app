@@ -99,10 +99,7 @@ class _DobPage extends StatelessWidget {
           onTap: pick,
         ),
         if (state.status == DobStatus.failed)
-          Text(
-            l10n.genericError,
-            style: context.text.caption.copyWith(color: context.colors.danger),
-          ),
+          Text(l10n.genericError, style: context.text.error),
       ],
     );
   }

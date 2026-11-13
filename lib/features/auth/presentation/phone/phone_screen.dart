@@ -157,9 +157,6 @@ class _AccountNotice extends StatelessWidget {
     style: TextButton.styleFrom(
       minimumSize: const Size(AppSizes.button, AppSizes.button),
     ),
-    child: Text(
-      action,
-      style: context.text.label.copyWith(color: context.colors.accent),
-    ),
+    child: Text(action, style: context.text.link),
   );
 }

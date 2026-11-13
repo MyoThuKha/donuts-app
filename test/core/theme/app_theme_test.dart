@@ -47,6 +47,18 @@ void main() {
     expect(text.pointsLabel, text.label.copyWith(color: colors.accent));
   });
 
+  test('bannerTitle, link, captionLink, highlight and error only recolour '
+      'their base roles', () {
+    final text = AppTheme.light().extension<DonutsText>()!;
+    const colors = DonutsColors.light;
+
+    expect(text.bannerTitle, text.headline.copyWith(color: colors.onPrimary));
+    expect(text.link, text.label.copyWith(color: colors.accent));
+    expect(text.captionLink, text.caption.copyWith(color: colors.accent));
+    expect(text.highlight, text.bodySmall.copyWith(color: colors.accent));
+    expect(text.error, text.caption.copyWith(color: colors.danger));
+  });
+
   testWidgets('every bundled font weight loads from the asset bundle', (
     tester,
   ) async {

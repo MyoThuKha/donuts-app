@@ -63,7 +63,6 @@ class SettingsHeaderView extends StatelessWidget {
       expandedHeight: contentHeight,
       stretch: true,
       backgroundColor: colors.settingsHeader,
-      surfaceTintColor: Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 0,
       flexibleSpace: Stack(
