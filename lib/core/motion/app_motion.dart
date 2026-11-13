@@ -13,6 +13,11 @@ abstract final class AppMotion {
   static const Curve emphasized = Curves.easeInOutCubicEmphasized;
   static const Curve pop = Curves.easeOutBack;
 
+  /// The spring sheets slide on. Flutter's defaults (half a second, no
+  /// bounce) match an iOS sheet's smooth spring.
+  static final SpringDescription sheetSpring =
+      SpringDescription.withDurationAndBounce();
+
   /// Scale a pressed control shrinks to before springing back.
   static const double pressScale = 0.96;
 
