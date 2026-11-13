@@ -28,6 +28,7 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     required this.tierRingStart,
     required this.tierRingEnd,
     required this.danger,
+    required this.scrim,
   });
 
   factory _fromValues(List<Color> v) => DonutsColors(
@@ -55,6 +56,7 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     tierRingStart: v[21],
     tierRingEnd: v[22],
     danger: v[23],
+    scrim: v[24],
   );
 
   static const DonutsColors light = DonutsColors(
@@ -82,6 +84,7 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     tierRingStart: Color(0xFFFBE2CB),
     tierRingEnd: Color(0xFFE5924B),
     danger: Color(0xFFD9534F),
+    scrim: Color(0x8A000000),
   );
 
   final Color primary;
@@ -122,6 +125,9 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
   /// errors don't read as accent-pink links.
   final Color danger;
 
+  /// Dims the screen behind a sheet. Not in the client designs.
+  final Color scrim;
+
   List<Color> get _values => [
     primary,
     onPrimary,
@@ -147,6 +153,7 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     tierRingStart,
     tierRingEnd,
     danger,
+    scrim,
   ];
 
   /// The design has a single light palette, so tokens are never overridden

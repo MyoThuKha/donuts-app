@@ -1,8 +1,8 @@
 import 'package:donuts/core/format/number_format.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
 import 'package:donuts/features/rewards/presentation/items/tier_row_item.dart';
-import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Silver, Gold and Platinum, top to bottom. The shields pop in order, the

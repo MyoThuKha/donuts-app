@@ -17,8 +17,12 @@ class SettingsMemberCubit extends Cubit<MemberSummary?> {
     unawaited(_subscription?.cancel());
     _subscription = _member().listen(
       _emitIfOpen,
-      // The header keeps its plain colour and the initials.
-      onError: (Object _, StackTrace _) => _emitIfOpen(null),
+      // The header keeps its plain colour and the initials, and the
+      // failure goes to [onError] for the logs.
+      onError: (Object error, StackTrace stackTrace) {
+        _emitIfOpen(null);
+        if (!isClosed) addError(error, stackTrace);
+      },
     );
   }
 

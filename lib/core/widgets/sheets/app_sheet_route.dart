@@ -12,7 +12,13 @@ import 'package:material_ui/material_ui.dart';
 /// The spring drives the route itself (through [createSimulation]), so a
 /// drag released halfway carries its speed into the close or the snap back.
 class AppSheetRoute<T> extends PopupRoute<T> {
-  new({required this.child, required this.reduced, this.title, super.settings});
+  new({
+    required this.child,
+    required this.reduced,
+    required this.scrim,
+    this.title,
+    super.settings,
+  });
 
   final Widget child;
 
@@ -21,6 +27,9 @@ class AppSheetRoute<T> extends PopupRoute<T> {
 
   /// Reduce Motion: the sheet appears and leaves without sliding.
   final bool reduced;
+
+  /// Dims the screen behind the sheet.
+  final Color scrim;
 
   /// Sheet heights per second at release, carried into the spring.
   double _releaseVelocity = 0;
@@ -36,7 +45,7 @@ class AppSheetRoute<T> extends PopupRoute<T> {
   static const double _radius = 32;
 
   @override
-  Color? get barrierColor => Colors.black54;
+  Color? get barrierColor => scrim;
 
   @override
   bool get barrierDismissible => true;
