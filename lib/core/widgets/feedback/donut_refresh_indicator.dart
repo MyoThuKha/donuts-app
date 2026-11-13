@@ -17,10 +17,10 @@ class DonutRefreshIndicator extends StatefulWidget {
     super.key,
   });
 
- 
   final Future<void> Function() onRefresh;
   final Widget child;
   final double edgeOffset;
+
   /// How far the user pulls before a release refreshes.
   static const double triggerDistance = 100;
   static const double restOffset = AppSpacing.l;
