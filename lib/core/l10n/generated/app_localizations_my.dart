@@ -97,6 +97,18 @@ class AppLocalizationsMy extends AppLocalizations {
   }
 
   @override
+  String get settingsLanguage => 'ဘာသာစကား';
+
+  @override
+  String get languageSystem => 'ဖုန်း၏ ဘာသာစကား';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageBurmese => 'မြန်မာ';
+
+  @override
   String settingsVersion(String version) {
     return 'J’Donuts $version';
   }

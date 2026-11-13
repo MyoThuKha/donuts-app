@@ -11,6 +11,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/fake_connectivity.dart';
+import '../helpers/fake_language_store.dart';
 import '../helpers/file_seed_source.dart';
 import '../helpers/memory_session_store.dart';
 
@@ -23,6 +24,7 @@ void main() {
     await configureDependencies(
       database: AppDatabase.forTesting(NativeDatabase.memory()),
       sessionStore: MemorySessionStore(),
+      languageStore: FakeLanguageStore(),
       authLatency: Duration.zero,
       seedSource: FileSeedSource(),
       connectivitySource: FakeConnectivitySource(),

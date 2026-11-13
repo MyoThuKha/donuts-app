@@ -254,6 +254,30 @@ abstract class AppLocalizations {
   /// **'{years, plural, =1{1 year} other{{years} years}}'**
   String accountAgeYears(int years);
 
+  /// Settings row and sheet title for the app language
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguage;
+
+  /// Language option that follows the phone's language
+  ///
+  /// In en, this message translates to:
+  /// **'Device language'**
+  String get languageSystem;
+
+  /// English's own name. Never translate it.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// Burmese's own name, in Myanmar script. Never translate it.
+  ///
+  /// In en, this message translates to:
+  /// **'မြန်မာ'**
+  String get languageBurmese;
+
   /// No description provided for @settingsVersion.
   ///
   /// In en, this message translates to:
