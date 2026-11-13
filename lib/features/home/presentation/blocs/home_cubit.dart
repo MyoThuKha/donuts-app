@@ -6,7 +6,6 @@ import 'package:donuts/features/home/domain/usecases/watch_section_products_use_
 import 'package:donuts/features/home/domain/usecases/watch_shops_use_case.dart';
 import 'package:donuts/features/home/domain/vo/home_section_vo.dart';
 import 'package:donuts/features/home/presentation/blocs/home_state.dart';
-import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +21,6 @@ class HomeCubit extends Cubit<HomeState>
     required this._sections,
     required this._sectionProducts,
     required this._shops,
-    required this._clearRewardClaims,
   }) : super(const HomeState());
 
   final WatchMemberSummaryUseCase _member;
@@ -30,7 +28,6 @@ class HomeCubit extends Cubit<HomeState>
   final WatchHomeSectionsUseCase _sections;
   final WatchSectionProductsUseCase _sectionProducts;
   final WatchShopsUseCase _shops;
-  final ClearRewardClaimsUseCase _clearRewardClaims;
 
   /// Subscribes to every section.
   void start() => HomeSectionId.values.forEach(retry);
@@ -66,10 +63,6 @@ class HomeCubit extends Cubit<HomeState>
     _sectionProducts(sectionId).map(listSection),
     (section) => state.withRow(sectionId, section),
   );
-
-  /// Undoes any Earn from Rewards. The header follows the member summary,
-  /// so it shows the stored points again.
-  void resetRewardClaims() => _clearRewardClaims();
 
   /// Starts following the products of rows that arrived and stops
   /// following rows that left, then stores [section].

@@ -35,7 +35,10 @@ void main() {
       expect(product?.discountPercent, isNull);
       expect(product?.description, startsWith('Enjoy our scrumptious donuts'));
       expect(product?.imageUrl, testImageBase.resolve(image).toString());
-      expect(product?.imageAsset, isNull);
+      expect(
+        product?.imageAsset,
+        'assets/seed/images/home/donuts/chocolate-strawberry-glaze.png',
+      );
     },
   );
 

@@ -46,10 +46,7 @@ class ProductDescriptionView extends StatelessWidget {
           ),
           Expanded(
             child: switch (description) {
-              final description? => Text(
-                description,
-                style: text.bodySmall.copyWith(color: colors.inkMuted),
-              ),
+              final description? => Text(description, style: text.bodySmall),
               null => const _DescriptionSkeleton(),
             },
           ),

@@ -20,6 +20,14 @@ void main() {
     expect(AppRadii.enclosing(14.5, 8), 22.5);
   });
 
+  test('a concentric radius is the outer radius less the inset', () {
+    expect(AppRadii.concentric(20, 8), 12);
+  });
+
+  test('a concentric radius stops at its minimum', () {
+    expect(AppRadii.concentric(20, 20, minimum: 12), 12);
+  });
+
   testWidgets('a cornered badge is a rounded rectangle with a white rim', (
     tester,
   ) async {

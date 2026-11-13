@@ -32,9 +32,10 @@ class ShopsBandView extends StatelessWidget {
       (c) => c.state.shops,
     );
     final l10n = context.l10n;
-    // Home runs under the nav, so the bottom padding is the nav plus the
-    // home indicator. The scene ends where the nav's pink band starts, so
-    // the grass shows beside and above the nav's top half.
+    // Home runs under the nav, so the bottom padding is the nav's height
+    // (plus Android's 3-button bar, where the nav leaves room for it). The
+    // scene ends where the nav's pink band starts, so the grass shows
+    // beside and above the nav's top half.
     final sceneBottom = math
         .max(0, MediaQuery.paddingOf(context).bottom - AppSizes.navBar / 2)
         .toDouble();

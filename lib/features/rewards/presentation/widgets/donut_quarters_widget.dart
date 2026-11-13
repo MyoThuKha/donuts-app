@@ -1,5 +1,6 @@
 import 'package:donuts/core/widgets/images/network_image.dart';
 import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
+import 'package:donuts/features/rewards/presentation/widgets/reward_card_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The donut challenge art: the same image twice. The bottom copy is
@@ -38,6 +39,7 @@ class DonutQuartersWidget extends StatelessWidget {
       url: url,
       asset: asset,
       fit: BoxFit.contain,
+      placeholderShape: RewardCard.artPlaceholderShape,
       cacheWidth: cacheWidth,
     );
     return RepaintBoundary(

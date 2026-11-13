@@ -43,6 +43,18 @@ void main() {
     expect(find.byKey(AppNetworkImage.errorKey), findsNothing);
   });
 
+  testWidgets('draws the placeholder box in the given shape', (tester) async {
+    await _pumpImage(
+      tester,
+      const AppNetworkImage(url: null, placeholderShape: CircleBorder()),
+    );
+
+    final box = tester.widget<DecoratedBox>(
+      find.byKey(AppNetworkImage.placeholderKey),
+    );
+    expect((box.decoration as ShapeDecoration).shape, const CircleBorder());
+  });
+
   testWidgets(
     'shows the error tile with its label when the download fails and there '
     'is no asset',
@@ -92,5 +104,26 @@ void main() {
     await tester.pump();
 
     expect(find.byKey(AppNetworkImage.placeholderKey), findsOneWidget);
+  });
+
+  testWidgets('a fallback replaces the box and the error tile', (tester) async {
+    const fallback = Text('YP');
+    await _pumpImage(
+      tester,
+      const AppNetworkImage(url: null, fallback: fallback),
+    );
+    expect(find.text('YP'), findsOneWidget);
+    expect(find.byKey(AppNetworkImage.placeholderKey), findsNothing);
+
+    await _pumpImage(
+      tester,
+      AppNetworkImage(
+        url: _url,
+        cacheManager: _FailingCacheManager(),
+        fallback: fallback,
+      ),
+    );
+    expect(find.text('YP'), findsOneWidget);
+    expect(find.byKey(AppNetworkImage.errorKey), findsNothing);
   });
 }

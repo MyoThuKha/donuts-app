@@ -11,7 +11,7 @@ Future<void> _pumpOpener(WidgetTester tester) => pumpThemed(
   tester,
   Builder(
     builder: (context) => TextButton(
-      onPressed: () => _body.sheet<void>(context, title: 'Profile Detail'),
+      onPressed: () => _body.sheet<void>(context, title: 'Sheet title'),
       child: const Text('Open'),
     ),
   ),
@@ -27,7 +27,7 @@ void main() {
     final midway = tester.getTopLeft(find.text('Sheet body')).dy;
     await tester.pumpAndSettle();
 
-    expect(find.text('Profile Detail'), findsOneWidget);
+    expect(find.text('Sheet title'), findsOneWidget);
     expect(tester.getTopLeft(find.text('Sheet body')).dy, lessThan(midway));
   });
 

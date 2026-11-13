@@ -7,9 +7,10 @@ import 'package:donuts/core/widgets/badges/app_tag.dart';
 import 'package:donuts/core/widgets/feedback/section_empty_state.dart';
 import 'package:donuts/core/widgets/feedback/section_error_state.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
-import 'package:donuts/core/widgets/images/network_image.dart';
+import 'package:donuts/core/widgets/images/profile_avatar.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
+import 'package:donuts/features/auth/presentation/session/user_initials.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:donuts/features/home/presentation/blocs/home_state.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
@@ -108,6 +109,12 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final initials = context.select<SessionCubit, String>(
+      (c) => switch (c.state) {
+        SessionSignedIn(:final user) => user.initials,
+        SessionSignedOut() => '',
+      },
+    );
     if (member is SectionLoading) {
       return const SkeletonGroup(
         child: Skeleton(
@@ -117,24 +124,10 @@ class _Avatar extends StatelessWidget {
         ),
       );
     }
-    // White behind the photo and in its place while it loads or is
-    // missing, like the product cards.
-    final surface = context.colors.surface;
-    return ClipOval(
-      child: ColoredBox(
-        color: surface,
-        child: SizedBox.square(
-          dimension: HomeDimens.avatar,
-          child: AppNetworkImage(
-            url: summary?.avatarUrl,
-            asset: summary?.avatarAsset,
-            placeholderColor: surface,
-            cacheWidth:
-                (HomeDimens.avatar * MediaQuery.devicePixelRatioOf(context))
-                    .round(),
-          ),
-        ),
-      ),
+    return ProfileAvatar(
+      imageUrl: summary?.avatarUrl,
+      size: HomeDimens.avatar,
+      initials: initials,
     );
   }
 }

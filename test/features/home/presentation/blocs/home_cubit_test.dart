@@ -12,7 +12,6 @@ import 'package:donuts/features/home/domain/vo/home_section_vo.dart';
 import 'package:donuts/features/home/domain/vo/shop_vo.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:donuts/features/home/presentation/blocs/home_state.dart';
-import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,7 +19,6 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/home_fixtures.dart';
 import '../../../../helpers/member_fakes.dart';
-import '../../../../helpers/rewards_fakes.dart';
 
 class _MockMember extends Mock implements WatchMemberSummaryUseCase;
 
@@ -78,7 +76,6 @@ void main() {
       sections: sectionsUseCase,
       sectionProducts: productsUseCase,
       shops: shopsUseCase,
-      clearRewardClaims: ClearRewardClaimsUseCase(FakeRewardsRepository()),
     );
   }
 

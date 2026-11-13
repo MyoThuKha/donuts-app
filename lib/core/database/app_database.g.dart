@@ -3378,6 +3378,21 @@ class $ChallengesTableTable extends ChallengesTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _claimedMeta = const VerificationMeta(
+    'claimed',
+  );
+  @override
+  late final GeneratedColumn<bool> claimed = GeneratedColumn<bool>(
+    'claimed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("claimed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -3389,6 +3404,7 @@ class $ChallengesTableTable extends ChallengesTable
     imageUrl,
     imageAsset,
     sortOrder,
+    claimed,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3470,6 +3486,12 @@ class $ChallengesTableTable extends ChallengesTable
     } else if (isInserting) {
       context.missing(_sortOrderMeta);
     }
+    if (data.containsKey('claimed')) {
+      context.handle(
+        _claimedMeta,
+        claimed.isAcceptableOrUnknown(data['claimed']!, _claimedMeta),
+      );
+    }
     return context;
   }
 
@@ -3515,6 +3537,10 @@ class $ChallengesTableTable extends ChallengesTable
         DriftSqlType.int,
         data['${effectivePrefix}sort_order'],
       )!,
+      claimed: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}claimed'],
+      )!,
     );
   }
 
@@ -3535,6 +3561,10 @@ class ChallengesTableData extends DataClass
   final String? imageUrl;
   final String? imageAsset;
   final int sortOrder;
+
+  /// True once the member has pressed Earn and the points were added to
+  /// `member_profile.total_points`.
+  final bool claimed;
   const ChallengesTableData({
     required this.id,
     required this.title,
@@ -3545,6 +3575,7 @@ class ChallengesTableData extends DataClass
     this.imageUrl,
     this.imageAsset,
     required this.sortOrder,
+    required this.claimed,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3562,6 +3593,7 @@ class ChallengesTableData extends DataClass
       map['image_asset'] = Variable<String>(imageAsset);
     }
     map['sort_order'] = Variable<int>(sortOrder);
+    map['claimed'] = Variable<bool>(claimed);
     return map;
   }
 
@@ -3580,6 +3612,7 @@ class ChallengesTableData extends DataClass
           ? const Value.absent()
           : Value(imageAsset),
       sortOrder: Value(sortOrder),
+      claimed: Value(claimed),
     );
   }
 
@@ -3598,6 +3631,7 @@ class ChallengesTableData extends DataClass
       imageUrl: serializer.fromJson<String?>(json['imageUrl']),
       imageAsset: serializer.fromJson<String?>(json['imageAsset']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      claimed: serializer.fromJson<bool>(json['claimed']),
     );
   }
   @override
@@ -3613,6 +3647,7 @@ class ChallengesTableData extends DataClass
       'imageUrl': serializer.toJson<String?>(imageUrl),
       'imageAsset': serializer.toJson<String?>(imageAsset),
       'sortOrder': serializer.toJson<int>(sortOrder),
+      'claimed': serializer.toJson<bool>(claimed),
     };
   }
 
@@ -3626,6 +3661,7 @@ class ChallengesTableData extends DataClass
     Value<String?> imageUrl = const Value.absent(),
     Value<String?> imageAsset = const Value.absent(),
     int? sortOrder,
+    bool? claimed,
   }) => ChallengesTableData(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -3636,6 +3672,7 @@ class ChallengesTableData extends DataClass
     imageUrl: imageUrl.present ? imageUrl.value : this.imageUrl,
     imageAsset: imageAsset.present ? imageAsset.value : this.imageAsset,
     sortOrder: sortOrder ?? this.sortOrder,
+    claimed: claimed ?? this.claimed,
   );
   ChallengesTableData copyWithCompanion(ChallengesTableCompanion data) {
     return ChallengesTableData(
@@ -3652,6 +3689,7 @@ class ChallengesTableData extends DataClass
           ? data.imageAsset.value
           : this.imageAsset,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      claimed: data.claimed.present ? data.claimed.value : this.claimed,
     );
   }
 
@@ -3666,7 +3704,8 @@ class ChallengesTableData extends DataClass
           ..write('rewardPoints: $rewardPoints, ')
           ..write('imageUrl: $imageUrl, ')
           ..write('imageAsset: $imageAsset, ')
-          ..write('sortOrder: $sortOrder')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('claimed: $claimed')
           ..write(')'))
         .toString();
   }
@@ -3682,6 +3721,7 @@ class ChallengesTableData extends DataClass
     imageUrl,
     imageAsset,
     sortOrder,
+    claimed,
   );
   @override
   bool operator ==(Object other) =>
@@ -3695,7 +3735,8 @@ class ChallengesTableData extends DataClass
           other.rewardPoints == this.rewardPoints &&
           other.imageUrl == this.imageUrl &&
           other.imageAsset == this.imageAsset &&
-          other.sortOrder == this.sortOrder);
+          other.sortOrder == this.sortOrder &&
+          other.claimed == this.claimed);
 }
 
 class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
@@ -3708,6 +3749,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
   final Value<String?> imageUrl;
   final Value<String?> imageAsset;
   final Value<int> sortOrder;
+  final Value<bool> claimed;
   final Value<int> rowid;
   const ChallengesTableCompanion({
     this.id = const Value.absent(),
@@ -3719,6 +3761,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     this.imageUrl = const Value.absent(),
     this.imageAsset = const Value.absent(),
     this.sortOrder = const Value.absent(),
+    this.claimed = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ChallengesTableCompanion.insert({
@@ -3731,6 +3774,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     this.imageUrl = const Value.absent(),
     this.imageAsset = const Value.absent(),
     required int sortOrder,
+    this.claimed = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        title = Value(title),
@@ -3749,6 +3793,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     Expression<String>? imageUrl,
     Expression<String>? imageAsset,
     Expression<int>? sortOrder,
+    Expression<bool>? claimed,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3761,6 +3806,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
       if (imageUrl != null) 'image_url': imageUrl,
       if (imageAsset != null) 'image_asset': imageAsset,
       if (sortOrder != null) 'sort_order': sortOrder,
+      if (claimed != null) 'claimed': claimed,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3775,6 +3821,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     Value<String?>? imageUrl,
     Value<String?>? imageAsset,
     Value<int>? sortOrder,
+    Value<bool>? claimed,
     Value<int>? rowid,
   }) {
     return ChallengesTableCompanion(
@@ -3787,6 +3834,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
       imageUrl: imageUrl ?? this.imageUrl,
       imageAsset: imageAsset ?? this.imageAsset,
       sortOrder: sortOrder ?? this.sortOrder,
+      claimed: claimed ?? this.claimed,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3821,6 +3869,9 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
     if (sortOrder.present) {
       map['sort_order'] = Variable<int>(sortOrder.value);
     }
+    if (claimed.present) {
+      map['claimed'] = Variable<bool>(claimed.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3839,6 +3890,7 @@ class ChallengesTableCompanion extends UpdateCompanion<ChallengesTableData> {
           ..write('imageUrl: $imageUrl, ')
           ..write('imageAsset: $imageAsset, ')
           ..write('sortOrder: $sortOrder, ')
+          ..write('claimed: $claimed, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -7240,6 +7292,7 @@ typedef $$ChallengesTableTableCreateCompanionBuilder =
       Value<String?> imageUrl,
       Value<String?> imageAsset,
       required int sortOrder,
+      Value<bool> claimed,
       Value<int> rowid,
     });
 typedef $$ChallengesTableTableUpdateCompanionBuilder =
@@ -7253,6 +7306,7 @@ typedef $$ChallengesTableTableUpdateCompanionBuilder =
       Value<String?> imageUrl,
       Value<String?> imageAsset,
       Value<int> sortOrder,
+      Value<bool> claimed,
       Value<int> rowid,
     });
 
@@ -7307,6 +7361,11 @@ class $$ChallengesTableTableFilterComposer
 
   ColumnFilters<int> get sortOrder => $composableBuilder(
     column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get claimed => $composableBuilder(
+    column: $table.claimed,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -7364,6 +7423,11 @@ class $$ChallengesTableTableOrderingComposer
     column: $table.sortOrder,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get claimed => $composableBuilder(
+    column: $table.claimed,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ChallengesTableTableAnnotationComposer
@@ -7405,6 +7469,9 @@ class $$ChallengesTableTableAnnotationComposer
 
   GeneratedColumn<int> get sortOrder =>
       $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<bool> get claimed =>
+      $composableBuilder(column: $table.claimed, builder: (column) => column);
 }
 
 class $$ChallengesTableTableTableManager
@@ -7453,6 +7520,7 @@ class $$ChallengesTableTableTableManager
                 Value<String?> imageUrl = const Value.absent(),
                 Value<String?> imageAsset = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
+                Value<bool> claimed = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ChallengesTableCompanion(
                 id: id,
@@ -7464,6 +7532,7 @@ class $$ChallengesTableTableTableManager
                 imageUrl: imageUrl,
                 imageAsset: imageAsset,
                 sortOrder: sortOrder,
+                claimed: claimed,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7477,6 +7546,7 @@ class $$ChallengesTableTableTableManager
                 Value<String?> imageUrl = const Value.absent(),
                 Value<String?> imageAsset = const Value.absent(),
                 required int sortOrder,
+                Value<bool> claimed = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ChallengesTableCompanion.insert(
                 id: id,
@@ -7488,6 +7558,7 @@ class $$ChallengesTableTableTableManager
                 imageUrl: imageUrl,
                 imageAsset: imageAsset,
                 sortOrder: sortOrder,
+                claimed: claimed,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

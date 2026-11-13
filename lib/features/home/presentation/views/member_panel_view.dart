@@ -1,9 +1,8 @@
-import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/state/section_state.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/images/tier_backdrop.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
-import 'package:donuts/features/home/presentation/home_assets.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/views/banner_carousel_view.dart';
 import 'package:donuts/features/home/presentation/views/home_header_view.dart';
@@ -50,9 +49,8 @@ class MemberPanelView extends StatelessWidget {
   }
 }
 
-/// The backdrop for the member's current tier, cross-fading when the tier
-/// changes. The nav's blue shows underneath whenever there is no image:
-/// while the member loads, for a tier without art, or if the image fails.
+/// The backdrop of the member's current tier. The nav's blue shows while
+/// the member loads.
 class _TierBackdrop extends StatelessWidget {
   const new();
 
@@ -64,28 +62,6 @@ class _TierBackdrop extends StatelessWidget {
         _ => null,
       },
     );
-    final asset = HomeAssets.headerBackdrop(tierId);
-    return ColoredBox(
-      color: context.colors.primary,
-      child: AnimatedSwitcher(
-        duration: context.motion.of(AppMotion.medium),
-        child: asset == null
-            ? const SizedBox.expand()
-            : DecoratedBox(
-                key: ValueKey(asset),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(asset),
-                    fit: BoxFit.cover,
-                    // The hexagon stays behind the bell on any screen width.
-                    alignment: Alignment.topRight,
-                    // A missing image leaves the blue showing.
-                    onError: (_, _) {},
-                  ),
-                ),
-                child: const SizedBox.expand(),
-              ),
-      ),
-    );
+    return TierBackdrop(tierId: tierId, color: context.colors.primary);
   }
 }

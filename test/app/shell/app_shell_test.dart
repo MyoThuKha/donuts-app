@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:donuts/app/shell/widgets/app_bottom_nav.dart';
 import 'package:donuts/app/shell/widgets/nav_icons.dart';
 import 'package:donuts/app/shell/widgets/nav_pill_widget.dart';
+import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/features/home/presentation/home_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,6 +16,18 @@ final Finder _homeIcon = find.byKey(const ValueKey(NavIcons.home));
 
 Future<void> _pumpApp(WidgetTester tester) =>
     pumpRouterApp(tester, session: testSessionCubit()..signedIn(testUser));
+
+/// Sets the bottom safe-area inset in logical pixels.
+void _setBottomInset(WidgetTester tester, double inset) {
+  final padding = FakeViewPadding(bottom: inset * tester.view.devicePixelRatio);
+  tester.view
+    ..padding = padding
+    ..viewPadding = padding;
+  addTearDown(tester.view.reset);
+}
+
+double _navHeight(WidgetTester tester) =>
+    tester.getSize(find.byType(AppBottomNav)).height;
 
 void main() {
   testWidgets('app opens on the Home tab with the pill on Home', (
@@ -164,5 +178,30 @@ void main() {
     expect(travellingWidth, greaterThan(restingWidth));
     expect(landed.width, moreOrLessEquals(restingWidth));
     expect(landed.contains(tester.getCenter(_rewardIcon)), isTrue);
+  });
+
+  testWidgets(
+    'the home indicator draws over the nav instead of adding height',
+    (tester) async {
+      _setBottomInset(tester, 34);
+      await _pumpApp(tester);
+
+      expect(_navHeight(tester), AppSizes.navBar);
+    },
+    variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+  );
+
+  testWidgets("Android's gesture handle draws over the nav", (tester) async {
+    _setBottomInset(tester, 24);
+    await _pumpApp(tester);
+
+    expect(_navHeight(tester), AppSizes.navBar);
+  });
+
+  testWidgets("the nav sits above Android's 3-button bar", (tester) async {
+    _setBottomInset(tester, 48);
+    await _pumpApp(tester);
+
+    expect(_navHeight(tester), AppSizes.navBar + 48);
   });
 }

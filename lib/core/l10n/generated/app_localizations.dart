@@ -244,18 +244,6 @@ abstract class AppLocalizations {
   /// **'{years, plural, =1{1 year} other{{years} years}}'**
   String accountAgeYears(int years);
 
-  /// No description provided for @settingsEdit.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit'**
-  String get settingsEdit;
-
-  /// No description provided for @profileDetailTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile Detail'**
-  String get profileDetailTitle;
-
   /// No description provided for @settingsVersion.
   ///
   /// In en, this message translates to:
@@ -465,6 +453,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Year'**
   String get yearHint;
+
+  /// Title of the sheet with the date of birth wheel
+  ///
+  /// In en, this message translates to:
+  /// **'Select your birthday'**
+  String get dobPickerTitle;
+
+  /// Button that confirms the value chosen in a picker sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
 
   /// No description provided for @letsExplore.
   ///

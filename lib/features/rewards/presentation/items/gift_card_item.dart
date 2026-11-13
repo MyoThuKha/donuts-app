@@ -22,6 +22,7 @@ class GiftCardItem extends StatelessWidget {
         url: gift.imageUrl,
         asset: gift.imageAsset,
         fit: BoxFit.contain,
+        placeholderShape: RewardCard.artPlaceholderShape,
         cacheWidth:
             (RewardsDimens.cardArt * MediaQuery.devicePixelRatioOf(context))
                 .round(),

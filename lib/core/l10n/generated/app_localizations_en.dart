@@ -96,12 +96,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get settingsEdit => 'Edit';
-
-  @override
-  String get profileDetailTitle => 'Profile Detail';
-
-  @override
   String settingsVersion(String version) {
     return 'J’Donuts $version';
   }
@@ -224,6 +218,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yearHint => 'Year';
+
+  @override
+  String get dobPickerTitle => 'Select your birthday';
+
+  @override
+  String get select => 'Select';
 
   @override
   String get letsExplore => 'Let’s explore';

@@ -9,8 +9,9 @@ import 'package:material_ui/material_ui.dart';
 /// A network image cached on disk, so it still shows offline once loaded.
 ///
 /// While it loads, and when the download fails, it shows the bundled
-/// [asset]. Without an asset it shows a plain box while loading and an
-/// error tile on failure, both in [placeholderColor].
+/// [asset]. Without an asset it shows [fallback], or else a plain box while
+/// loading and an error tile on failure, both in [placeholderColor] and
+/// [placeholderShape].
 class AppNetworkImage extends StatelessWidget {
   const new({
     required this.url,
@@ -20,6 +21,8 @@ class AppNetworkImage extends StatelessWidget {
     this.cacheManager,
     this.fade = true,
     this.placeholderColor,
+    this.placeholderShape = const RoundedRectangleBorder(),
+    this.fallback,
     super.key,
   });
 
@@ -47,10 +50,19 @@ class AppNetworkImage extends StatelessWidget {
   /// grey; a photo on a white card passes white so the card stays visible.
   final Color? placeholderColor;
 
+  /// Outline of the loading box and the error tile, so a stand-in matches
+  /// the shape the real image draws, such as a circle for a round badge.
+  /// The image itself is never clipped. Defaults to a square box.
+  final ShapeBorder placeholderShape;
+
+  /// Shown instead of the box and the error tile while the image loads or
+  /// when it fails, such as an avatar's initials. The asset still wins.
+  final Widget? fallback;
+
   @override
   Widget build(BuildContext context) {
     final url = this.url;
-    if (url == null) return _assetOr(_PlaceholderBox(placeholderColor));
+    if (url == null) return _assetOr(_loading);
     return CachedNetworkImage(
       imageUrl: url,
       cacheManager: cacheManager,
@@ -58,52 +70,63 @@ class AppNetworkImage extends StatelessWidget {
       fit: fit,
       fadeInDuration: fade ? _fadeIn : Duration.zero,
       fadeOutDuration: fade ? _fadeOut : Duration.zero,
-      placeholder: (_, _) => _assetOr(_PlaceholderBox(placeholderColor)),
-      errorWidget: (_, _, _) => _assetOr(_ErrorTile(placeholderColor)),
+      placeholder: (_, _) => _assetOr(_loading),
+      errorWidget: (_, _, _) =>
+          _assetOr(fallback ?? _ErrorTile(placeholderColor, placeholderShape)),
     );
   }
 
-  Widget _assetOr(Widget fallback) {
+  Widget get _loading =>
+      fallback ?? _PlaceholderBox(placeholderColor, placeholderShape);
+
+  Widget _assetOr(Widget otherwise) {
     final asset = this.asset;
-    if (asset == null) return fallback;
+    if (asset == null) return otherwise;
     return Image.asset(
       asset,
       fit: fit,
       cacheWidth: cacheWidth,
       // Until the first frame decodes, Image paints nothing, and whatever
       // sits behind it shows for a frame. A cached asset decodes at once.
-      frameBuilder: (_, child, frame, _) =>
-          frame == null ? _PlaceholderBox(placeholderColor) : child,
-      errorBuilder: (_, _, _) => _PlaceholderBox(placeholderColor),
+      frameBuilder: (_, child, frame, _) => frame == null ? _loading : child,
+      errorBuilder: (_, _, _) => _loading,
     );
   }
 }
 
 class _PlaceholderBox extends StatelessWidget {
-  const new(this.color);
+  const new(this.color, this.shape);
 
   final Color? color;
+  final ShapeBorder shape;
 
   @override
-  Widget build(BuildContext context) => ColoredBox(
+  Widget build(BuildContext context) => DecoratedBox(
     key: AppNetworkImage.placeholderKey,
-    color: color ?? context.colors.canvas,
+    decoration: ShapeDecoration(
+      color: color ?? context.colors.canvas,
+      shape: shape,
+    ),
     child: const SizedBox.expand(),
   );
 }
 
 class _ErrorTile extends StatelessWidget {
-  const new(this.color);
+  const new(this.color, this.shape);
 
   final Color? color;
+  final ShapeBorder shape;
 
   @override
   Widget build(BuildContext context) => Semantics(
     key: AppNetworkImage.errorKey,
     label: context.l10n.imageUnavailable,
     image: true,
-    child: ColoredBox(
-      color: color ?? context.colors.canvas,
+    child: DecoratedBox(
+      decoration: ShapeDecoration(
+        color: color ?? context.colors.canvas,
+        shape: shape,
+      ),
       child: Center(
         child: Icon(
           LucideIcons.imageOff,

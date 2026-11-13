@@ -131,7 +131,7 @@ class _RewardsPageState extends State<_RewardsPage>
         child: DonutRefreshIndicator(
           nested: true,
           edgeOffset: MediaQuery.paddingOf(context).top,
-          onRefresh: () => _refresh(context),
+          onRefresh: () => refreshCatalogFromPull(context),
           child: NestedScrollView(
             physics: _pullable,
             headerSliverBuilder: (context, _) => [
@@ -148,13 +148,6 @@ class _RewardsPageState extends State<_RewardsPage>
         ),
       ),
     );
-  }
-
-  /// Undoes any Earn, so the points and challenges read as stored, and
-  /// refreshes the catalog like Home's pull.
-  Future<void> _refresh(BuildContext context) {
-    context.read<RewardsCubit>().resetClaims();
-    return refreshCatalogFromPull(context);
   }
 
   /// The white upper half: the header, then the ladder and ring. While the

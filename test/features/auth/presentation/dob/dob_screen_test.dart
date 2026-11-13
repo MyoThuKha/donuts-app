@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
 import 'package:donuts/features/auth/domain/params/registration_params.dart';
+import 'package:donuts/features/auth/domain/validators/date_of_birth_validator.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
 import 'package:donuts/features/home/presentation/home_screen.dart';
@@ -25,19 +27,15 @@ Future<void> _tapContinue(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-/// Fills the date fields: picks [month] from the sheet, types day and year.
-Future<void> _enterDate(
-  WidgetTester tester, {
-  required String month,
-  required String day,
-  required String year,
-}) async {
+CupertinoDatePicker _wheel(WidgetTester tester) =>
+    tester.widget<CupertinoDatePicker>(find.byType(CupertinoDatePicker));
+
+/// Opens the wheel from the Month field, turns it to [date] and taps Select.
+Future<void> _pickDate(WidgetTester tester, DateTime date) async {
   await tester.tap(find.text('Month'));
   await tester.pumpAndSettle();
-  await tester.tap(find.text(month).last);
-  await tester.pumpAndSettle();
-  await tester.enterText(find.byType(TextField).at(0), day);
-  await tester.enterText(find.byType(TextField).at(1), year);
+  _wheel(tester).onDateTimeChanged(date);
+  await tester.tap(find.text('SELECT'));
   await tester.pumpAndSettle();
 }
 
@@ -62,34 +60,50 @@ void main() {
     await _tapContinue(tester);
   }
 
-  testWidgets('31 April is rejected and Continue stays disabled', (
-    tester,
-  ) async {
+  testWidgets('Continue stays disabled until a date is picked', (tester) async {
     await pumpDob(tester);
+    expect(_enabled(tester), isFalse);
 
-    await _enterDate(tester, month: 'April', day: '31', year: '2000');
+    await tester.tap(find.text('Day'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pumpAndSettle();
 
-    expect(find.text('That date doesn’t exist'), findsOneWidget);
+    expect(find.text('Day'), findsOneWidget);
     expect(_enabled(tester), isFalse);
   });
 
-  testWidgets('someone under 13 is told the minimum age', (tester) async {
+  testWidgets('a picked date fills all three fields', (tester) async {
     await pumpDob(tester);
 
-    await _enterDate(tester, month: 'May', day: '1', year: '2014');
+    await _pickDate(tester, DateTime(1980, 5));
 
-    expect(find.text('You need to be at least 13 to join'), findsOneWidget);
-    expect(_enabled(tester), isFalse);
+    expect(find.text('May'), findsOneWidget);
+    expect(find.text('1'), findsOneWidget);
+    expect(find.text('1980'), findsOneWidget);
+    expect(_enabled(tester), isTrue);
   });
 
-  testWidgets('a year still being typed keeps Continue disabled', (
-    tester,
-  ) async {
+  testWidgets('the wheel stops at the youngest allowed age', (tester) async {
     await pumpDob(tester);
 
-    await _enterDate(tester, month: 'May', day: '1', year: '198');
+    await tester.tap(find.text('Year'));
+    await tester.pumpAndSettle();
 
-    expect(_enabled(tester), isFalse);
+    // AuthFlowMocks fixes today at 12 November 2026.
+    final range = dateOfBirthRange(DateTime(2026, 11, 12));
+    expect(_wheel(tester).maximumDate, range.latest);
+    expect(_wheel(tester).minimumDate, range.earliest);
+  });
+
+  testWidgets('reopening the wheel starts on the picked date', (tester) async {
+    await pumpDob(tester);
+    await _pickDate(tester, DateTime(1980, 5));
+
+    await tester.tap(find.text('1980'));
+    await tester.pumpAndSettle();
+
+    expect(_wheel(tester).initialDateTime, DateTime(1980, 5));
   });
 
   testWidgets('Back does nothing while the account is being created', (
@@ -112,7 +126,7 @@ void main() {
     await tester.enterText(find.byType(TextField).first, 'Ye Min');
     await tester.pump();
     await _tapContinue(tester);
-    await _enterDate(tester, month: 'May', day: '1', year: '1980');
+    await _pickDate(tester, DateTime(1980, 5));
 
     await tester.tap(_continue);
     await tester.pump();
@@ -169,7 +183,7 @@ void main() {
       await tester.enterText(find.byType(TextField).at(1), 'Phyoe Win');
       await tester.pump();
       await _tapContinue(tester);
-      await _enterDate(tester, month: 'May', day: '1', year: '1980');
+      await _pickDate(tester, DateTime(1980, 5));
       await tester.tap(_continue);
       await tester.tap(_continue, warnIfMissed: false);
       await tester.pumpAndSettle();

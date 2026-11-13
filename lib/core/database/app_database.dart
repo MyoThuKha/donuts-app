@@ -44,7 +44,7 @@ class AppDatabase extends _$AppDatabase {
   new forTesting(super.e);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -53,6 +53,9 @@ class AppDatabase extends _$AppDatabase {
       // v3 adds `cart_items`, the persistent cart.
       from2To3: (m, schema) => m.createTable(schema.cartItems),
       from3To4: _addRewardImages,
+      // v5 stores Earn on each challenge. Existing rows start unclaimed.
+      from4To5: (m, schema) =>
+          m.addColumn(schema.challenges, schema.challenges.claimed),
     ),
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
   );

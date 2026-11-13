@@ -2,7 +2,6 @@ import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/state/section_state.dart';
 import 'package:donuts/core/state/section_watcher.dart';
 import 'package:donuts/features/rewards/domain/usecases/claim_challenge_use_case.dart';
-import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_gifts_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
@@ -11,8 +10,8 @@ import 'package:donuts/features/rewards/presentation/blocs/rewards_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Follows the member summary, challenges and gifts, each into its own
-/// [SectionState], and which card list is showing. Earn claims a
-/// challenge's points for this run of the app.
+/// [SectionState], and which card list is showing. Earn stores a
+/// challenge's points in the local database.
 class RewardsCubit extends Cubit<RewardsState>
     with SectionWatcher<RewardsPart, RewardsState> {
   new({
@@ -20,14 +19,12 @@ class RewardsCubit extends Cubit<RewardsState>
     required this._challenges,
     required this._gifts,
     required this._claim,
-    required this._clearClaims,
   }) : super(const RewardsState());
 
   final WatchMemberSummaryUseCase _member;
   final WatchChallengesUseCase _challenges;
   final WatchGiftsUseCase _gifts;
   final ClaimChallengeUseCase _claim;
-  final ClearRewardClaimsUseCase _clearClaims;
 
   /// Subscribes to every part.
   void start() => RewardsPart.values.forEach(retry);
@@ -60,9 +57,6 @@ class RewardsCubit extends Cubit<RewardsState>
       addError(failure, failure.stackTrace ?? StackTrace.current);
     }
   }
-
-  /// Undoes every Earn, so the points and challenges read as stored.
-  void resetClaims() => _clearClaims();
 
   static SectionState<MemberSummary> _memberState(MemberSummary? summary) =>
       summary == null ? const SectionEmpty() : SectionReady(summary);

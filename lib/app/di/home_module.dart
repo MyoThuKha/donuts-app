@@ -26,7 +26,6 @@ void registerHomeModule(GetIt getIt) {
         sections: getIt(),
         sectionProducts: getIt(),
         shops: getIt(),
-        clearRewardClaims: getIt(),
       ),
     );
 }

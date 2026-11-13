@@ -12,6 +12,10 @@ class ChallengesTable extends Table {
   TextColumn get imageAsset => text().nullable()();
   IntColumn get sortOrder => integer()();
 
+  /// True once the member has pressed Earn and the points were added to
+  /// `member_profile.total_points`.
+  BoolColumn get claimed => boolean().withDefault(const Constant(false))();
+
   @override
   Set<Column<Object>> get primaryKey => {id};
 

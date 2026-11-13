@@ -51,7 +51,7 @@ void main() {
     final mistletoe = seasonal.first;
     expect(mistletoe.name, 'Mistletoe Romance box');
     expect(mistletoe.discountPercent, 50);
-    expect(mistletoe.imageAsset, isNull);
+    expect(mistletoe.imageAsset, 'assets/seed/images/home/romance.jpeg');
     expect(
       mistletoe.imageUrl,
       testImageBase.resolve('assets/home/romance.jpeg').toString(),
@@ -96,7 +96,7 @@ void main() {
     expect(shops.first.name, 'J’Donuts Myaynigone');
     expect(shops.first.address, 'Bayint Naung Road, Hlaing Township, Yangon');
     expect(shops.first.imageUrl, 'http://localhost:8080/assets/home/shop.jpg');
-    expect(shops.first.imageAsset, isNull);
+    expect(shops.first.imageAsset, 'assets/seed/images/home/shop.jpg');
   });
 
   test('a section titleKey nobody knows maps to other', () async {

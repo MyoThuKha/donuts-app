@@ -1,7 +1,7 @@
 import 'package:donuts/core/database/app_database.dart';
+import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/sync/data/catalog_importer.dart';
 import 'package:donuts/features/rewards/data/repositories/rewards_repository_impl.dart';
-import 'package:donuts/features/rewards/data/sources/reward_claims_memory_source.dart';
 import 'package:donuts/features/rewards/domain/types/challenge_kind.dart';
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
@@ -15,11 +15,7 @@ void main() {
 
   setUp(() async {
     db = AppDatabase.forTesting(NativeDatabase.memory());
-    repository = RewardsRepositoryImpl(
-      db.memberDao,
-      db.catalogDao,
-      RewardClaimsMemorySource(),
-    );
+    repository = RewardsRepositoryImpl(db.memberDao, db.catalogDao);
     final importer = CatalogImporter(
       db,
       now: () => DateTime.utc(2026, 11, 12),
@@ -54,7 +50,10 @@ void main() {
       challenges.first.imageUrl,
       'http://localhost:8080/assets/rewards/reward-donut.webp',
     );
-    expect(challenges.first.imageAsset, isNull);
+    expect(
+      challenges.first.imageAsset,
+      'assets/seed/images/rewards/reward-donut.webp',
+    );
   });
 
   test('a challenge with an unknown kind is left out', () async {
@@ -100,6 +99,64 @@ void main() {
         'http://localhost:8080/assets/home/box.jpg',
       ],
     );
-    expect(gifts.first.imageAsset, isNull);
+    expect(
+      gifts.first.imageAsset,
+      'assets/seed/images/home/donuts/blueberry-sprinkle.png',
+    );
+  });
+
+  group('claimChallenge', () {
+    Future<int?> totalPoints() async =>
+        (await db.memberDao.watchProfile().first)?.totalPoints;
+
+    Future<bool> claimed(String id) async =>
+        (await repository.watchChallenges().first)
+            .firstWhere((c) => c.id == id)
+            .claimed;
+
+    test('stores a complete challenge as claimed and adds its points to the '
+        'stored total', () async {
+      final result = await repository.claimChallenge('c_coco_donuts');
+
+      expect(result, isA<Success<void>>());
+      expect(await claimed('c_coco_donuts'), isTrue);
+      expect(await totalPoints(), 680500);
+    });
+
+    test('keeps the claim for a new repository on the same database', () async {
+      await repository.claimChallenge('c_coco_donuts');
+
+      final reopened = RewardsRepositoryImpl(db.memberDao, db.catalogDao);
+      final challenges = await reopened.watchChallenges().first;
+
+      expect(challenges.first.claimed, isTrue);
+    });
+
+    test('pays a challenge only once', () async {
+      await repository.claimChallenge('c_coco_donuts');
+      await repository.claimChallenge('c_coco_donuts');
+
+      expect(await totalPoints(), 680500);
+    });
+
+    test('leaves an incomplete or unknown challenge alone', () async {
+      await repository.claimChallenge('c_americano');
+      await repository.claimChallenge('c_missing');
+
+      expect(await claimed('c_americano'), isFalse);
+      expect(await totalPoints(), 680300);
+    });
+
+    test(
+      'fails and rolls the claim back when there is no profile row',
+      () async {
+        await db.delete(db.memberProfileTable).go();
+
+        final result = await repository.claimChallenge('c_coco_donuts');
+
+        expect(result, isA<Failure<void>>());
+        expect(await claimed('c_coco_donuts'), isFalse);
+      },
+    );
   });
 }

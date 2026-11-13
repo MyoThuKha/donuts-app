@@ -72,10 +72,10 @@ void main() {
       ),
     );
 
-    final placeholder = tester.widget<ColoredBox>(
+    final placeholder = tester.widget<DecoratedBox>(
       find.byKey(AppNetworkImage.placeholderKey),
     );
-    expect(placeholder.color, Colors.white);
+    expect((placeholder.decoration as ShapeDecoration).color, Colors.white);
     expect(
       tester.getSize(find.byKey(AppNetworkImage.placeholderKey)),
       const Size(70, 105),

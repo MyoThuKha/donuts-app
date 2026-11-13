@@ -51,7 +51,7 @@ class _HomePage extends StatelessWidget {
                 removeTop: offline,
                 child: DonutRefreshIndicator(
                   edgeOffset: offline ? 0 : inset,
-                  onRefresh: () => _refresh(context),
+                  onRefresh: () => refreshCatalogFromPull(context),
                   child: CustomScrollView(
                     // Clamping: a pull shows the donut over the header
                     // without dragging the page down and opening a gap.
@@ -69,16 +69,9 @@ class _HomePage extends StatelessWidget {
     );
   }
 
-  /// Undoes any Earn, so the header shows the stored points again, and
-  /// refreshes the catalog.
-  Future<void> _refresh(BuildContext context) {
-    context.read<HomeCubit>().resetRewardClaims();
-    return refreshCatalogFromPull(context);
-  }
-
   List<Widget> _slivers(BuildContext context) {
     // Home runs under the nav, so the bottom padding already covers the
-    // nav and the home indicator.
+    // nav's height.
     final navClearance = MediaQuery.paddingOf(context).bottom + AppSpacing.xxxl;
     return [
       const SliverToBoxAdapter(child: MemberPanelView()),

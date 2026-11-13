@@ -161,6 +161,8 @@ class _CoffeeArt extends StatelessWidget {
             url: url,
             asset: asset,
             fit: BoxFit.contain,
+            // The cup sits inside the round progress ring.
+            placeholderShape: const CircleBorder(),
             cacheWidth: cacheWidth,
           ),
         ),

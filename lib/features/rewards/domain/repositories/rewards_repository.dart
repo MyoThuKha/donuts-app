@@ -10,11 +10,8 @@ abstract interface class RewardsRepository {
   /// The gifts in display order.
   Stream<List<GiftVO>> watchGifts();
 
-  /// Adds a completed challenge's points to the member's total and marks
-  /// it claimed, for this run of the app only. A challenge that isn't
-  /// complete, is already claimed or doesn't exist is left alone.
+  /// Adds a completed challenge's points to the member's stored total and
+  /// stores it as claimed. A challenge that isn't complete, is already
+  /// claimed or doesn't exist is left alone.
   Future<Result<void>> claimChallenge(String challengeId);
-
-  /// Forgets every claim, so the points and challenges read as stored.
-  void clearClaims();
 }
