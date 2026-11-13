@@ -1,5 +1,7 @@
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
+import 'package:donuts/features/auth/presentation/dob/dob_screen.dart';
+import 'package:donuts/features/auth/presentation/name/name_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -71,5 +73,27 @@ void main() {
 
     expect(find.text('Ye Min'), findsOneWidget);
     expect(find.text('Phyoe Win'), findsOneWidget);
+  });
+
+  testWidgets('a double tap on Continue opens Date of birth once, and '
+      'Continue works again after Back', (tester) async {
+    final dateSteps = find.byType(DobScreen, skipOffstage: false);
+    await pumpName(tester);
+    await tester.enterText(_first, 'Ye Min');
+    await tester.pump();
+
+    await tester.tap(find.byType(AppPrimaryButton));
+    await tester.tap(find.byType(AppPrimaryButton), warnIfMissed: false);
+    await tester.pumpAndSettle();
+    expect(dateSteps, findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Back'));
+    await tester.pumpAndSettle();
+    expect(dateSteps, findsNothing);
+    expect(find.byType(NameScreen), findsOneWidget);
+
+    await tester.tap(find.byType(AppPrimaryButton));
+    await tester.pumpAndSettle();
+    expect(dateSteps, findsOneWidget);
   });
 }
