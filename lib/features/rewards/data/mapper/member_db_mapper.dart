@@ -15,20 +15,17 @@ extension TiersTableDataMapper on TiersTableData {
 }
 
 extension MemberProfileTableDataMapper on MemberProfileTableData {
-  /// [bonusPoints] are points earned in this run of the app on top of the
-  /// stored total, and they count towards the tier.
-  MemberSummary toSummary(List<TierVO> tiers, {int bonusPoints = 0}) {
-    final points = totalPoints + bonusPoints;
+  MemberSummary toSummary(List<TierVO> tiers) {
     final sorted = [...tiers]
       ..sort((a, b) => a.minPoints.compareTo(b.minPoints));
     return MemberSummary(
-      totalPoints: points,
+      totalPoints: totalPoints,
       avatarUrl: avatarUrl,
       avatarAsset: avatarAsset,
       notificationCount: notificationCount,
       rewardsCount: rewardsCount,
       tiers: sorted,
-      tierProgress: resolveTierProgress(points, sorted),
+      tierProgress: resolveTierProgress(totalPoints, sorted),
     );
   }
 }

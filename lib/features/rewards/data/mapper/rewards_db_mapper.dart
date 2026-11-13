@@ -17,6 +17,7 @@ extension ChallengesTableDataMapper on ChallengesTableData {
       rewardPoints: rewardPoints,
       imageUrl: imageUrl,
       imageAsset: imageAsset,
+      claimed: claimed,
     );
   }
 }

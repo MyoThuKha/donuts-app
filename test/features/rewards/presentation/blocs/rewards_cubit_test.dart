@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:donuts/features/rewards/domain/usecases/claim_challenge_use_case.dart';
-import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_cubit.dart';
@@ -27,7 +26,6 @@ void main() {
     challenges: challenges,
     gifts: gifts,
     claim: ClaimChallengeUseCase(repository),
-    clearClaims: ClearRewardClaimsUseCase(repository),
   );
 
   setUp(() {
@@ -87,13 +85,12 @@ void main() {
     ],
   );
 
-  test('earn claims a complete challenge and resetClaims undoes it', () async {
+  test('earn claims a complete challenge', () async {
     final cubit = RewardsCubit(
       member: member,
       challenges: WatchChallengesUseCase(repository),
       gifts: gifts,
       claim: ClaimChallengeUseCase(repository),
-      clearClaims: ClearRewardClaimsUseCase(repository),
     )..start();
     addTearDown(cubit.close);
     await pumpEventQueue();
@@ -104,10 +101,6 @@ void main() {
     await cubit.earn('c_coco_donuts');
     await pumpEventQueue();
     expect(claimed('c_coco_donuts'), isTrue);
-
-    cubit.resetClaims();
-    await pumpEventQueue();
-    expect(claimed('c_coco_donuts'), isFalse);
   });
 
   test('earn leaves an incomplete challenge unclaimed', () async {
@@ -116,7 +109,6 @@ void main() {
       challenges: WatchChallengesUseCase(repository),
       gifts: gifts,
       claim: ClaimChallengeUseCase(repository),
-      clearClaims: ClearRewardClaimsUseCase(repository),
     )..start();
     addTearDown(cubit.close);
     await pumpEventQueue();
