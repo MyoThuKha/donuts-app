@@ -56,6 +56,7 @@ class ProductCardView extends StatelessWidget {
                     child: ProductHeroImage(
                       url: product?.imageUrl,
                       asset: product?.imageAsset,
+                      pictureRadius: ProductHeroImage.tileRadius(context),
                     ),
                   ),
                 ),

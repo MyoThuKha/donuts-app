@@ -2,7 +2,6 @@ import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
-import 'package:donuts/core/widgets/badges/app_tag.dart';
 import 'package:donuts/core/widgets/badges/discount_badge.dart';
 import 'package:donuts/core/widgets/images/product_hero_image.dart';
 import 'package:donuts/core/widgets/images/product_hero_tag.dart';
@@ -34,13 +33,8 @@ class ProductTileItem extends StatelessWidget {
   final bool fillsTile;
 
   /// The discount badge's distance from the tile's bottom-right corner.
+  /// [ProductHeroImage.tileRadius] assumes this inset for its curve.
   static const double _badgeInset = AppSpacing.s;
-
-  /// The tile's corner radius: concentric with the discount pill in its
-  /// corner, so it follows the pill when the text size changes. Every tile
-  /// uses it, with or without a badge, so a row's corners match.
-  static double cornerRadius(BuildContext context) =>
-      AppRadii.enclosing(AppTag.heightOf(context) / 2, _badgeInset);
 
   Object get _heroTag => productHeroTag(product.id, scope: sectionId);
 
@@ -82,7 +76,7 @@ class ProductTileItem extends StatelessWidget {
 
   Widget _image(BuildContext context) {
     final discount = product.discountPercent;
-    final radius = cornerRadius(context);
+    final radius = ProductHeroImage.tileRadius(context);
     return SizedBox.fromSize(
       size: imageSize,
       child: Stack(
