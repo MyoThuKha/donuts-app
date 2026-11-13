@@ -1,6 +1,6 @@
 import 'package:donuts/features/rewards/presentation/painters/coffee_arc_painter.dart';
+import 'package:donuts/features/rewards/presentation/painters/donut_quarters_painter.dart';
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
-import 'package:donuts/features/rewards/presentation/painters/quarter_clipper.dart';
 import 'package:donuts/features/rewards/presentation/painters/tier_line_painter.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -8,6 +8,7 @@ import 'package:material_ui/material_ui.dart';
 const _track = Color(0xFFF1F3F3);
 const _fill = Color(0xFFE87BAC);
 const _other = Color(0xFFF3984B);
+const _box = Rect.fromLTWH(0, 0, 100, 100);
 
 Future<void> _paint(WidgetTester tester, CustomPainter painter) async {
   await tester.pumpWidget(
@@ -60,37 +61,44 @@ void main() {
       expect(line(filled: _other).shouldRepaint(line()), isTrue);
     });
 
-    test('the quarter clipper', () {
+    test('the donut quarters', () {
+      const quarter = AlwaysStoppedAnimation<double>(0.25);
+      const painter = DonutQuartersPainter(progress: quarter, image: null);
+
       expect(
-        const QuarterClipper(0.25).shouldReclip(const QuarterClipper(0.25)),
+        painter.shouldRepaint(
+          const DonutQuartersPainter(progress: quarter, image: null),
+        ),
         isFalse,
       );
       expect(
-        const QuarterClipper(0.5).shouldReclip(const QuarterClipper(0.25)),
+        painter.shouldRepaint(
+          const DonutQuartersPainter(progress: progress, image: null),
+        ),
         isTrue,
       );
     });
   });
 
-  test('the quarter clipper covers a quarter of the box at 0.25', () {
-    final path = const QuarterClipper(0.25).getClip(const Size(100, 100));
+  test('the donut sector covers a quarter of the box at 0.25', () {
+    final path = DonutQuartersPainter.sector(_box, 0.25);
 
     expect(path.contains(const Offset(75, 25)), isTrue);
     expect(path.contains(const Offset(25, 75)), isFalse);
     expect(path.contains(const Offset(25, 25)), isFalse);
   });
 
-  test('the quarter clipper covers nothing at 0 and everything at 1', () {
-    const size = Size(100, 100);
+  test('the donut sector covers the whole box at 1', () {
+    final path = DonutQuartersPainter.sector(_box, 1);
 
-    expect(
-      const QuarterClipper(0).getClip(size).contains(const Offset(75, 25)),
-      isFalse,
-    );
-    expect(
-      const QuarterClipper(1).getClip(size).contains(const Offset(25, 75)),
-      isTrue,
-    );
+    for (final corner in [
+      const Offset(1, 1),
+      const Offset(99, 1),
+      const Offset(1, 99),
+      const Offset(99, 99),
+    ]) {
+      expect(path.contains(corner), isTrue);
+    }
   });
 
   testWidgets('the ring painter paints without errors at 0, 0.75 and 1', (
@@ -105,6 +113,23 @@ void main() {
           fill: _fill,
           stroke: 40,
           sprinkle: const Color(0xFFFFFFFF),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+    }
+  });
+
+  testWidgets('the donut painter paints its photo at 0, 0.25 and 1', (
+    tester,
+  ) async {
+    final photo = await tester.runAsync(() => createTestImage(width: 40));
+    addTearDown(photo!.dispose);
+    for (final value in [0.0, 0.25, 1.0]) {
+      await _paint(
+        tester,
+        DonutQuartersPainter(
+          progress: AlwaysStoppedAnimation(value),
+          image: photo,
         ),
       );
       expect(tester.takeException(), isNull);
