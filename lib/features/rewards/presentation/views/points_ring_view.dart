@@ -66,7 +66,6 @@ class PointsRingView extends StatelessWidget {
   }
 
   Widget _total(BuildContext context, int total, Animation<double> sweep) {
-    final colors = context.colors;
     return Padding(
       padding: const EdgeInsets.all(RewardsDimens.ringStroke + AppSpacing.s),
       child: Center(
@@ -77,7 +76,7 @@ class PointsRingView extends StatelessWidget {
             children: [
               Text(
                 context.l10n.rewardsTotalPoints,
-                style: context.text.label.copyWith(color: colors.accent),
+                style: context.text.pointsLabel,
               ),
               CountUpText(
                 progress: sweep,

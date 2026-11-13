@@ -32,11 +32,12 @@ void main() {
     expect(text.button.letterSpacing, 1.2);
   });
 
-  test('subtitle sits between label and sectionTitle at 16/700', () {
+  test('tabActive and pointsLabel only recolour sectionTitle and label', () {
     final text = AppTheme.light().extension<DonutsText>()!;
+    const colors = DonutsColors.light;
 
-    expect(text.subtitle.fontSize, 16);
-    expect(text.subtitle.fontWeight, FontWeight.w700);
+    expect(text.tabActive, text.sectionTitle.copyWith(color: colors.onPrimary));
+    expect(text.pointsLabel, text.label.copyWith(color: colors.accent));
   });
 
   testWidgets('every bundled font weight loads from the asset bundle', (
@@ -84,7 +85,7 @@ void main() {
         text.title,
         text.headline,
         text.sectionTitle,
-        text.subtitle,
+        text.tabActive,
         text.points,
         text.button,
       ]) {

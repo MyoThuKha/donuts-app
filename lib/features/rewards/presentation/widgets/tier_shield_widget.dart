@@ -30,13 +30,13 @@ class TierShieldWidget extends StatelessWidget {
   ShieldPainter _painter(BuildContext context) {
     final colors = context.colors;
     final tier = this.tier;
-    final letter = context.text.label.copyWith(color: colors.tierLine);
+    final letter = context.text.label;
     if (tier == null) {
       return ShieldPainter(
         fill: colors.disabled,
         stars: 1,
         letter: '',
-        letterStyle: letter.copyWith(color: colors.canvas),
+        letterStyle: letter,
       );
     }
     return ShieldPainter(

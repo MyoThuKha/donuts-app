@@ -33,13 +33,7 @@ class RewardsPill extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: AppSpacing.s,
           children: [
-            Text(
-              context.l10n.rewardsPill,
-              style: context.text.body.copyWith(
-                color: colors.onPrimary,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
+            Text(context.l10n.rewardsPill, style: context.text.badge),
             ScaleTransition(
               scale: badge,
               child: AppTag.count(
