@@ -20,6 +20,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../test/helpers/fake_connectivity.dart';
+import '../test/helpers/fake_language_store.dart';
 import '../test/helpers/memory_session_store.dart';
 
 /*
@@ -87,6 +88,9 @@ Future<void> _startApp(
   await configureDependencies(
     database: AppDatabase.forTesting(NativeDatabase.memory()),
     sessionStore: sessionStore,
+    // The finders read English text, whatever language the device uses or
+    // the app last saved.
+    languageStore: FakeLanguageStore('en'),
     connectivitySource: FakeConnectivitySource(),
     probe: FakeReachabilityProbe(reachable: false),
   );
