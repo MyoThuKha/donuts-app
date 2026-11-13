@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -66,5 +68,44 @@ void main() {
     await tester.tap(find.byType(AppPrimaryButton));
 
     expect(taps, 1);
+  });
+
+  testWidgets('taps are ignored until the future the last tap returned '
+      'completes, then work again', (tester) async {
+    var taps = 0;
+    var pending = Completer<void>();
+    await pumpThemed(
+      tester,
+      AppPrimaryButton(
+        label: 'Continue',
+        onPressed: () {
+          taps++;
+          return pending.future;
+        },
+      ),
+    );
+
+    await tester.tap(find.byType(AppPrimaryButton));
+    await tester.tap(find.byType(AppPrimaryButton));
+    expect(taps, 1);
+
+    pending.complete();
+    await tester.pump();
+    pending = Completer<void>();
+    await tester.tap(find.byType(AppPrimaryButton));
+    expect(taps, 2);
+  });
+
+  testWidgets('a synchronous onPressed runs on every tap', (tester) async {
+    var taps = 0;
+    await pumpThemed(
+      tester,
+      AppPrimaryButton(label: 'Close', onPressed: () => taps++),
+    );
+
+    await tester.tap(find.byType(AppPrimaryButton));
+    await tester.tap(find.byType(AppPrimaryButton));
+
+    expect(taps, 2);
   });
 }

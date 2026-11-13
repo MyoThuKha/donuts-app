@@ -3,6 +3,7 @@ import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/pending_tap_guard.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
 import 'package:donuts/features/auth/presentation/widgets/social_sign_in_row_widget.dart';
 import 'package:donuts/features/auth/presentation/widgets/terms_notice_widget.dart';
@@ -44,9 +45,16 @@ class OnboardingActionsView extends StatelessWidget {
   }
 }
 
-class _LogInRow extends StatelessWidget {
+/// Ignores Log In taps while the log-in step it opened is on top, so a
+/// double tap opens it once.
+class _LogInRow extends StatefulWidget {
   const new();
 
+  @override
+  State<_LogInRow> createState() => _LogInRowState();
+}
+
+class _LogInRowState extends State<_LogInRow> with PendingTapGuard {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -57,7 +65,7 @@ class _LogInRow extends StatelessWidget {
       children: [
         Text(l10n.alreadyHaveAccount, style: context.text.bodySmall),
         TextButton(
-          onPressed: () => context.push(AppRoutes.logInPhone),
+          onPressed: () => runGuarded(() => context.push(AppRoutes.logInPhone)),
           style: TextButton.styleFrom(
             minimumSize: const Size(AppSizes.button, AppSizes.button),
           ),

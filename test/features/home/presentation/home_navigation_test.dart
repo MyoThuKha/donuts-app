@@ -89,4 +89,29 @@ void main() {
 
     expect(node.single.value, '50% off');
   });
+
+  testWidgets('a double tap on a tile opens one product detail, and Back '
+      'lets the tile open it again', (tester) async {
+    useTallPhoneSurface(tester);
+    await pumpRouterApp(
+      tester,
+      session: testSessionCubit()..signedIn(testUser),
+    );
+    final tile = _tile('Coconut Donut');
+    final details = find.byType(ProductDetailScreen, skipOffstage: false);
+    await tester.ensureVisible(tile);
+    await tester.pumpAndSettle();
+
+    await tester.tap(tile);
+    await tester.tap(tile, warnIfMissed: false);
+    await tester.pumpAndSettle();
+    expect(details, findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Back'));
+    await tester.pumpAndSettle();
+    expect(details, findsNothing);
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+    expect(details, findsOneWidget);
+  });
 }

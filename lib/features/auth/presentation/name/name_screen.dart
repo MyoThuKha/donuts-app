@@ -43,10 +43,6 @@ class _NamePageState extends State<_NamePage> {
   final FocusNode _firstFocus = FocusNode();
   final FocusNode _lastFocus = FocusNode();
 
-  /// True from a Continue tap until the user comes back from the date
-  /// step, so a second quick tap doesn't push that step twice.
-  bool _leaving = false;
-
   @override
   void initState() {
     super.initState();
@@ -82,17 +78,12 @@ class _NamePageState extends State<_NamePage> {
         ),
         bottom: AppPrimaryButton(
           label: l10n.continueLabel,
-          onPressed: state.canContinue ? _continue : null,
+          onPressed: state.canContinue
+              ? () => context.push(AppRoutes.registerDob)
+              : null,
         ),
       ),
     );
-  }
-
-  Future<void> _continue() async {
-    if (_leaving) return;
-    _leaving = true;
-    await context.push(AppRoutes.registerDob);
-    _leaving = false;
   }
 
   Widget _firstField(NameState state) => AppTextField(

@@ -1,12 +1,18 @@
+import 'dart:async';
+
 import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/pending_tap_guard.dart';
 import 'package:donuts/core/widgets/buttons/press_grow.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The filled stadium call-to-action, shared by every screen. It grows a
 /// little while held, and while [loading] it morphs into a circle holding a
 /// spinner and ignores taps.
+///
+/// When [onPressed] returns a [Future], the button also ignores taps until
+/// that future completes (see [PendingTapGuard]).
 class AppPrimaryButton extends StatefulWidget {
   const new({
     required this.label,
@@ -24,18 +30,21 @@ class AppPrimaryButton extends StatefulWidget {
   final Widget? child;
 
   /// `null` disables the button.
-  final VoidCallback? onPressed;
+  final FutureOr<void> Function()? onPressed;
   final bool loading;
 
   @override
   State<AppPrimaryButton> createState() => _AppPrimaryButtonState();
 }
 
-class _AppPrimaryButtonState extends State<AppPrimaryButton> {
+class _AppPrimaryButtonState extends State<AppPrimaryButton>
+    with PendingTapGuard {
   static const double _spinnerSize = 22;
   static const double _spinnerStroke = 2.5;
 
   bool get _enabled => widget.onPressed != null && !widget.loading;
+
+  void _tap() => runGuarded(widget.onPressed!);
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +53,9 @@ class _AppPrimaryButtonState extends State<AppPrimaryButton> {
       enabled: _enabled,
       label: widget.label,
       excludeSemantics: true,
-      onTap: _enabled ? widget.onPressed : null,
+      onTap: _enabled ? _tap : null,
       child: AppPressGrow(
-        onTap: _enabled ? widget.onPressed : null,
+        onTap: _enabled ? _tap : null,
         pressedScale: AppMotion.pressGrowWide,
         child: LayoutBuilder(
           builder: (context, constraints) =>

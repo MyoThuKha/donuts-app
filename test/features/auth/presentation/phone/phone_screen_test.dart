@@ -4,6 +4,7 @@ import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
+import 'package:donuts/features/auth/presentation/otp/otp_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -115,5 +116,20 @@ void main() {
 
     expect(find.text('This number is already registered.'), findsOneWidget);
     expect(find.text('Log in instead'), findsOneWidget);
+  });
+
+  testWidgets('a second tap after the code is sent opens one OTP step and '
+      'sends no second code', (tester) async {
+    await pumpPhone(tester, AppRoutes.logInPhone);
+    await tester.enterText(_field, '09254135592');
+    await tester.pump();
+
+    await tester.tap(_continue);
+    await tester.tap(_continue, warnIfMissed: false);
+    await tester.pumpAndSettle();
+
+    verify(() => mocks.requestOtp(any())).called(1);
+    expect(find.byType(OtpScreen, skipOffstage: false), findsOneWidget);
+    await unmountApp(tester);
   });
 }
