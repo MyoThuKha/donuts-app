@@ -9,7 +9,7 @@ import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner_frame.dart';
 import 'package:donuts/core/widgets/feedback/page_state_view.dart';
 import 'package:donuts/core/widgets/images/product_hero_tag.dart';
-import 'package:donuts/features/product/domain/product_rules.dart';
+import 'package:donuts/features/cart/domain/cart_rules.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_cubit.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_state.dart';
 import 'package:donuts/features/product/presentation/product_dimens.dart';
@@ -156,10 +156,10 @@ class _ProductBody extends StatelessWidget {
               ),
               QuantityStepperWidget(
                 quantity: state.quantity,
-                onDecrement: ready && state.quantity > ProductRules.minQuantity
+                onDecrement: ready && state.quantity > CartRules.minQuantity
                     ? cubit.decrement
                     : null,
-                onIncrement: ready && state.quantity < ProductRules.maxQuantity
+                onIncrement: ready && state.quantity < CartRules.maxQuantity
                     ? cubit.increment
                     : null,
               ),

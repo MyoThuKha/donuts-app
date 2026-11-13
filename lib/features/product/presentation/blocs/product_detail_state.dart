@@ -1,4 +1,4 @@
-import 'package:donuts/features/product/domain/product_rules.dart';
+import 'package:donuts/features/cart/domain/cart_rules.dart';
 import 'package:donuts/features/product/domain/vo/product_detail_vo.dart';
 import 'package:equatable/equatable.dart';
 
@@ -10,7 +10,7 @@ final class ProductDetailState extends Equatable {
   const new({
     this.status = ProductLoadStatus.loading,
     this.product,
-    this.quantity = ProductRules.minQuantity,
+    this.quantity = CartRules.minQuantity,
     this.addStatus = CartAddStatus.idle,
     this.addedQuantity = 0,
   });

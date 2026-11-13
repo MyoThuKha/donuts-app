@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:donuts/core/result/result.dart';
-import 'package:donuts/features/product/domain/params/add_to_cart_params.dart';
-import 'package:donuts/features/product/domain/product_rules.dart';
-import 'package:donuts/features/product/domain/usecases/add_to_cart_use_case.dart';
+import 'package:donuts/features/cart/domain/cart_rules.dart';
+import 'package:donuts/features/cart/domain/params/add_to_cart_params.dart';
+import 'package:donuts/features/cart/domain/usecases/add_to_cart_use_case.dart';
 import 'package:donuts/features/product/domain/usecases/watch_product_use_case.dart';
 import 'package:donuts/features/product/domain/vo/product_detail_vo.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_state.dart';
@@ -86,12 +86,12 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     );
   }
 
-  /// Clamps to [ProductRules]. A change after an add or a failed add
+  /// Clamps to [CartRules]. A change after an add or a failed add
   /// returns the add status to idle, so its snackbar shows only once.
   void _setQuantity(int quantity) {
     final clamped = quantity.clamp(
-      ProductRules.minQuantity,
-      ProductRules.maxQuantity,
+      CartRules.minQuantity,
+      CartRules.maxQuantity,
     );
     if (clamped == state.quantity) return;
     emit(

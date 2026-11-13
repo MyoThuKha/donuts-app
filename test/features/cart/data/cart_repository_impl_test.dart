@@ -1,8 +1,8 @@
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/result.dart';
-import 'package:donuts/features/product/data/repositories/cart_repository_impl.dart';
-import 'package:donuts/features/product/domain/product_rules.dart';
+import 'package:donuts/features/cart/data/repositories/cart_repository_impl.dart';
+import 'package:donuts/features/cart/domain/cart_rules.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -42,11 +42,11 @@ void main() {
 
   test('add rejects a quantity outside the product rules', () {
     expect(
-      () => repository.add('p_coconut', ProductRules.minQuantity - 1),
+      () => repository.add('p_coconut', CartRules.minQuantity - 1),
       throwsArgumentError,
     );
     expect(
-      () => repository.add('p_coconut', ProductRules.maxQuantity + 1),
+      () => repository.add('p_coconut', CartRules.maxQuantity + 1),
       throwsArgumentError,
     );
   });

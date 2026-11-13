@@ -1,4 +1,5 @@
 import 'package:donuts/app/di/auth_module.dart';
+import 'package:donuts/app/di/cart_module.dart';
 import 'package:donuts/app/di/core_module.dart';
 import 'package:donuts/app/di/home_module.dart';
 import 'package:donuts/app/di/product_module.dart';
@@ -42,6 +43,7 @@ Future<void> configureDependencies({
     probe: probe,
   );
   registerHomeModule(getIt);
+  registerCartModule(getIt);
   registerProductModule(getIt);
   registerRewardsModule(getIt);
   registerSettingsModule(getIt);
