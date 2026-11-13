@@ -1,5 +1,4 @@
 import 'package:donuts/core/database/app_database.dart';
-import 'package:donuts/core/database/daos/catalog_dao.dart';
 import 'package:donuts/features/home/domain/types/banner_style.dart';
 import 'package:donuts/features/home/domain/vo/banner_vo.dart';
 import 'package:donuts/features/home/domain/vo/home_product_vo.dart';
@@ -27,12 +26,11 @@ extension ProductsTableDataHomeMapper on ProductsTableData {
   );
 }
 
-extension SectionWithProductsMapper on SectionWithProducts {
+extension HomeSectionsTableDataMapper on HomeSectionsTableData {
   HomeSectionVO toVO() => HomeSectionVO(
-    id: section.id,
-    titleKey: section.titleKey,
-    kind: HomeSectionKind.fromTitleKey(section.titleKey),
-    products: [for (final p in products) p.toHomeProductVO()],
+    id: id,
+    titleKey: titleKey,
+    kind: HomeSectionKind.fromTitleKey(titleKey),
   );
 }
 

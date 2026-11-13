@@ -46,6 +46,19 @@ abstract final class AppSizes {
   static const double navBar = 80;
   static const double imageErrorIcon = 24;
 
+  /// The tinted circle behind a section's empty or error icon.
+  static const double stateBadge = 40;
+
+  /// The tinted circle and icon of a full-page empty or error state.
+  static const double pageStateBadge = 88;
+  static const double pageStateIcon = 40;
+
+  /// Keeps a full-page state's button from stretching edge to edge.
+  static const double pageStateButton = 220;
+
+  /// The shortest a compact button may be and still meet the tap target.
+  static const double compactButton = 44;
+
   /// The thin white outline around badges that sit on photos.
   static const double rim = 1.5;
 

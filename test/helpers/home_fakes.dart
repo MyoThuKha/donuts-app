@@ -1,8 +1,10 @@
 import 'package:donuts/features/home/domain/repositories/home_repository.dart';
 import 'package:donuts/features/home/domain/usecases/watch_banners_use_case.dart';
 import 'package:donuts/features/home/domain/usecases/watch_home_sections_use_case.dart';
+import 'package:donuts/features/home/domain/usecases/watch_section_products_use_case.dart';
 import 'package:donuts/features/home/domain/usecases/watch_shops_use_case.dart';
 import 'package:donuts/features/home/domain/vo/banner_vo.dart';
+import 'package:donuts/features/home/domain/vo/home_product_vo.dart';
 import 'package:donuts/features/home/domain/vo/home_section_vo.dart';
 import 'package:donuts/features/home/domain/vo/shop_vo.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
@@ -19,6 +21,10 @@ class FakeHomeRepository implements HomeRepository {
 
   @override
   Stream<List<HomeSectionVO>> watchSections() => Stream.value(testHomeSections);
+
+  @override
+  Stream<List<HomeProductVO>> watchSectionProducts(String sectionId) =>
+      Stream.value(testSectionProducts[sectionId] ?? const []);
 
   @override
   Stream<List<ShopVO>> watchShops() => Stream.value(testShops);
@@ -38,6 +44,9 @@ void registerHomeFakes(GetIt getIt) {
   if (!getIt.isRegistered<WatchHomeSectionsUseCase>()) {
     getIt.registerSingleton(WatchHomeSectionsUseCase(getIt()));
   }
+  if (!getIt.isRegistered<WatchSectionProductsUseCase>()) {
+    getIt.registerSingleton(WatchSectionProductsUseCase(getIt()));
+  }
   if (!getIt.isRegistered<WatchShopsUseCase>()) {
     getIt.registerSingleton(WatchShopsUseCase(getIt()));
   }
@@ -47,6 +56,7 @@ void registerHomeFakes(GetIt getIt) {
         member: getIt(),
         banners: getIt(),
         sections: getIt(),
+        sectionProducts: getIt(),
         shops: getIt(),
         clearRewardClaims: ClearRewardClaimsUseCase(FakeRewardsRepository()),
       ),

@@ -490,6 +490,12 @@ abstract class AppLocalizations {
   /// **'{points} points left to become {tier} Member'**
   String homePointsToNextTier(String points, String tier);
 
+  /// Home header when there is no member record
+  ///
+  /// In en, this message translates to:
+  /// **'Your membership details aren’t ready yet.'**
+  String get homeMemberEmpty;
+
   /// Home header chip when there is no next tier
   ///
   /// In en, this message translates to:
@@ -639,6 +645,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn’t add to your cart. Try again.'**
   String get productAddFailed;
+
+  /// Product detail when reading the product fails
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t load this product.'**
+  String get productLoadError;
+
+  /// Line under the Product detail load error
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong on our side. Give it another try.'**
+  String get productLoadErrorHint;
+
+  /// Line under the Product detail not-found title
+  ///
+  /// In en, this message translates to:
+  /// **'It may have sold out or left the menu.'**
+  String get productNotFoundHint;
 
   /// Rewards screen title
   ///

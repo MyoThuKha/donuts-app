@@ -202,6 +202,10 @@
       }
     }
   },
+  "homeMemberEmpty": "Your membership details aren’t ready yet.",
+  "@homeMemberEmpty": {
+    "description": "Home header when there is no member record"
+  },
   "homeTopTier": "You’re at our top tier",
   "@homeTopTier": {
     "description": "Home header chip when there is no next tier"
@@ -329,6 +333,18 @@
   "productAddFailed": "Couldn’t add to your cart. Try again.",
   "@productAddFailed": {
     "description": "Snackbar when adding to the cart fails"
+  },
+  "productLoadError": "We couldn’t load this product.",
+  "@productLoadError": {
+    "description": "Product detail when reading the product fails"
+  },
+  "productLoadErrorHint": "Something went wrong on our side. Give it another try.",
+  "@productLoadErrorHint": {
+    "description": "Line under the Product detail load error"
+  },
+  "productNotFoundHint": "It may have sold out or left the menu.",
+  "@productNotFoundHint": {
+    "description": "Line under the Product detail not-found title"
   },
   "rewardsTitle": "J' Donuts Rewards",
   "@rewardsTitle": {

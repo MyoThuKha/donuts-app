@@ -1,17 +1,20 @@
-import 'dart:async';
-
 import 'package:donuts/core/result/result.dart';
+import 'package:donuts/core/state/section_state.dart';
+import 'package:donuts/core/state/section_watcher.dart';
 import 'package:donuts/features/rewards/domain/usecases/claim_challenge_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_gifts_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
+import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// Follows the member summary, challenges and gifts, and which card list
-/// is showing. Earn claims a challenge's points for this run of the app.
-class RewardsCubit extends Cubit<RewardsState> {
+/// Follows the member summary, challenges and gifts, each into its own
+/// [SectionState], and which card list is showing. Earn claims a
+/// challenge's points for this run of the app.
+class RewardsCubit extends Cubit<RewardsState>
+    with SectionWatcher<RewardsPart, RewardsState> {
   new({
     required this._member,
     required this._challenges,
@@ -25,23 +28,28 @@ class RewardsCubit extends Cubit<RewardsState> {
   final WatchGiftsUseCase _gifts;
   final ClaimChallengeUseCase _claim;
   final ClearRewardClaimsUseCase _clearClaims;
-  final List<StreamSubscription<Object?>> _subscriptions = [];
 
-  /// Ready once the member summary arrives. Any stream error fails the
-  /// screen until [retry].
-  void start() {
-    _subscriptions.addAll([
-      _member().listen((m) => emit(state.withMember(m)), onError: _fail),
-      _challenges().listen(
-        (list) => emit(state.copyWith(challenges: list)),
-        onError: _fail,
-      ),
-      _gifts().listen(
-        (list) => emit(state.copyWith(gifts: list)),
-        onError: _fail,
-      ),
-    ]);
-  }
+  /// Subscribes to every part.
+  void start() => RewardsPart.values.forEach(retry);
+
+  /// Shows [part] as loading again and subscribes to it afresh.
+  void retry(RewardsPart part) => switch (part) {
+    RewardsPart.member => watchSection(
+      part,
+      _member().map(_memberState),
+      (section) => state.copyWith(member: section),
+    ),
+    RewardsPart.challenges => watchSection(
+      part,
+      _challenges().map(listSection),
+      (section) => state.copyWith(challenges: section),
+    ),
+    RewardsPart.gifts => watchSection(
+      part,
+      _gifts().map(listSection),
+      (section) => state.copyWith(gifts: section),
+    ),
+  };
 
   void selectTab(RewardsTab tab) => emit(state.copyWith(tab: tab));
 
@@ -56,29 +64,6 @@ class RewardsCubit extends Cubit<RewardsState> {
   /// Undoes every Earn, so the points and challenges read as stored.
   void resetClaims() => _clearClaims();
 
-  /// Drops the current streams and subscribes again from loading, keeping
-  /// the selected tab.
-  void retry() {
-    unawaited(_cancel());
-    emit(RewardsState(tab: state.tab));
-    start();
-  }
-
-  void _fail(Object error, StackTrace stackTrace) {
-    addError(error, stackTrace);
-    unawaited(_cancel());
-    emit(state.copyWith(status: RewardsStatus.failed));
-  }
-
-  Future<void> _cancel() async {
-    final current = [..._subscriptions];
-    _subscriptions.clear();
-    await Future.wait([for (final s in current) s.cancel()]);
-  }
-
-  @override
-  Future<void> close() async {
-    await _cancel();
-    await super.close();
-  }
+  static SectionState<MemberSummary> _memberState(MemberSummary? summary) =>
+      summary == null ? const SectionEmpty() : SectionReady(summary);
 }

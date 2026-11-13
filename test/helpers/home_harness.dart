@@ -8,8 +8,10 @@ import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/home/domain/usecases/watch_banners_use_case.dart';
 import 'package:donuts/features/home/domain/usecases/watch_home_sections_use_case.dart';
+import 'package:donuts/features/home/domain/usecases/watch_section_products_use_case.dart';
 import 'package:donuts/features/home/domain/usecases/watch_shops_use_case.dart';
 import 'package:donuts/features/home/domain/vo/banner_vo.dart';
+import 'package:donuts/features/home/domain/vo/home_product_vo.dart';
 import 'package:donuts/features/home/domain/vo/home_section_vo.dart';
 import 'package:donuts/features/home/domain/vo/shop_vo.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
@@ -36,6 +38,8 @@ class _MockBanners extends Mock implements WatchBannersUseCase;
 
 class _MockSections extends Mock implements WatchHomeSectionsUseCase;
 
+class _MockSectionProducts extends Mock implements WatchSectionProductsUseCase;
+
 class _MockShops extends Mock implements WatchShopsUseCase;
 
 /// The four Home streams, driven by hand. Each subscription is counted so
@@ -48,11 +52,35 @@ class HomeStreams {
   final StreamController<List<ShopVO>> shops = StreamController.broadcast();
   int sectionSubscriptions = 0;
 
+  /// What each row's products stream starts with when subscribed. A row
+  /// left out here stays loading until [row] emits.
+  final Map<String, List<HomeProductVO>> rowStart = {...testSectionProducts};
+
+  /// Subscriptions to each row's products, by row id.
+  final Map<String, int> rowSubscriptions = {};
+  final Map<String, StreamController<List<HomeProductVO>>> _rows = {};
+
+  /// Row [id]'s products, driven by hand after [rowStart].
+  StreamController<List<HomeProductVO>> row(String id) =>
+      _rows.putIfAbsent(id, StreamController.broadcast);
+
+  Stream<List<HomeProductVO>> _rowStream(String id) async* {
+    rowSubscriptions[id] = (rowSubscriptions[id] ?? 0) + 1;
+    final start = rowStart[id];
+    if (start != null) yield start;
+    yield* row(id).stream;
+  }
+
   HomeCubit cubit() {
     final memberUseCase = _MockMember();
     final bannersUseCase = _MockBanners();
     final sectionsUseCase = _MockSections();
     final shopsUseCase = _MockShops();
+    final productsUseCase = _MockSectionProducts();
+    when(() => productsUseCase(any())).thenAnswer(
+      (invocation) =>
+          _rowStream(invocation.positionalArguments.single as String),
+    );
     when(memberUseCase.call).thenAnswer((_) => member.stream);
     when(bannersUseCase.call).thenAnswer((_) => banners.stream);
     when(sectionsUseCase.call).thenAnswer((_) {
@@ -64,12 +92,14 @@ class HomeStreams {
       member: memberUseCase,
       banners: bannersUseCase,
       sections: sectionsUseCase,
+      sectionProducts: productsUseCase,
       shops: shopsUseCase,
       clearRewardClaims: ClearRewardClaimsUseCase(FakeRewardsRepository()),
     );
   }
 
-  /// Emits the seed-shaped fixtures on every stream.
+  /// Emits the seed-shaped fixtures on every stream. Each row's products
+  /// follow from [rowStart] once the rows arrive.
   void emitAll() {
     member.add(testMemberSummary);
     banners.add(testBanners);

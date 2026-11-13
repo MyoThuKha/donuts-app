@@ -19,12 +19,6 @@ typedef CatalogRows = ({
   List<GiftsTableCompanion> gifts,
 });
 
-/// One Home section and its products, in display order.
-typedef SectionWithProducts = ({
-  HomeSectionsTableData section,
-  List<ProductsTableData> products,
-});
-
 /// The public catalog: products, Home sections, banners, shops and the
 /// Rewards gifts.
 @DriftAccessor(
@@ -43,43 +37,6 @@ class CatalogDao extends DatabaseAccessor<AppDatabase> with _$CatalogDaoMixin {
   Stream<List<HomeSectionsTableData>> watchSections() => (select(
     homeSectionsTable,
   )..orderBy([(s) => OrderingTerm.asc(s.sortOrder)])).watch();
-
-  /// Every Home section with its products, from one query, so a catalog
-  /// write emits once with sections and products in step. Sections follow
-  /// `sortOrder` and products their link's `sortOrder`. A section with no
-  /// products is listed with an empty list.
-  Stream<List<SectionWithProducts>> watchHomeSections() {
-    final query =
-        select(homeSectionsTable).join([
-          leftOuterJoin(
-            sectionProductsTable,
-            sectionProductsTable.sectionId.equalsExp(homeSectionsTable.id),
-          ),
-          leftOuterJoin(
-            productsTable,
-            productsTable.id.equalsExp(sectionProductsTable.productId),
-          ),
-        ])..orderBy([
-          OrderingTerm.asc(homeSectionsTable.sortOrder),
-          OrderingTerm.asc(homeSectionsTable.id),
-          OrderingTerm.asc(sectionProductsTable.sortOrder),
-        ]);
-    return query.watch().map(_groupBySection);
-  }
-
-  List<SectionWithProducts> _groupBySection(List<TypedResult> rows) {
-    final sections = <String, SectionWithProducts>{};
-    for (final row in rows) {
-      final section = row.readTable(homeSectionsTable);
-      final entry = sections.putIfAbsent(
-        section.id,
-        () => (section: section, products: <ProductsTableData>[]),
-      );
-      final product = row.readTableOrNull(productsTable);
-      if (product != null) entry.products.add(product);
-    }
-    return sections.values.toList();
-  }
 
   Stream<List<ProductsTableData>> watchSectionProducts(String sectionId) {
     final query =

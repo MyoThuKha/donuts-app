@@ -242,6 +242,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get homeMemberEmpty => 'Your membership details aren’t ready yet.';
+
+  @override
   String get homeTopTier => 'You’re at our top tier';
 
   @override
@@ -344,6 +347,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productAddFailed => 'Couldn’t add to your cart. Try again.';
+
+  @override
+  String get productLoadError => 'We couldn’t load this product.';
+
+  @override
+  String get productLoadErrorHint =>
+      'Something went wrong on our side. Give it another try.';
+
+  @override
+  String get productNotFoundHint => 'It may have sold out or left the menu.';
 
   @override
   String get rewardsTitle => 'J\' Donuts Rewards';

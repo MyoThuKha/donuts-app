@@ -25,8 +25,8 @@ void main() {
   });
   tearDown(() => db.close());
 
-  test('watchSections maps the seed into seasonal, popular and order again '
-      'with their products', () async {
+  test('watchSections maps the seed into seasonal, popular and order '
+      'again', () async {
     final sections = await repository.watchSections().first;
 
     expect(sections.map((s) => s.kind), [
@@ -35,14 +35,20 @@ void main() {
       HomeSectionKind.orderAgain,
     ]);
     expect(sections.map((s) => s.id), ['seasonal', 'popular', 'order_again']);
-    expect(sections[1].products.map((p) => p.id), [
+  });
+
+  test("watchSectionProducts maps a row's products in order", () async {
+    final popular = await repository.watchSectionProducts('popular').first;
+    final seasonal = await repository.watchSectionProducts('seasonal').first;
+
+    expect(popular.map((p) => p.id), [
       'p_strawberry_chocolate',
       'p_dalgona',
       'p_americano',
       'p_coconut',
       'p_blueberry',
     ]);
-    final mistletoe = sections[0].products.first;
+    final mistletoe = seasonal.first;
     expect(mistletoe.name, 'Mistletoe Romance box');
     expect(mistletoe.discountPercent, 50);
     expect(mistletoe.imageAsset, isNull);
@@ -50,7 +56,7 @@ void main() {
       mistletoe.imageUrl,
       testImageBase.resolve('assets/home/romance.jpeg').toString(),
     );
-    expect(sections[1].products.first.discountPercent, isNull);
+    expect(popular.first.discountPercent, isNull);
   });
 
   test('watchBanners maps the seeded banners and their styles', () async {
@@ -103,6 +109,6 @@ void main() {
     expect(sections.last.id, 'mystery');
     expect(sections.last.kind, HomeSectionKind.other);
     expect(sections.last.titleKey, 'mystery');
-    expect(sections.last.products, isEmpty);
+    expect(await repository.watchSectionProducts('mystery').first, isEmpty);
   });
 }

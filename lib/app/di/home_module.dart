@@ -3,6 +3,7 @@ import 'package:donuts/features/home/data/repositories/home_repository_impl.dart
 import 'package:donuts/features/home/domain/repositories/home_repository.dart';
 import 'package:donuts/features/home/domain/usecases/watch_banners_use_case.dart';
 import 'package:donuts/features/home/domain/usecases/watch_home_sections_use_case.dart';
+import 'package:donuts/features/home/domain/usecases/watch_section_products_use_case.dart';
 import 'package:donuts/features/home/domain/usecases/watch_shops_use_case.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -16,12 +17,14 @@ void registerHomeModule(GetIt getIt) {
     )
     ..registerLazySingleton(() => WatchBannersUseCase(getIt()))
     ..registerLazySingleton(() => WatchHomeSectionsUseCase(getIt()))
+    ..registerLazySingleton(() => WatchSectionProductsUseCase(getIt()))
     ..registerLazySingleton(() => WatchShopsUseCase(getIt()))
     ..registerFactory(
       () => HomeCubit(
         member: getIt(),
         banners: getIt(),
         sections: getIt(),
+        sectionProducts: getIt(),
         shops: getIt(),
         clearRewardClaims: getIt(),
       ),

@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:donuts/core/state/section_state.dart';
 import 'package:donuts/features/rewards/domain/usecases/claim_challenge_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/clear_reward_claims_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_challenges_use_case.dart';
 import 'package:donuts/features/rewards/domain/usecases/watch_member_summary_use_case.dart';
+import 'package:donuts/features/rewards/domain/vo/challenge_vo.dart';
+import 'package:donuts/features/rewards/domain/vo/gift_vo.dart';
+import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_cubit.dart';
 import 'package:donuts/features/rewards/presentation/blocs/rewards_state.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,6 +18,11 @@ import '../../../../helpers/member_fakes.dart';
 import '../../../../helpers/rewards_fakes.dart';
 
 class _MockWatchMember extends Mock implements WatchMemberSummaryUseCase;
+
+List<ChallengeVO> _challenges(RewardsState state) => switch (state.challenges) {
+  SectionReady(:final data) => data,
+  _ => throw StateError('challenges not ready'),
+};
 
 void main() {
   late _MockWatchMember member;
@@ -44,7 +53,8 @@ void main() {
     final cubit = build();
     addTearDown(cubit.close);
 
-    expect(cubit.state.status, RewardsStatus.loading);
+    expect(cubit.state, const RewardsState());
+    expect(cubit.state.member, isA<SectionLoading<MemberSummary>>());
     expect(cubit.state.tab, RewardsTab.challenges);
   });
 
@@ -52,30 +62,58 @@ void main() {
     'becomes ready with the member, challenges and gifts',
     build: build,
     act: (cubit) => cubit.start(),
-    verify: (cubit) {
-      expect(cubit.state.status, RewardsStatus.ready);
-      expect(cubit.state.member, testMemberSummary);
-      expect(cubit.state.challenges, testChallenges);
-      expect(cubit.state.gifts, testGifts);
-    },
+    verify: (cubit) => expect(
+      cubit.state,
+      RewardsState(
+        member: SectionReady(testMemberSummary),
+        challenges: const SectionReady(testChallenges),
+        gifts: const SectionReady(testGifts),
+      ),
+    ),
   );
+
+  test('the lists stay loading until their own streams emit', () async {
+    final challengeStream = StreamController<List<ChallengeVO>>();
+    addTearDown(challengeStream.close);
+    when(challenges.call).thenAnswer((_) => challengeStream.stream);
+    final cubit = build()..start();
+    addTearDown(cubit.close);
+    await pumpEventQueue();
+
+    expect(cubit.state.member, SectionReady(testMemberSummary));
+    expect(cubit.state.challenges, isA<SectionLoading<List<ChallengeVO>>>());
+
+    challengeStream.add(const []);
+    await pumpEventQueue();
+
+    expect(cubit.state.challenges, isA<SectionEmpty<List<ChallengeVO>>>());
+  });
 
   blocTest<RewardsCubit, RewardsState>(
     'a null member is empty',
     setUp: () => when(member.call).thenAnswer((_) => Stream.value(null)),
     build: build,
     act: (cubit) => cubit.start(),
-    verify: (cubit) => expect(cubit.state.status, RewardsStatus.empty),
+    verify: (cubit) =>
+        expect(cubit.state.member, isA<SectionEmpty<MemberSummary>>()),
   );
 
   blocTest<RewardsCubit, RewardsState>(
-    'a stream error is failed',
+    'a challenges error fails only the challenges',
     setUp: () =>
         when(challenges.call)
             .thenAnswer((_) => Stream.error(StateError('database closed'))),
     build: build,
     act: (cubit) => cubit.start(),
-    verify: (cubit) => expect(cubit.state.status, RewardsStatus.failed),
+    errors: () => [isA<StateError>()],
+    verify: (cubit) => expect(
+      cubit.state,
+      RewardsState(
+        member: SectionReady(testMemberSummary),
+        challenges: const SectionFailed(),
+        gifts: const SectionReady(testGifts),
+      ),
+    ),
   );
 
   blocTest<RewardsCubit, RewardsState>(
@@ -99,7 +137,7 @@ void main() {
     await pumpEventQueue();
 
     bool claimed(String id) =>
-        cubit.state.challenges.firstWhere((c) => c.id == id).claimed;
+        _challenges(cubit.state).firstWhere((c) => c.id == id).claimed;
 
     await cubit.earn('c_coco_donuts');
     await pumpEventQueue();
@@ -125,7 +163,7 @@ void main() {
     await pumpEventQueue();
 
     expect(
-      cubit.state.challenges.firstWhere((c) => c.id == 'c_americano').claimed,
+      _challenges(cubit.state).firstWhere((c) => c.id == 'c_americano').claimed,
       isFalse,
     );
   });
@@ -144,26 +182,28 @@ void main() {
     act: (cubit) async {
       cubit.start();
       await pumpEventQueue();
-      expect(cubit.state.status, RewardsStatus.failed);
-      cubit.retry();
+      expect(cubit.state.member, isA<SectionFailed<MemberSummary>>());
+      cubit.retry(RewardsPart.member);
     },
+    errors: () => [isA<StateError>()],
     verify: (cubit) {
-      expect(cubit.state.status, RewardsStatus.ready);
-      expect(cubit.state.member, testMemberSummary);
+      expect(cubit.state.member, SectionReady(testMemberSummary));
       verify(member.call).called(2);
+      verify(challenges.call).called(1);
     },
   );
 
-  test('retry goes back to loading first', () async {
-    when(member.call).thenAnswer((_) => const Stream.empty());
-    final cubit = build()
-      ..start()
-      ..selectTab(RewardsTab.gifts);
+  test('retry shows its part loading first and keeps the tab', () async {
+    final cubit = build()..start();
     addTearDown(cubit.close);
+    await pumpEventQueue();
+    cubit.selectTab(RewardsTab.gifts);
+    when(gifts.call).thenAnswer((_) => const Stream.empty());
 
-    cubit.retry();
+    cubit.retry(RewardsPart.gifts);
 
-    expect(cubit.state.status, RewardsStatus.loading);
+    expect(cubit.state.gifts, isA<SectionLoading<List<GiftVO>>>());
+    expect(cubit.state.member, SectionReady(testMemberSummary));
     expect(cubit.state.tab, RewardsTab.gifts);
   });
 
