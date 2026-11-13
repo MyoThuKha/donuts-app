@@ -10,7 +10,7 @@ A working slice of the J'Donuts customer app in Flutter. It covers onboarding wi
 | Sample phone number | `09254135592`, typed after the fixed +95 |
 | Download | [Latest release](https://github.com/MyoThuKha/donuts-app/releases/latest): signed APK and zipped iOS Simulator app |
 | Flutter / Dart | 3.50.0 (stable) / 3.14.0 |
-| App version | 1.0.0+1 |
+| App version | 1.0.0+2 |
 | Languages | English, Burmese (pick one in Settings) |
 | Back end | None. Data is bundled JSON plus an optional mock API |
 
