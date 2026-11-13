@@ -1,8 +1,15 @@
 import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/features/cart/domain/params/add_to_cart_params.dart';
+import 'package:donuts/features/cart/domain/params/set_cart_quantity_params.dart';
 import 'package:donuts/features/cart/domain/repositories/cart_repository.dart';
 import 'package:donuts/features/cart/domain/usecases/add_to_cart_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/clear_cart_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/remove_from_cart_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/set_cart_quantity_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/watch_cart_count_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/watch_cart_use_case.dart';
+import 'package:donuts/features/cart/domain/vo/cart_vo.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -51,6 +58,56 @@ void main() {
         ),
         throwsArgumentError,
       );
+    });
+  });
+
+  group('the cart use cases forward to the repository', () {
+    late MockCartRepository cart;
+    final failure = DatabaseFailure(error: Exception('disk full'));
+
+    setUp(() => cart = MockCartRepository());
+
+    test('WatchCartUseCase streams the repository cart', () {
+      const empty = CartVO(items: []);
+      when(cart.watchCart).thenAnswer((_) => Stream.value(empty));
+
+      expect(WatchCartUseCase(cart)(), emits(empty));
+    });
+
+    test('WatchCartCountUseCase streams the repository count', () {
+      when(cart.watchCount).thenAnswer((_) => Stream.value(4));
+
+      expect(WatchCartCountUseCase(cart)(), emits(4));
+    });
+
+    test('SetCartQuantityUseCase sets the params quantity', () async {
+      when(() => cart.setQuantity(_coconutId, 5))
+          .thenAnswer((_) async => Failure(failure));
+
+      final result = await SetCartQuantityUseCase(cart)(
+        const SetCartQuantityParams(productId: _coconutId, quantity: 5),
+      );
+
+      expect(_failureOf(result), same(failure));
+      verify(() => cart.setQuantity(_coconutId, 5)).called(1);
+    });
+
+    test('RemoveFromCartUseCase removes the product', () async {
+      when(() => cart.remove(_coconutId))
+          .thenAnswer((_) async => const Success(null));
+
+      expect(
+        await RemoveFromCartUseCase(cart)(_coconutId),
+        isA<Success<void>>(),
+      );
+      verify(() => cart.remove(_coconutId)).called(1);
+    });
+
+    test('ClearCartUseCase clears the cart', () async {
+      when(cart.clear).thenAnswer((_) async => Failure(failure));
+
+      expect(_failureOf(await ClearCartUseCase(cart)()), same(failure));
+      verify(cart.clear).called(1);
     });
   });
 }
