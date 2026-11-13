@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:donuts/features/auth/domain/age.dart';
 import 'package:donuts/features/auth/domain/auth_rules.dart';
 import 'package:donuts/features/auth/domain/validators/validation_result.dart';
@@ -26,6 +28,21 @@ ValidationResult<DateTime> validateDateOfBirth({
     return const Invalid(ValidationError.tooYoung);
   }
   return Valid(date);
+}
+
+/// The earliest and latest dates of birth that [validateDateOfBirth]
+/// accepts on [today], for limiting a date picker.
+({DateTime earliest, DateTime latest}) dateOfBirthRange(DateTime today) => (
+  earliest: _yearsBefore(today, AuthRules.maximumAge),
+  latest: _yearsBefore(today, AuthRules.minimumAge),
+);
+
+/// The same month and day [years] before [today]. In a common year,
+/// 29 February becomes the 28th instead of rolling over to 1 March.
+DateTime _yearsBefore(DateTime today, int years) {
+  final year = today.year - years;
+  final lastDayOfMonth = DateTime(year, today.month + 1, 0).day;
+  return DateTime(year, today.month, min(today.day, lastDayOfMonth));
 }
 
 /// `DateTime` rolls 31 April over to 1 May, so a date is real only when it

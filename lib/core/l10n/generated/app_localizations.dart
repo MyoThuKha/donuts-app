@@ -466,6 +466,18 @@ abstract class AppLocalizations {
   /// **'Year'**
   String get yearHint;
 
+  /// Title of the sheet with the date of birth wheel
+  ///
+  /// In en, this message translates to:
+  /// **'Select your birthday'**
+  String get dobPickerTitle;
+
+  /// Button that confirms the value chosen in a picker sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
   /// No description provided for @letsExplore.
   ///
   /// In en, this message translates to:

@@ -176,6 +176,14 @@
   "monthHint": "Month",
   "dayHint": "Day",
   "yearHint": "Year",
+  "dobPickerTitle": "Select your birthday",
+  "@dobPickerTitle": {
+    "description": "Title of the sheet with the date of birth wheel"
+  },
+  "select": "Select",
+  "@select": {
+    "description": "Button that confirms the value chosen in a picker sheet"
+  },
   "letsExplore": "Let’s explore",
   "imageUnavailable": "Image unavailable",
   "@imageUnavailable": {
