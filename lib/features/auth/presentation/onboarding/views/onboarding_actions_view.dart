@@ -58,7 +58,8 @@ class _LogInRowState extends State<_LogInRow> with PendingTapGuard {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    // Wraps Log In under the question when large text leaves no room.
+    // Wraps, so Log In moves under the question when the line runs out of
+    // room, as Burmese does at large text on a 4.7-inch phone.
     return Wrap(
       alignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.center,

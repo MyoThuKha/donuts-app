@@ -84,3 +84,16 @@ flutter:
           weight: 700
         - asset: assets/fonts/nunito/Nunito-ExtraBold.ttf
           weight: 800
+    # Myanmar script, which the two fonts above don't cover.
+    - family: NotoSansMyanmar
+      fonts:
+        - asset: assets/fonts/noto_sans_myanmar/NotoSansMyanmar-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/noto_sans_myanmar/NotoSansMyanmar-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/noto_sans_myanmar/NotoSansMyanmar-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/noto_sans_myanmar/NotoSansMyanmar-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/noto_sans_myanmar/NotoSansMyanmar-ExtraBold.ttf
+          weight: 800

@@ -14,6 +14,16 @@ void main() {
     );
   });
 
+  test('Myanmar script falls back to the bundled Noto Sans Myanmar', () {
+    final theme = AppTheme.light();
+    final text = theme.extension<DonutsText>()!;
+
+    expect(theme.textTheme.bodyMedium?.fontFamilyFallback, ['NotoSansMyanmar']);
+    for (final style in [text.body, text.sectionTitle, text.label]) {
+      expect(style.fontFamilyFallback, ['NotoSansMyanmar']);
+    }
+  });
+
   test("light theme carries the J'Donuts colour tokens from the design", () {
     final colors = AppTheme.light().extension<DonutsColors>()!;
 

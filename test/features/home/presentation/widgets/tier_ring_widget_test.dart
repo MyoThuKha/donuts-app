@@ -1,4 +1,5 @@
 import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/motion/first_frame.dart';
 import 'package:donuts/features/home/presentation/painters/tier_ring_painter.dart';
 import 'package:donuts/features/home/presentation/widgets/tier_ring_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -56,6 +57,25 @@ void main() {
     await tester.pump(
       const Duration(milliseconds: 1) + AppMotion.showcase ~/ 2,
     );
+    expect(_drawn(tester), inExclusiveRange(0, 0.9));
+
+    await tester.pumpAndSettle();
+    expect(_drawn(tester), 0.9);
+  });
+
+  testWidgets('on a cold start the sweep starts once the first frame is '
+      'shown', (tester) async {
+    final hold = FirstFrame.debugHold();
+    addTearDown(FirstFrame.debugReset);
+    await _pumpRing(tester, 0.9);
+
+    await tester.pump(AppMotion.slow + AppMotion.showcase);
+    expect(_drawn(tester), 0);
+
+    hold.complete();
+    await tester.pump();
+    await tester.pump();
+    await tester.pump(AppMotion.slow + AppMotion.showcase ~/ 2);
     expect(_drawn(tester), inExclusiveRange(0, 0.9));
 
     await tester.pumpAndSettle();

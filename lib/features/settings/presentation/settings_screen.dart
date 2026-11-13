@@ -1,16 +1,19 @@
 import 'package:donuts/core/di/locator.dart';
+import 'package:donuts/core/format/date_format.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/l10n/language_cubit.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/sheets/sheet_extension.dart';
 import 'package:donuts/features/auth/domain/age.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
 import 'package:donuts/features/settings/presentation/blocs/settings_member_cubit.dart';
 import 'package:donuts/features/settings/presentation/items/settings_row_item.dart';
+import 'package:donuts/features/settings/presentation/views/language_sheet_view.dart';
 import 'package:donuts/features/settings/presentation/views/settings_header_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -22,8 +25,8 @@ Future<String> _platformVersion() async =>
     (await PackageInfo.fromPlatform()).version;
 
 /// The Settings tab: the member's header on their tier's backdrop, their
-/// date of birth and age, Log out and the app version. It runs edge to edge
-/// under the status bar.
+/// date of birth and age, the app language, Log out and the app version. It
+/// runs edge to edge under the status bar.
 class SettingsScreen extends StatelessWidget {
   const new({
     this.now = DateTime.now,
@@ -73,6 +76,7 @@ class _SettingsPage extends StatelessWidget {
             ),
           ] else
             SliverToBoxAdapter(child: SizedBox(height: insets.top)),
+          const SliverToBoxAdapter(child: _LanguageRow()),
           SliverToBoxAdapter(
             child: SettingsRowItem(
               icon: LucideIcons.logOut,
@@ -103,9 +107,10 @@ class _SettingsPage extends StatelessWidget {
       SettingsRowItem(
         icon: LucideIcons.cake,
         label: l10n.accountDateOfBirth,
-        value: DateFormat.yMMMMd(
+        value: formatLongDate(
+          user.dateOfBirth,
           Localizations.localeOf(context).toLanguageTag(),
-        ).format(user.dateOfBirth),
+        ),
       ),
       SettingsRowItem(
         icon: LucideIcons.calendarDays,
@@ -122,6 +127,26 @@ class _SettingsPage extends StatelessWidget {
       builder: (context) => const _LogOutDialog(),
     );
     if (confirmed ?? false) await session.logOut();
+  }
+}
+
+/// Shows the current language and opens the language sheet.
+class _LanguageRow extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final language = context.watch<LanguageCubit>().state;
+    return SettingsRowItem(
+      icon: LucideIcons.languages,
+      label: l10n.settingsLanguage,
+      value: language.label(l10n),
+      onTap: () => const LanguageSheetView().sheet<void>(
+        context,
+        title: l10n.settingsLanguage,
+      ),
+    );
   }
 }
 

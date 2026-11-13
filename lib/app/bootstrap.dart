@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:donuts/core/di/locator.dart';
+import 'package:donuts/core/l10n/language_cubit.dart';
 import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
 import 'package:donuts/core/sync/presentation/seed_cubit.dart';
@@ -11,7 +12,8 @@ import 'package:flutter/foundation.dart';
  Runs once before the first frame, after `configureDependencies`.
  1. Seeds the database on first launch. A failed seed stays in
     `SeedCubit`, so Home shows an error with Try again.
- 2. Restores the session, so the router's first redirect is right.
+ 2. Restores the session, so the router's first redirect is right, and
+    the language, so the first frame is already in it.
  3. Creates the sync cubit, so it hears the first online status, then
     starts connectivity without waiting for the network probe.
 */
@@ -19,6 +21,7 @@ Future<void> bootstrap() async {
   await getIt<SeedCubit>().seed();
 
   await getIt<SessionCubit>().restore();
+  await getIt<LanguageCubit>().restore();
   final sync = getIt<CatalogSyncCubit>();
   final connectivity = getIt<ConnectivityCubit>();
 

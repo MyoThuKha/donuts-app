@@ -1,8 +1,14 @@
+import 'dart:async';
+
 import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/motion/first_frame.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Fades and slides [child] in after `index × delay`, so a column of these
 /// enters one after another. Reduce Motion shows [child] at once.
+///
+/// On a cold start the count starts once [FirstFrame] is on screen, so a
+/// slow first frame can't eat into the entrance.
 class StaggeredEntrance extends StatefulWidget {
   const new({
     required this.index,
@@ -52,8 +58,16 @@ class _StaggeredEntranceState extends State<StaggeredEntrance>
       _controller.value = 1;
     } else {
       _controller.duration = total;
-      _controller.forward();
+      if (FirstFrame.isShown) {
+        _controller.forward();
+      } else {
+        unawaited(FirstFrame.shown.then((_) => _forward()));
+      }
     }
+  }
+
+  void _forward() {
+    if (mounted) _controller.forward();
   }
 
   @override

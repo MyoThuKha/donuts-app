@@ -1,5 +1,6 @@
 import 'package:donuts/core/format/number_format.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/badges/discount_badge.dart';
@@ -50,12 +51,17 @@ class ProductCardView extends StatelessWidget {
                 widthFactor: ProductDimens.imageWidthFactor,
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Hero(
-                    tag: heroTag,
-                    flightShuttleBuilder: productHeroShuttle,
-                    child: ProductHeroImage(
-                      url: product?.imageUrl,
-                      asset: product?.imageAsset,
+                  child: HeroMode(
+                    // Reduce Motion skips the flight; the page fades in.
+                    enabled: !context.motion.reduced,
+                    child: Hero(
+                      tag: heroTag,
+                      flightShuttleBuilder: productHeroShuttle,
+                      child: ProductHeroImage(
+                        url: product?.imageUrl,
+                        asset: product?.imageAsset,
+                        pictureRadius: ProductHeroImage.tileRadius(context),
+                      ),
                     ),
                   ),
                 ),

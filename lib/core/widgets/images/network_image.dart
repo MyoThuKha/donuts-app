@@ -56,10 +56,32 @@ class AppNetworkImage extends StatelessWidget {
   /// when it fails, such as an avatar's initials. The asset still wins.
   final Widget? fallback;
 
+  /// The provider this widget decodes for [url], or for [asset] without
+  /// one, at [cacheWidth]. Another widget that resolves it shares the
+  /// decoded image in the cache. Null when there is nothing to load.
+  static ImageProvider? provider({
+    String? url,
+    String? asset,
+    int? cacheWidth,
+  }) {
+    if (url != null) {
+      return ResizeImage.resizeIfNeeded(
+        cacheWidth,
+        null,
+        CachedNetworkImageProvider(url),
+      );
+    }
+    if (asset != null) {
+      return ResizeImage.resizeIfNeeded(cacheWidth, null, AssetImage(asset));
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final url = this.url;
     if (url == null) return _assetOr(_loading);
+    // The fade is decoration, so Reduce Motion skips it.
     final motion = context.motion;
     return CachedNetworkImage(
       imageUrl: url,
