@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:donuts/core/motion/app_motion.dart';
+import 'package:donuts/core/motion/first_frame.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/painters/tier_ring_painter.dart';
@@ -10,7 +13,8 @@ import 'package:material_ui/material_ui.dart';
 /// When it first shows, the ring waits [AppMotion.slow] for Home to finish
 /// coming in, like the Rewards ring, then sweeps from empty to [progress].
 /// When [progress] changes, it sweeps from the old value to the new one at
-/// once. Under Reduce Motion it shows the value without a sweep.
+/// once. Under Reduce Motion it shows the value without a sweep. On a cold
+/// start nothing sweeps until [FirstFrame] is on screen.
 class TierRingWidget extends StatefulWidget {
   const new({required this.progress, required this.child, super.key});
 
@@ -28,6 +32,7 @@ class _TierRingWidgetState extends State<TierRingWidget>
   CurvedAnimation? _curve;
   Animation<double> _sweep = const AlwaysStoppedAnimation(0);
   bool _started = false;
+  bool _awaitingFirstFrame = false;
 
   double get _target => widget.progress.clamp(0.0, 1.0);
 
@@ -72,7 +77,23 @@ class _TierRingWidgetState extends State<TierRingWidget>
     }
     _controller
       ..duration = duration
-      ..forward(from: 0);
+      ..value = 0;
+    _run();
+  }
+
+  void _run() {
+    if (FirstFrame.isShown) {
+      _controller.forward(from: 0);
+      return;
+    }
+    if (_awaitingFirstFrame) return;
+    _awaitingFirstFrame = true;
+    unawaited(
+      FirstFrame.shown.then((_) {
+        _awaitingFirstFrame = false;
+        if (mounted) _run();
+      }),
+    );
   }
 
   @override
