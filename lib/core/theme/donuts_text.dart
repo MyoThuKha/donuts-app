@@ -10,6 +10,7 @@ class DonutsText extends ThemeExtension<DonutsText> {
     required this.headline,
     required this.sectionTitle,
     required this.tabActive,
+    required this.cardTitle,
     required this.body,
     required this.bodySmall,
     required this.label,
@@ -26,6 +27,7 @@ class DonutsText extends ThemeExtension<DonutsText> {
     headline: rounded(_style(22, FontWeight.w800, c.ink, height: 1.2)),
     sectionTitle: rounded(_style(18, FontWeight.w700, c.ink)),
     tabActive: rounded(_style(18, FontWeight.w700, c.onPrimary)),
+    cardTitle: _style(16, FontWeight.w800, c.ink),
     body: _style(15, FontWeight.w400, c.inkMuted),
     bodySmall: _style(13, FontWeight.w500, c.inkMuted),
     label: _style(14, FontWeight.w700, c.ink),
@@ -56,6 +58,10 @@ class DonutsText extends ThemeExtension<DonutsText> {
   /// [sectionTitle] on a `primary` fill, such as the selected Rewards tab.
   /// Lerp from [sectionTitle] to animate a selection.
   final TextStyle tabActive;
+
+  /// The title on a content card, such as a Rewards challenge or gift, in
+  /// the plain face like the design's card titles.
+  final TextStyle cardTitle;
   final TextStyle body;
   final TextStyle bodySmall;
   final TextStyle label;
@@ -100,6 +106,7 @@ class DonutsText extends ThemeExtension<DonutsText> {
       headline: mix(headline, other.headline),
       sectionTitle: mix(sectionTitle, other.sectionTitle),
       tabActive: mix(tabActive, other.tabActive),
+      cardTitle: mix(cardTitle, other.cardTitle),
       body: mix(body, other.body),
       bodySmall: mix(bodySmall, other.bodySmall),
       label: mix(label, other.label),

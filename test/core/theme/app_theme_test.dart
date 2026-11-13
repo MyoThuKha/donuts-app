@@ -32,6 +32,13 @@ void main() {
     expect(text.button.letterSpacing, 1.2);
   });
 
+  test('cardTitle is 16/800, a step above body', () {
+    final text = AppTheme.light().extension<DonutsText>()!;
+
+    expect(text.cardTitle.fontSize, 16);
+    expect(text.cardTitle.fontWeight, FontWeight.w800);
+  });
+
   test('tabActive and pointsLabel only recolour sectionTitle and label', () {
     final text = AppTheme.light().extension<DonutsText>()!;
     const colors = DonutsColors.light;
@@ -91,7 +98,12 @@ void main() {
       ]) {
         expect(heading.fontFamily, DonutsText.roundedFamily);
       }
-      for (final plain in [text.body, text.label, text.caption]) {
+      for (final plain in [
+        text.body,
+        text.label,
+        text.caption,
+        text.cardTitle,
+      ]) {
         expect(plain.fontFamily, DonutsText.fontFamily);
       }
     },
