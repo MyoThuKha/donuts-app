@@ -15,6 +15,7 @@ import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
 import 'package:donuts/features/home/presentation/blocs/home_state.dart';
 import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/widgets/notification_bell_widget.dart';
+import 'package:donuts/features/home/presentation/widgets/tier_ring_widget.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
@@ -124,10 +125,14 @@ class _Avatar extends StatelessWidget {
         ),
       );
     }
-    return ProfileAvatar(
-      imageUrl: summary?.avatarUrl,
-      size: HomeDimens.avatar,
-      initials: initials,
+    return TierRingWidget(
+      progress: summary?.tierProgress.progress ?? 0,
+      child: ProfileAvatar(
+        imageUrl: summary?.avatarUrl,
+        asset: summary?.avatarAsset,
+        size: HomeDimens.avatar,
+        initials: initials,
+      ),
     );
   }
 }

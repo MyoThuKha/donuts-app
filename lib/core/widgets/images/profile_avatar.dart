@@ -5,17 +5,21 @@ import 'package:material_ui/material_ui.dart';
 /// The member's photo in a circle with a white rim, [size] across. Home's
 /// header and the Settings header both use it.
 ///
-/// While the photo loads, and when there is none or it fails, it shows
-/// [initials] on the pink accent.
+/// While the photo loads, and when there is none or it fails, it shows the
+/// bundled [asset], or [initials] on the pink accent without one.
 class ProfileAvatar extends StatelessWidget {
   const new({
     required this.imageUrl,
     required this.size,
+    this.asset,
     this.initials = '',
     super.key,
   });
 
   final String? imageUrl;
+
+  /// The bundled copy of the photo, so it shows offline before any download.
+  final String? asset;
   final double size;
   final String initials;
 
@@ -38,6 +42,7 @@ class ProfileAvatar extends StatelessWidget {
       child: ClipOval(
         child: AppNetworkImage(
           url: imageUrl,
+          asset: asset,
           cacheWidth: (size * MediaQuery.devicePixelRatioOf(context)).round(),
           fallback: _Initials(initials: initials, size: size * _letterShare),
         ),

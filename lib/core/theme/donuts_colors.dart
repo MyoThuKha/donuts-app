@@ -25,6 +25,8 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     required this.tierSilver,
     required this.tierGold,
     required this.tierPlatinum,
+    required this.tierRingStart,
+    required this.tierRingEnd,
     required this.danger,
   });
 
@@ -50,7 +52,9 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     tierSilver: v[18],
     tierGold: v[19],
     tierPlatinum: v[20],
-    danger: v[21],
+    tierRingStart: v[21],
+    tierRingEnd: v[22],
+    danger: v[23],
   );
 
   static const DonutsColors light = DonutsColors(
@@ -75,6 +79,8 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     tierSilver: Color(0xFFBFC3C7),
     tierGold: Color(0xFFE9D27A),
     tierPlatinum: Color(0xFFBFE3F2),
+    tierRingStart: Color(0xFFFBE2CB),
+    tierRingEnd: Color(0xFFE5924B),
     danger: Color(0xFFD9534F),
   );
 
@@ -107,6 +113,11 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
   final Color tierGold;
   final Color tierPlatinum;
 
+  /// The ring around Home's avatar runs from [tierRingStart] at 12 o'clock
+  /// to [tierRingEnd] at its tip.
+  final Color tierRingStart;
+  final Color tierRingEnd;
+
   /// Validation and error messages. Not in the client designs; chosen so
   /// errors don't read as accent-pink links.
   final Color danger;
@@ -133,6 +144,8 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     tierSilver,
     tierGold,
     tierPlatinum,
+    tierRingStart,
+    tierRingEnd,
     danger,
   ];
 

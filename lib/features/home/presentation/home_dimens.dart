@@ -4,6 +4,12 @@ import 'package:material_ui/material_ui.dart';
 /// Layout numbers only Home uses, measured from the design (±2 pt).
 abstract final class HomeDimens {
   static const double avatar = 52;
+
+  /// The next-tier ring drawn outside the avatar: its line width and the
+  /// gap between it and the photo.
+  static const double avatarRingStroke = 5;
+  static const double avatarRingGap = 2;
+
   static const double bellIcon = 18;
   static const double bellTagHeight = 32;
   static const double bellBadge = 18;
