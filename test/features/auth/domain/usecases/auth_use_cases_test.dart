@@ -163,6 +163,49 @@ void main() {
 
       expect(_failureOf(result), isA<UnknownFailure>());
     });
+
+    test('log out runs the cleanups before clearing the session', () async {
+      final calls = <String>[];
+      when(auth.logOut).thenAnswer((_) async {
+        calls.add('session');
+        return const Success(null);
+      });
+
+      final result = await LogOutUseCase(
+        auth,
+        cleanups: [
+          () async {
+            calls.add('cart');
+            return const Success(null);
+          },
+        ],
+      )();
+
+      expect(result, isA<Success<void>>());
+      expect(calls, ['cart', 'session']);
+    });
+
+    test(
+      'a failed cleanup returns its failure and keeps the session',
+      () async {
+        var secondRan = false;
+
+        final result = await LogOutUseCase(
+          auth,
+          cleanups: [
+            () async => const Failure(DatabaseFailure()),
+            () async {
+              secondRan = true;
+              return const Success(null);
+            },
+          ],
+        )();
+
+        expect(_failureOf(result), isA<DatabaseFailure>());
+        expect(secondRan, isFalse);
+        verifyNever(auth.logOut);
+      },
+    );
   });
 }
 

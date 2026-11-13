@@ -9,12 +9,15 @@ import 'package:donuts/core/widgets/images/profile_avatar.dart';
 import 'package:donuts/core/widgets/images/tier_backdrop.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
+import 'package:donuts/features/cart/domain/repositories/cart_repository.dart';
+import 'package:donuts/features/cart/presentation/widgets/cart_tag_widget.dart';
 import 'package:donuts/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/cart_fakes.dart';
 import '../../helpers/fake_language_store.dart';
 import '../../helpers/fakes.dart';
 import '../../helpers/member_fakes.dart';
@@ -49,6 +52,31 @@ void main() {
     expect(find.text('May 1, 1980'), findsOneWidget);
     expect(find.text('46 years'), findsOneWidget);
     expect(find.text('J’Donuts 1.0.0'), findsOneWidget);
+  });
+
+  testWidgets('the header shows the cart tag with the cart count', (
+    tester,
+  ) async {
+    (getIt<CartRepository>() as FakeCartRepository).seed({
+      'p_coconut': 2,
+      'p_berry': 1,
+    });
+    final session = testSessionCubit()..signedIn(testUser);
+    await pumpThemed(
+      tester,
+      BlocProvider.value(
+        value: session,
+        child: SettingsScreen(
+          now: () => DateTime(2026, 11, 12),
+          readVersion: () async => '1.0.0',
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.byType(CartTagWidget), findsOneWidget);
+    expect(find.bySemanticsLabel('Cart, 3 items'), findsOneWidget);
   });
 
   testWidgets('the header sits on the backdrop of the member tier, with '

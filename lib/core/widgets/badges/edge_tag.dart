@@ -1,3 +1,4 @@
+import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A tag that runs off the right edge of the screen: round on the left,
@@ -22,6 +23,14 @@ class EdgeTag extends StatelessWidget {
   final Color? rim;
 
   final EdgeInsetsGeometry padding;
+
+  /// Padding for an icon and a count, as the Home bell and the Settings
+  /// cart use it: the run past the count stays short, as the design draws
+  /// it.
+  static const EdgeInsets iconPadding = EdgeInsets.only(
+    left: AppSpacing.l,
+    right: AppSpacing.s,
+  );
 
   static const double _rimWidth = 1.5;
 

@@ -3,7 +3,6 @@ import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/badges/app_tag.dart';
 import 'package:donuts/core/widgets/badges/edge_tag.dart';
-import 'package:donuts/features/home/presentation/home_dimens.dart';
 import 'package:donuts/features/home/presentation/widgets/press_scale_widget.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -27,23 +26,20 @@ class NotificationBellWidget extends StatelessWidget {
       child: PressScaleWidget(
         child: EdgeTag(
           color: colors.highlight,
-          height: HomeDimens.bellTagHeight,
+          height: AppSizes.edgeTagHeight,
           rim: colors.surface,
-          padding: const EdgeInsets.only(
-            left: AppSpacing.m,
-            right: AppSpacing.l,
-          ),
+          padding: EdgeTag.iconPadding,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             spacing: AppSpacing.s,
             children: [
               Icon(
                 LucideIcons.bell,
-                size: HomeDimens.bellIcon,
+                size: AppSizes.edgeTagIcon,
                 color: colors.onPrimary,
               ),
               if (count != null && count > 0)
-                AppTag.count(count: count, diameter: HomeDimens.bellBadge),
+                AppTag.count(count: count, diameter: AppSizes.edgeTagBadge),
             ],
           ),
         ),

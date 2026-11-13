@@ -1,0 +1,35 @@
+import 'package:donuts/core/database/app_database.dart';
+import 'package:donuts/features/cart/data/repositories/cart_repository_impl.dart';
+import 'package:donuts/features/cart/domain/repositories/cart_repository.dart';
+import 'package:donuts/features/cart/domain/usecases/add_to_cart_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/clear_cart_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/remove_from_cart_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/set_cart_quantity_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/watch_cart_count_use_case.dart';
+import 'package:donuts/features/cart/domain/usecases/watch_cart_use_case.dart';
+import 'package:donuts/features/cart/presentation/blocs/cart_count_cubit.dart';
+import 'package:donuts/features/cart/presentation/blocs/cart_cubit.dart';
+import 'package:get_it/get_it.dart';
+
+/// The persistent cart.
+void registerCartModule(GetIt getIt) {
+  getIt
+    ..registerLazySingleton<CartRepository>(
+      () => CartRepositoryImpl(
+        getIt<AppDatabase>().cartDao,
+        now: getIt<DateTime Function()>(),
+      ),
+    )
+    ..registerLazySingleton(() => AddToCartUseCase(getIt()))
+    ..registerLazySingleton(() => WatchCartUseCase(getIt()))
+    ..registerLazySingleton(() => WatchCartCountUseCase(getIt()))
+    ..registerLazySingleton(() => SetCartQuantityUseCase(getIt()))
+    ..registerLazySingleton(() => RemoveFromCartUseCase(getIt()))
+    ..registerLazySingleton(() => ClearCartUseCase(getIt()))
+    // Factories: each cart screen and Settings page gets its own cubit.
+    ..registerFactory(
+      () =>
+          CartCubit(watchCart: getIt(), setQuantity: getIt(), remove: getIt()),
+    )
+    ..registerFactory(() => CartCountCubit(getIt()));
+}

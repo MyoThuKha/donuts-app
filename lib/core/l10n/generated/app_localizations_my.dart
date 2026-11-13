@@ -457,4 +457,43 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get rewardsRetry => 'ထပ်ကြိုးစားရန်';
+
+  @override
+  String get cartTitle => 'ခြင်း';
+
+  @override
+  String get cartEmptyTitle => 'ခြင်းထဲ ဘာမှ မရှိသေးပါ';
+
+  @override
+  String get cartEmptyMessage =>
+      'ပစ္စည်းစာမျက်နှာ တစ်ခုခုမှ မုန့်ကို ထည့်နိုင်ပါသည်။';
+
+  @override
+  String get cartErrorTitle => 'ခြင်းကို ဖွင့်မရပါ';
+
+  @override
+  String get cartErrorMessage =>
+      'ဖတ်ရာတွင် အမှားဖြစ်သွားပါသည်။ ခဏနေ ထပ်ကြိုးစားပါ။';
+
+  @override
+  String get cartRetry => 'ထပ်ကြိုးစားရန်';
+
+  @override
+  String get cartRemove => 'ဖယ်ရှားရန်';
+
+  @override
+  String get cartChangeFailed => 'ခြင်းကို ပြင်မရပါ';
+
+  @override
+  String cartOpen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ခြင်း၊ ပစ္စည်း $count ခု',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cartTotal => 'စုစုပေါင်း';
 }

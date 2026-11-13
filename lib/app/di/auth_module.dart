@@ -16,7 +16,13 @@ import 'package:donuts/features/auth/presentation/phone/blocs/phone_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:get_it/get_it.dart';
 
-void registerAuthModule(GetIt getIt, {required Duration latency}) {
+/// [signOutCleanups] run before each log-out ends the session, such as
+/// emptying the cart.
+void registerAuthModule(
+  GetIt getIt, {
+  required Duration latency,
+  List<SignOutCleanup> signOutCleanups = const [],
+}) {
   getIt
     ..registerLazySingleton<AuthRepository>(
       () => FakeAuthRepository(
@@ -30,7 +36,9 @@ void registerAuthModule(GetIt getIt, {required Duration latency}) {
     ..registerLazySingleton(() => VerifyOtpUseCase(getIt()))
     ..registerLazySingleton(() => RegisterUseCase(getIt()))
     ..registerLazySingleton(() => RestoreSessionUseCase(getIt()))
-    ..registerLazySingleton(() => LogOutUseCase(getIt()))
+    ..registerLazySingleton(
+      () => LogOutUseCase(getIt(), cleanups: signOutCleanups),
+    )
     ..registerLazySingleton(
       () => SessionCubit(restoreSession: getIt(), logOut: getIt()),
       dispose: (cubit) => cubit.close(),

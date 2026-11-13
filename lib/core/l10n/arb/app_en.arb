@@ -493,5 +493,50 @@
   "rewardsRetry": "Try again",
   "@rewardsRetry": {
     "description": "Retry button on the Rewards error state"
+  },
+  "cartTitle": "Cart",
+  "@cartTitle": {
+    "description": "Cart screen title"
+  },
+  "cartEmptyTitle": "Your cart is empty",
+  "@cartEmptyTitle": {
+    "description": "Cart empty state title"
+  },
+  "cartEmptyMessage": "Add a donut from any product page.",
+  "@cartEmptyMessage": {
+    "description": "Cart empty state message"
+  },
+  "cartErrorTitle": "Couldn't load your cart",
+  "@cartErrorTitle": {
+    "description": "Cart error state title"
+  },
+  "cartErrorMessage": "Something went wrong reading it. Try again in a moment.",
+  "@cartErrorMessage": {
+    "description": "Cart error state message"
+  },
+  "cartRetry": "Try again",
+  "@cartRetry": {
+    "description": "Cart error state retry button"
+  },
+  "cartRemove": "Remove",
+  "@cartRemove": {
+    "description": "Screen reader label of the trash button that takes an item out of the cart"
+  },
+  "cartChangeFailed": "Couldn't update your cart",
+  "@cartChangeFailed": {
+    "description": "Snackbar when a cart change fails"
+  },
+  "cartOpen": "{count, plural, =0{Cart, empty} =1{Cart, 1 item} other{Cart, {count} items}}",
+  "@cartOpen": {
+    "description": "Screen reader label of the Settings cart tag",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cartTotal": "Total",
+  "@cartTotal": {
+    "description": "Label beside the cart's total at the bottom of the cart"
   }
 }

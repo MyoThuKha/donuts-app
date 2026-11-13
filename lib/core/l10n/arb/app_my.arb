@@ -123,5 +123,15 @@
   "rewardsProgress": "{progress}/{target}",
   "rewardsEmpty": "ပြသရန် မရှိသေးပါ။",
   "rewardsError": "သင့်ဆုလာဘ်များကို ဖွင့်၍ မရပါ။",
-  "rewardsRetry": "ထပ်ကြိုးစားရန်"
+  "rewardsRetry": "ထပ်ကြိုးစားရန်",
+  "cartTitle": "ခြင်း",
+  "cartEmptyTitle": "ခြင်းထဲ ဘာမှ မရှိသေးပါ",
+  "cartEmptyMessage": "ပစ္စည်းစာမျက်နှာ တစ်ခုခုမှ မုန့်ကို ထည့်နိုင်ပါသည်။",
+  "cartErrorTitle": "ခြင်းကို ဖွင့်မရပါ",
+  "cartErrorMessage": "ဖတ်ရာတွင် အမှားဖြစ်သွားပါသည်။ ခဏနေ ထပ်ကြိုးစားပါ။",
+  "cartRetry": "ထပ်ကြိုးစားရန်",
+  "cartRemove": "ဖယ်ရှားရန်",
+  "cartChangeFailed": "ခြင်းကို ပြင်မရပါ",
+  "cartOpen": "{count, plural, other{ခြင်း၊ ပစ္စည်း {count} ခု}}",
+  "cartTotal": "စုစုပေါင်း"
 }

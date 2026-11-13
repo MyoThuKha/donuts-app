@@ -1,4 +1,5 @@
 import 'package:donuts/app/di/auth_module.dart';
+import 'package:donuts/app/di/cart_module.dart';
 import 'package:donuts/app/di/core_module.dart';
 import 'package:donuts/app/di/home_module.dart';
 import 'package:donuts/app/di/product_module.dart';
@@ -14,6 +15,7 @@ import 'package:donuts/core/storage/language_store.dart';
 import 'package:donuts/core/storage/session_store.dart';
 import 'package:donuts/core/sync/data/seed_source.dart';
 import 'package:donuts/features/auth/data/repositories/fake_auth_repository.dart';
+import 'package:donuts/features/cart/domain/usecases/clear_cart_use_case.dart';
 
 /// Registers every module on [getIt]. Tests pass in-memory replacements.
 Future<void> configureDependencies({
@@ -33,7 +35,12 @@ Future<void> configureDependencies({
     sessionStore: sessionStore,
     languageStore: languageStore,
   );
-  registerAuthModule(getIt, latency: authLatency);
+  registerAuthModule(
+    getIt,
+    latency: authLatency,
+    // The cart has no user column, so it belongs to whoever is signed in.
+    signOutCleanups: [() => getIt<ClearCartUseCase>()()],
+  );
   registerSyncModule(
     getIt,
     config: apiConfig ?? ApiConfig.fromEnvironment(),
@@ -42,6 +49,7 @@ Future<void> configureDependencies({
     probe: probe,
   );
   registerHomeModule(getIt);
+  registerCartModule(getIt);
   registerProductModule(getIt);
   registerRewardsModule(getIt);
   registerSettingsModule(getIt);

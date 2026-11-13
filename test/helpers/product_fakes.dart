@@ -1,6 +1,6 @@
 import 'package:donuts/core/result/result.dart';
-import 'package:donuts/features/product/domain/params/add_to_cart_params.dart';
-import 'package:donuts/features/product/domain/usecases/add_to_cart_use_case.dart';
+import 'package:donuts/features/cart/domain/params/add_to_cart_params.dart';
+import 'package:donuts/features/cart/domain/usecases/add_to_cart_use_case.dart';
 import 'package:donuts/features/product/domain/usecases/watch_product_use_case.dart';
 import 'package:donuts/features/product/domain/vo/product_detail_vo.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_cubit.dart';

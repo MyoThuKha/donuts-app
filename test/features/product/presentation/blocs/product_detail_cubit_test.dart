@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/result.dart';
-import 'package:donuts/features/product/domain/params/add_to_cart_params.dart';
-import 'package:donuts/features/product/domain/product_rules.dart';
+import 'package:donuts/features/cart/domain/cart_rules.dart';
+import 'package:donuts/features/cart/domain/params/add_to_cart_params.dart';
 import 'package:donuts/features/product/domain/vo/product_detail_vo.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_cubit.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_state.dart';
@@ -46,7 +46,7 @@ void main() {
     final state = build().state;
 
     expect(state.status, ProductLoadStatus.loading);
-    expect(state.quantity, ProductRules.minQuantity);
+    expect(state.quantity, CartRules.minQuantity);
     expect(state.total, isNull);
   });
 
@@ -98,11 +98,11 @@ void main() {
   blocTest<ProductDetailCubit, ProductDetailState>(
     'increment stops at 99',
     build: build,
-    seed: () => _ready.copyWith(quantity: ProductRules.maxQuantity - 1),
+    seed: () => _ready.copyWith(quantity: CartRules.maxQuantity - 1),
     act: (cubit) => cubit
       ..increment()
       ..increment(),
-    expect: () => [_ready.copyWith(quantity: ProductRules.maxQuantity)],
+    expect: () => [_ready.copyWith(quantity: CartRules.maxQuantity)],
   );
 
   blocTest<ProductDetailCubit, ProductDetailState>(

@@ -10,14 +10,14 @@ import 'package:donuts/core/widgets/buttons/back_button.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/core/widgets/feedback/page_state_view.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
-import 'package:donuts/features/product/domain/usecases/add_to_cart_use_case.dart';
+import 'package:donuts/core/widgets/inputs/quantity_stepper.dart';
+import 'package:donuts/features/cart/domain/usecases/add_to_cart_use_case.dart';
 import 'package:donuts/features/product/domain/usecases/watch_product_use_case.dart';
 import 'package:donuts/features/product/domain/vo/product_detail_vo.dart';
 import 'package:donuts/features/product/presentation/product_detail_screen.dart';
 import 'package:donuts/features/product/presentation/views/add_to_cart_bar_view.dart';
 import 'package:donuts/features/product/presentation/views/product_card_view.dart';
 import 'package:donuts/features/product/presentation/views/product_description_view.dart';
-import 'package:donuts/features/product/presentation/widgets/quantity_stepper_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -92,7 +92,7 @@ void main() {
   });
 
   Finder inStepper(String text) => find.descendant(
-    of: find.byType(QuantityStepperWidget),
+    of: find.byType(QuantityStepper),
     matching: find.text(text),
   );
 

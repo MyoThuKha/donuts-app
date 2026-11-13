@@ -5,22 +5,22 @@ import 'package:material_ui/material_ui.dart';
 /// A number that rolls to its new value: the old one slides out and the new
 /// one slides in, upwards when the value grows and downwards when it
 /// shrinks. Under Reduce Motion it swaps instantly.
-class RollingNumberWidget extends StatefulWidget {
+class RollingNumber extends StatefulWidget {
   const new({required this.value, required this.style, super.key});
 
   final int value;
   final TextStyle style;
 
   @override
-  State<RollingNumberWidget> createState() => _RollingNumberWidgetState();
+  State<RollingNumber> createState() => _RollingNumberState();
 }
 
-class _RollingNumberWidgetState extends State<RollingNumberWidget> {
+class _RollingNumberState extends State<RollingNumber> {
   /// 1 when the value last grew, -1 when it shrank.
   double _direction = 1;
 
   @override
-  void didUpdateWidget(RollingNumberWidget oldWidget) {
+  void didUpdateWidget(RollingNumber oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.value != oldWidget.value) {
       _direction = widget.value > oldWidget.value ? 1 : -1;

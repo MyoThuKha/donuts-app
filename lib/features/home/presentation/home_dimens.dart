@@ -10,9 +10,6 @@ abstract final class HomeDimens {
   static const double avatarRingStroke = 5;
   static const double avatarRingGap = 2;
 
-  static const double bellIcon = 18;
-  static const double bellTagHeight = 32;
-  static const double bellBadge = 18;
   static const double chipHeight = 24;
 
   static const double bannerHeight = 180;
