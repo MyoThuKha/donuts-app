@@ -2,7 +2,7 @@
   "data": {
     "profile": {
       "totalPoints": 680300,
-      "avatarUrl": "https://raw.githubusercontent.com/MyoThuKha/donuts-app/main/assets/images/avatar_member.webp",
+      "avatarUrl": "assets/member/avatar.webp",
       "avatarAsset": "assets/images/avatar_member.webp",
       "notificationCount": 2,
       "rewardsCount": 3

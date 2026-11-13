@@ -75,13 +75,13 @@ extension ShopDtoDbMapper on ShopDto {
 }
 
 extension MemberSeedDtoDbMapper on MemberSeedDto {
-  /// Relative tier and challenge image URLs resolve against [imageBase],
-  /// like the catalog's.
+  /// Relative avatar, tier and challenge image URLs resolve against
+  /// [imageBase], like the catalog's.
   MemberRows toRows({required Uri imageBase}) => (
     profile: MemberProfileTableCompanion.insert(
       id: const Value(MemberDao.profileId),
       totalPoints: profile.totalPoints,
-      avatarUrl: profile.avatarUrl,
+      avatarUrl: imageBase.resolve(profile.avatarUrl).toString(),
       avatarAsset: Value(profile.avatarAsset),
       notificationCount: profile.notificationCount,
       rewardsCount: profile.rewardsCount,

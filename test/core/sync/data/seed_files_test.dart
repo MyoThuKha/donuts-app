@@ -64,13 +64,17 @@ void main() {
     }
   });
 
-  test('the member photo is bundled at the avatarAsset the seed names', () {
+  test('the member photo is bundled at the avatarAsset the seed names, '
+      'and the mock API serves the same file at its avatarUrl', () {
     final profile = readMemberFile(seedMemberPath).data!.profile;
     final asset = profile.avatarAsset;
 
     expect(asset, 'assets/images/avatar_member.webp');
-    expect(File(asset!).existsSync(), isTrue);
-    expect(profile.avatarUrl, endsWith('/$asset'));
+    expect(Uri.parse(profile.avatarUrl).hasScheme, isFalse);
+    expect(
+      File(asset!).readAsBytesSync(),
+      File('mock-api/${profile.avatarUrl}').readAsBytesSync(),
+    );
   });
 
   test('the remote catalog names the same bundled copy as the seed for '

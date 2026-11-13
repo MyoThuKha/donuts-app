@@ -184,4 +184,15 @@ void main() {
       expect((await db.syncStateDao.find(SyncKeys.member))?.version, 1);
     },
   );
+
+  test('the member photo URL resolves against the API base URL', () async {
+    final member = readMemberFile(seedMemberPath).data!;
+
+    await importer.importMember(member, version: 1);
+
+    expect(
+      (await db.memberDao.watchProfile().first)?.avatarUrl,
+      'http://localhost:8080/assets/member/avatar.webp',
+    );
+  });
 }
