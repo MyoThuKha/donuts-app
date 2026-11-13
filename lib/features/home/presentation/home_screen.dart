@@ -78,7 +78,7 @@ class _HomePage extends StatelessWidget {
 
   List<Widget> _slivers(BuildContext context) {
     // Home runs under the nav, so the bottom padding already covers the
-    // nav and the home indicator.
+    // nav's height.
     final navClearance = MediaQuery.paddingOf(context).bottom + AppSpacing.xxxl;
     return [
       const SliverToBoxAdapter(child: MemberPanelView()),
