@@ -21,5 +21,5 @@ Future<void> refreshCatalogFromPull(BuildContext context) async {
     await sync.refresh();
   }
   if (sync.state.status != CatalogSyncStatus.failed) return;
-  messenger.showMessage(failedMessage);
+  messenger.showMessage(failedMessage, tone: AppSnackBarTone.error);
 }

@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
+import 'package:donuts/core/theme/app_shadows.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
@@ -296,10 +297,6 @@ class _DonutPill extends StatelessWidget {
 
   static const String _donut = 'assets/images/reward_donut.png';
 
-  static const double _shadowAlpha = 0.12;
-  static const double _shadowBlur = 16;
-  static const Offset _shadowDrop = Offset(0, 4);
-
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -311,13 +308,7 @@ class _DonutPill extends StatelessWidget {
       decoration: ShapeDecoration(
         color: colors.surface,
         shape: const StadiumBorder(),
-        shadows: [
-          BoxShadow(
-            color: colors.ink.withValues(alpha: _shadowAlpha),
-            blurRadius: _shadowBlur,
-            offset: _shadowDrop,
-          ),
-        ],
+        shadows: AppShadows.floating(colors),
       ),
       child: SizedBox(
         height: AppSizes.refreshIndicator,
