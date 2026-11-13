@@ -1,3 +1,4 @@
+import 'package:donuts/core/motion/app_motion.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Positions [child] horizontally and animates it with a stretch: the edge
@@ -14,12 +15,6 @@ class StretchyPositionWidget extends ImplicitlyAnimatedWidget {
     super.curve,
     super.key,
   });
-
-  /// Share of the run after which the leading edge has arrived.
-  static const double leadingEnd = 0.7;
-
-  /// Share of the run before which the trailing edge stays put.
-  static const double trailingStart = 0.3;
 
   final double left;
   final double width;
@@ -58,11 +53,11 @@ class _StretchyPositionState
     final movingRight = (leftTween.end ?? 0) >= (leftTween.begin ?? 0);
     final leading = Interval(
       0,
-      StretchyPositionWidget.leadingEnd,
+      AppMotion.stretchLeadingEnd,
       curve: widget.curve,
     );
     final trailing = Interval(
-      StretchyPositionWidget.trailingStart,
+      AppMotion.stretchTrailingStart,
       1,
       curve: widget.curve,
     );

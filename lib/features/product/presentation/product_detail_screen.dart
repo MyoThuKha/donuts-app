@@ -6,6 +6,7 @@ import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/buttons/back_button.dart';
 import 'package:donuts/core/widgets/buttons/primary_button.dart';
 import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
+import 'package:donuts/core/widgets/feedback/offline_banner_frame.dart';
 import 'package:donuts/core/widgets/feedback/page_state_view.dart';
 import 'package:donuts/core/widgets/images/product_hero_tag.dart';
 import 'package:donuts/features/product/domain/product_rules.dart';
@@ -61,40 +62,8 @@ class _ProductDetailPage extends StatelessWidget {
         bottomNavigationBar: const _AddToCartBar(),
         // Edge to edge: the page scrolls under the status bar, and the back
         // button pads itself below it.
-        body: BlocBuilder<ProductDetailCubit, ProductDetailState>(
-          buildWhen: (previous, current) => previous.status != current.status,
-          // Loading and ready share one body, so the Hero built while
-          // loading is the one the product fills in.
-          builder: (context, state) => CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.fromLTRB(
-                  AppSpacing.l,
-                  MediaQuery.paddingOf(context).top,
-                  AppSpacing.l,
-                  0,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: AppBackButton(onPressed: () => _back(context)),
-                  ),
-                ),
-              ),
-              ...switch (state.status) {
-                ProductLoadStatus.notFound => const [
-                  SliverFillRemaining(child: _NotFound()),
-                ],
-                // The retry button lays out with a LayoutBuilder, which
-                // can't report the intrinsic height hasScrollBody: false needs.
-                ProductLoadStatus.failed => const [
-                  SliverFillRemaining(child: _Failed()),
-                ],
-                ProductLoadStatus.loading ||
-                ProductLoadStatus.ready => [_ProductBody(heroTag: heroTag)],
-              },
-            ],
-          ),
+        body: OfflineBannerFrame(
+          child: _DetailBody(heroTag: heroTag, onBack: () => _back(context)),
         ),
       ),
     );
@@ -112,6 +81,52 @@ class _ProductDetailPage extends StatelessWidget {
     };
     if (message == null || tone == null) return;
     context.showMessage(message, tone: tone);
+  }
+}
+
+class _DetailBody extends StatelessWidget {
+  const new({required this.heroTag, required this.onBack});
+
+  final Object heroTag;
+  final VoidCallback onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProductDetailCubit, ProductDetailState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      // Loading and ready share one body, so the Hero built while loading
+      // is the one the product fills in.
+      builder: (context, state) => CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.l,
+              MediaQuery.paddingOf(context).top,
+              AppSpacing.l,
+              0,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: AppBackButton(onPressed: onBack),
+              ),
+            ),
+          ),
+          ...switch (state.status) {
+            ProductLoadStatus.notFound => const [
+              SliverFillRemaining(child: _NotFound()),
+            ],
+            // The retry button lays out with a LayoutBuilder, which can't
+            // report the intrinsic height hasScrollBody: false needs.
+            ProductLoadStatus.failed => const [
+              SliverFillRemaining(child: _Failed()),
+            ],
+            ProductLoadStatus.loading ||
+            ProductLoadStatus.ready => [_ProductBody(heroTag: heroTag)],
+          },
+        ],
+      ),
+    );
   }
 }
 

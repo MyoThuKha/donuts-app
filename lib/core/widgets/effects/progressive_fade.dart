@@ -1,3 +1,4 @@
+import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/effects/eased_gradient.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -22,14 +23,14 @@ class ProgressiveFade extends StatelessWidget {
 
   final Widget child;
 
-  static const Color _shown = Color(0xFFFFFFFF);
-  static const Color _hidden = Color(0x00FFFFFF);
-
   @override
   Widget build(BuildContext context) {
+    // dstIn keeps only the mask's alpha, so any opaque token works here.
+    final shown = context.colors.surface;
+    final hidden = shown.withValues(alpha: 0);
     return ShaderMask(
       blendMode: BlendMode.dstIn,
-      shaderCallback: easedVerticalGradient([(start, _shown), (end, _hidden)])
+      shaderCallback: easedVerticalGradient([(start, shown), (end, hidden)])
           .createShader,
       child: child,
     );

@@ -5,7 +5,6 @@ import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/features/rewards/domain/vo/member_summary.dart';
 import 'package:donuts/features/rewards/presentation/painters/points_ring_painter.dart';
 import 'package:donuts/features/rewards/presentation/rewards_dimens.dart';
-import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:donuts/features/rewards/presentation/widgets/count_up_text_widget.dart';
 import 'package:material_ui/material_ui.dart';
 

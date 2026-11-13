@@ -7,7 +7,6 @@ import 'package:donuts/features/rewards/domain/types/challenge_kind.dart';
 import 'package:donuts/features/rewards/domain/vo/challenge_vo.dart';
 import 'package:donuts/features/rewards/presentation/painters/coffee_arc_painter.dart';
 import 'package:donuts/features/rewards/presentation/rewards_dimens.dart';
-import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:donuts/features/rewards/presentation/widgets/donut_quarters_widget.dart';
 import 'package:donuts/features/rewards/presentation/widgets/earn_button_widget.dart';
 import 'package:donuts/features/rewards/presentation/widgets/reward_card_widget.dart';

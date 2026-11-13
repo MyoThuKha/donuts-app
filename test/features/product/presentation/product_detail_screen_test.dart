@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:donuts/core/di/locator.dart';
 import 'package:donuts/core/l10n/l10n.dart';
+import 'package:donuts/core/network/connectivity_cubit.dart';
 import 'package:donuts/core/result/app_failure.dart';
 import 'package:donuts/core/result/result.dart';
 import 'package:donuts/core/theme/app_theme.dart';
+import 'package:donuts/core/widgets/buttons/back_button.dart';
+import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/core/widgets/feedback/page_state_view.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/features/product/domain/usecases/add_to_cart_use_case.dart';
@@ -20,17 +23,20 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../helpers/fake_connectivity.dart';
 import '../../../helpers/product_fakes.dart';
 
 const _heroTag = 'product-image-seasonal-p_coconut';
 
 void main() {
   late MockAddToCartUseCase addToCart;
+  late ConnectivityCubit connectivity;
 
   setUpAll(registerProductFallbacks);
 
   setUp(() {
     addToCart = MockAddToCartUseCase();
+    connectivity = testConnectivity();
     when(() => addToCart(any()))
         .thenAnswer((_) async => const Success<void>(null));
     getIt
@@ -54,6 +60,7 @@ void main() {
     // and snackbars show on the root Scaffold.
     await tester.pumpWidget(
       MaterialApp(
+        builder: provideConnectivity(connectivity),
         localizationsDelegates: appLocalizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: AppTheme.light(),
@@ -68,6 +75,21 @@ void main() {
     );
     await tester.pumpAndSettle();
   }
+
+  testWidgets('the offline banner opens above the back button while '
+      'offline', (tester) async {
+    await pumpDetail(tester);
+
+    await connectivity.start();
+    await tester.pumpAndSettle();
+
+    final banner = tester.widget<OfflineBanner>(find.byType(OfflineBanner));
+    expect(banner.visible, isTrue);
+    expect(
+      tester.getRect(find.byType(OfflineBanner)).bottom,
+      lessThanOrEqualTo(tester.getRect(find.byType(AppBackButton)).top),
+    );
+  });
 
   Finder inStepper(String text) => find.descendant(
     of: find.byType(QuantityStepperWidget),
@@ -235,6 +257,7 @@ void main() {
     addTearDown(router.dispose);
     await tester.pumpWidget(
       MaterialApp.router(
+        builder: provideConnectivity(connectivity),
         localizationsDelegates: appLocalizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: AppTheme.light(),
@@ -273,6 +296,7 @@ void main() {
     addTearDown(router.dispose);
     await tester.pumpWidget(
       MaterialApp.router(
+        builder: provideConnectivity(connectivity),
         localizationsDelegates: appLocalizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: AppTheme.light(),

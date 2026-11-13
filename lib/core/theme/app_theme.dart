@@ -20,11 +20,18 @@ abstract final class AppTheme {
         onError: colors.onPrimary,
         surface: colors.surface,
         onSurface: colors.ink,
+        scrim: colors.scrim,
       ),
       fontFamily: DonutsText.fontFamily,
       fontFamilyFallback: DonutsText.fallback,
       scaffoldBackgroundColor: colors.canvas,
       pageTransitionsTheme: motionAwarePageTransitions,
+      // `AppSnackBarPill` draws the visible pill, so Material's own box
+      // stays clear and flat.
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       extensions: [colors, text],
     );
   }

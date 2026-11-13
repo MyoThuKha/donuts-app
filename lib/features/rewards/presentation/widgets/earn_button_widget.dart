@@ -2,7 +2,6 @@ import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/features/rewards/presentation/rewards_dimens.dart';
-import 'package:donuts/features/rewards/presentation/rewards_motion.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The stadium on a challenge or gift card. It shrinks on press and does
