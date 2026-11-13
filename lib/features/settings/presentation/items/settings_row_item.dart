@@ -49,19 +49,8 @@ class SettingsRowItem extends StatelessWidget {
               spacing: AppSpacing.l,
               children: [
                 _icon(context),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: context.text.sectionTitle.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                if (value != null)
-                  Text(
-                    value,
-                    style: context.text.body.copyWith(color: colors.inkMuted),
-                  ),
+                Expanded(child: Text(label, style: context.text.sectionTitle)),
+                if (value != null) Text(value, style: context.text.body),
                 if (onTap != null)
                   Icon(
                     LucideIcons.chevronRight,

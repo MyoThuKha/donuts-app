@@ -42,12 +42,7 @@ class ProductDescriptionView extends StatelessWidget {
             color: colors.disabled,
             child: const SizedBox(width: ProductDimens.dividerThickness),
           ),
-          Expanded(
-            child: Text(
-              description,
-              style: text.bodySmall.copyWith(color: colors.inkMuted),
-            ),
-          ),
+          Expanded(child: Text(description, style: text.bodySmall)),
         ],
       ),
     );

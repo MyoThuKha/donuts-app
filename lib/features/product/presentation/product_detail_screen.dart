@@ -193,7 +193,7 @@ class _NotFound extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.pageGutter),
         child: Text(
           context.l10n.productNotFound,
-          style: context.text.body.copyWith(color: context.colors.inkMuted),
+          style: context.text.body,
           textAlign: TextAlign.center,
         ),
       ),

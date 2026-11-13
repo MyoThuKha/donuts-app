@@ -202,10 +202,7 @@ class _NavItem extends StatelessWidget {
             child: Text(
               item.label,
               maxLines: 1,
-              style: context.text.label.copyWith(
-                color: color,
-                fontWeight: FontWeight.w700,
-              ),
+              style: context.text.label.copyWith(color: color),
             ),
           ),
         ),
