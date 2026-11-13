@@ -1,3 +1,4 @@
+import 'package:donuts/app/di/cart_module.dart';
 import 'package:donuts/app/di/product_module.dart';
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/features/product/presentation/blocs/product_detail_cubit.dart';
@@ -12,6 +13,7 @@ void main() {
     getIt
       ..registerSingleton(db)
       ..registerSingleton<DateTime Function()>(DateTime.now);
+    registerCartModule(getIt);
     registerProductModule(getIt);
 
     final first = getIt<ProductDetailCubit>(param1: 'p_coconut');

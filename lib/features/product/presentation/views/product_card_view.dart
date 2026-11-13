@@ -6,6 +6,7 @@ import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/badges/discount_badge.dart';
 import 'package:donuts/core/widgets/feedback/skeleton.dart';
 import 'package:donuts/core/widgets/images/product_hero_image.dart';
+import 'package:donuts/core/widgets/inputs/quantity_stepper.dart';
 import 'package:donuts/features/product/domain/vo/product_detail_vo.dart';
 import 'package:donuts/features/product/presentation/product_dimens.dart';
 import 'package:donuts/features/product/presentation/widgets/new_badge_widget.dart';
@@ -36,7 +37,7 @@ class ProductCardView extends StatelessWidget {
           AppSpacing.xl,
           AppSpacing.xl,
           AppSpacing.xl,
-          AppSpacing.xl + ProductDimens.stepperHeight / 2,
+          AppSpacing.xl + QuantityStepper.height / 2,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

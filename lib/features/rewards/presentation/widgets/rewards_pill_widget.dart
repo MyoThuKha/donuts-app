@@ -23,10 +23,11 @@ class RewardsPill extends StatelessWidget {
       child: EdgeTag(
         color: colors.highlight,
         height: RewardsDimens.pillHeight,
+        // A short run past the badge, as the design draws it.
         padding: const EdgeInsets.fromLTRB(
-          AppSpacing.l,
+          AppSpacing.xl,
           AppSpacing.xs,
-          AppSpacing.l,
+          AppSpacing.s,
           AppSpacing.xs,
         ),
         child: Row(

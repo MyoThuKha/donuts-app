@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:donuts/core/widgets/cards/art_card.dart';
+
 /// Sizes used only on the Rewards screen, measured from the design.
 abstract final class RewardsDimens {
   static const double ringDiameter = 216;
@@ -18,15 +20,15 @@ abstract final class RewardsDimens {
   static const double glowSpread = 2;
   static const double glowAlpha = 0.45;
 
-  static const double pillHeight = 36;
-  static const double badgeSize = 22;
+  static const double pillHeight = 42;
+  static const double badgeSize = 18;
 
   static const double tabHeight = 48;
 
   /// The white outline around each tab pill.
   static const double tabRim = 3;
 
-  static const double cardArt = 96;
+  static const double cardArt = ArtCard.artSize;
   static const double coffeeStroke = 8;
   static const double coffeeCupInset = 18;
 

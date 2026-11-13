@@ -1,30 +1,90 @@
+import 'dart:math' as math;
+
 import 'package:donuts/core/database/app_database.dart';
 import 'package:donuts/core/database/tables/cart_items_table.dart';
+import 'package:donuts/core/database/tables/products_table.dart';
 import 'package:drift/drift.dart';
 
 part 'cart_dao.g.dart';
 
+/// One cart row with the product it holds.
+typedef CartLineRow = ({CartItemsTableData item, ProductsTableData product});
+
 /// The persistent cart.
-@DriftAccessor(tables: [CartItemsTable])
+@DriftAccessor(tables: [CartItemsTable, ProductsTable])
 class CartDao extends DatabaseAccessor<AppDatabase> with _$CartDaoMixin {
   new(super.attachedDatabase);
 
   /// Puts [quantity] of [productId] in the cart, adding to any quantity
-  /// already there. One statement, so two quick adds never race.
-  Future<void> add(String productId, int quantity, {required DateTime at}) =>
-      into(cartItemsTable).insert(
-        CartItemsTableCompanion.insert(
-          productId: productId,
-          quantity: quantity,
-          updatedAt: at,
+  /// already there, but never past [cap] when one is given. One statement,
+  /// so two quick adds never race.
+  Future<void> add(
+    String productId,
+    int quantity, {
+    required DateTime at,
+    int? cap,
+  }) {
+    final summed = cartItemsTable.quantity + Variable(quantity);
+    return into(cartItemsTable).insert(
+      CartItemsTableCompanion.insert(
+        productId: productId,
+        quantity: cap == null ? quantity : math.min(quantity, cap),
+        updatedAt: at,
+      ),
+      onConflict: DoUpdate(
+        (old) => CartItemsTableCompanion.custom(
+          quantity: cap == null
+              ? summed
+              : FunctionCallExpression<int>('MIN', [summed, Variable(cap)]),
+          updatedAt: Variable(at),
         ),
-        onConflict: DoUpdate.withExcluded(
-          (old, excluded) => CartItemsTableCompanion.custom(
-            quantity: old.quantity + excluded.quantity,
-            updatedAt: excluded.updatedAt,
+      ),
+    );
+  }
+
+  /// Sets [productId]'s quantity to [quantity], putting it in the cart if
+  /// it isn't there.
+  Future<void> setQuantity(
+    String productId,
+    int quantity, {
+    required DateTime at,
+  }) => into(cartItemsTable).insertOnConflictUpdate(
+    CartItemsTableCompanion.insert(
+      productId: productId,
+      quantity: quantity,
+      updatedAt: at,
+    ),
+  );
+
+  /// Takes [productId] out of the cart.
+  Future<void> remove(String productId) => (delete(
+    cartItemsTable,
+  )..where((c) => c.productId.equals(productId))).go();
+
+  /// Empties the cart.
+  Future<void> clear() => delete(cartItemsTable).go();
+
+  /// Every cart row with its product, the most recently added first. A
+  /// quantity change keeps a row in place, so a tile doesn't move while
+  /// it's being stepped.
+  Stream<List<CartLineRow>> watchLines() {
+    final query = select(cartItemsTable).join([
+      innerJoin(
+        productsTable,
+        productsTable.id.equalsExp(cartItemsTable.productId),
+      ),
+      // An upsert keeps the rowid, so rowid order is the order of adding.
+    ])..orderBy([OrderingTerm.desc(cartItemsTable.rowId)]);
+    return query.watch().map(
+      (rows) => [
+        for (final row in rows)
+          (
+            item: row.readTable(cartItemsTable),
+            product: row.readTable(productsTable),
           ),
-        ),
-      );
+      ],
+    );
+  }
 
   /// How many items the cart holds, counting every product's quantity.
   Stream<int> watchTotalQuantity() {

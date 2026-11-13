@@ -841,6 +841,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get rewardsRetry;
+
+  /// Cart screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Cart'**
+  String get cartTitle;
+
+  /// Cart empty state title
+  ///
+  /// In en, this message translates to:
+  /// **'Your cart is empty'**
+  String get cartEmptyTitle;
+
+  /// Cart empty state message
+  ///
+  /// In en, this message translates to:
+  /// **'Add a donut from any product page.'**
+  String get cartEmptyMessage;
+
+  /// Cart error state title
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your cart'**
+  String get cartErrorTitle;
+
+  /// Cart error state message
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong reading it. Try again in a moment.'**
+  String get cartErrorMessage;
+
+  /// Cart error state retry button
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get cartRetry;
+
+  /// Screen reader label of the trash button that takes an item out of the cart
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get cartRemove;
+
+  /// Snackbar when a cart change fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update your cart'**
+  String get cartChangeFailed;
+
+  /// Screen reader label of the Settings cart tag
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Cart, empty} =1{Cart, 1 item} other{Cart, {count} items}}'**
+  String cartOpen(int count);
+
+  /// Label beside the cart's total at the bottom of the cart
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get cartTotal;
 }
 
 class _AppLocalizationsDelegate

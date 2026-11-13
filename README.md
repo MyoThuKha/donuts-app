@@ -10,7 +10,7 @@ A working slice of the J'Donuts customer app in Flutter. It covers onboarding wi
 | Sample phone number | `09254135592`, typed after the fixed +95 |
 | Download | [Latest release](https://github.com/MyoThuKha/donuts-app/releases/latest): signed APK and zipped iOS Simulator app |
 | Flutter / Dart | 3.50.0 (stable) / 3.14.0 |
-| App version | 1.0.0+2 |
+| App version | 1.0.0+3 |
 | Languages | English, Burmese (pick one in Settings) |
 | Back end | None. Data is bundled JSON plus an optional mock API |
 
@@ -39,7 +39,7 @@ Pick an iOS Simulator or Android emulator when asked, or pass `-d <device id>` (
 | Build the iOS Simulator app | `flutter build ios --simulator` |
 | Serve the mock API locally | `dart run tool/mock_server.dart --port 8080` |
 
-The end-to-end test needs a booted simulator, emulator or attached phone. It starts the whole app with an empty in-memory database, an in-memory session and no network, so every run registers a new user and Home renders from the bundled seed.
+The end-to-end tests need a booted simulator, emulator or attached phone. Each starts the whole app with an empty in-memory database, an in-memory session and no network, so every run registers a new user and Home renders from the bundled seed.
 
 ### Builds
 
@@ -66,7 +66,8 @@ On an Android phone over USB, run `adb reverse tcp:8080 tcp:8080` first. [docs/o
 2. **Log out.** Open the Settings tab, tap Log out and confirm.
 3. **Log in.** Tap Log in on Onboarding, enter the same number and `123456`. It goes straight to Home.
 4. **Browse.** Tap any product tile to open Product detail, then switch to the Reward tab.
-5. **Go offline.** Turn on airplane mode and repeat. Home, Product detail and Rewards still render from the local database, images included.
+5. **Cart.** Add a donut from Product detail, then open Settings and tap the cart tag at the top right. Plus and minus change a quantity, and minus at 1 is a trash button that deletes the item. The total at the bottom follows. Log out empties the cart.
+6. **Go offline.** Turn on airplane mode and repeat. Home, Product detail and Rewards still render from the local database, images included.
 
 The session survives a relaunch. Explore and Wallet in the bottom nav are placeholder tabs.
 
@@ -94,7 +95,7 @@ lib/
 ├── main.dart            # configureDependencies(), bootstrap(), runApp
 ├── app/                 # wires the features together
 │   ├── di/              # one get_it module per feature, plus core and sync
-│   ├── router/          # go_router: auth guard, sign-up and log-in steps, /product/:id
+│   ├── router/          # go_router: auth guard, sign-up and log-in steps, /product/:id, /cart
 │   └── shell/           # bottom nav over a StatefulShellRoute
 ├── core/                # shared code; never imports a feature
 │   ├── database/        # Drift: tables, DAOs, schema v5 with step-by-step migrations
@@ -109,10 +110,11 @@ lib/
 │   └── widgets/         # buttons, inputs, images, sheets, skeletons, state views
 └── features/
     ├── auth/            # onboarding, phone, OTP, name, date of birth, welcome, session
+    ├── cart/            # the persistent cart, its screen and the Settings cart tag
     ├── home/            # member panel, banners, product rows, nearby shops
-    ├── product/         # product detail and add to cart
+    ├── product/         # product detail
     ├── rewards/         # tier ladder, points ring, challenges and gifts
-    └── settings/        # member header, language, log out
+    └── settings/        # member header with the cart tag, language, log out
 ```
 
 Inside a feature:
@@ -202,13 +204,13 @@ On Rewards:
 
 ## Tests and CI
 
-`flutter test` runs about 620 tests. The folders under `test/` mirror `lib/`.
+`flutter test` runs about 690 tests. The folders under `test/` mirror `lib/`.
 
 | Kind | Covers |
 |---|---|
 | Unit | Every validator rule, every use case, the repositories, the cubits, the sync and import logic, and the Drift migrations from each schema version |
 | Widget | Every screen's loading, empty, error and ready states, sign-up and log-in validation, double taps, Reduce Motion, and every screen at 1.3x text on a 4.7-inch phone |
-| Integration | `integration_test/register_to_product_detail_test.dart`: register, reach Home, open a product. Runs on a device |
+| Integration | `integration_test/register_to_product_detail_test.dart`: register, reach Home, open a product. `integration_test/register_to_cart_test.dart`: add to the cart, step and delete, then log out and back in to an empty cart. Both run on a device |
 
 | Workflow | Runs on | Does |
 |---|---|---|
@@ -224,7 +226,7 @@ Not built:
 - There is no back end. Sign-in is the fake repository, and the catalog comes from static JSON.
 - Google, Apple, Facebook, Terms of Use and Privacy Policy open a placeholder sheet. Explore and Wallet are placeholder tabs.
 - Redeem on a gift says it's coming soon, as do See all, Explore now and Order online on Home.
-- Add to cart stores the item in the local database, but there is no cart screen or cart badge.
+- The cart has no checkout. Its count shows only on the Settings tag.
 
 Different from the brief:
 
@@ -237,7 +239,8 @@ Limits:
 - The member record is seeded only. A refresh updates the public catalog, not the member's points.
 - One product exists only on the server (`p_toasted_coconut`), so it has no bundled image and shows a plain box until its photo has downloaded once.
 - Android release builds block plain HTTP, so they can't reach the local mock server and use the GitHub-hosted mock API instead.
-- The integration test needs a device, so CI doesn't run it.
+- The cart table has no user column, so log out empties it rather than keeping one cart per account.
+- The integration tests need a device, so CI doesn't run them.
 - No profile-mode frame timings are recorded in this repository.
 
 ## Time spent

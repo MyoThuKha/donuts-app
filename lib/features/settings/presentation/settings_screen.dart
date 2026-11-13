@@ -11,6 +11,7 @@ import 'package:donuts/features/auth/domain/age.dart';
 import 'package:donuts/features/auth/domain/vo/user_vo.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
+import 'package:donuts/features/cart/presentation/blocs/cart_count_cubit.dart';
 import 'package:donuts/features/settings/presentation/blocs/settings_member_cubit.dart';
 import 'package:donuts/features/settings/presentation/items/settings_row_item.dart';
 import 'package:donuts/features/settings/presentation/views/language_sheet_view.dart';
@@ -26,9 +27,9 @@ typedef VersionReader = Future<String> Function();
 Future<String> _platformVersion() async =>
     (await PackageInfo.fromPlatform()).version;
 
-/// The Settings tab: the member's header on their tier's backdrop, their
-/// date of birth and age, the app language, Log out and the app version. It
-/// runs edge to edge under the status bar.
+/// The Settings tab: the member's header on their tier's backdrop with the
+/// cart tag, their date of birth and age, the app language, Log out and the
+/// app version. It runs edge to edge under the status bar.
 class SettingsScreen extends StatelessWidget {
   const new({
     this.now = DateTime.now,
@@ -42,8 +43,11 @@ class SettingsScreen extends StatelessWidget {
   final VersionReader readVersion;
 
   @override
-  Widget build(BuildContext context) => BlocProvider(
-    create: (_) => getIt<SettingsMemberCubit>()..start(),
+  Widget build(BuildContext context) => MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (_) => getIt<SettingsMemberCubit>()..start()),
+      BlocProvider(create: (_) => getIt<CartCountCubit>()..start()),
+    ],
     child: _SettingsPage(now: now, readVersion: readVersion),
   );
 }

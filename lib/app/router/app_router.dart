@@ -15,6 +15,7 @@ import 'package:donuts/features/auth/presentation/phone/phone_screen.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_cubit.dart';
 import 'package:donuts/features/auth/presentation/session/blocs/session_state.dart';
 import 'package:donuts/features/auth/presentation/welcome/welcome_screen.dart';
+import 'package:donuts/features/cart/presentation/cart_screen.dart';
 import 'package:donuts/features/home/presentation/home_screen.dart';
 import 'package:donuts/features/product/presentation/product_detail_screen.dart';
 import 'package:donuts/features/rewards/presentation/rewards_screen.dart';
@@ -55,6 +56,10 @@ GoRouter buildAppRouter({
       ]),
       _shell(),
       GoRoute(path: AppRoutes.product, builder: _productDetail),
+      GoRoute(
+        path: AppRoutes.cart,
+        builder: (context, state) => const CartScreen(),
+      ),
     ],
   );
 }
