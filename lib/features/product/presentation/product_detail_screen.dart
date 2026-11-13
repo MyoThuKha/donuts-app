@@ -55,28 +55,35 @@ class _ProductDetailPage extends StatelessWidget {
         backgroundColor: context.colors.canvas,
         // In the bottom bar slot, so the add snackbar shows above it.
         bottomNavigationBar: const _AddToCartBar(),
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.l),
-                child: AppBackButton(onPressed: () => _back(context)),
-              ),
-              Expanded(
-                child: BlocBuilder<ProductDetailCubit, ProductDetailState>(
-                  buildWhen: (previous, current) =>
-                      previous.status != current.status,
-                  // Loading and ready share one body, so the Hero built while
-                  // loading is the one the product fills in.
-                  builder: (context, state) => switch (state.status) {
-                    ProductLoadStatus.notFound => const _NotFound(),
-                    ProductLoadStatus.loading ||
-                    ProductLoadStatus.ready => _ProductBody(heroTag: heroTag),
-                  },
+        // Edge to edge: the page scrolls under the status bar, and the back
+        // button pads itself below it.
+        body: BlocBuilder<ProductDetailCubit, ProductDetailState>(
+          buildWhen: (previous, current) => previous.status != current.status,
+          // Loading and ready share one body, so the Hero built while
+          // loading is the one the product fills in.
+          builder: (context, state) => CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(
+                  AppSpacing.l,
+                  MediaQuery.paddingOf(context).top,
+                  AppSpacing.l,
+                  0,
+                ),
+                sliver: SliverToBoxAdapter(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: AppBackButton(onPressed: () => _back(context)),
+                  ),
                 ),
               ),
+              ...switch (state.status) {
+                ProductLoadStatus.notFound => const [
+                  SliverFillRemaining(hasScrollBody: false, child: _NotFound()),
+                ],
+                ProductLoadStatus.loading ||
+                ProductLoadStatus.ready => [_ProductBody(heroTag: heroTag)],
+              },
             ],
           ),
         ),
@@ -112,45 +119,37 @@ class _ProductBody extends StatelessWidget {
     final state = context.watch<ProductDetailCubit>().state;
     final product = state.product;
     final ready = product != null;
-    return CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.all(AppSpacing.pageGutter),
-          sliver: SliverList.list(
+    return SliverPadding(
+      padding: const EdgeInsets.all(AppSpacing.pageGutter),
+      sliver: SliverList.list(
+        children: [
+          Stack(
+            alignment: Alignment.bottomCenter,
             children: [
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: ProductDimens.stepperHeight / 2,
-                    ),
-                    child: ProductCardView(product: product, heroTag: heroTag),
-                  ),
-                  QuantityStepperWidget(
-                    quantity: state.quantity,
-                    onDecrement:
-                        ready && state.quantity > ProductRules.minQuantity
-                        ? cubit.decrement
-                        : null,
-                    onIncrement:
-                        ready && state.quantity < ProductRules.maxQuantity
-                        ? cubit.increment
-                        : null,
-                  ),
-                ],
-              ),
-              if (product != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.xxxl),
-                  child: ProductDescriptionView(
-                    description: product.description,
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  bottom: ProductDimens.stepperHeight / 2,
                 ),
+                child: ProductCardView(product: product, heroTag: heroTag),
+              ),
+              QuantityStepperWidget(
+                quantity: state.quantity,
+                onDecrement: ready && state.quantity > ProductRules.minQuantity
+                    ? cubit.decrement
+                    : null,
+                onIncrement: ready && state.quantity < ProductRules.maxQuantity
+                    ? cubit.increment
+                    : null,
+              ),
             ],
           ),
-        ),
-      ],
+          if (product != null)
+            Padding(
+              padding: const EdgeInsets.only(top: AppSpacing.xxxl),
+              child: ProductDescriptionView(description: product.description),
+            ),
+        ],
+      ),
     );
   }
 }

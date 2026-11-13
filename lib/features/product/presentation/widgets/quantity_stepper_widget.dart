@@ -6,8 +6,8 @@ import 'package:donuts/features/product/presentation/widgets/rolling_number_widg
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// A white stadium with minus and plus buttons around a rolling quantity.
-/// A null callback disables its button.
+/// A grey stadium with a white rim, with minus and plus buttons around a
+/// rolling quantity. A null callback disables its button.
 class QuantityStepperWidget extends StatelessWidget {
   const new({
     required this.quantity,
@@ -23,10 +23,16 @@ class QuantityStepperWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final colors = context.colors;
     return DecoratedBox(
       decoration: ShapeDecoration(
-        color: context.colors.surface,
-        shape: const StadiumBorder(),
+        color: colors.canvas,
+        shape: StadiumBorder(
+          side: BorderSide(
+            color: colors.surface,
+            width: ProductDimens.stepperRim,
+          ),
+        ),
       ),
       child: SizedBox(
         height: ProductDimens.stepperHeight,
@@ -85,8 +91,10 @@ class _StepperButton extends StatelessWidget {
           dimension: ProductDimens.stepperTapTarget,
           child: Center(
             child: DecoratedBox(
+              // Blue at the limit too, as the design draws it; the
+              // semantics still report the button as disabled.
               decoration: ShapeDecoration(
-                color: onPressed == null ? colors.disabled : colors.primary,
+                color: colors.primary,
                 shape: const CircleBorder(),
               ),
               child: SizedBox.square(

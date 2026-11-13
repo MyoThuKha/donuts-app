@@ -6,9 +6,12 @@ abstract final class ProductDimens {
   static const double stepperHeight = 52;
 
   /// The visible circle of a stepper button. Its tap area is larger.
-  static const double stepperButton = 28;
+  static const double stepperButton = 34;
   static const double stepperTapTarget = 44;
-  static const double stepperIcon = 16;
+  static const double stepperIcon = 18;
+
+  /// The white outline around the stepper.
+  static const double stepperRim = 3;
 
   /// Wide enough for "99" in the title style, so the buttons don't shift.
   static const double stepperNumberWidth = 40;
