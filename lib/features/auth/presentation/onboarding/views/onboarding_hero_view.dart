@@ -2,6 +2,7 @@ import 'package:donuts/core/motion/app_motion.dart';
 import 'package:donuts/core/motion/stagger.dart';
 import 'package:donuts/core/theme/donuts_colors.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/effects/progressive_fade.dart';
 import 'package:donuts/core/widgets/images/donut_placeholder.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -66,12 +67,15 @@ class OnboardingHeroView extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final size = constraints.biggest;
-        return Stack(
-          children: [
-            for (final (i, circle) in onboardingCircles.indexed)
-              _positioned(context, i, circle, size),
-            const Positioned.fill(child: _BottomFade()),
-          ],
+        // The lowest circles fade into the background behind the title.
+        return ProgressiveFade(
+          start: _fadeStart,
+          child: Stack(
+            children: [
+              for (final (i, circle) in onboardingCircles.indexed)
+                _positioned(context, i, circle, size),
+            ],
+          ),
         );
       },
     );
@@ -107,6 +111,9 @@ class OnboardingHeroView extends StatelessWidget {
     return const Offset(0, _drift);
   }
 
+  /// Where the fade starts, as a share of the hero's height.
+  static const double _fadeStart = 0.55;
+
   static const double _edgeZone = 0.3;
   static const double _drift = 0.7;
   static const double _rise = 0.15;
@@ -129,32 +136,6 @@ class HeroCircleItem extends StatelessWidget {
         widthFactor: donutShare,
         heightFactor: donutShare,
         child: DonutPlaceholder(glaze: circle.glaze(context.colors)),
-      ),
-    );
-  }
-}
-
-/// Fades the lowest circles into the background behind the title, as the
-/// design does.
-class _BottomFade extends StatelessWidget {
-  const new();
-
-  /// Where the fade starts, as a share of the hero's height.
-  static const double fadeStart = 0.55;
-
-  @override
-  Widget build(BuildContext context) {
-    final background = context.colors.authBottom;
-    return IgnorePointer(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: const [fadeStart, 1],
-            colors: [background.withValues(alpha: 0), background],
-          ),
-        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/badges/app_tag.dart';
 import 'package:donuts/core/widgets/images/network_image.dart';
 import 'package:donuts/features/home/domain/types/banner_style.dart';
 import 'package:donuts/features/home/domain/vo/banner_vo.dart';
@@ -62,28 +63,13 @@ class BannerItem extends StatelessWidget {
       child: Column(
         spacing: AppSpacing.xs,
         children: [
-          DecoratedBox(
-            decoration: ShapeDecoration(
-              color: colors.highlight,
-              shape: const StadiumBorder(),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.s,
-                vertical: AppSpacing.xs / 2,
-              ),
-              child: Text(
-                banner.tag,
-                style: context.text.caption.copyWith(color: colors.onPrimary),
-              ),
-            ),
-          ),
+          AppTag.small(label: banner.tag),
           Text(
             banner.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: context.text.sectionTitle.copyWith(color: colors.onPrimary),
+            style: context.text.headline.copyWith(color: colors.onPrimary),
           ),
         ],
       ),

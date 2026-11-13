@@ -38,8 +38,6 @@ abstract final class RewardsMotion {
     AppMotion.pop,
   );
 
-  static const Duration tabSwitch = AppMotion.medium;
-
   /// A card's art fills over [AppMotion.slow] once the card has entered.
   static Duration artDelay(int index) =>
       AppMotion.stagger * index + AppMotion.slow;

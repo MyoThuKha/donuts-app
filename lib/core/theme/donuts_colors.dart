@@ -17,7 +17,9 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     required this.canvas,
     required this.authTop,
     required this.authBottom,
-    required this.memberHeader,
+    required this.authMiddle,
+    required this.authWash,
+    required this.settingsHeader,
     required this.disabled,
     required this.tierLine,
     required this.tierSilver,
@@ -40,30 +42,34 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     canvas: v[10],
     authTop: v[11],
     authBottom: v[12],
-    memberHeader: v[13],
-    disabled: v[14],
-    tierLine: v[15],
-    tierSilver: v[16],
-    tierGold: v[17],
-    tierPlatinum: v[18],
-    danger: v[19],
+    authMiddle: v[13],
+    authWash: v[14],
+    settingsHeader: v[15],
+    disabled: v[16],
+    tierLine: v[17],
+    tierSilver: v[18],
+    tierGold: v[19],
+    tierPlatinum: v[20],
+    danger: v[21],
   );
 
   static const DonutsColors light = DonutsColors(
-    primary: Color(0xFF88D4EC),
+    primary: Color(0xFF58CFEC),
     onPrimary: Color(0xFFFFFFFF),
-    accent: Color(0xFFE87BAC),
-    highlight: Color(0xFFF3984B),
-    bannerIndigo: Color(0xFF7070B0),
+    accent: Color(0xFFEE589E),
+    highlight: Color(0xFFFF7F1F),
+    bannerIndigo: Color(0xFF5E5AA7),
     success: Color(0xFF9FC566),
     ink: Color(0xFF1D2931),
     inkMuted: Color(0xFF343D44),
     inkSubtle: Color(0xFF89939D),
     surface: Color(0xFFFFFFFF),
-    canvas: Color(0xFFF1F3F3),
-    authTop: Color(0xFFFBF1F5),
-    authBottom: Color(0xFFFFFFFF),
-    memberHeader: Color(0xFFFCF0E4),
+    canvas: Color(0xFFEEF0F1),
+    authTop: Color(0xFFFCEAF1),
+    authBottom: Color(0xFFFEEEF4),
+    authMiddle: Color(0xFFFEF9FB),
+    authWash: Color(0xFFFCEFF3),
+    settingsHeader: Color(0xFFBFE6F2),
     disabled: Color(0xFFEBEBEB),
     tierLine: Color(0xFF878787),
     tierSilver: Color(0xFFBFC3C7),
@@ -83,9 +89,18 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
   final Color inkSubtle;
   final Color surface;
   final Color canvas;
+
+  /// The sign-up steps run pink at [authTop], near-white at [authMiddle]
+  /// and pink again at [authBottom], behind the footer.
   final Color authTop;
   final Color authBottom;
-  final Color memberHeader;
+  final Color authMiddle;
+
+  /// The flat pink behind Onboarding and Welcome.
+  final Color authWash;
+
+  /// The light blue behind the Settings header.
+  final Color settingsHeader;
   final Color disabled;
   final Color tierLine;
   final Color tierSilver;
@@ -110,7 +125,9 @@ class DonutsColors extends ThemeExtension<DonutsColors> {
     canvas,
     authTop,
     authBottom,
-    memberHeader,
+    authMiddle,
+    authWash,
+    settingsHeader,
     disabled,
     tierLine,
     tierSilver,

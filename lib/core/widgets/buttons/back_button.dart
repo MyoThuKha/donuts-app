@@ -2,11 +2,13 @@ import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/router/app_routes.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/buttons/press_grow.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The white rounded square with an arrow from the registration designs.
+/// It grows while held.
 class AppBackButton extends StatelessWidget {
   const new({this.onPressed, this.enabled = true, super.key});
 
@@ -27,7 +29,7 @@ class AppBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final onTap = enabled ? onPressed ?? () => _back(context) : null;
-    // excludeSemantics drops the InkResponse's own tap action, so the
+    // excludeSemantics drops the press widget's own tap action, so the
     // Semantics node carries it for screen readers.
     return Semantics(
       button: true,
@@ -35,9 +37,8 @@ class AppBackButton extends StatelessWidget {
       enabled: enabled,
       excludeSemantics: true,
       onTap: onTap,
-      child: InkResponse(
+      child: AppPressGrow(
         onTap: onTap,
-        radius: AppSizes.button / 2,
         child: SizedBox.square(
           dimension: AppSizes.button,
           child: Center(

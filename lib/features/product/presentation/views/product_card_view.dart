@@ -3,7 +3,7 @@ import 'package:donuts/core/l10n/l10n.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
 import 'package:donuts/core/widgets/badges/discount_badge.dart';
-import 'package:donuts/core/widgets/images/network_image.dart';
+import 'package:donuts/core/widgets/images/product_hero_image.dart';
 import 'package:donuts/features/product/domain/vo/product_detail_vo.dart';
 import 'package:donuts/features/product/presentation/product_dimens.dart';
 import 'package:donuts/features/product/presentation/widgets/new_badge_widget.dart';
@@ -78,11 +78,10 @@ class ProductCardView extends StatelessWidget {
                   aspectRatio: 1,
                   child: Hero(
                     tag: heroTag,
-                    flightShuttleBuilder: _flyTheSourceImage,
-                    child: AppNetworkImage(
+                    flightShuttleBuilder: productHeroShuttle,
+                    child: ProductHeroImage(
                       url: product?.imageUrl,
                       asset: product?.imageAsset,
-                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
@@ -94,13 +93,3 @@ class ProductCardView extends StatelessWidget {
     );
   }
 }
-
-/// Flies the image the flight started from. On a push that is the tile's
-/// image, which shows even if the product hasn't loaded yet.
-Widget _flyTheSourceImage(
-  BuildContext flightContext,
-  Animation<double> animation,
-  HeroFlightDirection direction,
-  BuildContext fromHeroContext,
-  BuildContext toHeroContext,
-) => (fromHeroContext.widget as Hero).child;

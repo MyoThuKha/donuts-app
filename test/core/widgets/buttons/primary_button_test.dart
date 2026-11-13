@@ -35,7 +35,7 @@ void main() {
     expect(taps, 0);
   });
 
-  testWidgets('pressing shrinks the button to the press scale', (tester) async {
+  testWidgets('holding the button grows it gently', (tester) async {
     await pumpThemed(
       tester,
       AppPrimaryButton(label: 'Continue', onPressed: () {}),
@@ -44,12 +44,15 @@ void main() {
     final gesture = await tester.startGesture(
       tester.getCenter(find.byType(AppPrimaryButton)),
     );
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    expect(
-      tester.widget<AnimatedScale>(find.byType(AnimatedScale)).scale,
-      AppMotion.pressScale,
+    final scale = tester.widget<ScaleTransition>(
+      find.descendant(
+        of: find.byType(AppPrimaryButton),
+        matching: find.byType(ScaleTransition),
+      ),
     );
+    expect(scale.scale.value, closeTo(AppMotion.pressGrowWide, 1e-6));
     await gesture.up();
   });
 

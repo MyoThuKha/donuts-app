@@ -97,7 +97,7 @@ abstract class AppLocalizations {
   /// App name shown by the OS task switcher.
   ///
   /// In en, this message translates to:
-  /// **'J\'Donuts'**
+  /// **'J’Donuts'**
   String get appTitle;
 
   /// Bottom navigation label for the Home tab.
@@ -139,7 +139,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to the world of J\'donuts'**
+  /// **'Welcome to the world of J’donuts'**
   String get welcomeTitle;
 
   /// No description provided for @onboardingTitle.
@@ -151,7 +151,7 @@ abstract class AppLocalizations {
   /// No description provided for @getStarted.
   ///
   /// In en, this message translates to:
-  /// **'Let\'s get started'**
+  /// **'Let’s get started'**
   String get getStarted;
 
   /// No description provided for @alreadyHaveAccount.
@@ -196,6 +196,12 @@ abstract class AppLocalizations {
   /// **'Coming soon'**
   String get comingSoonTitle;
 
+  /// Snackbar for buttons whose feature isn’t built yet
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is coming soon.'**
+  String get featureComingSoon;
+
   /// No description provided for @close.
   ///
   /// In en, this message translates to:
@@ -211,7 +217,7 @@ abstract class AppLocalizations {
   /// No description provided for @logOutConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Log out of J\'Donuts?'**
+  /// **'Log out of J’Donuts?'**
   String get logOutConfirm;
 
   /// No description provided for @cancel.
@@ -219,6 +225,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @accountDateOfBirth.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get accountDateOfBirth;
+
+  /// No description provided for @accountAge.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get accountAge;
+
+  /// No description provided for @accountAgeYears.
+  ///
+  /// In en, this message translates to:
+  /// **'{years, plural, =1{1 year} other{{years} years}}'**
+  String accountAgeYears(int years);
+
+  /// No description provided for @settingsEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get settingsEdit;
+
+  /// No description provided for @profileDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Detail'**
+  String get profileDetailTitle;
+
+  /// No description provided for @settingsVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'J’Donuts {version}'**
+  String settingsVersion(String version);
 
   /// Accessibility label for a social sign-in button.
   ///
@@ -229,7 +271,7 @@ abstract class AppLocalizations {
   /// Placeholder sheet body for social sign-in.
   ///
   /// In en, this message translates to:
-  /// **'{provider} sign-in isn\'t available in this demo'**
+  /// **'{provider} sign-in isn’t available in this demo'**
   String socialSignInUnavailable(String provider);
 
   /// Placeholder sheet body for legal documents.
@@ -271,7 +313,7 @@ abstract class AppLocalizations {
   /// No description provided for @notRegistered.
   ///
   /// In en, this message translates to:
-  /// **'This number isn\'t registered yet.'**
+  /// **'This number isn’t registered yet.'**
   String get notRegistered;
 
   /// No description provided for @registerInstead.
@@ -313,7 +355,7 @@ abstract class AppLocalizations {
   /// No description provided for @otpWrong.
   ///
   /// In en, this message translates to:
-  /// **'That code isn\'t right. Try again.'**
+  /// **'That code isn’t right. Try again.'**
   String get otpWrong;
 
   /// No description provided for @otpLocked.
@@ -325,7 +367,7 @@ abstract class AppLocalizations {
   /// No description provided for @didntReceive.
   ///
   /// In en, this message translates to:
-  /// **'Didn\'t receive the code?'**
+  /// **'Didn’t receive the code?'**
   String get didntReceive;
 
   /// No description provided for @resend.
@@ -349,19 +391,19 @@ abstract class AppLocalizations {
   /// No description provided for @dobInvalid.
   ///
   /// In en, this message translates to:
-  /// **'That date doesn\'t exist'**
+  /// **'That date doesn’t exist'**
   String get dobInvalid;
 
   /// No description provided for @dobFuture.
   ///
   /// In en, this message translates to:
-  /// **'Date of birth can\'t be in the future'**
+  /// **'Date of birth can’t be in the future'**
   String get dobFuture;
 
   /// No description provided for @otpSent.
   ///
   /// In en, this message translates to:
-  /// **'We\'ve sent a 6 digit OTP to {phone}'**
+  /// **'We’ve sent a 6 digit OTP to {phone}'**
   String otpSent(String phone);
 
   /// No description provided for @resendIn.
@@ -385,7 +427,7 @@ abstract class AppLocalizations {
   /// No description provided for @nameTitle.
   ///
   /// In en, this message translates to:
-  /// **'What\'s your name?'**
+  /// **'What’s your name?'**
   String get nameTitle;
 
   /// No description provided for @firstNameHint.
@@ -403,7 +445,7 @@ abstract class AppLocalizations {
   /// No description provided for @dobTitle.
   ///
   /// In en, this message translates to:
-  /// **'What\'s your date of birth?'**
+  /// **'What’s your date of birth?'**
   String get dobTitle;
 
   /// No description provided for @monthHint.
@@ -427,7 +469,7 @@ abstract class AppLocalizations {
   /// No description provided for @letsExplore.
   ///
   /// In en, this message translates to:
-  /// **'Let\'s explore'**
+  /// **'Let’s explore'**
   String get letsExplore;
 
   /// Screen reader label for an image that failed to load
@@ -451,7 +493,7 @@ abstract class AppLocalizations {
   /// Home header chip when there is no next tier
   ///
   /// In en, this message translates to:
-  /// **'You\'re at our top tier'**
+  /// **'You’re at our top tier'**
   String get homeTopTier;
 
   /// Screen reader label for the notification bell
@@ -490,10 +532,10 @@ abstract class AppLocalizations {
   /// **'{percent}% off'**
   String discountOff(int percent);
 
-  /// Title of the nearby shops band
+  /// Title of the nearby shops band. Non-breaking spaces keep "near you. 😋" on one line.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{There is 1 J\'Donut shop near you} other{There are {count} J\'Donut shops near you}}'**
+  /// **'{count, plural, =1{There is 1 J’Donut shop near you. 😋} other{There are {count} J’Donut shops near you. 😋}}'**
   String homeShopsTitle(int count);
 
   /// Button in the nearby shops band
@@ -511,13 +553,13 @@ abstract class AppLocalizations {
   /// Banner at the top of Home while offline
   ///
   /// In en, this message translates to:
-  /// **'You\'re offline. Showing saved data.'**
+  /// **'You’re offline. Showing saved data.'**
   String get homeOffline;
 
   /// Snackbar after a failed pull-to-refresh
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t refresh. Showing saved data.'**
+  /// **'Couldn’t refresh. Showing saved data.'**
   String get homeRefreshFailed;
 
   /// Shown in a Home section with no items
@@ -529,7 +571,7 @@ abstract class AppLocalizations {
   /// Shown in a Home section that failed to load
   ///
   /// In en, this message translates to:
-  /// **'We couldn\'t load this section.'**
+  /// **'We couldn’t load this section.'**
   String get homeSectionError;
 
   /// Retry button in a failed Home section
@@ -547,7 +589,7 @@ abstract class AppLocalizations {
   /// Label next to the product description
   ///
   /// In en, this message translates to:
-  /// **'What\'s this?'**
+  /// **'What’s this?'**
   String get productWhatsThis;
 
   /// Add to cart button
@@ -583,13 +625,13 @@ abstract class AppLocalizations {
   /// Product detail for a product the catalog no longer has
   ///
   /// In en, this message translates to:
-  /// **'This product isn\'t available any more.'**
+  /// **'This product isn’t available any more.'**
   String get productNotFound;
 
   /// Snackbar when adding to the cart fails
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t add to your cart. Try again.'**
+  /// **'Couldn’t add to your cart. Try again.'**
   String get productAddFailed;
 
   /// Rewards screen title
@@ -613,7 +655,7 @@ abstract class AppLocalizations {
   /// Caption under the current tier
   ///
   /// In en, this message translates to:
-  /// **'You\'re here now'**
+  /// **'You’re here now'**
   String get rewardsTierCurrent;
 
   /// Caption under the next tier; points is pre-formatted
@@ -625,7 +667,7 @@ abstract class AppLocalizations {
   /// Caption under tiers beyond the next one
   ///
   /// In en, this message translates to:
-  /// **'You\'ll be here soon'**
+  /// **'You’ll be here soon'**
   String get rewardsTierUpcoming;
 
   /// Caption under tiers below the current one
@@ -685,7 +727,7 @@ abstract class AppLocalizations {
   /// Rewards when its data fails to load
   ///
   /// In en, this message translates to:
-  /// **'We couldn\'t load your rewards.'**
+  /// **'We couldn’t load your rewards.'**
   String get rewardsError;
 
   /// Retry button on the Rewards error state

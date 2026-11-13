@@ -7,10 +7,10 @@ import 'package:donuts/core/sync/presentation/catalog_sync_cubit.dart';
 import 'package:donuts/core/sync/presentation/catalog_sync_state.dart';
 import 'package:donuts/core/theme/app_dimens.dart';
 import 'package:donuts/core/theme/theme_context.dart';
+import 'package:donuts/core/widgets/feedback/app_snack_bar.dart';
 import 'package:donuts/core/widgets/feedback/offline_banner.dart';
 import 'package:donuts/features/home/presentation/blocs/home_cubit.dart';
-import 'package:donuts/features/home/presentation/views/banner_carousel_view.dart';
-import 'package:donuts/features/home/presentation/views/home_header_view.dart';
+import 'package:donuts/features/home/presentation/views/member_panel_view.dart';
 import 'package:donuts/features/home/presentation/views/product_sections_view.dart';
 import 'package:donuts/features/home/presentation/views/shops_band_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,33 +38,36 @@ class _HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    return ColoredBox(
-      color: colors.canvas,
-      child: Column(
-        children: [
-          ColoredBox(
-            color: colors.memberHeader,
-            child: SizedBox(
-              width: double.infinity,
-              height: MediaQuery.paddingOf(context).top,
-            ),
-          ),
-          const _Offline(),
-          Expanded(
-            child: MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              child: RefreshIndicator(
-                color: colors.accent,
-                onRefresh: () => _refresh(context),
-                child: CustomScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: _slivers(context),
+    final inset = MediaQuery.paddingOf(context).top;
+
+    return BlocSelector<ConnectivityCubit, ConnectivityStatus, bool>(
+      selector: (status) => status == ConnectivityStatus.offline,
+      builder: (context, offline) => ColoredBox(
+        color: colors.canvas,
+        child: Column(
+          children: [
+            _Offline(visible: offline, topInset: inset),
+            Expanded(
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: offline,
+                child: RefreshIndicator(
+                  color: colors.accent,
+                  edgeOffset: offline ? 0 : inset,
+                  onRefresh: () => _refresh(context),
+                  child: CustomScrollView(
+                    // Clamping: a pull shows the spinner over the header
+                    // without dragging the page down and opening a gap.
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: ClampingScrollPhysics(),
+                    ),
+                    slivers: _slivers(context),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -84,24 +87,15 @@ class _HomePage extends StatelessWidget {
       await sync.refresh();
     }
     if (sync.state.status != CatalogSyncStatus.failed) return;
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(failedMessage)));
+    messenger.showMessage(failedMessage);
   }
 
   List<Widget> _slivers(BuildContext context) {
-    final navClearance =
-        AppSizes.navBar + MediaQuery.paddingOf(context).bottom + AppSpacing.xxl;
+    // Home runs under the nav, so the bottom padding already covers the
+    // nav and the home indicator.
+    final navClearance = MediaQuery.paddingOf(context).bottom + AppSpacing.xxxl;
     return [
-      SliverToBoxAdapter(
-        child: ColoredBox(
-          color: context.colors.memberHeader,
-          child: const StaggeredEntrance(index: 0, child: HomeHeaderView()),
-        ),
-      ),
-      const SliverToBoxAdapter(
-        child: StaggeredEntrance(index: 1, child: BannerCarouselView()),
-      ),
+      const SliverToBoxAdapter(child: MemberPanelView()),
       const ProductSectionsView(firstIndex: _firstSectionIndex),
       SliverPadding(
         padding: const EdgeInsets.only(top: AppSpacing.xxxl),
@@ -116,24 +110,29 @@ class _HomePage extends StatelessWidget {
   }
 }
 
-/// The offline banner, between the status bar and the page. It opens a
-/// strip of its own height, so it pushes Home down instead of covering the
-/// header, and folds away when the app is back online.
+/// The offline banner at the top of the screen. It opens a strip of its own
+/// height, plus the status bar's, so it pushes Home down instead of covering
+/// the header, and folds away when the app is back online.
 class _Offline extends StatelessWidget {
-  const new();
+  const new({required this.visible, required this.topInset});
+
+  final bool visible;
+  final double topInset;
 
   @override
-  Widget build(BuildContext context) =>
-      BlocSelector<ConnectivityCubit, ConnectivityStatus, bool>(
-        selector: (status) => status == ConnectivityStatus.offline,
-        builder: (context, offline) => ClipRect(
-          child: AnimatedAlign(
-            alignment: Alignment.topCenter,
-            heightFactor: offline ? 1 : 0,
-            duration: context.motion.of(AppMotion.medium),
-            curve: AppMotion.standard,
-            child: OfflineBanner(visible: offline),
-          ),
+  Widget build(BuildContext context) => ClipRect(
+    child: AnimatedAlign(
+      alignment: Alignment.topCenter,
+      heightFactor: visible ? 1 : 0,
+      duration: context.motion.of(AppMotion.medium),
+      curve: AppMotion.standard,
+      child: ColoredBox(
+        color: context.colors.inkMuted,
+        child: Padding(
+          padding: EdgeInsets.only(top: topInset),
+          child: OfflineBanner(visible: visible),
         ),
-      );
+      ),
+    ),
+  );
 }

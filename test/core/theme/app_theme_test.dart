@@ -7,20 +7,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('light theme uses the bundled Plus Jakarta Sans family', () {
+  test('light theme uses the bundled Schibsted Grotesk family', () {
     expect(
       AppTheme.light().textTheme.bodyMedium?.fontFamily,
-      'PlusJakartaSans',
+      'SchibstedGrotesk',
     );
   });
 
   test("light theme carries the J'Donuts colour tokens from the design", () {
     final colors = AppTheme.light().extension<DonutsColors>()!;
 
-    expect(colors.primary, const Color(0xFF88D4EC));
-    expect(colors.accent, const Color(0xFFE87BAC));
-    expect(colors.highlight, const Color(0xFFF3984B));
-    expect(colors.canvas, const Color(0xFFF1F3F3));
+    expect(colors.primary, const Color(0xFF58CFEC));
+    expect(colors.accent, const Color(0xFFEE589E));
+    expect(colors.highlight, const Color(0xFFFF7F1F));
+    expect(colors.canvas, const Color(0xFFEEF0F1));
     expect(colors.ink, const Color(0xFF1D2931));
   });
 
@@ -30,6 +30,13 @@ void main() {
     expect(text.button.fontSize, 14);
     expect(text.button.fontWeight, FontWeight.w800);
     expect(text.button.letterSpacing, 1.2);
+  });
+
+  test('subtitle sits between label and sectionTitle at 16/700', () {
+    final text = AppTheme.light().extension<DonutsText>()!;
+
+    expect(text.subtitle.fontSize, 16);
+    expect(text.subtitle.fontWeight, FontWeight.w700);
   });
 
   testWidgets('every bundled font weight loads from the asset bundle', (
@@ -43,7 +50,7 @@ void main() {
       'ExtraBold',
     ]) {
       final data = await rootBundle.load(
-        'assets/fonts/PlusJakartaSans-$weight.ttf',
+        'assets/fonts/schibsted_grotesk/SchibstedGrotesk-$weight.ttf',
       );
       expect(data.lengthInBytes, greaterThan(0));
     }
@@ -66,6 +73,47 @@ void main() {
       expect(weights, unorderedEquals([400, 500, 600, 700, 800]));
     },
   );
+
+  test(
+    'headings and buttons use Nunito, body text stays Schibsted Grotesk',
+    () {
+      final text = AppTheme.light().extension<DonutsText>()!;
+
+      for (final heading in [
+        text.display,
+        text.title,
+        text.headline,
+        text.sectionTitle,
+        text.subtitle,
+        text.points,
+        text.button,
+      ]) {
+        expect(heading.fontFamily, DonutsText.roundedFamily);
+      }
+      for (final plain in [text.body, text.label, text.caption]) {
+        expect(plain.fontFamily, DonutsText.fontFamily);
+      }
+    },
+  );
+
+  testWidgets('font manifest registers Nunito at weights 500 to 800', (
+    tester,
+  ) async {
+    // Real asset I/O, outside the test's fake clock.
+    final source = await tester.runAsync(
+      () => rootBundle.loadString('FontManifest.json', cache: false),
+    );
+    final manifest = jsonDecode(source!) as List<dynamic>;
+    final family = manifest.cast<Map<String, dynamic>>().singleWhere(
+      (entry) => entry['family'] == DonutsText.roundedFamily,
+    );
+    final weights = [
+      for (final font in family['fonts'] as List<dynamic>)
+        (font as Map<String, dynamic>)['weight'],
+    ];
+
+    expect(weights, unorderedEquals([500, 600, 700, 800]));
+  });
 
   test('error colour is the danger token, not the link pink', () {
     expect(AppTheme.light().colorScheme.error, DonutsColors.light.danger);

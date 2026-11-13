@@ -69,7 +69,7 @@ void main() {
 
     await _enterDate(tester, month: 'April', day: '31', year: '2000');
 
-    expect(find.text("That date doesn't exist"), findsOneWidget);
+    expect(find.text('That date doesn’t exist'), findsOneWidget);
     expect(_enabled(tester), isFalse);
   });
 
@@ -120,7 +120,7 @@ void main() {
     // The spinner keeps animating while the request is pending.
     await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.text("What's your date of birth?"), findsOneWidget);
+    expect(find.text('What’s your date of birth?'), findsOneWidget);
     pending.complete(
       Success(
         UserVO(
@@ -182,7 +182,7 @@ void main() {
       expect(params.lastName, 'Phyoe Win');
       expect(params.dateOfBirth, DateTime(1980, 5));
       expect(session.state, SessionSignedIn(user, justRegistered: true));
-      expect(find.text("Welcome to the world of J'donuts"), findsOneWidget);
+      expect(find.text('Welcome to the world of J’donuts'), findsOneWidget);
 
       await tester.tap(find.byType(AppPrimaryButton));
       await tester.pumpAndSettle();

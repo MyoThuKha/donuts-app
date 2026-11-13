@@ -16,7 +16,12 @@ class StepProgressPainter extends CustomPainter {
     required this.mark,
   }) : super(repaint: Listenable.merge([sweep, check]));
 
-  static const double strokeWidth = 4;
+  /// Ring thickness as a share of its diameter: the design draws a thick
+  /// two-colour donut rather than a thin arc.
+  static const double strokeShare = 0.26;
+
+  /// Check stroke as a share of the diameter.
+  static const double _checkShare = 0.1;
 
   /// Check points as fractions of the ring's size.
   static const List<Offset> _checkPoints = [
@@ -40,11 +45,12 @@ class StepProgressPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
+    final strokeWidth = size.shortestSide * strokeShare;
     final ring = rect.deflate(strokeWidth / 2);
+    // Butt caps: the design's arc ends square against the track.
     final stroke = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
+      ..strokeWidth = strokeWidth;
     canvas
       ..drawOval(ring, stroke..color = track)
       ..drawArc(
@@ -75,7 +81,7 @@ class StepProgressPainter extends CustomPainter {
       metric.extractPath(0, metric.length * checkProgress),
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth / 2
+        ..strokeWidth = size.shortestSide * _checkShare
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round
         ..color = mark,

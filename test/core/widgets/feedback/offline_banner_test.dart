@@ -19,9 +19,9 @@ void main() {
       tester.widget<AnimatedSlide>(find.byType(AnimatedSlide)).offset,
       Offset.zero,
     );
-    expect(find.text("You're offline. Showing saved data."), findsOneWidget);
+    expect(find.text('You’re offline. Showing saved data.'), findsOneWidget);
     expect(
-      tester.getSemantics(find.text("You're offline. Showing saved data.")),
+      tester.getSemantics(find.text('You’re offline. Showing saved data.')),
       isSemantics(isLiveRegion: true),
     );
   });
@@ -32,7 +32,7 @@ void main() {
     await pumpThemed(tester, const OfflineBanner(visible: false));
 
     expect(
-      find.bySemanticsLabel("You're offline. Showing saved data."),
+      find.bySemanticsLabel('You’re offline. Showing saved data.'),
       findsNothing,
     );
   });

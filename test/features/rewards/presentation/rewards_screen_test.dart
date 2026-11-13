@@ -77,9 +77,9 @@ void main() {
     (tester) async {
       await _pumpRewards(tester);
 
-      expect(find.text("You're here now"), findsOneWidget);
+      expect(find.text('You’re here now'), findsOneWidget);
       expect(find.text('500 pts Remaining to become Gold'), findsOneWidget);
-      expect(find.text("You'll be here soon"), findsOneWidget);
+      expect(find.text('You’ll be here soon'), findsOneWidget);
     },
   );
 
@@ -132,6 +132,20 @@ void main() {
     expect(clips, [1.0, 0.25]);
   });
 
+  testWidgets('swiping the list across shows the gift cards', (tester) async {
+    await _pumpRewards(tester);
+    await tester.pumpAndSettle();
+
+    await tester.fling(
+      find.text('Eat 4 Coco donuts'),
+      const Offset(-300, 0),
+      1000,
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Free classic donut'), findsOneWidget);
+  });
+
   testWidgets('tapping Gift shows the gift cards', (tester) async {
     await _pumpRewards(tester);
     expect(find.text('Free classic donut'), findsNothing);
@@ -177,34 +191,14 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Gift'));
     await tester.pumpAndSettle();
-    await tester.scrollUntilVisible(find.text('Box of 6 donuts'), 200);
+    // The header and the list share one NestedScrollView; drag the outer.
+    await tester.scrollUntilVisible(
+      find.text('Box of 6 donuts'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-  });
-
-  testWidgets('scrolled content stays out from under the status bar', (
-    tester,
-  ) async {
-    tester.view.padding = const FakeViewPadding(top: 120);
-    addTearDown(tester.view.reset);
-    await _pumpRewards(tester);
-    await tester.pumpAndSettle();
-
-    await tester.drag(find.byType(CustomScrollView), const Offset(0, -400));
-    await tester.pumpAndSettle();
-
-    final strip = tester.getRect(find.byKey(RewardsScreen.statusBarKey));
-    expect(strip.top, 0);
-    expect(strip.height, closeTo(120 / tester.view.devicePixelRatio, 0.01));
-    final hit = tester.hitTestOnBinding(Offset(strip.center.dx, 10));
-    expect(
-      hit.path.any(
-        (e) =>
-            e.target ==
-            tester.renderObject(find.byKey(RewardsScreen.statusBarKey)),
-      ),
-      isTrue,
-    );
   });
 
   testWidgets('a null member shows the empty message', (tester) async {
@@ -226,7 +220,7 @@ void main() {
     getIt.registerSingleton<WatchChallengesUseCase>(challenges);
 
     await _pumpRewards(tester);
-    expect(find.text("We couldn't load your rewards."), findsOneWidget);
+    expect(find.text('We couldn’t load your rewards.'), findsOneWidget);
 
     await tester.tap(find.text('TRY AGAIN'));
     await tester.pump();

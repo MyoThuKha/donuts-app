@@ -62,7 +62,7 @@ void main() {
     await tester.enterText(_field, '000000');
     await tester.pumpAndSettle();
 
-    expect(find.text("That code isn't right. Try again."), findsOneWidget);
+    expect(find.text('That code isn’t right. Try again.'), findsOneWidget);
     expect(tester.widget<TextField>(_field).controller!.text, isEmpty);
     await unmountApp(tester);
   });
