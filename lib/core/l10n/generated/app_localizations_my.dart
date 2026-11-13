@@ -78,6 +78,9 @@ class AppLocalizationsMy extends AppLocalizations {
   String get logOutConfirm => 'J’Donuts မှ ထွက်မလား?';
 
   @override
+  String get logOutFailed => 'အကောင့်မှ ထွက်၍ မရပါ။ ထပ်ကြိုးစားကြည့်ပါ။';
+
+  @override
   String get cancel => 'မလုပ်တော့ပါ';
 
   @override
@@ -169,6 +172,9 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get otpWrong => 'ကုဒ် မှားနေပါသည်။ ထပ်ကြိုးစားကြည့်ပါ။';
+
+  @override
+  String get otpRetry => 'ထပ်ကြိုးစားရန်';
 
   @override
   String get otpLocked =>

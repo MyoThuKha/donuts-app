@@ -79,6 +79,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logOutConfirm => 'Log out of J’Donuts?';
 
   @override
+  String get logOutFailed => 'Couldn’t log out. Try again.';
+
+  @override
   String get cancel => 'Cancel';
 
   @override
@@ -171,6 +174,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get otpWrong => 'That code isn’t right. Try again.';
+
+  @override
+  String get otpRetry => 'Try again';
 
   @override
   String get otpLocked => 'Too many wrong codes. Tap Resend to get a new one.';

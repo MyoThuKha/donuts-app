@@ -65,10 +65,15 @@ final UserVO testUser = UserVO(
 
 /// A [SessionCubit] whose use cases succeed: restore finds [restored] and
 /// log out clears it.
-SessionCubit testSessionCubit({UserVO? restored}) {
+SessionCubit testSessionCubit({
+  UserVO? restored,
+  Result<UserVO?>? restoreResult,
+  Result<void> logOutResult = const Success(null),
+}) {
   final restore = MockRestoreSessionUseCase();
   final logOut = MockLogOutUseCase();
-  when(restore.call).thenAnswer((_) async => Success(restored));
-  when(logOut.call).thenAnswer((_) async => const Success(null));
+  when(restore.call)
+      .thenAnswer((_) async => restoreResult ?? Success(restored));
+  when(logOut.call).thenAnswer((_) async => logOutResult);
   return SessionCubit(restoreSession: restore, logOut: logOut);
 }
