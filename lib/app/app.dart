@@ -36,7 +36,7 @@ class _DonutsAppState extends State<DonutsApp> {
       ],
       child: MaterialApp.router(
         onGenerateTitle: (context) => context.l10n.appTitle,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        localizationsDelegates: appLocalizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: AppTheme.light(),
         debugShowCheckedModeBanner: false,

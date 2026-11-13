@@ -58,7 +58,7 @@ Future<void> pumpRouterApp(
         BlocProvider.value(value: sync),
       ],
       child: MaterialApp.router(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        localizationsDelegates: appLocalizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: AppTheme.light(),
         routerConfig: router,
@@ -72,7 +72,7 @@ Future<void> pumpRouterApp(
 Future<void> pumpThemed(WidgetTester tester, Widget child) async {
   await tester.pumpWidget(
     MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: appLocalizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: AppTheme.light(),
       home: Scaffold(body: child),
