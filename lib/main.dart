@@ -8,8 +8,10 @@ import 'package:material_ui/material_ui.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LicenseRegistry.addLicense(_fontLicenses);
+
   await configureDependencies();
   await bootstrap();
+
   runApp(const DonutsApp());
 }
 
